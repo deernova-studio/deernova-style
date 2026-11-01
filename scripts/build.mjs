@@ -1,6 +1,7 @@
 import { readFile, writeFile, mkdir, cp, readdir, rm } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { marked } from 'marked';
+import { PHASES } from '../apps/docs/motion-model.mjs';
 import { fileURLToPath } from 'node:url';
 process.chdir(fileURLToPath(new URL('../', import.meta.url)));
 const read = p => readFile(p, 'utf8');
@@ -18,7 +19,7 @@ await cp('design','dist/project',{recursive:true});
 
 await cp('apps/docs/style.css','dist/style.css');
 await cp('apps/docs/app.js','dist/app.js');
-for(const file of ['reference.css','reference.js','deer.js']) await cp('apps/docs/'+file,'dist/'+file);
+for(const file of ['reference.css','reference.js','deer.js','motion-model.mjs']) await cp('apps/docs/'+file,'dist/'+file);
 const escape = s => s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
 const components = [];
 for(const name of (await readdir('design/components')).sort()) {
@@ -32,7 +33,7 @@ const compHTML = components.map(c=>`<section class="component" id="c-${c.name}" 
 const tokenHTML = groups.map(g=>`<h3>${g}</h3><div class="token-grid">${tokens[g].tokens.map(t=>`<button class="token" data-copy="var(--${t.name})" title="复制 CSS 变量">${g==='color'?`<span class="swatch" style="background:var(--${t.name})"></span>`:''}<strong>${t.name}</strong><code>${escape(String(value(t.value,'light')))}</code><small>${escape(t.usage)}</small></button>`).join('')}</div>`).join('') + '<h3>Typography</h3>' + tokens.type.groups.map(g=>`<h4>${g.name}</h4>`+g.styles.map(t=>`<div class="type-row"><code>${t.name} · ${t.fontSize}/${t.lineHeight}</code><p style="font-family:var(--font-${t.family||g.family});font-size:${t.fontSize};line-height:${t.lineHeight};font-weight:${t.fontWeight}">${t.sample}</p><small>${t.usage}</small></div>`).join('')).join('');
 for(const page of ['index','reference']) {
  let html = await read(`apps/docs/${page}.html`);
- for(const [k,v] of Object.entries({version,article,components:compHTML,tokens:tokenHTML,count:components.length,links:components.map(c=>`<a href="#c-${c.name}">${c.name}</a>`).join('')})) html=html.replaceAll(`{{${k}}}`,String(v));
+ for(const [k,v] of Object.entries({version,sceneCopy:PHASES.map((phase,i)=>`<div data-scene-copy${i?' style="opacity:0"':''}><p class="scene-title">${escape(phase.title)}</p><p class="hero-description">${escape(phase.description)}</p></div>`).join('\n'),sceneSteps:PHASES.map((phase,i)=>`<li data-scene-step${i?'':' aria-current="step"'}>0${i+1} ${escape(phase.label)}</li>`).join(''),article,components:compHTML,tokens:tokenHTML,count:components.length,links:components.map(c=>`<a href="#c-${c.name}">${c.name}</a>`).join('')})) html=html.replaceAll(`{{${k}}}`,String(v));
  await write(`dist/${page}.html`,html);
 }
 await rm('packages/style/skill',{recursive:true,force:true});

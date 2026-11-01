@@ -32,3 +32,12 @@ The intended product is a design reference skill installed into a specified repo
 - Reduced-motion handling defaults the deer to a static frame; offscreen/background rendering does not advance the animation. OS-level reduced-motion emulation was not exercised.
 - npm test and JavaScript syntax checks pass. No npm release is required for this documentation-only change.
 - Natural-history sources are linked beside each fact: Washington Department of Fish & Wildlife and U.S. National Park Service. MiMo supplied the requested character-art/editorial direction; its browser view timed out, so only its retrieved page content was available for reference.
+
+# Continuous deer / starfield sequence
+
+- Replaced the 85 ms text replacement loop with requestAnimationFrame and cached canvas glyphs. Persistent, seeded particles follow continuous paths through a 24-second run / scatter / stars / assemble loop.
+- Animation, phase indicator and copy share one active-time clock. Fixed canvas and overlaid copy geometry prevent phase changes from shifting the page; build takes phase labels and copy from the motion model.
+- Unit tests cover all phase boundaries, complete-loop continuity, deterministic particles, finite coordinates, bounded copy blending, long-frame clamping, and pause / offscreen / hidden-tab resume without time jumps. All six repository tests pass.
+- Browser verified: deer and sparse starfield render; phase copy changes with the drawing; desktop copy bounds remain at top 610.390625 px / height 102 px across run and stars. Paused screenshots compare byte-for-byte equal. At 390 px viewport, document width is 375 px (scrollbar reserved), with no horizontal overflow; copy height remains 96 px.
+- Browser console has no errors or warnings. Resize preserves paused scene state. OS reduced-motion and background-tab transitions are covered by implementation/model tests, not OS-level browser emulation. Actual device FPS has not been benchmarked.
+- Screenshot: reviews/continuous-deer.png. This is a website update; no npm release was made.

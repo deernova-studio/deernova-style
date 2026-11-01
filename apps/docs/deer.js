@@ -1,60 +1,37 @@
-// A small articulated silhouette, sampled into real text. No images or font assets.
-export function createDeer(element, button) {
-  const cols = 120, rows = 48;
-  const canvas = document.createElement('canvas');
-  canvas.width = 260; canvas.height = 168;
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  let paused = reduced.matches, visible = true, time = 0, last = 0, raf;
-  const ellipse = (x,y,rx,ry,angle=0) => {ctx.beginPath();ctx.ellipse(x,y,rx,ry,angle,0,Math.PI*2);ctx.fill();};
-  const shape = points => {ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();ctx.fill();};
-  const line = (points,width) => {ctx.lineWidth=width;ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();};
-  function draw(t) {
-    ctx.clearRect(0,0,260,168);ctx.fillStyle='#111';ctx.strokeStyle='#111';ctx.lineCap='round';ctx.lineJoin='round';
-    const p=t*2.2, leap=Math.max(0,Math.sin(p));
-    ctx.save();ctx.translate(9+Math.sin(p)*2,14-leap*10);
-    // Far legs, with a soft galloping gait.
-    for(const [x,offset,rear] of [[77,Math.PI,true],[139,Math.PI+.7,false],[66,0,true],[130,.7,false]]){
-      const swing=Math.sin(p+offset), fold=Math.max(0,Math.cos(p+offset));
-      const kneeX=x+(rear?-8:4)+swing*10, kneeY=120-fold*7;
-      const footX=x+swing*25+(rear?-7:9), footY=147-fold*13;
-      line([[x,99],[kneeX,kneeY],[footX,footY]],rear?4.5:3.8);
-      line([[footX,footY],[footX+5,footY+1]],3.5);
-    }
-    ellipse(100,91,43,18,-.08);ellipse(67,91,15,18,-.2);ellipse(135,86,17,22,.15);
-    shape([[134,94],[144,65],[151,46],[164,43],[164,66],[153,94],[143,103]]);
-    ellipse(166,45,14,9,.18);shape([[172,41],[191,46],[191,51],[176,54],[163,52]]);
-    // Ears, alert but relaxed.
-    shape([[157,40],[145,28],[155,29],[165,40]]);shape([[174,40],[188,31],[185,39],[177,45]]);
-    // Branching antlers give the silhouette its character.
-    line([[160,37],[155,25],[150,15],[151,3]],2.5);
-    line([[155,25],[141,19],[137,10]],2);line([[150,15],[140,7],[140,1]],1.5);
-    line([[163,36],[170,22],[175,11],[174,1]],2.3);
-    line([[170,22],[184,17],[190,8]],1.8);line([[175,11],[183,5],[183,0]],1.5);
-    // Tail and eye.
-    shape([[56,83],[44,73],[43,80],[56,91]]);
-    ctx.fillStyle='#fff';ellipse(175,44,1.3,1.3);
-    ctx.restore();
-    const pixels=ctx.getImageData(0,0,260,168).data;
-    const chars='.:+*x#@';let output='';
-    for(let y=0;y<rows;y++){
-      for(let x=0;x<cols;x++){
-        const sx=Math.floor((x+.5)*260/cols), sy=Math.floor((y+.5)*168/rows);
-        const a=pixels[(sy*260+sx)*4+3];
-        if(a>55){const grain=(Math.sin(x*27.13+y*13.7)*43758.5)%1;const shade=.35+.3*Math.sin(x*.035+y*.09)+Math.abs(grain)*.35;output+=chars[Math.min(chars.length-1,Math.floor(shade*chars.length))];}
-        else if(y===46 && x>24+leap*3 && x<92-leap*3)output+=x%3===0?'.':' ';
-        else output+=' ';
-      }
-      output+='\n';
-    }
-    element.textContent=output;
+import {MotionClock,PHASES,createParticles,sceneAt,poseAt,particleAt} from './motion-model.mjs';
+export function createDeer(canvas,button){
+  const ctx=canvas.getContext('2d');
+  if(!ctx){button.disabled=true;return ()=>{};}
+  const particles=createParticles(),clock=new MotionClock(),reduced=matchMedia('(prefers-reduced-motion: reduce)');
+  clock.set({paused:reduced.matches,foreground:!document.hidden});
+  const copy=document.querySelectorAll('[data-scene-copy]'),steps=document.querySelectorAll('[data-scene-step]');
+  let raf=null,width=0,height=0,dpr=1,scale=1,offsetX=0,offsetY=0,atlas,themeColor='',lastPhase=-1;
+  function makeAtlas(){
+    themeColor=getComputedStyle(canvas).color;
+    atlas=document.createElement('canvas');atlas.width=6*20*dpr;atlas.height=20*dpr;
+    const a=atlas.getContext('2d');a.scale(dpr,dpr);a.fillStyle=themeColor;a.font='8px ui-monospace, SFMono-Regular, Menlo, monospace';a.textAlign='center';a.textBaseline='middle';
+    [...'.:+*x#'].forEach((glyph,i)=>a.fillText(glyph,i*20+10,10));
   }
-  function label(){button.setAttribute('aria-pressed',String(paused));button.textContent=paused?'播放动画 ▷':'暂停动画 Ⅱ';}
-  function tick(now){if(!paused&&visible&&!document.hidden&&now-last>85){time+=last?Math.min((now-last)/1000,.12):0;draw(time);last=now;}raf=requestAnimationFrame(tick);}
-  button.addEventListener('click',()=>{paused=!paused;last=0;label();});
-  reduced.addEventListener('change',()=>{paused=reduced.matches;label();if(paused)draw(0);});
-  new IntersectionObserver(([e])=>{visible=e.isIntersecting;last=0;}).observe(element);
-  document.addEventListener('visibilitychange',()=>{last=0;});
-  draw(0);label();raf=requestAnimationFrame(tick);
-  return ()=>cancelAnimationFrame(raf);
+  function draw(){
+    if(!width||!height)return;
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width,height);ctx.translate(offsetX,offsetY);ctx.scale(scale,scale);
+    const scene=sceneAt(clock.time),pose=poseAt(clock.time);
+    for(const p of particles){const point=particleAt(p,clock.time,scene,pose);ctx.globalAlpha=point.alpha;ctx.drawImage(atlas,p.glyph*20*dpr,0,20*dpr,20*dpr,point.x-10,point.y-10,20,20);}
+    ctx.globalAlpha=1;
+    copy.forEach((el,i)=>{el.style.opacity=i===scene.phase?String(scene.blend):i===scene.from?String(1-scene.blend):'0';});
+    if(lastPhase!==scene.phase){lastPhase=scene.phase;canvas.dataset.phase=PHASES[scene.phase].id;steps.forEach((el,i)=>{if(i===scene.phase)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current');});}
+  }
+  function frame(now){raf=null;clock.frame(now);draw();if(clock.running)raf=requestAnimationFrame(frame);}
+  function reconcile(){if(raf!==null){cancelAnimationFrame(raf);raf=null;}if(clock.running)raf=requestAnimationFrame(frame);button.setAttribute('aria-pressed',String(clock.paused));button.textContent=clock.paused?'继续播放 ▷':'暂停动画 Ⅱ';draw();}
+  function resize(){const bounds=canvas.getBoundingClientRect();width=bounds.width;height=bounds.height;dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);scale=Math.min(width/720,height/380);offsetX=(width-720*scale)/2;offsetY=(height-380*scale)/2;makeAtlas();draw();}
+  const onPause=()=>{clock.set({paused:!clock.paused});reconcile();};
+  const onReduced=()=>{if(reduced.matches)clock.set({paused:true});reconcile();};
+  const onVisibility=()=>{clock.set({foreground:!document.hidden});reconcile();};
+  button.addEventListener('click',onPause);reduced.addEventListener('change',onReduced);document.addEventListener('visibilitychange',onVisibility);
+  const observer=new IntersectionObserver(([entry])=>{clock.set({visible:entry.isIntersecting});reconcile();},{threshold:0});observer.observe(canvas);
+  const sizing=new ResizeObserver(resize);sizing.observe(canvas);
+  const theme=new MutationObserver(()=>{makeAtlas();draw();});theme.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  const systemTheme=matchMedia('(prefers-color-scheme:dark)'),onTheme=()=>{makeAtlas();draw();};systemTheme.addEventListener('change',onTheme);
+  resize();reconcile();
+  return ()=>{if(raf!==null)cancelAnimationFrame(raf);observer.disconnect();sizing.disconnect();theme.disconnect();button.removeEventListener('click',onPause);reduced.removeEventListener('change',onReduced);document.removeEventListener('visibilitychange',onVisibility);systemTheme.removeEventListener('change',onTheme);};
 }

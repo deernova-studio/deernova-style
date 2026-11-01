@@ -33,25 +33,30 @@ npx @deernova/style@latest doctor --repo /path/to/your-project
 
 | 路径 | 内容 |
 | --- | --- |
-| `design/` | 规范唯一来源：原则、文案、颜色、字体、尺寸、动效、无障碍、组件和布局参考 |
-| `skill/` | AI 使用规范的工作流，以及 Web、Apple 平台和设计审查指导 |
-| `packages/style/` | 唯一 npm 包：skill 安装/更新 CLI 与完整生成资源 |
-| `apps/docs/` | 首页以 ASCII 鹿、自然观察和交互手记展示设计语言；reference.html 收录完整规范 |
-| `archive/Paperlight/` | 原始资料完整归档 |
-| `dist/` | 生成的静态规范网站 |
+| `design/` | 设计规范、token 源数据、组件说明和参考图片 |
+| `examples/html/` | 与网站分开的 HTML UI 示例，随 skill 分发 |
+| `skill/` | AI 应用规范的入口，以及 Web、原生平台和设计审查指导 |
+| `apps/website/` | 网站自己的 HTML 页面、CSS 与交互脚本 |
+| `packages/style/` | 唯一 npm 包：安装/更新 CLI 与生成的 skill |
+| `archive/Paperlight/` | 原始资料归档 |
 
-保留 npm workspace/monorepo 管理方式，区分规范来源、展示网站和 skill 分发。网页中的组件是设计参考示例，消费者无需采用这些组件的代码或命名。
+[架构与维护说明](ARCHITECTURE.md) 介绍两类 HTML、构建依赖、输出目录和修改规则。HTML 示例供 AI 参考；使用者无需安装组件库。
 
 ## 维护与发布
 
 ```sh
 npm install
-npm run dev       # 本地展示规范，http://localhost:4173
+npm run dev         # 构建网站并启动 http://localhost:4173
+npm run build:site  # 只构建网站到 dist/
+npm run build:skill # 只构建完整 skill
+npm run build       # 同时构建两者
 npm test
 npm run pack     # 只生成 @deernova/style 的包
 ```
 
-修改 `design/` 或 `skill/` 后，build 同步生成网页和 skill，manifest 记录版本与来源哈希。发布新版后，目标仓库通过 `update` 获取最新规范。
+网站和 skill 独立构建，共享 `design/` 和 `examples/html/`。修改网站不会改变 skill 哈希；修改规范或 HTML 示例会同步进入两个产物。网站实践中的通用规则需要先沉淀回规范。
+
+`dist/`、`packages/style/skill/` 和其中的 `tokens.css` 均由构建生成，不直接编辑。当前预览没有自动监听，修改后运行 `npm run build:site` 并刷新。发布新版后，目标仓库通过 `update` 获取最新 skill。
 
 ```sh
 npm run release:version -- 0.3.0

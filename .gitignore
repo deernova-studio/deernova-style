@@ -2,5 +2,4 @@ node_modules/
 dist/
 releases/*.tgz
 packages/style/skill/
-packages/style/template/
 .DS_Store

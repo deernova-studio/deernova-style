@@ -41,3 +41,13 @@ The intended product is a design reference skill installed into a specified repo
 - Browser verified: deer and sparse starfield render; phase copy changes with the drawing; desktop copy bounds remain at top 610.390625 px / height 102 px across run and stars. Paused screenshots compare byte-for-byte equal. At 390 px viewport, document width is 375 px (scrollbar reserved), with no horizontal overflow; copy height remains 96 px.
 - Browser console has no errors or warnings. Resize preserves paused scene state. OS reduced-motion and background-tab transitions are covered by implementation/model tests, not OS-level browser emulation. Actual device FPS has not been benchmarked.
 - Screenshot: reviews/continuous-deer.png. This is a website update; no npm release was made.
+
+# Architecture separation
+
+- Split UI reference HTML into examples/html; retained guidelines and native examples in design/components. Website HTML, CSS and JS now live under apps/website/pages, styles and scripts. Existing original archive is untouched.
+- Added independent build:site and build:skill entrypoints sharing design materialization; token CSS is generated only inside outputs. Website styles are formatted and motion styles consolidated into their own file.
+- Added architecture tests proving builds do not mutate sources or each other's output, website changes do not alter skill hashes, and guideline / HTML changes update both consumers. All HTML/CSS/module dependencies resolve in both the website and bundled skill assets. All eight tests pass.
+- Motion/state-stability principles now live in design/motion.md and are rendered on the reference site and bundled as a routed skill reference. The deer and starfield remain website-specific examples.
+- Official skill-creator validation passes. npm pack inventory: 92 files, 18 HTML examples, motion reference and generated tokens included, no website application files. Extracted an actual npm tarball and ran its install/doctor successfully in an isolated directory.
+- Browser verified homepage render, reference navigation, Button iframe with 12 controls, and light/dark theme propagation to the newly separated HTML path. No console errors or warnings observed. Screenshot: reviews/separate-html-references.png.
+- README and ARCHITECTURE.md document ownership, generation, hashes, maintenance and release boundaries. This change is committed to GitHub; no new npm version was published.

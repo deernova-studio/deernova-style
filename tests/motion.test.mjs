@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {MotionClock,createParticles,sceneAt,particleAt,DURATION} from '../apps/docs/motion-model.mjs';
+import {MotionClock,createParticles,sceneAt,particleAt,DURATION} from '../apps/website/scripts/motion-model.mjs';
 test('pause, hidden tab and offscreen freeze active time without resume jumps',()=>{for(const flag of ['paused','visible','foreground']){const clock=new MotionClock();clock.frame(1000);clock.frame(1016);const before=clock.time;clock.set({[flag]:flag==='paused'});clock.frame(20000);assert.equal(clock.time,before);clock.set({[flag]:flag!=='paused'});clock.frame(30000);assert.equal(clock.time,before);clock.frame(30016);assert.ok(Math.abs(clock.time-before-.016)<1e-9);}});
 test('stable particle identity, finite bounds, and continuous phase/loop boundaries',()=>{const particles=createParticles();assert.deepEqual(particles,createParticles());assert.ok(particles.length>500);for(const t of [0,7,9,11,14,16,19,21,24]){for(const p of particles){const position=particleAt(p,t);assert.ok(Number.isFinite(position.x)&&Number.isFinite(position.y));assert.ok(position.x>=0&&position.x<=720&&position.y>=0&&position.y<=380);}}
 for(const t of [7,11,16,21,24])for(const p of particles){const before=particleAt(p,t-1e-5),after=particleAt(p,t+1e-5);assert.ok(Math.hypot(before.x-after.x,before.y-after.y)<.1,`jump at ${t}`);}

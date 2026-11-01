@@ -10,7 +10,7 @@ npx @deernova/style@latest doctor --repo /path/to/project
 
 Run without `--repo` inside your target project to use its current directory. The CLI writes only `.agents/skills/deernova-style/` by default. It does not add application code, CSS imports or package dependencies. The AI uses the installed skill to guide implementation through your project's existing framework and components.
 
-The skill contains the complete Deernova foundations, writing, typography, semantic values, platform density, accessibility, review criteria, component/layout references, SwiftUI examples and visual assets. The documentation website and skill are generated from the same design source.
+The skill contains the complete Deernova foundations, writing, typography, semantic values, platform density, accessibility, review criteria, component/layout references, SwiftUI examples and visual assets. The skill bundles shared design sources and separate HTML examples under `assets/design/` and `assets/examples/html/`. The showcase website is built independently and is not installed. Website-only changes do not alter the skill content hash.
 
 Use `--agent claude|codex|agents` to choose the skill directory, `--dir <skills-parent>` for a custom destination, or `--global` for a user installation. These three destination modes are mutually exclusive. Repeat the same options on update.
 

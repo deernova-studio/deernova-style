@@ -1,54 +1,6 @@
-import { readFile, writeFile, mkdir, cp, readdir, rm } from 'node:fs/promises';
-import { createHash } from 'node:crypto';
-import { marked } from 'marked';
-import { PHASES } from '../apps/docs/motion-model.mjs';
-import { fileURLToPath } from 'node:url';
-process.chdir(fileURLToPath(new URL('../', import.meta.url)));
-const read = p => readFile(p, 'utf8');
-const write = async (p, s) => { await mkdir(p.slice(0,p.lastIndexOf('/')), {recursive:true}); await writeFile(p,s); };
-const version = JSON.parse(await read('package.json')).version;
-const tokens = JSON.parse(await read('design/tokens.json'));
-const groups = ['color','shadow','spacing','radius','stroke','size'];
-const value = (v,theme) => typeof v === 'object' ? v[theme] : v.replace?.(/\{([^}]+)\}/g,'var(--$1)') ?? v;
-const declarations = theme => groups.flatMap(g=>tokens[g].tokens.map(t=>`  --${t.name}: ${value(t.value,theme)};`)).concat(Object.entries(tokens.type.families).map(([k,v])=>`  --font-${k}: ${v};`)).join('\n');
-const css = `/* Generated from design/tokens.json. Do not edit. */\n:root {\n${declarations('light')}\n}\n@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){\n${declarations('dark')}\n}}\n:root[data-theme="dark"]{\n${declarations('dark')}\n}\n`;
-await write('design/tokens.css',css);
-await rm('dist',{recursive:true,force:true});
-await mkdir('dist',{recursive:true});
-await cp('design','dist/project',{recursive:true});
+import { buildSite } from './build-site.mjs';
+import { buildSkill } from './build-skill.mjs';
 
-await cp('apps/docs/style.css','dist/style.css');
-await cp('apps/docs/app.js','dist/app.js');
-for(const file of ['reference.css','reference.js','deer.js','motion-model.mjs']) await cp('apps/docs/'+file,'dist/'+file);
-const escape = s => s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
-const components = [];
-for(const name of (await readdir('design/components')).sort()) {
- if(name.includes('.')) continue;
- const preview = await read(`design/components/${name}/preview.html`);
- const doc = await read(`design/components/${name}/README.md`).catch(()=> '组合预览。用于对齐布局、尺寸与层级。');
- components.push({name, height:Number(preview.match(/height=(\d+)/)?.[1] || 360), subtitle:preview.match(/subtitle="([^"]+)"/)?.[1] || '', doc});
-}
-const article = marked.parse(await read('design/README.md'));
-const compHTML = components.map(c=>`<section class="component" id="c-${c.name}" data-search="${escape(c.name+' '+c.subtitle+' '+c.doc)}"><div class="component-head"><h3>${c.name}</h3><span>${escape(c.subtitle)}</span><a href="project/components/${c.name}/preview.html" target="_blank" rel="noopener">独立预览 ↗</a></div><div class="preview"><iframe loading="lazy" title="${c.name} 组件预览" src="project/components/${c.name}/preview.html" style="height:${c.height+32}px"></iframe></div><details><summary>使用规范与 SwiftUI 示例</summary><div class="prose">${marked.parse(c.doc)}</div></details></section>`).join('\n');
-const tokenHTML = groups.map(g=>`<h3>${g}</h3><div class="token-grid">${tokens[g].tokens.map(t=>`<button class="token" data-copy="var(--${t.name})" title="复制 CSS 变量">${g==='color'?`<span class="swatch" style="background:var(--${t.name})"></span>`:''}<strong>${t.name}</strong><code>${escape(String(value(t.value,'light')))}</code><small>${escape(t.usage)}</small></button>`).join('')}</div>`).join('') + '<h3>Typography</h3>' + tokens.type.groups.map(g=>`<h4>${g.name}</h4>`+g.styles.map(t=>`<div class="type-row"><code>${t.name} · ${t.fontSize}/${t.lineHeight}</code><p style="font-family:var(--font-${t.family||g.family});font-size:${t.fontSize};line-height:${t.lineHeight};font-weight:${t.fontWeight}">${t.sample}</p><small>${t.usage}</small></div>`).join('')).join('');
-for(const page of ['index','reference']) {
- let html = await read(`apps/docs/${page}.html`);
- for(const [k,v] of Object.entries({version,sceneCopy:PHASES.map((phase,i)=>`<div data-scene-copy${i?' style="opacity:0"':''}><p class="scene-title">${escape(phase.title)}</p><p class="hero-description">${escape(phase.description)}</p></div>`).join('\n'),sceneSteps:PHASES.map((phase,i)=>`<li data-scene-step${i?'':' aria-current="step"'}>0${i+1} ${escape(phase.label)}</li>`).join(''),article,components:compHTML,tokens:tokenHTML,count:components.length,links:components.map(c=>`<a href="#c-${c.name}">${c.name}</a>`).join('')})) html=html.replaceAll(`{{${k}}}`,String(v));
- await write(`dist/${page}.html`,html);
-}
-await rm('packages/style/skill',{recursive:true,force:true});
-await cp('skill','packages/style/skill',{recursive:true});
-await cp('design','packages/style/skill/assets/design',{recursive:true});
-await write('packages/style/skill/references/foundations.md',await read('design/README.md'));
-await write('packages/style/skill/references/components.md',components.map(c=>`## ${c.name}\n\n${c.doc}`).join('\n\n'));
-await write('packages/style/skill/references/tokens.md',groups.map(g=>`## ${g}\n\n`+tokens[g].tokens.map(t=>`- \`${t.name}\`: light \`${value(t.value,'light')}\`; dark \`${value(t.value,'dark')}\`. ${t.usage}`).join('\n')).join('\n\n'));
-await rm('packages/style/template',{recursive:true,force:true});
-
-const hash=createHash('sha256');
-async function hashTree(dir){for(const e of (await readdir(dir,{withFileTypes:true})).sort((a,b)=>a.name.localeCompare(b.name))){const p=dir+'/'+e.name; if(e.isDirectory())await hashTree(p);else{hash.update(p);hash.update(await readFile(p));}}}
-for(const dir of ['design','skill','apps/docs']) await hashTree(dir);
-const manifest={version,sourceHash:hash.digest('hex'),components:components.map(c=>c.name)};
-await write('packages/style/skill/manifest.json',JSON.stringify(manifest,null,2)+'\n');
-await write('dist/manifest.json',JSON.stringify(manifest,null,2)+'\n');
-
-console.log(`Built Deernova ${version}: ${components.length} reference previews, documentation website and installable design skill.`);
+await buildSite();
+const manifest = await buildSkill();
+console.log(`Built website and skill ${manifest.version}: ${manifest.components.length} reference previews.`);

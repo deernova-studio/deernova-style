@@ -1,0 +1,74 @@
+<!-- @dsCard group="Layouts" height=780 width=840 subtitle="组合示例：iPhone 列表页与对话页" -->
+<!doctype html>
+<html lang="zh-CN">
+<head><link rel="stylesheet" href="../../tokens.css"><link rel="stylesheet" href="../bundle.css"><script>(function(){function a(){var t=location.hash.slice(1),r=document.documentElement;if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme");}a();addEventListener("hashchange",a);})();</script><meta charset="utf-8"><title>PhoneScreen</title>
+<style>
+  body { background: var(--surface-sunken); }
+  .pair { display: flex; gap: 40px; justify-content: center; padding: 30px 20px; }
+  .phone { position: relative; width: 375px; height: 720px; border-radius: calc(var(--radius-xl) + var(--space-4)); background: var(--canvas); border: var(--stroke-hairline) solid var(--line); box-shadow: var(--shadow-float); overflow: hidden; flex: none; }
+  .status { height: 50px; padding: 16px 32px 0; font-size: 15px; font-weight: 600; color: var(--ink); }
+  .large { font-family: var(--font-serif); font-size: 30px; line-height: 36px; font-weight: 600; letter-spacing: -0.01em; margin: 6px 16px 12px; color: var(--ink); }
+  .cards { display: flex; flex-direction: column; gap: var(--space-2); padding: 0 16px; }
+  .cards .pl-card { width: auto; border-radius: var(--radius-lg); padding: 14px var(--space-4); }
+  .cards .pl-card-title { font-size: 17px; line-height: 22px; }
+  .cards .pl-card-body { font-size: 13px; line-height: 17px; }
+  .tabs { position: absolute; left: 16px; right: 16px; bottom: 28px; display: flex; align-items: center; gap: var(--space-3); }
+  .tabbar { flex: 1; display: flex; justify-content: space-around; padding: 4px; }
+  .tab { display: flex; flex-direction: column; align-items: center; gap: 1px; width: 84px; padding: 5px 0; border-radius: var(--radius-full); font-size: 10px; font-weight: 500; color: var(--ink-secondary); }
+  .tab .pl-icon { width: 21px; height: 21px; }
+  .tab.is-selected { background: var(--fill-selected); color: var(--ink); }
+  .tabs .pl-glass-btn { width: 54px; height: 54px; }
+  .nav { position: absolute; top: 50px; left: 16px; right: 16px; display: flex; align-items: center; justify-content: space-between; z-index: 2; }
+  .nav .t { font-size: 15px; font-weight: 600; color: var(--ink); }
+  .chat { position: absolute; inset: 106px 16px 110px; display: flex; flex-direction: column; gap: var(--space-3); }
+  .chat .pl-msg-user { font-size: 15px; line-height: 20px; padding: 8px 14px; }
+  .chat .pl-msg-assistant { font-size: 17px; line-height: 26px; }
+  .chat .pl-msg-assistant p { margin-bottom: var(--space-2); }
+  .chat .pl-step { padding: 0; font-size: 13px; }
+  .bottom { position: absolute; left: 12px; right: 12px; bottom: 28px; }
+  .bottom .pl-composer { border-radius: var(--radius-xl); padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4); flex-direction: row; align-items: center; }
+  .bottom textarea { min-height: 0; height: 24px; font-size: 17px; line-height: 24px; padding: 0; }
+  .bottom .pl-send { width: 32px; height: 32px; }
+</style>
+</head>
+<body>
+<div class="pair">
+  <div class="phone">
+    <div class="status">9:41</div>
+    <div class="large">笔记</div>
+    <div class="cards">
+      <article class="pl-card"><p class="pl-card-title">本周回顾</p><p class="pl-card-body">完成 12 条笔记，整理了两个项目的待办，下周重点是首页改版。</p><div class="pl-card-meta"><span class="pl-tag pl-tag-success"><span class="pl-dot"></span>已同步</span><span>今天 09:41</span></div></article>
+      <article class="pl-card"><p class="pl-card-title">读书摘录</p><p class="pl-card-body">好的工具会退到背景里，让人只看见自己的工作。</p><div class="pl-card-meta"><span>昨天</span><span>·</span><span>阅读</span></div></article>
+      <article class="pl-card"><p class="pl-card-title">旅行清单</p><p class="pl-card-body">护照、转换插头、两本书、一件薄外套。</p><div class="pl-card-meta"><span>10 月 28 日</span></div></article>
+    </div>
+    <div class="tabs">
+      <div class="tabbar pl-glass">
+        <div class="tab is-selected"><svg class="pl-icon" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg>笔记</div>
+        <div class="tab"><svg class="pl-icon" viewBox="0 0 24 24"><path d="M5 5h14v10H9l-4 4z"/></svg>对话</div>
+        <div class="tab"><svg class="pl-icon" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>设置</div>
+      </div>
+      <button class="pl-glass pl-glass-btn" aria-label="搜索"><svg class="pl-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></button>
+    </div>
+  </div>
+  <div class="phone">
+    <div class="status">9:41</div>
+    <div class="nav">
+      <button class="pl-glass pl-glass-btn" aria-label="返回"><svg class="pl-icon" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <span class="t">周报整理</span>
+      <button class="pl-glass pl-glass-btn" aria-label="更多"><svg class="pl-icon" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18" cy="12" r="1"/></svg></button>
+    </div>
+    <div class="chat">
+      <div class="pl-msg-user">帮我把这份周报整理成三条要点</div>
+      <div class="pl-step pl-step-ok"><svg class="pl-icon pl-glyph" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg><span class="pl-step-name">读取</span><span class="pl-step-text">周报草稿.md</span><span class="pl-step-meta">0.4 秒</span></div>
+      <div class="pl-msg-assistant"><p><strong>首页改版定稿。</strong>下周三前交给开发。</p><p><strong>同步问题修复。</strong>离线编辑后重复保存的问题已解决。</p><p><strong>订阅转化提升。</strong>年付转化率从 3.1% 升到 4.4%。</p></div>
+    </div>
+    <div class="bottom">
+      <div class="pl-composer">
+        <textarea id="ps" rows="1" aria-label="消息" placeholder="继续追问"></textarea>
+        <button class="pl-send" disabled aria-label="发送"><svg class="pl-icon" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

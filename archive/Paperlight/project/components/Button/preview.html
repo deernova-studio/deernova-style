@@ -1,0 +1,27 @@
+<!-- @dsCard group="Actions" height=170 subtitle="主按钮每屏最多一个" -->
+<!doctype html>
+<html lang="zh-CN">
+<head><link rel="stylesheet" href="../../tokens.css"><link rel="stylesheet" href="../bundle.css"><script>(function(){function a(){var t=location.hash.slice(1),r=document.documentElement;if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme");}a();addEventListener("hashchange",a);})();</script><meta charset="utf-8"><title>Button</title></head>
+<body>
+<div class="pl-stage pl-stack" style="align-items:flex-start">
+  <div class="pl-note">macOS · 24pt</div>
+  <div class="pl-row">
+    <button class="pl-btn pl-btn-primary">保存</button>
+    <button class="pl-btn">取消</button>
+    <button class="pl-btn pl-btn-plain">跳过</button>
+    <button class="pl-btn pl-btn-danger">删除</button>
+    <button class="pl-btn pl-btn-sm">导出</button>
+    <button class="pl-btn is-focus">键盘焦点</button>
+    <button class="pl-btn pl-btn-primary" disabled>保存</button>
+  </div>
+  <div class="pl-note" style="margin-top:var(--space-2)">iOS · 默认 36pt / 小号 30pt / 通栏 46pt，点击区域都补足到 44pt</div>
+  <div class="pl-row">
+    <button class="pl-btn pl-btn-primary pl-btn-ios">继续</button>
+    <button class="pl-btn pl-btn-ios">稍后</button>
+    <button class="pl-btn pl-btn-ios-sm">获取</button>
+    <button class="pl-btn pl-btn-primary pl-btn-ios-sm">已订阅</button>
+    <div style="width:280px"><button class="pl-btn pl-btn-primary pl-btn-ios-lg">开始使用</button></div>
+  </div>
+</div>
+</body>
+</html>

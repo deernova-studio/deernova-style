@@ -1,0 +1,28 @@
+<!-- @dsCard group="Input" height=240 subtitle="多行输入与发送" -->
+<!doctype html>
+<html lang="zh-CN">
+<head><link rel="stylesheet" href="../../tokens.css"><link rel="stylesheet" href="../bundle.css"><script>(function(){function a(){var t=location.hash.slice(1),r=document.documentElement;if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme");}a();addEventListener("hashchange",a);})();</script><meta charset="utf-8"><title>Composer</title></head>
+<body>
+<div class="pl-stage pl-stack" style="align-items:center">
+  <div class="pl-composer">
+    <div class="pl-attach"><svg class="pl-icon" viewBox="0 0 24 24" style="width:12px;height:12px"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg>周报草稿.md</div>
+    <textarea id="c1" rows="2" aria-label="消息" placeholder="写点什么，或拖入文件">帮我把这份周报整理成三条要点</textarea>
+    <div class="pl-composer-bar">
+      <button class="pl-iconbtn" aria-label="添加附件"><svg class="pl-icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button class="pl-chip">标准模式<svg class="pl-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+      <span class="pl-spacer"></span>
+      <span class="pl-note" style="margin-right:var(--space-2)">剩余 42 次</span>
+      <button class="pl-send" aria-label="发送"><svg class="pl-icon" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+    </div>
+  </div>
+  <div class="pl-composer" style="box-shadow:none">
+    <textarea id="c2" rows="1" aria-label="消息" placeholder="写点什么，或拖入文件"></textarea>
+    <div class="pl-composer-bar">
+      <button class="pl-iconbtn" aria-label="添加附件"><svg class="pl-icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+      <span class="pl-spacer"></span>
+      <button class="pl-send" disabled aria-label="发送"><svg class="pl-icon" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

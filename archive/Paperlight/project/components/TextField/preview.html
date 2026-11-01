@@ -1,0 +1,28 @@
+<!-- @dsCard group="Input" height=180 subtitle="单行输入" -->
+<!doctype html>
+<html lang="zh-CN">
+<head><link rel="stylesheet" href="../../tokens.css"><link rel="stylesheet" href="../bundle.css"><script>(function(){function a(){var t=location.hash.slice(1),r=document.documentElement;if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme");}a();addEventListener("hashchange",a);})();</script><meta charset="utf-8"><title>TextField</title></head>
+<body>
+<div class="pl-stage" style="align-items:flex-start;gap:var(--space-5)">
+  <div class="pl-field">
+    <label for="f1">名称</label>
+    <input id="f1" class="pl-input" placeholder="例如：读书摘录">
+    <span class="pl-help">会显示在侧边栏里。</span>
+  </div>
+  <div class="pl-field">
+    <label for="f2">邮箱</label>
+    <input id="f2" class="pl-input is-focus" value="hello@paperlight.app">
+    <span class="pl-help">用于接收登录验证码。</span>
+  </div>
+  <div class="pl-field">
+    <label for="f3">验证码</label>
+    <input id="f3" class="pl-input is-error" value="12 34">
+    <span class="pl-help is-error">验证码是 6 位数字，请检查后重新输入。</span>
+  </div>
+  <div class="pl-field" style="width:300px">
+    <label for="f4">iOS · 44pt</label>
+    <input id="f4" class="pl-input pl-input-ios" placeholder="搜索笔记">
+  </div>
+</div>
+</body>
+</html>

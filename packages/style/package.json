@@ -1,0 +1,20 @@
+{
+  "name": "@deernova/style",
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "deernova-style": "bin/cli.mjs"
+  },
+  "files": [
+    "bin",
+    "skill",
+    "template"
+  ],
+  "description": "Deernova design skill installer and website template CLI"
+}

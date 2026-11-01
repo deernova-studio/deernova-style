@@ -1,0 +1,40 @@
+<!-- @dsCard group="Actions" height=260 subtitle="浮在内容之上的操作层" -->
+<!doctype html>
+<html lang="zh-CN">
+<head><link rel="stylesheet" href="../../tokens.css"><link rel="stylesheet" href="../bundle.css"><script>(function(){function a(){var t=location.hash.slice(1),r=document.documentElement;if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme");}a();addEventListener("hashchange",a);})();</script><meta charset="utf-8"><title>GlassControls</title>
+<style>
+  .scene { position: relative; height: 260px; overflow: hidden; background: var(--surface); }
+  .content { position: absolute; inset: 0; padding: var(--space-4); display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+  .content .dn-card { width: auto; }
+  .bar { position: absolute; left: 0; right: 0; bottom: var(--space-4); display: flex; justify-content: center; align-items: center; gap: var(--space-3); }
+  .top { position: absolute; top: var(--space-2); right: var(--space-4); display: flex; gap: var(--space-2); }
+</style>
+</head>
+<body>
+<div class="scene">
+  <div class="content" aria-hidden="true">
+    <div class="dn-card"><p class="dn-card-title">本周回顾</p><p class="dn-card-body">完成 12 条笔记，整理了两个项目的待办。</p><div class="dn-card-meta">今天 09:41</div></div>
+    <div class="dn-card"><p class="dn-card-title">读书摘录</p><p class="dn-card-body">好的工具会退到背景里，让人只看见自己的工作。</p><div class="dn-card-meta">昨天</div></div>
+    <div class="dn-card"><p class="dn-card-title">旅行清单</p><p class="dn-card-body">护照、转换插头、两本书、一件薄外套。</p><div class="dn-card-meta">10 月 28 日</div></div>
+    <div class="dn-card"><p class="dn-card-title">产品想法</p><p class="dn-card-body">一个账号打通所有应用，订阅一次全部可用。</p><div class="dn-card-meta">10 月 26 日</div></div>
+    <div class="dn-card"><p class="dn-card-title">会议记录</p><p class="dn-card-body">下周三前确定首页的信息层级。</p><div class="dn-card-meta">10 月 25 日</div></div>
+    <div class="dn-card"><p class="dn-card-title">周末</p><p class="dn-card-body">去山里走走，带上相机。</p><div class="dn-card-meta">10 月 24 日</div></div>
+  </div>
+  <div class="top">
+    <div class="dn-glass dn-glass-group">
+      <button class="dn-glass-btn" aria-label="分享"><svg class="dn-icon" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M5 13v6h14v-6"/></svg></button>
+      <button class="dn-glass-btn" aria-label="更多"><svg class="dn-icon" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18" cy="12" r="1"/></svg></button>
+    </div>
+  </div>
+  <div class="bar">
+    <div class="dn-glass dn-glass-group">
+      <button class="dn-glass-btn is-selected" aria-label="笔记"><svg class="dn-icon" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg></button>
+      <button class="dn-glass-btn" aria-label="收藏"><svg class="dn-icon" viewBox="0 0 24 24"><path d="M12 4l2.4 5 5.6.6-4.2 3.8 1.2 5.5L12 16l-5 2.9 1.2-5.5L4 9.6l5.6-.6z"/></svg></button>
+      <button class="dn-glass-btn" aria-label="设置"><svg class="dn-icon" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+    </div>
+    <button class="dn-glass dn-glass-btn" aria-label="搜索"><svg class="dn-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></button>
+    <button class="dn-glass dn-glass-btn dn-glass-prominent" aria-label="新建"><svg class="dn-icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+  </div>
+</div>
+</body>
+</html>

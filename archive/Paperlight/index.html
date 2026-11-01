@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paperlight 设计规范</title>
+<link rel="stylesheet" href="project/tokens.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: var(--canvas); color: var(--ink); font-family: var(--font-sans); font-size: 14px; line-height: 22px; -webkit-font-smoothing: antialiased; }
+  .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); }
+  aside { position: sticky; top: 0; height: 100vh; overflow: auto; background: var(--surface); border-right: var(--stroke-hairline) solid var(--line); padding: var(--space-4) var(--space-3) var(--space-8); }
+  .brand { font-family: var(--font-serif); font-size: 20px; line-height: 25px; font-weight: 600; padding: 0 var(--space-2); }
+  .seg { display: flex; gap: 2px; padding: 2px; margin: var(--space-3) var(--space-2) 0; background: var(--surface-sunken); border-radius: var(--radius-sm); }
+  .seg button { flex: 1; appearance: none; border: 0; background: transparent; font: inherit; font-size: 12px; line-height: 16px; height: 22px; padding: 0; white-space: nowrap; border-radius: 4px; color: var(--ink-secondary); cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--surface-raised); color: var(--ink); box-shadow: var(--shadow-control); }
+  .navhead { font-size: 11px; line-height: 13px; font-weight: 500; color: var(--ink-tertiary); margin: var(--space-4) var(--space-2) var(--space-1); }
+  nav a { display: block; padding: 3px var(--space-2); border-radius: var(--radius-sm); color: var(--ink-secondary); text-decoration: none; font-size: 13px; line-height: 20px; }
+  nav a:hover { background: var(--fill-hover); color: var(--ink); }
+  main { min-width: 0; padding: var(--space-8) var(--space-10) 120px; }
+  .wide { max-width: 960px; }
+  .hero { border: var(--stroke-hairline) solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
+  .hero iframe { display: block; border: 0; width: 960px; max-width: 100%; height: 288px; }
+  .intro { max-width: 680px; margin: var(--space-6) 0 0; color: var(--ink-secondary); }
+  .intro code { color: var(--ink); }
+  h2.part { font-family: var(--font-serif); font-size: 30px; line-height: 36px; font-weight: 600; margin: 56px 0 var(--space-3); }
+  .doc { max-width: 720px; }
+  .doc h2 { font-family: var(--font-serif); font-size: 22px; line-height: 28px; font-weight: 600; margin: 40px 0 var(--space-3); scroll-margin-top: var(--space-6); }
+  .doc p, .doc ul, .doc ol { margin: 0 0 var(--space-3); }
+  .doc ul, .doc ol { padding-left: 1.4em; }
+  .doc li { margin: 0 0 var(--space-1); }
+  .doc strong { font-weight: 600; }
+  code { font-family: var(--font-mono); font-size: 12.5px; background: var(--surface-sunken); padding: 1px 4px; border-radius: var(--radius-xs); }
+  pre { background: var(--surface-sunken); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); overflow: auto; margin: 0 0 var(--space-3); }
+  pre code { background: none; padding: 0; font-size: 12px; line-height: 18px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; line-height: 19px; margin: 0 0 var(--space-3); }
+  th, td { text-align: left; vertical-align: top; padding: 6px 10px; border-bottom: var(--stroke-hairline) solid var(--line); }
+  th { color: var(--ink-secondary); font-weight: 600; }
+  h2.group { font-family: var(--font-serif); font-size: 22px; line-height: 28px; font-weight: 600; margin: 48px 0 0; padding-top: var(--space-4); border-top: var(--stroke-hairline) solid var(--line); }
+  .comp { margin: var(--space-8) 0 0; scroll-margin-top: var(--space-6); }
+  .comp-head { display: flex; align-items: baseline; gap: var(--space-3); margin: 0 0 var(--space-3); }
+  .comp-head h3 { margin: 0; font-size: 16px; line-height: 22px; font-weight: 600; }
+  .sub { color: var(--ink-secondary); font-size: 13px; }
+  .open { margin-left: auto; font-size: 12px; color: var(--ink-secondary); }
+  .frame { border: var(--stroke-hairline) solid var(--line); border-radius: var(--radius-lg); overflow: auto; background: var(--canvas); margin: 0 0 var(--space-4); max-width: 960px; }
+  .frame iframe { display: block; border: 0; }
+  a { color: var(--ink); }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; border-right: 0; border-bottom: var(--stroke-hairline) solid var(--line); }
+    main { padding: var(--space-6) var(--space-4) 80px; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <div class="brand">Paperlight</div>
+  <div class="seg" role="group" aria-label="主题">
+    <button data-theme-btn="" aria-pressed="true">跟随系统</button><button data-theme-btn="light" aria-pressed="false">浅色</button><button data-theme-btn="dark" aria-pressed="false">深色</button>
+  </div>
+  <nav>
+    <div class="navhead">设计规范</div><a href="#s1">原则</a><a href="#s2">文案</a><a href="#s3">颜色</a><a href="#s4">字体</a><a href="#s5">间距与尺寸</a><a href="#s6">圆角</a><a href="#s7">线条</a><a href="#s8">层级与阴影</a><a href="#s9">Liquid Glass</a><a href="#s10">动效</a><a href="#s11">图标</a><a href="#s12">无障碍</a><a href="#s13">组件</a>
+    <div class="navhead">操作</div><a href="#c-Button">Button</a><a href="#c-GlassControls">GlassControls</a><a href="#c-Segmented">Segmented</a><div class="navhead">输入</div><a href="#c-Composer">Composer</a><a href="#c-TextField">TextField</a><div class="navhead">导航</div><a href="#c-ListGroup">ListGroup</a><a href="#c-Sidebar">Sidebar</a><div class="navhead">内容</div><a href="#c-Card">Card</a><a href="#c-CodeBlock">CodeBlock</a><a href="#c-EmptyState">EmptyState</a><a href="#c-Message">Message</a><a href="#c-StepRow">StepRow</a><div class="navhead">反馈</div><a href="#c-Banner">Banner</a><a href="#c-Sheet">Sheet</a><a href="#c-Tag">Tag</a><div class="navhead">组合示例</div><a href="#c-MacWindow">MacWindow</a><a href="#c-PhoneScreen">PhoneScreen</a>
+  </nav>
+</aside>
+<main>
+  <div class="wide">
+    <div class="hero"><iframe data-src="project/components/Cover/preview.html" src="project/components/Cover/preview.html" title="封面"></iframe></div>
+    <p class="intro">macOS 与 iOS 应用的设计语言，只用黑、白、灰。这个页面不需要联网，双击就能打开。规范原文在 <code>project/README.md</code>，每个组件的说明在 <code>project/components/组件名/README.md</code>，设计变量在 <code>project/tokens.json</code>（网页用的同一套变量在 <code>tokens.css</code>）。<code>images/</code> 里是每个组件浅色和深色的截图。</p>
+    <h2 class="part">设计规范</h2>
+    <div class="doc"><p>Paperlight 是给 macOS 和 iOS 应用用的一套设计语言：只用黑、白、灰。纸面承载内容，液态玻璃（Liquid Glass）承载操作，强调靠明暗对比，不靠彩色。整体紧凑、安静、克制，像一件趁手的工具。</p>
+<h2 id="s1">原则</h2>
+<ol><li><strong>纸面与玻璃分层。</strong> 文字、列表、卡片、代码这些内容，放在不透明的纸面上：<code>canvas</code>、<code>surface</code>、<code>surface-raised</code>、<code>surface-sunken</code>。工具栏、标签栏、浮动按钮、弹出层这些操作，浮在内容之上，用系统的 Liquid Glass。玻璃上不放内容，内容也不做成玻璃。</li><li><strong>黑白灰，强调靠对比。</strong> <code>accent</code> 就是墨色本身：浅色主题下主按钮是黑底白字，深色主题下是白底黑字。界面里唯一的彩色是状态色（成功、警告、错误、提示），只在表达状态时出现。</li><li><strong>用线条代替阴影。</strong> 区块之间用 <code>line</code> 细线分隔（<code>stroke-hairline</code>）。只有真正浮起来的东西（菜单、弹窗、浮动面板）才加阴影 <code>shadow-float</code>。</li><li><strong>衬线用来"说"，无衬线用来"做"。</strong> 标题、空状态、长文阅读（文章、AI 回答）用衬线 <code>--font-serif</code>；按钮、标签、列表、表单这些界面文字，用系统无衬线 <code>--font-sans</code>。</li><li><strong>紧凑。</strong> Mac 正文 13pt、行高约 1.4 倍，控件 24pt、列表行 26pt；靠细线和少量留白分组，不靠大块空白。iOS 保留系统的 17pt 正文和 44pt 点击区域，但按钮看起来只有 36pt。</li><li><strong>原生优先。</strong> 系统已有的控件（Toggle、Picker、Menu、DatePicker、Alert）直接用，只通过 <code>tint</code> 和字体让它们融入。自定义组件只做系统没有的东西：Composer、Message、StepRow。</li></ol>
+<h2 id="s2">文案</h2>
+<ul><li>用"你"称呼用户。语气平实直接，不用感叹号，不用 emoji。</li><li>按钮以动词开头，说清点了会发生什么：「保存」「新建笔记」「删除 3 个文件」。不用「确定」「OK」。操作完成后的提示用完成态：「已保存」「已复制」。</li><li>错误提示要说明出了什么问题、怎么解决：「网络连接已断开，恢复后会自动重试。」不道歉，不含糊。</li><li>中文与英文、中文与数字之间加一个半角空格：「同步到 iCloud」「剩余 12 次」。数字和单位用半角。</li><li>标题、按钮、标签不加句号；完整的句子加句号。</li><li>空状态写法：标题说明现在的状态，正文告诉用户下一步做什么。例如「还没有笔记」/「写下第一条想法，它会同步到你所有的设备。」</li></ul>
+<h2 id="s3">颜色</h2>
+<p>所有颜色都是语义 token，分 Light 和 Dark 两套主题，两套都验算过对比度。灰阶全部是中性灰，不偏暖也不偏冷。</p>
+<ul><li><strong>纸面层级</strong>，从下到上：窗口底色 <code>canvas</code> → 内容区和卡片 <code>surface</code> → 输入框、Composer、弹出层 <code>surface-raised</code>。代码块、用户消息气泡、展开的详情用 <code>surface-sunken</code>。</li><li><strong>文字</strong>：正文用 <code>ink</code>，次要信息用 <code>ink-secondary</code>，占位符、时间戳、计数用 <code>ink-tertiary</code>。三者在四种纸面上都不低于 4.5:1。</li><li><strong>线条</strong>：分隔线和卡片描边用 <code>line</code>，属于装饰。输入框边框用 <code>line-control</code>，不低于 3:1，让人看得出这里可以输入。</li><li><strong>强调</strong>：<code>accent</code> 等于 <code>ink</code>，用于主按钮填充、选中指示、焦点环。主按钮上的文字用 <code>on-accent</code>，不要写死白色，深色主题下它是黑色。浅灰强调底用 <code>accent-soft</code>，上面的文字用 <code>ink</code>。链接用 <code>ink</code> 加下划线，不用彩色。</li><li><strong>焦点</strong>：<code>focus-ring</code> 等于 <code>accent</code>，2pt 实线，外偏移 2pt。</li><li><strong>状态色</strong>：<code>success</code>（青绿）、<code>warning</code>（赭黄）、<code>danger</code>（莓红）、<code>info</code>（蓝），各自配一个 <code>-soft</code> 浅底。这是界面里仅有的彩色，只用在状态上，不拿来装饰。状态必须同时带图标或文字，不能只靠颜色区分。<code>success</code> 特意偏青，和 <code>danger</code> 拉开距离，色弱用户也能分辨。开关打开时用 <code>success</code>，因为黑白开关在深色主题下看不清圆钮。</li><li><strong>交互底色</strong>：悬停用 <code>fill-hover</code>，选中用 <code>fill-selected</code>。它们是半透明的，叠在任何纸面上都成立。</li><li><strong>仅限网页预览</strong>：<code>glass-fill</code>、<code>glass-stroke</code>、<code>shadow-glass</code> 只是在网页里模拟玻璃效果。App 里一律用系统的 <code>.glassEffect()</code>，不要用这些值自己画玻璃。</li></ul>
+<p>在 SwiftUI 里落地：在 Asset Catalog 里按 token 名建 Color Set，分别填入 Any 和 Dark 两套值，再写一个扩展来引用。扩展写在 <code>ShapeStyle</code> 上，这样 <code>.foregroundStyle(.inkSecondary)</code>、<code>.background(.surface, in: …)</code> 都能直接用点语法。组件说明里的代码都按这套命名书写：</p>
+<pre><code>extension ShapeStyle where Self == Color {
+    static var canvas: Color { Color("canvas") }
+    static var surface: Color { Color("surface") }
+    static var surfaceRaised: Color { Color("surface-raised") }
+    static var surfaceSunken: Color { Color("surface-sunken") }
+    static var ink: Color { Color("ink") }
+    static var inkSecondary: Color { Color("ink-secondary") }
+    static var inkTertiary: Color { Color("ink-tertiary") }
+    static var line: Color { Color("line") }
+    static var brandAccent: Color { Color("accent") }   // 等于 ink；避开系统的 .accentColor
+    // success、successSoft、warning、danger、fillSelected 等其余 token 同理
+}
+
+// 在 App 入口统一着色，系统控件会自动跟随（按钮、选中态变成黑 / 白）
+WindowGroup {
+    RootView().tint(.brandAccent)
+}
+// 开关单独着色
+Toggle("iCloud 同步", isOn: $sync).tint(.success)</code></pre>
+<h2 id="s4">字体</h2>
+<p>全部使用系统字体，不打包字体文件：App 体积不增加，也自动支持动态字体（Dynamic Type）。</p>
+<table><thead><tr><th>角色</th><th>西文</th><th>中文</th><th>SwiftUI</th></tr></thead><tbody><tr><td>衬线：标题、长文</td><td>New York</td><td>苹方</td><td><code>.system(.title, design: .serif)</code></td></tr><tr><td>无衬线：界面</td><td>SF Pro</td><td>苹方</td><td><code>.body</code>、<code>.headline</code> 等</td></tr><tr><td>等宽：代码、数据</td><td>SF Mono</td><td>苹方</td><td><code>.system(.body, design: .monospaced)</code></td></tr></tbody></table>
+<ul><li>macOS 和 iOS 各有一套字号，见 Typography。Mac 正文 13pt、行高 18（<code>mac-body</code>），长文 14pt、行高 22（<code>mac-prose</code>）；iOS 正文 17pt、行高 23（<code>ios-body</code>）。</li><li>iOS 一律用文本样式（<code>.body</code>、<code>.headline</code>），不要写死字号，这样动态字体才会生效。需要衬线时用 <code>.system(.title2, design: .serif)</code> 这种写法，同样能随系统缩放。</li><li>界面文字行高约为字号的 1.4 倍；长文阅读放宽到 1.5–1.6 倍，中文读起来不挤。</li><li>如果想让中文标题也有衬线的气质，可以打包思源宋体（Source Han Serif，开源可商用）的子集，只用在大标题和营销页上。界面文字始终用苹方。</li><li>需要上下对齐的数字（计数、价格、时间）用等宽数字：<code>.monospacedDigit()</code>。</li></ul>
+<h2 id="s5">间距与尺寸</h2>
+<ul><li>采用 4pt 网格：<code>space-1</code>（4）、<code>space-2</code>（8）、<code>space-3</code>（12）、<code>space-4</code>（16）、<code>space-5</code>（20）、<code>space-6</code>（24）、<code>space-8</code>（32）、<code>space-10</code>（40）。日常布局基本只用到 <code>space-1</code> 到 <code>space-4</code>。</li><li><strong>macOS 紧凑</strong>：控件高 <code>control-mac</code>（24），侧边栏和列表行 <code>row-mac</code>（26），内容区边距 <code>space-4</code>，卡片内边距 <code>space-3</code>，消息之间 <code>space-4</code>，侧边栏宽 <code>sidebar-mac</code>（220）。</li><li><strong>iOS</strong>：可点区域至少 <code>control-ios</code>（44）。按钮的可见高度：默认 <code>button-ios</code>（36），小号 <code>button-ios-sm</code>（30），通栏主按钮 <code>control-ios-lg</code>（46）。页面左右边距 <code>space-4</code>，卡片之间 <code>space-2</code>，分组之间 <code>space-5</code>。</li><li>长文阅读的栏宽不超过 <code>content-max</code>（680），14pt 下大约每行 45 个汉字。</li><li>组与组之间的间距至少是组内间距的 2 倍。层次靠间距建立，不靠加更多的线和框。</li></ul>
+<h2 id="s6">圆角</h2>
+<ul><li><code>radius-xs</code>（4）：标签、复选框。</li><li><code>radius-sm</code>（6）：Mac 按钮、输入框、侧边栏选中块。</li><li><code>radius-md</code>（8）：Mac 卡片、横幅、代码块、菜单。</li><li><code>radius-lg</code>（12）：iOS 卡片、分组列表、Composer、消息气泡、Mac 侧边栏面板。</li><li><code>radius-xl</code>（24）：iOS 底部弹窗、单行 Composer。</li><li><code>radius-full</code>：胶囊和圆形，用于玻璃按钮、iOS 主按钮、发送按钮。</li><li>嵌套时保持同心：内圆角 = 外圆角 − 内边距。iOS 26 / macOS 26 起可以直接用 <code>ConcentricRectangle()</code>，内层会自动和外层容器同心。</li></ul>
+<h2 id="s7">线条</h2>
+<ul><li><code>stroke-hairline</code>：1 个物理像素，在 Retina 屏上是 0.5pt，用于分隔线和卡片描边。SwiftUI 里写成 <code>1 / displayScale</code>，<code>displayScale</code> 从 <code>@Environment(\.displayScale)</code> 读取。</li><li><code>stroke-control</code>：1pt，用于输入框边框。</li><li><code>stroke-focus</code>：2pt，用于焦点环。</li><li>列表分隔线从文字起点开始，不贯穿到左边缘。</li></ul>
+<h2 id="s8">层级与阴影</h2>
+<p>从下到上分三层：</p>
+<ol><li>纸面：<code>canvas</code> 和 <code>surface</code>。</li><li>用细线分隔的内容块：没有阴影。</li><li>浮层：玻璃控件、菜单、弹窗，带 <code>shadow-float</code> 或系统玻璃自带的阴影。</li></ol>
+<p>卡片不加阴影。</p>
+<h2 id="s9">Liquid Glass</h2>
+<p>目标系统设为 iOS 26+ / macOS 26+，直接用系统 API，不写兼容层。</p>
+<p><strong>用玻璃的地方</strong>（大部分由系统自动提供）：</p>
+<ul><li>导航栏、工具栏、标签栏、Mac 侧边栏：使用标准的 <code>NavigationStack</code>、<code>NavigationSplitView</code>、<code>TabView</code>、<code>.toolbar</code>，系统会自动渲染成玻璃。</li><li>浮动操作按钮、浮动工具条：用 <code>.glassEffect()</code>。相邻的几个玻璃元素放进同一个 <code>GlassEffectContainer</code>，它们会互相融合，切换时也会跟着变形。</li><li>底部弹窗、弹出菜单、popover：系统自动处理。</li><li>玻璃层上的主操作用 <code>.buttonStyle(.glassProminent)</code> 加 <code>.tint(.brandAccent)</code>，次要操作用 <code>.buttonStyle(.glass)</code>。</li></ul>
+<p><strong>不用玻璃的地方</strong>：卡片、列表行、消息、输入框、代码块，以及所有需要长时间阅读的内容。</p>
+<p><strong>规则</strong>：</p>
+<ul><li>玻璃上不叠玻璃。</li><li>玻璃上只放图标和很短的标签，不放段落。</li><li>只有主操作的玻璃才用实色（黑底白图标），一屏最多一个。</li><li>iOS 上可点击的自定义玻璃加 <code>.interactive()</code>，按下时会有形变反馈。</li><li>让内容从工具栏下面滚过去，保留系统的滚动边缘效果。不要给工具栏加实色背景。</li><li>iOS 标签栏在向下滚动时收起：<code>.tabBarMinimizeBehavior(.onScrollDown)</code>。</li><li>Mac 上侧边栏旁边的大图，用 <code>.backgroundExtensionEffect()</code> 延伸到侧边栏下方。</li><li>用户开启「降低透明度」后，系统会自动把玻璃换成实色。自己写的半透明效果也要读取 <code>accessibilityReduceTransparency</code>，并做同样的处理。</li></ul>
+<pre><code>// 浮动工具条：两个玻璃按钮融合成一组
+GlassEffectContainer(spacing: 12) {
+    HStack(spacing: 12) {
+        Button("新建", systemImage: "plus") { createNote() }
+            .buttonStyle(.glassProminent)
+        Button("搜索", systemImage: "magnifyingglass") { search() }
+            .buttonStyle(.glass)
+    }
+}
+.tint(.brandAccent)</code></pre>
+<h2 id="s10">动效</h2>
+<ul><li>默认用弹簧动画：<code>.spring(response: 0.35, dampingFraction: 0.85)</code>。悬停、按压这类即时反馈用 0.12s，展开、切换用 0.2s，弹窗的动画交给系统。</li><li>动效用来说明因果：东西从哪里来、到哪里去。不做装饰性的循环动画。</li><li>用户开启「减弱动态效果」（<code>accessibilityReduceMotion</code>）后，位移和缩放动画换成淡入淡出。</li></ul>
+<h2 id="s11">图标</h2>
+<ul><li>只用 SF Symbols，和系统保持一致。不用 emoji 当图标。</li><li>图标粗细跟随旁边的文字。Mac 上图标 14pt，13pt 文字旁的图标用 <code>.medium</code>，看起来更清楚。</li><li>默认颜色 <code>ink-secondary</code>，选中态和主操作用 <code>ink</code>。图标不用彩色，状态图标除外。多层符号用 <code>.symbolRenderingMode(.hierarchical)</code>。</li><li>状态图标固定为：成功 <code>checkmark.circle.fill</code>，警告 <code>exclamationmark.triangle.fill</code>，错误 <code>xmark.octagon.fill</code>，提示 <code>info.circle.fill</code>。</li><li>目前还没有品牌标志，界面里先用文字名称。做好标志后，再新增一个 Logos 资产组。</li><li>组件预览里的图标是近似 SF Symbols 的线稿，App 里换成对应的 SF Symbols。</li></ul>
+<h2 id="s12">无障碍</h2>
+<ul><li>每个文字 token 在它说明里注明的纸面上不低于 4.5:1，两套主题都验算过。界面紧凑不等于字小：Mac 正文不低于 13pt，说明文字不低于 11pt。</li><li>iOS 全面支持动态字体，在最大字号下也不截断文字：允许换行，横排放不下就改成竖排。</li><li>iOS 上每个可点元素的点击区域至少 44×44pt，看起来可以更小（按钮 36pt、小按钮 30pt），差的部分用透明的内边距补足；Mac 上的图标按钮至少 24×24pt。</li><li>只靠颜色传达的信息，一律补上图标或文字。</li></ul>
+<h2 id="s13">组件</h2>
+<p>组件页里的预览是网页上的近似效果，用来对齐尺寸、颜色和层级。App 里用 SwiftUI 实现，每个组件的说明里都写了对应的 SwiftUI 写法，以及需要传入哪些内容。Layouts 分组里有一个 Mac 窗口示例和一个 iPhone 界面示例，展示各个组件组合在一起的样子。</p></div>
+    <h2 class="part">组件</h2>
+    <h2 class="group" id="g-Actions">操作</h2><section class="comp" id="c-Button">
+<div class="comp-head"><h3>Button</h3><span class="sub">主按钮每屏最多一个</span><a class="open" href="project/components/Button/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/Button/preview.html" src="project/components/Button/preview.html" style="width:100%;height:170px" title="Button 预览"></iframe></div>
+<div class="doc"><p>按钮执行一个动作；每个视图最多一个主按钮（<code>accent</code> 填充，浅色主题黑底白字、深色主题白底黑字），用来完成这一屏存在的理由。</p>
+<p><strong>变体</strong></p>
+<ul><li>主按钮：<code>accent</code> 底、<code>on-accent</code> 字。用于保存、发送、购买等关键动作。</li><li>次按钮：<code>surface-raised</code> 底、<code>line</code> 描边、<code>ink</code> 字，带 <code>shadow-control</code>。</li><li>文字按钮：无底，<code>ink-secondary</code> 字，悬停时出现 <code>fill-hover</code>。用于工具栏和卡片内的次要操作。</li><li>危险按钮：<code>danger-soft</code> 底、<code>danger</code> 字。只有在最终确认弹窗里，才用系统的 <code>.destructive</code> 样式。</li></ul>
+<p><strong>尺寸</strong></p>
+<table><thead><tr><th></th><th>macOS</th><th>iOS</th></tr></thead><tbody><tr><td>小</td><td><code>control-mac-sm</code>（20），<code>radius-xs</code>，11pt</td><td><code>button-ios-sm</code>（30），胶囊，13pt 半粗，用于卡片和列表里的行内操作</td></tr><tr><td>默认</td><td><code>control-mac</code>（24），<code>radius-sm</code>，13pt 中粗</td><td><code>button-ios</code>（36），胶囊，15pt 半粗</td></tr><tr><td>大</td><td><code>control-mac-lg</code>（28）</td><td><code>control-ios-lg</code>（46），通栏胶囊，16pt 半粗，只用于页面底部或弹窗里唯一的主操作</td></tr></tbody></table>
+<p>iOS 按钮看起来可以比 44pt 小，但点击区域必须补足到 44pt（<code>control-ios</code>）：在按钮外面加透明的内边距，或者用 <code>.contentShape</code> 扩大可点范围。</p>
+<p><strong>iOS 怎么选尺寸</strong>：不是随意挑，按按钮所在的位置定。</p>
+<ul><li>列表行、卡片角落里的行内操作（获取、关注、打开）→ 小号 30pt。</li><li>页面和卡片里的普通按钮，包括并排的两个按钮（以后再说 / 开启）→ 默认 36pt。同一行里的按钮用同一个尺寸。</li><li>整页唯一的主操作，放在页面底部（登录、订阅、开始使用）→ 通栏 46pt，一屏最多一个。</li><li>导航栏、标签栏、工具栏里的按钮 → 用系统控件，不自己设尺寸。</li></ul>
+<p>iOS 按钮比 Mac 大是有意的：手指比鼠标指针粗，Mac 默认 24pt，iOS 默认 36pt。在 Mac 屏幕上看 iOS 设计图会比真机上大一些，因为 Mac 上 1pt 的物理尺寸比 iPhone 上大，判断大小时以真机为准。</p>
+<p><strong>需要提供</strong>：标签（动词开头）、可选的 SF Symbol、点击动作。加载中时保持按钮宽度不变，把标签换成 <code>ProgressView()</code>。</p>
+<pre><code>Button("保存") { save() }
+    .buttonStyle(.borderedProminent)   // 主按钮，颜色跟随 .tint(.brandAccent)
+Button("取消", role: .cancel) { dismiss() }
+    .buttonStyle(.bordered)
+Button("删除", role: .destructive) { delete() }
+
+// iOS 默认按钮：看起来 36pt 高，点击区域补足到 44pt
+Button("继续") { next() }
+    .font(.subheadline.weight(.semibold))
+    .buttonStyle(.borderedProminent)
+    .buttonBorderShape(.capsule)
+    .controlSize(.regular)
+    .padding(.vertical, 4)                 // 透明的外边距，把点击区域撑到 44pt
+    .contentShape(.rect)
+
+// iOS 底部通栏主按钮（46pt）
+Button { start() } label: {
+    Text("开始使用").font(.callout.weight(.semibold)).frame(maxWidth: .infinity, minHeight: 46)
+}
+.buttonStyle(.borderedProminent)
+.buttonBorderShape(.capsule)
+
+// 放在玻璃层上时改用 .glassProminent / .glass，见 GlassControls</code></pre>
+<p><strong>不要</strong>：一个视图里放两个主按钮；用「确定」「OK」做标签；按钮里写一整句话；为了强调把次要按钮也做成黑底。</p></div>
+</section><section class="comp" id="c-GlassControls">
+<div class="comp-head"><h3>GlassControls</h3><span class="sub">浮在内容之上的操作层</span><a class="open" href="project/components/GlassControls/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/GlassControls/preview.html" src="project/components/GlassControls/preview.html" style="width:100%;height:260px" title="GlassControls 预览"></iframe></div>
+<div class="doc"><p>浮在内容之上的玻璃操作层：工具栏按钮组、标签栏、浮动操作按钮。</p>
+<p><strong>什么时候用</strong>：用户在浏览内容时随时要用到的操作，比如新建、搜索、切换页面、分享。内容本身永远不放在玻璃上。</p>
+<p><strong>需要提供</strong>：每个按钮的 SF Symbol 和无障碍标签（<code>accessibilityLabel</code>）、点击动作；如果是标签栏，还要提供当前选中项。</p>
+<p><strong>规格</strong></p>
+<ul><li>单个玻璃按钮：圆形，<code>control-ios</code>（44）。</li><li>按钮组：胶囊形，内部按钮 36pt，间距 2pt。相邻的玻璃元素放进同一个 <code>GlassEffectContainer</code>，间距 <code>space-3</code>。</li><li>选中项：图标从 <code>ink-secondary</code> 变成 <code>ink</code>，底色 <code>fill-selected</code>。</li><li>实色玻璃（<code>accent</code> 底、<code>on-accent</code> 图标，也就是黑底白图标）一屏只用一次，留给主操作，比如「新建」。</li></ul>
+<pre><code>// 标准标签栏与工具栏，系统自动渲染为玻璃
+TabView {
+    Tab("笔记", systemImage: "doc.text") { NotesView() }
+    Tab("收藏", systemImage: "star") { FavoritesView() }
+    Tab(role: .search) { SearchView() }      // 搜索单独成为右侧的圆形玻璃按钮
+}
+.tabBarMinimizeBehavior(.onScrollDown)
+.tint(.brandAccent)
+
+// 自定义浮动按钮
+GlassEffectContainer(spacing: 12) {
+    HStack(spacing: 12) {
+        Button("搜索", systemImage: "magnifyingglass") { search() }
+            .buttonStyle(.glass)
+        Button("新建", systemImage: "plus") { create() }
+            .buttonStyle(.glassProminent)
+    }
+    .labelStyle(.iconOnly)
+}
+
+// 完全自定义形状时
+Image(systemName: "mic")
+    .frame(width: 44, height: 44)
+    .glassEffect(.regular.interactive(), in: .circle)</code></pre>
+<p><strong>不要</strong>：在玻璃上放段落文字或列表；玻璃叠玻璃；给工具栏加实色背景挡住滚动边缘效果；同一屏出现两个实色玻璃。</p></div>
+</section><section class="comp" id="c-Segmented">
+<div class="comp-head"><h3>Segmented</h3><span class="sub">在 2–4 个视图之间切换</span><a class="open" href="project/components/Segmented/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/Segmented/preview.html" src="project/components/Segmented/preview.html" style="width:100%;height:130px" title="Segmented 预览"></iframe></div>
+<div class="doc"><p>分段控件，在同一份数据的 2–4 种视图或范围之间切换。</p>
+<p><strong>需要提供</strong>：选项列表（每项 2–4 个字，或者一个 SF Symbol）和绑定的选中值。</p>
+<p><strong>规格</strong>：底槽 <code>fill-selected</code>；选中块 <code>surface-raised</code> 加 <code>shadow-control</code>；未选中文字 <code>ink-secondary</code>，选中文字 <code>ink</code>。Mac 上外层 <code>radius-sm</code>、内边距 2，内层 <code>radius-xs</code>，两层同心；高度 <code>control-mac-sm</code>。iOS 上是胶囊形，高 32pt。</p>
+<pre><code>Picker("视图", selection: $mode) {
+    Text("列表").tag(Mode.list)
+    Text("卡片").tag(Mode.cards)
+    Text("日历").tag(Mode.calendar)
+}
+.pickerStyle(.segmented)
+.labelsHidden()</code></pre>
+<p>直接用系统控件就能得到上面的效果，不需要自己画。</p>
+<p><strong>不要</strong>：选项超过 4 个（改用 Menu 或 Picker）；拿它当执行动作的按钮组；文字长短差别太大。</p></div>
+</section><h2 class="group" id="g-Input">输入</h2><section class="comp" id="c-Composer">
+<div class="comp-head"><h3>Composer</h3><span class="sub">多行输入与发送</span><a class="open" href="project/components/Composer/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/Composer/preview.html" src="project/components/Composer/preview.html" style="width:100%;height:240px" title="Composer 预览"></iframe></div>
+<div class="doc"><p>多行输入框加一条工具栏，用于发消息、写笔记、向 AI 提问。</p>
+<p><strong>需要提供</strong>：绑定的文本、占位符、发送动作、是否可以发送（内容为空或正在生成时禁用）。可选：附件列表、左侧的工具按钮（添加附件、模式选择）、右侧的状态文字（剩余次数、字数）。</p>
+<p><strong>规格</strong></p>
+<ul><li>容器：<code>surface-raised</code> 底、<code>line</code> 细线描边、<code>radius-lg</code>、<code>shadow-float</code>；内边距上、右、下 8，左 12。获得焦点时描边加深为 <code>line-control</code>。</li><li>文字：Mac 13pt（<code>mac-body</code>），iOS 17pt（<code>ios-body</code>）。高度随内容增长，最多 8 行，超出后内部滚动。</li><li>附件：放在输入区上方，<code>surface-sunken</code> 底、<code>radius-sm</code> 的文件条。</li><li>工具条：左边是 24pt 的图标按钮和 20pt 高的胶囊形选择器（<code>line</code> 描边），右边是状态文字和发送按钮。</li><li>发送按钮：24pt 圆形，<code>accent</code> 底、<code>on-accent</code> 箭头（浅色主题黑底白箭头）。不能发送时换成 <code>fill-selected</code> 底、<code>ink-tertiary</code> 箭头。正在生成时变成「停止」方块。</li><li>Mac 上 Return 发送，Shift-Return 换行；iOS 上换行键就是换行，只能点按钮发送。</li></ul>
+<pre><code>VStack(alignment: .leading, spacing: 4) {
+    TextField("写点什么，或拖入文件", text: $draft, axis: .vertical)
+        .lineLimit(1...8)
+        .textFieldStyle(.plain)
+        .onSubmit(send)                                   // Mac：Return 发送
+    HStack(spacing: 4) {
+        Button("添加附件", systemImage: "plus") { attach() }
+            .labelStyle(.iconOnly).buttonStyle(.borderless)
+        Spacer()
+        Button(action: send) {
+            Image(systemName: "arrow.up")
+                .fontWeight(.semibold)
+                .frame(width: 24, height: 24)
+        }
+        .buttonStyle(.borderedProminent)
+        .buttonBorderShape(.circle)
+        .disabled(draft.isEmpty)
+    }
+}
+.padding(EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 8))
+.background(.surfaceRaised, in: .rect(cornerRadius: 12))
+.overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(.line, lineWidth: 1 / displayScale))
+.shadow(color: .black.opacity(0.08), radius: 10, y: 6)</code></pre>
+<p><strong>不要</strong>：把 Composer 做成玻璃（它承载的是内容）；把发送按钮放到框外；禁用时把按钮直接隐藏，让布局跳动。</p></div>
+</section><section class="comp" id="c-TextField">
+<div class="comp-head"><h3>TextField</h3><span class="sub">单行输入</span><a class="open" href="project/components/TextField/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/TextField/preview.html" src="project/components/TextField/preview.html" style="width:100%;height:180px" title="TextField 预览"></iframe></div>
+<div class="doc"><p>单行文字输入，配一个标签和一句说明。</p>
+<p><strong>需要提供</strong>：标签（名词）、绑定的文本、可选的占位符（给示例，不要重复标签）、说明文字，校验失败时提供错误信息。</p>
+<p><strong>规格</strong></p>
+<ul><li>底色 <code>surface-raised</code>，边框 <code>stroke-control</code> 宽、<code>line-control</code> 色。Mac 用 <code>radius-sm</code>，高 <code>control-mac</code>；iOS 用 <code>radius-md</code>，高 <code>control-ios</code>。</li><li>聚焦时边框变 <code>focus-ring</code>，外圈加 3pt 的 <code>accent-soft</code> 灰色光晕。</li><li>出错时边框变 <code>danger</code>，说明文字换成错误信息，同样用 <code>danger</code> 色。错误信息要说清楚怎么改。</li><li>标签 12pt 中粗 <code>ink-secondary</code>，放在输入框上方；说明 11pt <code>ink-tertiary</code>，放在下方。</li></ul>
+<pre><code>VStack(alignment: .leading, spacing: 6) {
+    Text("邮箱").font(.caption.weight(.medium)).foregroundStyle(.inkSecondary)
+    TextField("name@example.com", text: $email)
+        .textFieldStyle(.roundedBorder)          // Mac；iOS 用自定义样式实现上面的规格
+        .textContentType(.emailAddress)
+        .keyboardType(.emailAddress)             // iOS
+    Text(error ?? "用于接收登录验证码。")
+        .font(.caption)
+        .foregroundStyle(error == nil ? .inkTertiary : .danger)
+}</code></pre>
+<p>iOS 设置页这类表单，直接在 <code>Form</code> 里用 <code>TextField</code>，交给系统的分组样式（见 ListGroup）。</p>
+<p><strong>不要</strong>：只用占位符代替标签；出错时只把边框变红、不给说明；把多行输入塞进单行框（多行用 <code>TextField(axis: .vertical)</code> 或 Composer）。</p></div>
+</section><h2 class="group" id="g-Navigation">导航</h2><section class="comp" id="c-ListGroup">
+<div class="comp-head"><h3>ListGroup</h3><span class="sub">iOS 分组列表与设置页</span><a class="open" href="project/components/ListGroup/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/ListGroup/preview.html" src="project/components/ListGroup/preview.html" style="width:100%;height:420px" title="ListGroup 预览"></iframe></div>
+<div class="doc"><p>iOS 分组列表，用于设置页、详情页和各种表单。</p>
+<p><strong>需要提供</strong>：分组，每个分组可以有页头和页脚说明；每一行提供标题，以及可选的图标、右侧的值、开关或箭头，点击后跳转或执行动作。</p>
+<p><strong>规格</strong></p>
+<ul><li>页面底色 <code>canvas</code>，分组底色 <code>surface-raised</code>，<code>radius-lg</code>，左右边距 <code>space-4</code>，分组之间 <code>space-5</code>。</li><li>每行最小高度 <code>control-ios</code>（44），左右内边距 <code>space-4</code>，文字 17pt <code>ink</code>；右侧的值用 <code>ink-secondary</code>，箭头用 <code>ink-tertiary</code>。</li><li>图标放在 28pt 的方块里，<code>accent-soft</code> 浅灰底、<code>ink</code> 图标、<code>radius-sm</code>。整个列表统一用灰色，不要每行一个颜色。</li><li>分隔线 <code>stroke-hairline</code>、<code>line</code> 色，从文字起点开始。</li><li>页头 13pt <code>ink-secondary</code>，页脚 13pt <code>ink-tertiary</code>，页脚写清楚这个设置会带来什么后果。</li><li>开关打开时用 <code>success</code> 色。不要用黑白色调的开关：深色主题下白色轨道会把白色圆钮吞掉。</li></ul>
+<pre><code>Form {
+    Section("账号") {
+        NavigationLink { ProfileView() } label: {
+            LabeledContent { Text("林一") } label: { Label("个人资料", systemImage: "person") }
+        }
+    }
+    Section {
+        Toggle(isOn: $iCloudSync) { Label("iCloud 同步", systemImage: "icloud") }
+            .tint(.success)
+    } header: {
+        Text("同步")
+    } footer: {
+        Text("关闭 iCloud 同步后，新笔记只保存在这台设备上。")
+    }
+}
+.scrollContentBackground(.hidden)
+.background(.canvas)
+.tint(.brandAccent)</code></pre>
+<p>Mac 上的设置窗口同样用 <code>Form</code> 加 <code>.formStyle(.grouped)</code>，系统会给出对应的 Mac 样式。</p>
+<p><strong>不要</strong>：每行用不同颜色的图标；页脚写成一大段；在列表行里放主按钮（主按钮放在页面底部）。</p></div>
+</section><section class="comp" id="c-Sidebar">
+<div class="comp-head"><h3>Sidebar</h3><span class="sub">macOS 侧边栏</span><a class="open" href="project/components/Sidebar/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/Sidebar/preview.html" src="project/components/Sidebar/preview.html" style="width:100%;height:320px" title="Sidebar 预览"></iframe></div>
+<div class="doc"><p>macOS 应用的主导航：顶部放全局操作，下面按分组列出各个位置。</p>
+<p><strong>需要提供</strong>：分组（标题可选）、每一项的 SF Symbol 和名称、可选的计数或快捷键、绑定的选中项。</p>
+<p><strong>规格</strong></p>
+<ul><li>宽度 <code>sidebar-mac</code>（220），用户可以拖动调整。macOS 26 上侧边栏是悬浮的玻璃面板，由 <code>NavigationSplitView</code> 自动提供；预览里用 <code>surface-sunken</code> 模拟。</li><li>每项高 <code>row-mac</code>（26），<code>radius-sm</code>，左右内边距 <code>space-2</code>，图标 14pt、颜色 <code>ink-secondary</code>，文字 13pt <code>ink</code>。</li><li>悬停时底色 <code>fill-hover</code>。选中时底色 <code>fill-selected</code>、文字中粗、图标变 <code>ink</code>。选中块不用黑色填满，保持安静。</li><li>分组标题 11pt 半粗 <code>ink-tertiary</code>，上方留 <code>space-3</code>、下方留 <code>space-1</code>。</li><li>计数和快捷键放在右侧，11pt <code>ink-tertiary</code>，用等宽数字。</li><li>名称太长时在末尾截断，悬停时显示完整内容。</li></ul>
+<pre><code>NavigationSplitView {
+    List(selection: $selection) {
+        Section("资料库") {
+            Label("全部笔记", systemImage: "doc.text").badge(128).tag(Item.all)
+            Label("收藏", systemImage: "star").badge(9).tag(Item.favorites)
+        }
+        Section("最近") {
+            ForEach(recent) { chat in
+                Label(chat.title, systemImage: "bubble.left").tag(Item.chat(chat.id))
+            }
+        }
+    }
+    .navigationSplitViewColumnWidth(min: 180, ideal: 220, max: 300)
+} detail: {
+    DetailView(selection: selection)
+}
+.tint(.brandAccent)</code></pre>
+<p><strong>不要</strong>：给侧边栏加实色背景（会盖掉系统玻璃）；一级导航超过两层；用彩色图标区分每一项（图标一律灰色）。</p></div>
+</section><h2 class="group" id="g-Content">内容</h2><section class="comp" id="c-Card">
+<div class="comp-head"><h3>Card</h3><span class="sub">细线描边，不加阴影</span><a class="open" href="project/components/Card/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/Card/preview.html" src="project/components/Card/preview.html" style="width:100%;height:170px" title="Card 预览"></iframe></div>
+<div class="doc"><p>卡片把一条内容的摘要装进一个可以点开的块里，用于网格和看板。</p>
+<p><strong>需要提供</strong>：标题、一到两行摘要、元信息（时间、分类、状态标签），点击后打开详情。</p>
+<p><strong>规格</strong></p>
+<ul><li><code>surface</code> 底、<code>stroke-hairline</code> 宽的 <code>line</code> 描边，不加阴影。Mac 用 <code>radius-md</code>，iOS 用 <code>radius-lg</code>。Mac 内边距 <code>space-3</code>，iOS 内边距 14pt × <code>space-4</code>，内部间距 <code>space-1</code>。</li><li>标题用衬线 15pt 半粗（Mac）或 17pt（iOS）；摘要用 <code>mac-callout</code> 或 <code>ios-footnote</code>、<code>ink-secondary</code>，最多 3 行；元信息 11pt <code>ink-tertiary</code>。</li><li>悬停时描边加深为 <code>line-control</code>。选中时描边变成 1pt 的 <code>ink</code>。</li><li>网格间距 <code>space-2</code>（Mac）或 <code>space-3</code>（iOS）；每张卡片高度由内容决定，同一行顶部对齐。</li></ul>
+<pre><code>VStack(alignment: .leading, spacing: 4) {
+    Text(note.title).font(.system(.headline, design: .serif))
+    Text(note.summary).font(.callout).foregroundStyle(.inkSecondary).lineLimit(3)
+    Text(note.date, format: .relative(presentation: .named))
+        .font(.caption).foregroundStyle(.inkTertiary)
+}
+.padding(12)
+.frame(maxWidth: .infinity, alignment: .leading)
+.background(.surface, in: .rect(cornerRadius: 8))
+.overlay(
+    RoundedRectangle(cornerRadius: 8)
+        .strokeBorder(isSelected ? .ink : .line,
+                      lineWidth: isSelected ? 1 : 1 / displayScale)
+)</code></pre>
+<p><strong>不要</strong>：给卡片加阴影或玻璃效果；在卡片左侧加一条彩色竖条；卡片里套卡片；一张卡片里放多个主按钮。</p></div>
+</section><section class="comp" id="c-CodeBlock">
+<div class="comp-head"><h3>CodeBlock</h3><span class="sub">代码与命令</span><a class="open" href="project/components/CodeBlock/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/CodeBlock/preview.html" src="project/components/CodeBlock/preview.html" style="width:100%;height:170px" title="CodeBlock 预览"></iframe></div>
+<div class="doc"><p>展示代码、命令或结构化数据，带语言标签和复制按钮。</p>
+<p><strong>需要提供</strong>：代码文本、语言名称；可选的文件名（替代语言名显示在表头）。</p>
+<p><strong>规格</strong></p>
+<ul><li><code>surface-sunken</code> 底、<code>line</code> 细线描边、<code>radius-md</code>。表头高 28pt，左边是语言名或文件名（11pt 等宽、<code>ink-tertiary</code>），右边是一个小号文字按钮「复制」；点击后显示「已复制」1.5 秒。</li><li>代码字体 <code>code-mac</code> 或 <code>code-ios</code>，内边距上下 <code>space-2</code>、左右 <code>space-3</code>，过长时横向滚动，不自动换行。</li><li>语法高亮只用灰阶：关键字 <code>ink</code> 加粗，字符串 <code>ink-secondary</code>，注释 <code>ink-tertiary</code> 加斜体，其余 <code>ink</code>。这些颜色在 <code>surface-sunken</code> 上都不低于 4.5:1。</li></ul>
+<pre><code>VStack(alignment: .leading, spacing: 0) {
+    HStack {
+        Text(language).font(.caption.monospaced()).foregroundStyle(.inkTertiary)
+        Spacer()
+        Button(copied ? "已复制" : "复制", systemImage: copied ? "checkmark" : "doc.on.doc") { copy() }
+            .buttonStyle(.borderless).controlSize(.small)
+    }
+    .padding(.horizontal, 12).frame(height: 28)
+    Divider()
+    ScrollView(.horizontal) {
+        Text(highlighted)                 // 用 AttributedString 按上面的颜色着色
+            .font(.system(.callout, design: .monospaced))
+            .textSelection(.enabled)
+            .padding(.vertical, 8).padding(.horizontal, 12)
+    }
+}
+.background(.surfaceSunken, in: .rect(cornerRadius: 8))
+.overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.line, lineWidth: 1 / displayScale))</code></pre>
+<p><strong>不要</strong>：用彩色的编辑器配色主题（和黑白灰的整体风格冲突）；给代码块加阴影；自动换行打乱缩进。</p></div>
+</section><section class="comp" id="c-EmptyState">
+<div class="comp-head"><h3>EmptyState</h3><span class="sub">没有内容时告诉用户下一步</span><a class="open" href="project/components/EmptyState/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/EmptyState/preview.html" src="project/components/EmptyState/preview.html" style="width:100%;height:230px" title="EmptyState 预览"></iframe></div>
+<div class="doc"><p>列表、搜索结果或整个页面没有内容时显示：说明现在是什么状态，再给出下一步。</p>
+<p><strong>需要提供</strong>：SF Symbol、标题（描述状态）、一句正文（告诉用户怎么开始），以及最多一个主操作和一个次操作。</p>
+<p><strong>规格</strong></p>
+<ul><li>在可用区域里居中。图标 28pt、细线、<code>ink-tertiary</code> 色；标题用 <code>mac-display</code> 或 <code>ios-title</code>（衬线）；正文 <code>ink-secondary</code>，最大宽度 320pt。</li><li>按钮用大号：Mac 是 <code>control-mac-lg</code>，iOS 是 <code>control-ios</code>。</li><li>搜索没有结果时不放按钮，标题写成「没有找到"关键词"」，正文给出修改建议。</li></ul>
+<pre><code>ContentUnavailableView {
+    Label("还没有笔记", systemImage: "doc.text")
+        .font(.system(.title2, design: .serif))
+} description: {
+    Text("写下第一条想法，它会同步到你所有的设备。")
+} actions: {
+    Button("新建笔记") { create() }.buttonStyle(.borderedProminent)
+    Button("从文件导入") { importFile() }
+}
+
+// 搜索没有结果
+ContentUnavailableView.search(text: query)</code></pre>
+<p><strong>不要</strong>：用插画或吉祥物填满空白；标题写「空空如也」这种玩笑话；出现三个以上的按钮。</p></div>
+</section><section class="comp" id="c-Message">
+<div class="comp-head"><h3>Message</h3><span class="sub">对话：用户气泡与衬线回答</span><a class="open" href="project/components/Message/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/Message/preview.html" src="project/components/Message/preview.html" style="width:100%;height:290px" title="Message 预览"></iframe></div>
+<div class="doc"><p>对话里的一条消息。用户说的话放在凹下去的气泡里，AI 的回答直接排在纸面上，用衬线字体，像一页文章。</p>
+<p><strong>需要提供</strong>：发送者（用户或 AI）、内容（Markdown，可以包含代码块、列表、链接）、AI 消息的操作（复制、重新生成），以及生成中的状态。</p>
+<p><strong>规格</strong></p>
+<ul><li>用户消息：靠右，最大宽度 80%，<code>surface-sunken</code> 底，<code>radius-lg</code>，内边距上下 6pt、左右 <code>space-3</code>；Mac 用 <code>mac-body</code>，iOS 用 <code>ios-callout</code>。</li><li>AI 消息：靠左，不加气泡，正文用 <code>mac-prose</code> 或 <code>ios-prose</code>，栏宽不超过 <code>content-max</code>。代码块用 CodeBlock，执行步骤用 StepRow。</li><li>消息之间间距 <code>space-4</code>，段落之间 <code>space-2</code>。</li><li>操作按钮放在 AI 消息下方，22pt 图标按钮，<code>ink-tertiary</code> 色，Mac 上只在悬停时显示，iOS 上一直显示。</li><li>链接用 <code>ink</code> 色，加 1pt 的 <code>line-control</code> 色下划线，下偏移 3pt。</li><li>生成中：回答末尾显示一个闪烁的光标，Composer 的发送按钮变成「停止」。</li></ul>
+<pre><code>// 用户消息
+Text(message.text)
+    .padding(.vertical, 6).padding(.horizontal, 12)
+    .background(.surfaceSunken, in: .rect(cornerRadius: 12))
+    .frame(maxWidth: .infinity, alignment: .trailing)
+
+// AI 消息：用 AttributedString(markdown:) 渲染，或接入 Markdown 渲染库
+Text(try AttributedString(markdown: message.text))
+    .font(.system(.body, design: .serif))
+    .lineSpacing(4)
+    .textSelection(.enabled)
+    .frame(maxWidth: 680, alignment: .leading)</code></pre>
+<p><strong>不要</strong>：给 AI 回答也加气泡；用头像区分谁在说话（靠位置和字体就够了）；在正文里用彩色强调文字（强调用加粗）。</p></div>
+</section><section class="comp" id="c-StepRow">
+<div class="comp-head"><h3>StepRow</h3><span class="sub">AI 或后台任务的执行步骤</span><a class="open" href="project/components/StepRow/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/StepRow/preview.html" src="project/components/StepRow/preview.html" style="width:100%;height:190px" title="StepRow 预览"></iframe></div>
+<div class="doc"><p>一行显示一个执行步骤：做了什么、结果如何、用了多久。点开可以看到细节。用于 AI 的工具调用、导入导出、批量处理这类任务。</p>
+<p><strong>需要提供</strong>：状态（进行中 / 成功 / 失败）、动作名（2–4 个字的动词）、对象摘要（文件名、参数、结果）、耗时或说明；可选的详细内容，点击后展开。</p>
+<p><strong>规格</strong></p>
+<ul><li>高 <code>control-mac</code>，<code>radius-sm</code>，悬停时底色 <code>fill-hover</code>。整行默认 <code>ink-secondary</code>，让位于正文内容。</li><li>状态图标 14pt：进行中是 <code>ink</code> 色的转圈，成功是 <code>success</code> 色，失败是 <code>danger</code> 色。失败时摘要要写清楚原因。</li><li>动作名 12pt 半粗 <code>ink</code>；摘要用 11pt 等宽，单行，在末尾截断；右侧耗时 11pt <code>ink-tertiary</code>。</li><li>展开后的详情缩进到和文字对齐，<code>surface-sunken</code> 底，<code>radius-sm</code>，12pt 等宽。</li><li>连续 3 步以上全部成功时，合并成一行「完成 5 个步骤」，点击后展开。</li></ul>
+<pre><code>DisclosureGroup(isExpanded: $expanded) {
+    Text(step.detail)
+        .font(.system(.callout, design: .monospaced))
+        .foregroundStyle(.inkSecondary)
+        .padding(.vertical, 6).padding(.horizontal, 8)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.surfaceSunken, in: .rect(cornerRadius: 6))
+} label: {
+    HStack(spacing: 7) {
+        StatusGlyph(step.status)          // ProgressView / checkmark.circle / xmark.circle
+        Text(step.action).fontWeight(.semibold).foregroundStyle(.ink)
+        Text(step.summary).font(.callout.monospaced()).lineLimit(1)
+        Spacer()
+        Text(step.duration).font(.caption).monospacedDigit().foregroundStyle(.inkTertiary)
+    }
+    .foregroundStyle(.inkSecondary)
+}</code></pre>
+<p><strong>不要</strong>：把每一步都做成卡片；成功的步骤也用醒目的颜色；把原始日志直接铺在对话里（放进折叠详情）。</p></div>
+</section><h2 class="group" id="g-Feedback">反馈</h2><section class="comp" id="c-Banner">
+<div class="comp-head"><h3>Banner</h3><span class="sub">页面内提示与轻提示</span><a class="open" href="project/components/Banner/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/Banner/preview.html" src="project/components/Banner/preview.html" style="width:100%;height:280px" title="Banner 预览"></iframe></div>
+<div class="doc"><p>页面内的提示条，告诉用户一件需要知道的事，必要时附带一个解决动作。轻提示（Toast）是它的短暂版本。</p>
+<p><strong>需要提供</strong>：语气（中性 / success / warning / danger）、标题（一句话说明状态）、正文（后果或解决办法）、可选的一个动作按钮；能关闭的横幅还要提供关闭动作。</p>
+<p><strong>规格</strong></p>
+<ul><li>中性横幅：<code>surface-raised</code> 底、<code>line</code> 描边、<code>ink-secondary</code> 图标。有语气的横幅：对应的 <code>-soft</code> 底、无描边、图标用语气色。文字始终是 <code>ink</code> 和 <code>ink-secondary</code>。</li><li><code>radius-md</code>，内边距上下 <code>space-2</code>、左右 <code>space-3</code>，图标 16pt；标题 13pt 半粗，正文 12pt。图标统一用 README「图标」一节里的状态符号。</li><li>动作按钮用小号次按钮，放在右侧，一个横幅最多一个。</li><li>轻提示：底部居中的玻璃胶囊，高 40pt，2 秒后自动消失，只用来确认刚刚完成的操作（「已复制」「已保存」），文字用完成态，不放按钮。</li></ul>
+<pre><code>HStack(alignment: .top, spacing: 10) {
+    Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.warning)
+    VStack(alignment: .leading, spacing: 2) {
+        Text("本月 AI 次数还剩 10%").font(.headline)
+        Text("用完后可以继续写笔记，AI 功能会在 11 月 1 日恢复。")
+            .foregroundStyle(.inkSecondary)
+    }
+}
+.padding(.vertical, 8).padding(.horizontal, 12)
+.frame(maxWidth: .infinity, alignment: .leading)
+.background(.warningSoft, in: .rect(cornerRadius: 8))
+
+// 轻提示
+Label("已复制到剪贴板", systemImage: "checkmark.circle.fill")
+    .padding(.horizontal, 16).frame(height: 40)
+    .glassEffect(in: .capsule)</code></pre>
+<p><strong>不要</strong>：一个页面同时出现多个横幅；用横幅打广告；错误信息只写「出错了」；轻提示里放需要用户处理的事情（那应该用横幅或弹窗）。</p></div>
+</section><section class="comp" id="c-Sheet">
+<div class="comp-head"><h3>Sheet</h3><span class="sub">iOS 底部弹窗，系统玻璃</span><a class="open" href="project/components/Sheet/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/Sheet/preview.html" src="project/components/Sheet/preview.html" style="width:100%;height:420px" title="Sheet 预览"></iframe></div>
+<div class="doc"><p>从底部弹出的面板，用于一个短小、独立的任务：确认购买、编辑一个字段、选择分享方式。</p>
+<p><strong>需要提供</strong>：标题、一两句说明、内容（短表单或选项）、主操作和取消操作，以及要支持的高度档位。</p>
+<p><strong>规格</strong></p>
+<ul><li>iOS 26 上，系统会把中等高度的弹窗渲染成悬浮的玻璃面板，四周留出间距；拉到全高后变成不透明。直接使用系统样式，不要自己画背景。</li><li>顶部拖拽条 36×5pt，<code>line-control</code> 色。</li><li>标题用 <code>ios-title</code>（衬线），说明用 <code>ios-callout</code> <code>ink-secondary</code>，下方留 <code>space-4</code>。</li><li>主操作是通栏 46pt 胶囊主按钮（<code>control-ios-lg</code>），下面是同尺寸的文字按钮「暂不需要」，两者间距 <code>space-1</code>。</li><li>内容超过一屏，或需要长时间阅读时，改成全高弹窗或推入新页面，背景用 <code>canvas</code>。</li><li>Mac 上对应的是附着在窗口上的 sheet 和系统 Alert，同样直接使用系统样式。</li></ul>
+<pre><code>.sheet(isPresented: $showPaywall) {
+    PaywallView()
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
+}
+
+// 确认删除这类二选一的决定，用系统对话框
+.confirmationDialog("删除这条笔记？", isPresented: $confirmDelete) {
+    Button("删除", role: .destructive) { delete() }
+}</code></pre>
+<p><strong>不要</strong>：在弹窗里再弹一个弹窗；把长篇文章放进玻璃弹窗；没有取消方式；把价格之类的关键信息藏在小字里。</p></div>
+</section><section class="comp" id="c-Tag">
+<div class="comp-head"><h3>Tag</h3><span class="sub">状态与分类</span><a class="open" href="project/components/Tag/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/Tag/preview.html" src="project/components/Tag/preview.html" style="width:100%;height:120px" title="Tag 预览"></iframe></div>
+<div class="doc"><p>一到四个字的标签，标出状态或分类，放在标题旁边或元信息里。</p>
+<p><strong>需要提供</strong>：文字、语气（中性 / 强调 / success / warning / danger / info）；表示状态时加一个圆点。</p>
+<p><strong>规格</strong></p>
+<ul><li>Mac：高 18pt，<code>radius-xs</code>，11pt 中粗，左右内边距 6pt。iOS：高 22pt，胶囊形，12pt。</li><li>中性标签：<code>fill-selected</code> 底、<code>ink-secondary</code> 字。强调标签：<code>accent</code> 黑底、<code>on-accent</code> 白字，只用于「新」「Pro」这类需要跳出来的少数标记。有语气的标签：用对应的 <code>-soft</code> 作底色，用语气色作文字和圆点，例如 <code>success-soft</code> 底配 <code>success</code> 字。</li><li>表示状态时一定加 5pt 圆点（<code>radius-full</code>），文字本身就要说清楚状态是什么，不能只靠颜色。</li></ul>
+<pre><code>struct Tag: View {
+    var text: LocalizedStringKey
+    var tone: Color = .inkSecondary
+    var background: Color = .fillSelected
+    var showsDot = false
+
+    var body: some View {
+        HStack(spacing: 4) {
+            if showsDot { Circle().frame(width: 5, height: 5) }
+            Text(text)
+        }
+        .font(.caption.weight(.medium))
+        .foregroundStyle(tone)
+        .padding(.horizontal, 6)
+        .frame(height: 18)
+        .background(background, in: .rect(cornerRadius: 4))
+    }
+}
+
+Tag(text: "已同步", tone: .success, background: .successSoft, showsDot: true)</code></pre>
+<p><strong>不要</strong>：用标签当按钮；一行里放超过三个标签；大量使用黑底强调标签（它和主按钮长得像，多了就分不清）。</p></div>
+</section><h2 class="group" id="g-Layouts">组合示例</h2><section class="comp" id="c-MacWindow">
+<div class="comp-head"><h3>MacWindow</h3><span class="sub">组合示例：Mac 窗口</span><a class="open" href="project/components/MacWindow/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/MacWindow/preview.html" src="project/components/MacWindow/preview.html" style="width:960px;height:590px" title="MacWindow 预览"></iframe></div>
+<div class="doc"><p>Mac 应用窗口的标准结构：左边是悬浮的玻璃侧边栏，右边内容区的上方浮着玻璃工具栏，下方浮着 Composer。</p>
+<p><strong>结构</strong></p>
+<ul><li>窗口底色 <code>canvas</code>。侧边栏是 <code>NavigationSplitView</code> 的 sidebar 列，系统会渲染成悬浮的玻璃面板。</li><li>工具栏用 <code>.toolbar</code> 声明，标题用 <code>mac-headline</code>；右侧的按钮组由系统渲染成玻璃胶囊。内容从工具栏下面滚过去。</li><li>内容区居中，阅读栏宽不超过 <code>content-max</code>，左右边距 <code>space-4</code>。</li><li>底部的 Composer 悬浮在内容之上，它承载输入的内容，所以是纸面，不是玻璃。用 <code>.safeAreaInset(edge: .bottom)</code> 放置，让内容可以滚到它的上方。</li></ul>
+<pre><code>NavigationSplitView {
+    SidebarView()
+} detail: {
+    ScrollView { ThreadView().frame(maxWidth: 680) }
+        .safeAreaInset(edge: .bottom) { Composer().padding(16) }
+        .navigationTitle(chat.title)
+        .toolbar {
+            ToolbarItemGroup {
+                ShareLink(item: chat.url)
+                Menu("更多", systemImage: "ellipsis") { … }
+            }
+        }
+}
+.background(.canvas)</code></pre></div>
+</section><section class="comp" id="c-PhoneScreen">
+<div class="comp-head"><h3>PhoneScreen</h3><span class="sub">组合示例：iPhone 列表页与对话页</span><a class="open" href="project/components/PhoneScreen/preview.html" target="_blank">单独打开</a></div>
+<div class="frame"><iframe data-src="project/components/PhoneScreen/preview.html" src="project/components/PhoneScreen/preview.html" style="width:840px;height:780px" title="PhoneScreen 预览"></iframe></div>
+<div class="doc"><p>iPhone 上的两种典型页面：一个列表页，一个对话页。展示纸面和玻璃在手机上怎么分层。</p>
+<p><strong>列表页</strong></p>
+<ul><li>衬线大标题（<code>ios-large-title</code>），内容是 <code>radius-lg</code> 的卡片，左右边距 <code>space-4</code>，卡片之间 <code>space-2</code>。</li><li>底部是玻璃标签栏，搜索单独成为右侧的圆形玻璃按钮（<code>Tab(role: .search)</code>）。向下滚动时标签栏收起。</li></ul>
+<p><strong>对话页</strong></p>
+<ul><li>顶部的返回和更多按钮是系统导航栏提供的玻璃圆形按钮，标题用 17pt 半粗。</li><li>对话内容：AI 回答用 <code>ios-prose</code>，用户消息用 <code>ios-callout</code>。</li><li>底部的 Composer 收成单行胶囊（<code>radius-xl</code>），用 <code>.safeAreaInset(edge: .bottom)</code> 悬浮在内容上方；输入多行时向上增长。</li></ul>
+<pre><code>NavigationStack {
+    ScrollView { ThreadView().padding(.horizontal, 16) }
+        .safeAreaInset(edge: .bottom) { Composer().padding(.horizontal, 12) }
+        .navigationTitle("周报整理")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { ToolbarItem { Menu("更多", systemImage: "ellipsis") { … } } }
+}
+.background(.canvas)</code></pre></div>
+</section>
+  </div>
+</main>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, btns = document.querySelectorAll('[data-theme-btn]'), frames = document.querySelectorAll('iframe[data-src]');
+  function apply(t) {
+    if (t) root.setAttribute('data-theme', t); else root.removeAttribute('data-theme');
+    btns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-theme-btn') === t)); });
+    frames.forEach(function (f) { f.src = f.getAttribute('data-src') + (t ? '#' + t : '#'); });
+    try { localStorage.setItem('paperlight-theme', t); } catch (e) {}
+  }
+  btns.forEach(function (b) { b.addEventListener('click', function () { apply(b.getAttribute('data-theme-btn')); }); });
+  var saved = '';
+  try { saved = localStorage.getItem('paperlight-theme') || ''; } catch (e) {}
+  if (saved) apply(saved);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "deernova-style",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "npm run build && node scripts/serve.mjs",
+    "test": "npm run build && node --test",
+    "check": "npm test",
+    "pack": "npm run build && npm pack --workspaces --pack-destination releases",
+    "release:version": "node scripts/version.mjs",
+    "release:publish": "npm test && node scripts/publish.mjs"
+  },
+  "devDependencies": {
+    "marked": "18.1.2"
+  }
+}

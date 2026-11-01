@@ -22,4 +22,4 @@ The intended product is a design reference skill installed into a specified repo
 - Skill guidance explicitly adapts design rules to the consuming repository's existing technology and components. Reference CSS/HTML is optional source material, not a required component library.
 - Website installation section and READMEs now explain the single-skill workflow.
 - Build, integration tests, official skill validation and actual 0.2.0 tarball installation passed.
-- 0.2.0 npm publication is awaiting owner browser authentication. Prior 0.1.0 tokens/UI releases remain historical public packages; no unpublish was performed.
+- 0.2.0 is public and latest points to 0.2.0. Installed the published package into an isolated directory and verified install/doctor/update against an existing repository; only .agents/skills files were added, with existing application and package.json unchanged. Prior 0.1.0 tokens/UI releases remain historical public packages; no unpublish was performed.

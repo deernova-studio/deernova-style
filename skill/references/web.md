@@ -1,8 +1,8 @@
 # Web implementation
 
-Install matching versions of `@deernova/tokens` and `@deernova/ui`. Import tokens.css before components.css. The CSS component namespace is `dn-` (migrated from Paperlight's `pl-`). The UI package provides CSS and HTML examples, not React components or JavaScript behavior.
+Read the repository’s existing framework, styles and components first. Translate Deernova’s semantic values and visual principles into that system. No npm style or UI package is required. The bundled HTML/CSS files are visual references; their `dn-` class names are not an interface that consuming projects must adopt.
 
-For framework-neutral implementations, copy the required CSS from `assets/design/`, and derive semantic markup from the relevant preview. Ensure buttons submit only intentionally, fields have labels, dialogs manage focus and Escape, and segmented controls expose their selected state. Preview-only static elements must receive real product behavior before shipping.
+Use `assets/design/tokens.json` and the relevant previews to make implementation decisions. Copy selected reference CSS only if it fits the user’s task and project conventions; do not add an entire stylesheet or scaffold application code just because the skill is installed. Ensure buttons submit only intentionally, fields have labels, dialogs manage focus and Escape, and segmented controls expose their selected state. Preview-only static elements must receive real product behavior before shipping.
 
 `data-theme="light"` or `data-theme="dark"` on the root overrides system theme; removing it follows the system. Persist preferences only if appropriate. Honor prefers-reduced-motion and prefers-reduced-transparency with stable and opaque fallbacks. Do not layer glass over reading content.
 

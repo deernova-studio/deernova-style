@@ -11,3 +11,15 @@
 - After the owner enabled 2FA and completed browser verification, npm publish returned success for @deernova/tokens@0.1.0, @deernova/ui@0.1.0 and @deernova/style@0.1.0.
 - Public registry now serves all three packages at 0.1.0. Installed all three from npm into an isolated temporary directory; verified CSS files, skill install/doctor/update, matching source hash, no local modifications, and website initialization.
 - Published package URLs: https://www.npmjs.com/package/@deernova/tokens ; https://www.npmjs.com/package/@deernova/ui ; https://www.npmjs.com/package/@deernova/style .
+
+# 0.2.0 scope correction
+
+The intended product is a design reference skill installed into a specified repository. The initial tokens/UI package split and website scaffolder exceeded that scope.
+
+- Removed tokens/UI workspaces and their build/publish outputs. Only @deernova/style is distributed going forward.
+- Added --repo targeting and changed init into an existing-repository skill installation alias.
+- Installer writes only the selected skill directory; integration tests preserve existing application files and package.json byte-for-byte and reject conflicting destination flags.
+- Skill guidance explicitly adapts design rules to the consuming repository's existing technology and components. Reference CSS/HTML is optional source material, not a required component library.
+- Website installation section and READMEs now explain the single-skill workflow.
+- Build, integration tests, official skill validation and actual 0.2.0 tarball installation passed.
+- 0.2.0 npm publication is awaiting owner browser authentication. Prior 0.1.0 tokens/UI releases remain historical public packages; no unpublish was performed.

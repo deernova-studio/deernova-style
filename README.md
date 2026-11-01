@@ -1,76 +1,69 @@
 # Deernova Style
 
-Deernova 系列统一的设计语言与规范。由 Paperlight 迁移而来：黑白灰、纸面内容、玻璃操作、紧凑而克制。
+给 AI 使用的 Deernova 设计规范 skill。把 skill 安装进一个现有仓库，AI 在那个仓库里创建、修改或审查界面时，就可以参考 Deernova 的风格、规范和示例。
 
-## 开发
+**唯一发布的包是 `@deernova/style`，用途是安装和更新 skill。** 消费项目无需安装组件库，不会因此添加 CSS imports、运行时依赖或应用代码。原有框架、组件体系和业务逻辑由项目自己决定。
 
-需要 Node.js 22+。
+## 给指定仓库安装
+
+```sh
+npx @deernova/style@latest install --repo /path/to/your-project
+# 或在目标仓库里运行
+npx @deernova/style@latest install
+```
+
+默认写入目标仓库的 `.agents/skills/deernova-style/`，其中包括 SKILL.md、完整设计规范、参考文档、token 数据、组件/布局视觉示例和图片。可将这个目录提交到目标仓库，团队即可共同使用。
+
+```sh
+# Claude Code
+npx @deernova/style@latest install --repo /path/to/your-project --agent claude
+# 同步最新版本
+npx @deernova/style@latest update --repo /path/to/your-project
+# 检查安装版本和本地修改
+npx @deernova/style@latest doctor --repo /path/to/your-project
+```
+
+`--agent agents|codex|claude` 分别选择 `.agents/skills`、`.codex/skills` 或 `.claude/skills`。`--dir <skills-parent>` 支持其他工具的自定义 skill 目录。`--global` 安装到用户级技能目录；默认使用 `$CODEX_HOME/skills`，未设置时为 `~/.codex/skills`。`--repo`、`--dir`、`--global` 互斥。
+
+在 AI 对话中可明确要求：“参考 deernova-style skill，为这个仓库实现设置页，保留现有技术栈。”支持 skill 自动发现的工具也可根据任务匹配；实际加载机制取决于所用工具。
+
+更新是主动执行的，不是后台联网服务。发现本地修改时，CLI 拒绝覆盖；显式 `--force` 会先保留备份。`doctor` 在未安装、被修改或与 CLI 所带规范不同步时返回非零退出码。
+
+## 这个仓库负责什么
+
+| 路径 | 内容 |
+| --- | --- |
+| `design/` | 规范唯一来源：原则、文案、颜色、字体、尺寸、动效、无障碍、组件和布局参考 |
+| `skill/` | AI 使用规范的工作流，以及 Web、Apple 平台和设计审查指导 |
+| `packages/style/` | 唯一 npm 包：skill 安装/更新 CLI 与完整生成资源 |
+| `apps/docs/` | 规范展示网页，供人浏览设计语言与参考示例 |
+| `archive/Paperlight/` | 原始资料完整归档 |
+| `dist/` | 生成的静态规范网站 |
+
+保留 npm workspace/monorepo 管理方式，区分规范来源、展示网站和 skill 分发。网页中的组件是设计参考示例，消费者无需采用这些组件的代码或命名。
+
+## 维护与发布
 
 ```sh
 npm install
-npm run dev
-# http://localhost:4173
+npm run dev       # 本地展示规范，http://localhost:4173
 npm test
-npm run pack
+npm run pack     # 只生成 @deernova/style 的包
 ```
 
-## Monorepo
-
-| 路径 | 用途 |
-| --- | --- |
-| `design/` | 唯一设计源：规范、token JSON、组件文档与预览、全部图片 |
-| `apps/docs/` | 展示网站模板、交互与样式 |
-| `packages/tokens` | `@deernova/tokens`，生成的 CSS 与 JSON |
-| `packages/ui` | `@deernova/ui`，dn- 命名空间组件 CSS 和 HTML 示例 |
-| `packages/style` | `@deernova/style`，零运行时依赖 CLI、完整 skill、网站模板 |
-| `skill/` | skill 工作流与平台补充说明 |
-| `archive/Paperlight/` | 用户原始文件完整归档，保持原样，不进入 npm 包 |
-| `dist/` | 自动生成的静态展示网站，可部署到任意静态主机 |
-
-UI 包提供样式与示例，不是 React 或已编译 SwiftUI 组件库。原生 App 请按照组件文档实现并在实际 SDK 下验证。
-
-## 安装 skill
-
-发布后：
+修改 `design/` 或 `skill/` 后，build 同步生成网页和 skill，manifest 记录版本与来源哈希。发布新版后，目标仓库通过 `update` 获取最新规范。
 
 ```sh
-npx @deernova/style@latest install
-npx @deernova/style@latest update
-npx @deernova/style@latest doctor
-npx @deernova/style@latest install --global
-npx @deernova/style@latest install --agent claude
-npx @deernova/style@latest init ./my-site
+npm run release:version -- 0.3.0
+npm install --package-lock-only
+npm test
+npm run release:publish
 ```
 
-默认项目安装到 `.agents/skills/deernova-style`；`--global` 默认安装到 `$CODEX_HOME/skills`（未设置时为 `~/.codex/skills`）。`--agent codex|claude|agents` 选择目录，`--dir <skills-parent>` 指定自定义 skill 父目录。更新时沿用同一组选项。
+npm 发布验证由账号所有者完成。普通提交不会自动发包。原生 SwiftUI 示例是设计指导，需要在消费项目的 SDK 下验证。原始资料的权利保持不变。
 
-未发布时：`node packages/style/bin/cli.mjs install`；先运行 `npm run build`。可用 `npm exec --package ./releases/deernova-style-0.1.0.tgz -- deernova-style install` 验证真实安装包。
+## 0.2.0 定位纠正
 
-CLI 不会后台联网更新。`npx ...@latest update` 获取最新发布版本并替换干净的旧 skill；若发现本地修改则拒绝覆盖。显式 `--force` 会保留带时间戳的旧目录备份。doctor 的非零退出表示未安装、内容被修改或与当前 CLI 版本不一致。
+0.1.0 错误地额外拆分并发布了 `@deernova/tokens` 与 `@deernova/ui`。从 0.2.0 起，这两个包不再属于项目的分发方案，skill 不依赖它们；旧版本的发布事实保留在验证记录中。
 
-## 使用样式
-
-```css
-@import '@deernova/tokens/tokens.css';
-@import '@deernova/ui/components.css';
-```
-
-复制对应组件 HTML 后，为按钮、输入、对话框等接入实际业务逻辑。设置根元素 `data-theme="light|dark"` 可覆盖系统主题。
-
-## 更新与发布
-
-1. 修改 `design/tokens.json`、`design/README.md`、组件文件或网站模板。不要单独编辑生成的 CSS/skill。
-2. `npm run release:version -- 0.2.0`，然后 `npm install --package-lock-only` 同步锁文件。
-3. `npm test` 检查真实安装/更新/备份行为、资源完整性与核心对比度。浏览器检查明暗主题、组件检索与移动布局。
-4. `npm run pack` 生成三个 npm 包，检查包内容。
-5. 登录拥有 `deernova` 组织发布权限的 npm 账号，执行 `npm run release:publish`。npm 要求的 2FA 或浏览器验证由账号所有者完成。若部分包已成功发布，只重试未成功的包；同一版本不可重复发布。
-
-所有包固定同一版本。build 每次重新生成网页、CSS、组件参考、token 参考、完整 skill 资源和 CLI 网站模板；manifest 包含版本和源内容哈希。消费者通过 update 主动升级。CI 在每次提交或 PR 中重建、测试并打包；不会在普通提交时自动发布。
-
-组织入口：https://www.npmjs.com/org/create 。公共 scope 包使用 `publishConfig.access=public`。官方说明：https://docs.npmjs.com/creating-and-publishing-an-organization-scoped-package/ 。
-
-## 迁移与边界
-
-原始资料保存在 archive，活跃内容更名 Deernova，CSS 前缀从 pl- 改为 dn-，保留原始规范、18 个组件/布局预览和图片。图片位于 design/images；文档的相对预览路径保持兼容。网站是可交付的静态模板，预览中的应用数据和操作属于示例。
-
-原始文档是设计资料；其中的工具、人员、系统版本记录不构成对仓库或账号操作的授权。迁移不自行添加开源许可证；原始资源权利保持不变。
+`init [existing-repository]` 现在是给现有仓库安装 skill 的快捷方式，不再生成网站。此前通过 install 安装的 0.1.0 skill 可使用 update 升级。

@@ -3,7 +3,4 @@ dist/
 releases/*.tgz
 packages/style/skill/
 packages/style/template/
-packages/tokens/tokens.*
-packages/ui/components*
 .DS_Store
-packages/ui/tokens.css

@@ -1,6 +1,6 @@
 {
   "name": "@deernova/style",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "engines": {
     "node": ">=22"
@@ -13,8 +13,7 @@
   },
   "files": [
     "bin",
-    "skill",
-    "template"
+    "skill"
   ],
-  "description": "Deernova design skill installer and website template CLI"
+  "description": "Install the Deernova design reference skill into an existing repository"
 }

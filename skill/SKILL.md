@@ -5,12 +5,14 @@ description: Apply Deernova's monochrome design language to Deernova apps, websi
 
 # Deernova Style
 
+Use this skill as the design reference for the repository in which it is installed. Read its guidelines when creating, modifying or reviewing that repository’s interface. Apply the principles through the project’s existing technology and components; do not install a component library or replace the architecture merely to follow this skill.
+
 Build coherent Deernova interfaces using the versioned resources bundled with this skill. Preserve the user's product, platform, framework and requested scope. The HTML previews demonstrate appearance; they are not production SwiftUI components or proof of functional behavior.
 
 ## Start with the relevant source
 
 - Read [foundations](references/foundations.md) for principles, writing, layout, platform behavior, motion and accessibility.
-- Read [tokens](references/tokens.md) when choosing semantic values. Exact structured values and typography live in `assets/design/tokens.json`; use `assets/design/tokens.css` for web projects.
+- Read [tokens](references/tokens.md) when choosing semantic values. Exact structured values and typography live in `assets/design/tokens.json`; the CSS in `assets/design/tokens.css` is a reference implementation, not a mandatory dependency.
 - Search [components](references/components.md) for the component being implemented, then inspect `assets/design/components/<Name>/preview.html` for its anatomy and variants. Native implementation examples live in that component's README.
 - For web implementation and validation, read [web](references/web.md). For native implementation, read [native](references/native.md).
 - For design review, read [review](references/review.md). Report concrete mismatches and locations; do not redesign unrelated screens.
@@ -33,4 +35,4 @@ Cards use thin borders without floating shadows. System-native controls and glas
 
 ## Version and updates
 
-`manifest.json` identifies the package version and source hash. Website, CSS and skill references are generated together from the repository's `design/` source. Update through `npx @deernova/style@latest update` in the same project; for global installations append `--global` and the same agent choice. This is an explicit update, not a background network service. Preserve local changes; the CLI refuses to overwrite them unless `--force` is requested, in which case it keeps a backup. Never edit generated references as the upstream source.
+`manifest.json` identifies the package version and source hash. The documentation website and skill references are generated together from the repository's `design/` source. Update through `npx @deernova/style@latest update` in the same project; for global installations append `--global` and the same agent choice. This is an explicit update, not a background network service. Preserve local changes; the CLI refuses to overwrite them unless `--force` is requested, in which case it keeps a backup. Never edit generated references as the upstream source.

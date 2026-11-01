@@ -12,12 +12,6 @@ const value = (v,theme) => typeof v === 'object' ? v[theme] : v.replace?.(/\{([^
 const declarations = theme => groups.flatMap(g=>tokens[g].tokens.map(t=>`  --${t.name}: ${value(t.value,theme)};`)).concat(Object.entries(tokens.type.families).map(([k,v])=>`  --font-${k}: ${v};`)).join('\n');
 const css = `/* Generated from design/tokens.json. Do not edit. */\n:root {\n${declarations('light')}\n}\n@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){\n${declarations('dark')}\n}}\n:root[data-theme="dark"]{\n${declarations('dark')}\n}\n`;
 await write('design/tokens.css',css);
-await write('packages/tokens/tokens.css',css);
-await cp('design/tokens.json','packages/tokens/tokens.json');
-await cp('design/components/bundle.css','packages/ui/components.css');
-await write('packages/ui/tokens.css',css);
-await rm('packages/ui/components',{recursive:true,force:true});
-await cp('design/components','packages/ui/components',{recursive:true});
 await rm('dist',{recursive:true,force:true});
 await mkdir('dist',{recursive:true});
 await cp('design','dist/project',{recursive:true});
@@ -45,12 +39,12 @@ await write('packages/style/skill/references/foundations.md',await read('design/
 await write('packages/style/skill/references/components.md',components.map(c=>`## ${c.name}\n\n${c.doc}`).join('\n\n'));
 await write('packages/style/skill/references/tokens.md',groups.map(g=>`## ${g}\n\n`+tokens[g].tokens.map(t=>`- \`${t.name}\`: light \`${value(t.value,'light')}\`; dark \`${value(t.value,'dark')}\`. ${t.usage}`).join('\n')).join('\n\n'));
 await rm('packages/style/template',{recursive:true,force:true});
-await cp('dist','packages/style/template',{recursive:true});
+
 const hash=createHash('sha256');
 async function hashTree(dir){for(const e of (await readdir(dir,{withFileTypes:true})).sort((a,b)=>a.name.localeCompare(b.name))){const p=dir+'/'+e.name; if(e.isDirectory())await hashTree(p);else{hash.update(p);hash.update(await readFile(p));}}}
 for(const dir of ['design','skill','apps/docs']) await hashTree(dir);
 const manifest={version,sourceHash:hash.digest('hex'),components:components.map(c=>c.name)};
 await write('packages/style/skill/manifest.json',JSON.stringify(manifest,null,2)+'\n');
 await write('dist/manifest.json',JSON.stringify(manifest,null,2)+'\n');
-await cp('dist/manifest.json','packages/style/template/manifest.json');
-console.log(`Built Deernova ${version}: ${components.length} previews, tokens, website, skill and CLI template.`);
+
+console.log(`Built Deernova ${version}: ${components.length} reference previews, documentation website and installable design skill.`);

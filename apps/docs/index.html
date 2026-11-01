@@ -1,8 +1,67 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Deernova 系列统一设计语言、组件规范与 AI skill。"><title>Deernova — Design language</title><link rel="stylesheet" href="project/tokens.css"><link rel="stylesheet" href="style.css"><script src="app.js" defer></script></head><body>
-<a class="skip" href="#main">跳到内容</a><aside><a class="brand" href="#overview">deernova<span>DESIGN LANGUAGE</span></a><div class="edition">规范与工具 / v{{version}}</div><label class="search">查找组件<input id="search" type="search" placeholder="名称或关键词…"></label><nav aria-label="文档导航"><a href="#overview">概览 <span>01</span></a><a href="#foundations">设计原则 <span>02</span></a><a href="#tokens">Design tokens <span>03</span></a><a href="#components">组件与布局 <span>04</span></a><div class="component-nav">{{links}}</div><a href="#install">安装与使用 <span>05</span></a></nav><div class="aside-bottom"><label for="theme">外观</label><select id="theme"><option value="system">跟随系统</option><option value="light">浅色</option><option value="dark">深色</option></select><p>内容在纸面上。<br>操作在玻璃上。</p></div></aside>
-<main id="main"><header><span>DEERNOVA / DESIGN SKILL</span><span>macOS · iOS · Web</span></header><section id="overview" class="hero"><p class="eyebrow">一套语言，贯穿每一件工具</p><h1>让内容清晰。<br><em>让界面安静。</em></h1><p class="lede">Deernova 系列的设计基础。用纸面的秩序、墨色的对比与恰到好处的玻璃，让工具退到背景，让想法留在眼前。</p><div class="actions"><a class="primary" href="#components">浏览组件 ↗</a><a href="#install">接入你的项目 →</a></div><div class="specimen"><div class="specimen-bar"><span>deernova / workspace</span><span>设计示例</span></div><div class="specimen-inner"><div class="mini-nav">工作空间<br><b>所有笔记</b><span>最近编辑</span><span>已归档</span></div><div class="paper"><small>随手记 / 今天</small><h2>好的工具，<br>让想法自然发生。</h2><p>记录、整理、继续创造。<br>把注意力留给真正重要的事。</p><div class="paper-rule"></div><span class="status">✓ 已同步</span></div><div class="floating">＋ <span>新建笔记</span></div></div></div><div class="stats"><div><b>{{count}}</b><span>组件与布局</span></div><div><b>Light / Dark</b><span>两套语义主题</span></div><div><b>One source</b><span>规范网页与 skill 同步生成</span></div></div></section>
-<section id="foundations" class="section"><div class="section-title"><span>02 / FOUNDATIONS</span><h2>从原则开始</h2><p>紧凑、克制、原生优先。每一个决定都有依据。</p></div><div class="prose foundations">{{article}}</div></section>
-<section id="tokens" class="section"><div class="section-title"><span>03 / DESIGN TOKENS</span><h2>同一种墨色，不同的层次</h2><p>点击 token 复制变量。切换主题查看语义颜色的变化。</p></div>{{tokens}}</section>
-<section id="components" class="section"><div class="section-title"><span>04 / DESIGN REFERENCES</span><h2>从细节，构成整体</h2><p>网页预览用于对齐视觉；原生 App 使用文档中的 SwiftUI 实现。</p></div><p id="results" role="status"></p>{{components}}</section>
-<section id="install" class="section"><div class="section-title"><span>05 / GET STARTED</span><h2>把 Deernova 带进项目</h2><p>将完整设计规范交给你仓库里的 AI，沿用项目现有的技术栈和组件。</p></div><div class="install-grid"><article><h3>安装到指定仓库</h3><p>只添加设计 skill，不修改应用代码或依赖。</p><pre><code>npx @deernova/style@latest install --repo ./your-project</code></pre><button data-copy="npx @deernova/style@latest install --repo ./your-project">复制安装命令</button><p>也可以进入目标仓库，直接运行 <code>npx @deernova/style@latest install</code>。</p></article><article><h3>让 AI 参考规范</h3><p>在目标仓库中提出需求：</p><pre><code>参考 deernova-style skill，
-为这个项目实现设置页，保留现有技术栈。</code></pre><p>更新已有 skill：</p><pre><code>npx @deernova/style@latest update --repo ./your-project</code></pre></article></div><p class="muted">默认安装到目标仓库的 .agents/skills/deernova-style。Claude Code 可追加 --agent claude。网页中的组件与 token 是设计参考；使用 skill 不需要安装组件库。</p></section><footer><span>deernova / 有秩序，也有呼吸。</span><span>v{{version}} · Origin: Paperlight</span></footer></main><div id="toast" role="status" aria-live="polite"></div></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Deernova，一种安静、自然的设计语言。从一只字符组成的鹿开始，观察自然，也体验界面。">
+  <title>Deernova — 留一片旷野</title>
+  <link rel="stylesheet" href="project/tokens.css">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">跳到内容</a>
+<header class="site-header">
+  <a class="wordmark" href="#" aria-label="Deernova 首页">deernova<span class="brand-dot">.</span></a>
+  <nav aria-label="主导航"><a href="#fieldnotes">关于鹿</a><a href="#experience">界面一瞥</a><a href="reference.html">设计规范 <span aria-hidden="true">↗</span></a></nav>
+  <label class="theme-label"><span class="sr-only">外观</span><select id="theme" aria-label="外观"><option value="light">浅色</option><option value="dark">深色</option><option value="system">系统</option></select></label>
+</header>
+<main id="main">
+<section class="hero" aria-labelledby="hero-title">
+  <p class="eyebrow hero-eyebrow">A LITTLE WILD. A LITTLE QUIET.</p>
+  <div class="deer-stage" role="img" aria-label="一只由 ASCII 字符组成的鹿，在空地上轻轻跳跃">
+    <pre id="ascii-deer" aria-hidden="true">                         /|       |\
+                    \___/ |       | \___/
+                        \ |  /\   | /
+                         \| /  \  |/
+                         (  .   .  )
+                          \   ^   /
+                           \_____/
+                   ________/     \
+                 /               /\
+                /_______________/  \
+                   ||  ||    ||    ||
+                   ||  ||    ||    ||</pre>
+  </div>
+  <div class="deer-caption"><span>CERVIDAE · 字符习作 001</span><button id="motion" class="text-button" aria-pressed="false">暂停动画 <span aria-hidden="true">Ⅱ</span></button></div>
+  <h1 id="hero-title">在数字世界里，<br class="mobile-break">留一片旷野。</h1>
+  <p class="hero-description">轻一点，静一点。<br>让内容自然生长，让好的设计退到身后。</p>
+  <a class="wander" href="#fieldnotes">向下，慢慢看 <span aria-hidden="true">↓</span></a>
+</section>
+<div class="section-rule"><span>DEERNOVA / A DESIGN LANGUAGE</span><span>观察 · 留白 · 生长</span></div>
+<section id="fieldnotes" class="fieldnotes section-space" aria-labelledby="field-title">
+  <div class="section-intro"><div><p class="eyebrow">01 / FIELD NOTES</p><h2 id="field-title">从一只鹿，<br>开始观察。</h2></div><p>有些细节，需要慢一点才看得见。<br>清晨的脚步，春天的新角，落在幼鹿背上的光。<br>关于自然的三则小笔记。</p></div>
+  <div class="fact-list">
+    <article class="fact"><span class="fact-number">01</span><div class="fact-heading"><span class="micro">DAWN & DUSK</span><h3>在晨昏之间</h3></div><div class="fact-body"><p>鹿在一天中都可能活动，但通常在黎明和黄昏更活跃。光线变化的时刻，也有它们自己的节奏。</p><a href="https://wdfw.wa.gov/species-habitats/living/species-facts/deer" target="_blank" rel="noopener">阅读观察来源 · WDFW ↗</a></div><span class="fact-glyph" aria-hidden="true">. : * : .</span></article>
+    <article class="fact"><span class="fact-number">02</span><div class="fact-heading"><span class="micro">GROW, LET GO, REPEAT</span><h3>鹿角也会重新生长</h3></div><div class="fact-body"><p>鹿角是从头骨延伸出的骨质结构。大多数长角的鹿类会季节性地脱角，再长出新角；更新，是生命的一部分。</p><a href="https://home.nps.gov/articles/hornsvantlers.htm" target="_blank" rel="noopener">阅读观察来源 · NPS ↗</a></div><pre class="fact-glyph" aria-hidden="true">\ | /\ | /
+ \|/  \|/</pre></article>
+    <article class="fact"><span class="fact-number">03</span><div class="fact-heading"><span class="micro">HIDDEN IN THE LIGHT</span><h3>把自己藏进光里</h3></div><div class="fact-body"><p>白尾鹿幼崽身上的白色斑点是一种伪装。它们安静伏在地面时，斑点会与林间斑驳的光影融在一起。</p><a href="https://www.nps.gov/articles/000/fawns-at-vafo.htm" target="_blank" rel="noopener">阅读观察来源 · NPS ↗</a></div><span class="fact-glyph" aria-hidden="true">· . · .<br> . · . ·</span></article>
+  </div>
+</section>
+<section id="experience" class="experience section-space" aria-labelledby="experience-title">
+  <div class="section-intro"><div><p class="eyebrow">02 / IN PRACTICE</p><h2 id="experience-title">把观察，<br>轻轻放在纸上。</h2></div><p>一页可以翻阅、收藏、记录的林间手记。<br>试着切换主题，留下一句话。<br>设计的样子，藏在这些小小的动作里。</p></div>
+  <div class="notebook">
+    <div class="notebook-top"><a class="notebook-brand" href="#experience">林间手记 <span>FIELD JOURNAL</span></a><span class="local-tag">交互示例 · 仅存于本机</span></div>
+    <div class="notebook-body">
+      <div class="notebook-index"><p class="micro">观察目录</p><div class="topic-list" role="tablist" aria-label="观察主题" aria-orientation="vertical"><button id="tab-dawn" role="tab" aria-controls="observation" aria-selected="true" data-topic="dawn"><span>01</span> 晨昏之间 <span aria-hidden="true">↗</span></button><button id="tab-antlers" role="tab" aria-controls="observation" aria-selected="false" tabindex="-1" data-topic="antlers"><span>02</span> 鹿角的季节 <span aria-hidden="true">↗</span></button><button id="tab-spots" role="tab" aria-controls="observation" aria-selected="false" tabindex="-1" data-topic="spots"><span>03</span> 光里的斑点 <span aria-hidden="true">↗</span></button></div><div class="index-bottom"><span class="tiny-deer" aria-hidden="true">\|/ \|/<br> (o.o)<br> /| |\</span><p>不急着抵达。<br>先留意身边。</p></div></div>
+      <div class="journal-paper" id="observation" role="tabpanel" aria-labelledby="tab-dawn" tabindex="0"><div class="entry-meta"><span id="entry-category">生活习性 / 观察 001</span><button id="bookmark" class="bookmark" aria-pressed="false" aria-label="收藏当前观察"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3h10v14l-5-3-5 3Z"/></svg><span>收藏</span></button></div><h3 id="entry-title">晨昏之间，森林醒来。</h3><p id="entry-body">鹿不只在清晨或傍晚活动，不过黎明与黄昏往往是它们更活跃的时段。在一日的两端，留意林缘，也留意光。</p><a id="entry-source" class="source-link" href="https://wdfw.wa.gov/species-habitats/living/species-facts/deer" target="_blank" rel="noopener">资料来源 · WDFW ↗</a><div class="entry-divider"></div><form id="note-form"><label for="note">此刻，你留意到了什么？</label><textarea id="note" rows="2" maxlength="280" placeholder="风吹过树叶的声音，或一个很小的想法……"></textarea><div class="composer-footer"><span id="note-count">0 / 280</span><button type="submit" class="ink-button" id="save-note">记下这一刻 <span aria-hidden="true">↗</span></button></div></form><ul id="saved-notes" class="saved-notes" aria-label="我的观察记录"></ul><p id="journal-status" class="journal-status" role="status">你的记录只保存在这台设备上。</p></div>
+    </div>
+  </div>
+  <div class="design-caption"><span>不透明纸面 / 阅读与记录</span><span>墨色强调 / 清楚的下一步</span><span>细线与留白 / 恰好的秩序</span></div>
+</section>
+<section class="language section-space" aria-labelledby="language-title"><div class="section-intro"><div><p class="eyebrow">03 / THE LANGUAGE</p><h2 id="language-title">少一点界面。<br>多一点感受。</h2></div><div class="language-copy"><p>Deernova 用中性的纸面承载内容，用墨色建立重点。标题有阅读的温度，操作有清晰的边界。颜色只在真正需要传达状态时出现。</p><a class="underlined" href="reference.html">翻阅完整设计规范 <span aria-hidden="true">↗</span></a></div></div><div class="language-strip"><div class="paper-samples" aria-label="四种纸面层级"><span style="background:var(--canvas)" title="canvas"></span><span style="background:var(--surface)" title="surface"></span><span style="background:var(--surface-raised)" title="surface-raised"></span><span style="background:var(--surface-sunken)" title="surface-sunken"></span></div><p>同一页纸，<br>也有丰富的层次。</p><div class="type-specimen" aria-label="衬线、无衬线和等宽字体参考"><span>Aa</span><span>Aa</span><span>Aa</span></div></div></section>
+<section id="install" class="install section-space"><p class="eyebrow">TAKE A LITTLE QUIET WITH YOU</p><h2>把这份自然，<br class="mobile-break">带进你的项目。</h2><p>将设计 skill 安装到仓库，让 AI 参考同一套语言。</p><div class="command"><code>npx @deernova/style@latest install</code><button id="copy-install" aria-label="复制 skill 安装命令"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="7" width="9" height="10" rx="1.5"/><path d="M12 7V3H3v10h4"/></svg></button></div><p class="install-footnote">在你的项目目录中执行 · <a href="reference.html#install">指定仓库与更新方式 ↗</a></p></section>
+</main>
+<footer><a class="wordmark" href="#">deernova.</a><p>自然有序，安静生长。</p><a href="reference.html">设计规范 · v{{version}} ↗</a></footer>
+<div id="toast" role="status" aria-live="polite"></div>
+</body></html>

@@ -23,3 +23,12 @@ The intended product is a design reference skill installed into a specified repo
 - Website installation section and READMEs now explain the single-skill workflow.
 - Build, integration tests, official skill validation and actual 0.2.0 tarball installation passed.
 - 0.2.0 is public and latest points to 0.2.0. Installed the published package into an isolated directory and verified install/doctor/update against an existing repository; only .agents/skills files were added, with existing application and package.json unchanged. Prior 0.1.0 tokens/UI releases remain historical public packages; no unpublish was performed.
+
+# Nature-led documentation homepage
+
+- Rebuilt the homepage around a text-rendered, animated ASCII deer, three sourced natural-history notes, and an embedded interactive field journal.
+- Full design reference remains available at reference.html; build generates both pages from the existing sources.
+- Browser verified: topic changes, saving a note, restoring it after reload, removing the test note, light/dark themes, 390 px layout without horizontal page overflow, pause/resume and paused-frame stability, navigation to the reference page. No browser console errors observed.
+- Reduced-motion handling defaults the deer to a static frame; offscreen/background rendering does not advance the animation. OS-level reduced-motion emulation was not exercised.
+- npm test and JavaScript syntax checks pass. No npm release is required for this documentation-only change.
+- Natural-history sources are linked beside each fact: Washington Department of Fish & Wildlife and U.S. National Park Service. MiMo supplied the requested character-art/editorial direction; its browser view timed out, so only its retrieved page content was available for reference.

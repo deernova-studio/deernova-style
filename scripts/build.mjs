@@ -18,6 +18,7 @@ await cp('design','dist/project',{recursive:true});
 
 await cp('apps/docs/style.css','dist/style.css');
 await cp('apps/docs/app.js','dist/app.js');
+for(const file of ['reference.css','reference.js','deer.js']) await cp('apps/docs/'+file,'dist/'+file);
 const escape = s => s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
 const components = [];
 for(const name of (await readdir('design/components')).sort()) {
@@ -29,9 +30,11 @@ for(const name of (await readdir('design/components')).sort()) {
 const article = marked.parse(await read('design/README.md'));
 const compHTML = components.map(c=>`<section class="component" id="c-${c.name}" data-search="${escape(c.name+' '+c.subtitle+' '+c.doc)}"><div class="component-head"><h3>${c.name}</h3><span>${escape(c.subtitle)}</span><a href="project/components/${c.name}/preview.html" target="_blank" rel="noopener">独立预览 ↗</a></div><div class="preview"><iframe loading="lazy" title="${c.name} 组件预览" src="project/components/${c.name}/preview.html" style="height:${c.height+32}px"></iframe></div><details><summary>使用规范与 SwiftUI 示例</summary><div class="prose">${marked.parse(c.doc)}</div></details></section>`).join('\n');
 const tokenHTML = groups.map(g=>`<h3>${g}</h3><div class="token-grid">${tokens[g].tokens.map(t=>`<button class="token" data-copy="var(--${t.name})" title="复制 CSS 变量">${g==='color'?`<span class="swatch" style="background:var(--${t.name})"></span>`:''}<strong>${t.name}</strong><code>${escape(String(value(t.value,'light')))}</code><small>${escape(t.usage)}</small></button>`).join('')}</div>`).join('') + '<h3>Typography</h3>' + tokens.type.groups.map(g=>`<h4>${g.name}</h4>`+g.styles.map(t=>`<div class="type-row"><code>${t.name} · ${t.fontSize}/${t.lineHeight}</code><p style="font-family:var(--font-${t.family||g.family});font-size:${t.fontSize};line-height:${t.lineHeight};font-weight:${t.fontWeight}">${t.sample}</p><small>${t.usage}</small></div>`).join('')).join('');
-let html = await read('apps/docs/index.html');
-for(const [k,v] of Object.entries({version,article,components:compHTML,tokens:tokenHTML,count:components.length,links:components.map(c=>`<a href="#c-${c.name}">${c.name}</a>`).join('')})) html=html.replaceAll(`{{${k}}}`,String(v));
-await write('dist/index.html',html);
+for(const page of ['index','reference']) {
+ let html = await read(`apps/docs/${page}.html`);
+ for(const [k,v] of Object.entries({version,article,components:compHTML,tokens:tokenHTML,count:components.length,links:components.map(c=>`<a href="#c-${c.name}">${c.name}</a>`).join('')})) html=html.replaceAll(`{{${k}}}`,String(v));
+ await write(`dist/${page}.html`,html);
+}
 await rm('packages/style/skill',{recursive:true,force:true});
 await cp('skill','packages/style/skill',{recursive:true});
 await cp('design','packages/style/skill/assets/design',{recursive:true});

@@ -36,7 +36,7 @@ npx @deernova/style@latest doctor --repo /path/to/your-project
 | `design/` | 规范唯一来源：原则、文案、颜色、字体、尺寸、动效、无障碍、组件和布局参考 |
 | `skill/` | AI 使用规范的工作流，以及 Web、Apple 平台和设计审查指导 |
 | `packages/style/` | 唯一 npm 包：skill 安装/更新 CLI 与完整生成资源 |
-| `apps/docs/` | 规范展示网页，供人浏览设计语言与参考示例 |
+| `apps/docs/` | 首页以 ASCII 鹿、自然观察和交互手记展示设计语言；reference.html 收录完整规范 |
 | `archive/Paperlight/` | 原始资料完整归档 |
 | `dist/` | 生成的静态规范网站 |
 

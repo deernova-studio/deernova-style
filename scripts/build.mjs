@@ -3,4 +3,4 @@ import { buildSkill } from './build-skill.mjs';
 
 await buildSite();
 const manifest = await buildSkill();
-console.log(`Built website and skill ${manifest.version}: ${manifest.components.length} reference previews.`);
+console.log(`Built website and skill ${manifest.version}.`);

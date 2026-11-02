@@ -1,35 +1,76 @@
 import { cp, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { marked } from 'marked';
-import { PHASES } from '../apps/website/scripts/motion-model.mjs';
-import { ROOT, escape, hashTree, isMain, read, write } from './lib/files.mjs';
-import { GROUPS, copyDesignAssets, readDesign, tokenValue } from './lib/design.mjs';
+import { ROOT, escape, isMain, read, write } from './lib/files.mjs';
+import { SKILL_DIR } from './lib/design.mjs';
+import { staleTokenOutputs } from './tokens.mjs';
+
+const SITE = 'apps/website';
+
+// The guide page shows the skill itself, in the order an agent would read it.
+export const DOCS = [
+  { id: 'overview', title: '总览', file: 'SKILL.md' },
+  { id: 'foundations', title: '基础', file: 'references/foundations.md' },
+  { id: 'tokens', title: '设计变量', file: 'references/tokens.md' },
+  { id: 'patterns', title: '界面模式', file: 'references/patterns.md' },
+  { id: 'swiftui', title: 'SwiftUI 落地', file: 'references/swiftui.md' },
+  { id: 'web', title: 'Web 落地', file: 'references/web.md' },
+  { id: 'review', title: '审查清单', file: 'references/review.md' }
+];
+
+function renderDoc(doc, markdown) {
+  const body = markdown.replace(/^---\n[\s\S]*?\n---\n/, '').replace(/^# .*\n/m, '');
+  const headings = [];
+  let html = marked.parse(body)
+    .replace(/<h2>(.*?)<\/h2>/g, (_, text) => {
+      const id = `${doc.id}-${headings.length + 1}`;
+      headings.push({ id, text: text.replace(/<[^>]+>/g, '') });
+      return `<h2 id="${id}">${text}</h2>`;
+    })
+    // Links between skill files become anchors on this page.
+    .replace(/href="(?:references\/)?([\w-]+)\.md"/g, (match, name) => {
+      const target = DOCS.find(item => item.file.endsWith(`${name}.md`));
+      return target ? `href="#${target.id}"` : match;
+    })
+    .replace(/<code>(#[0-9a-f]{6}(?:[0-9a-f]{2})?)<\/code>/gi, '<span class="swatch" style="--swatch:$1"></span><code>$1</code>')
+    .replaceAll('<table>', '<div class="table-wrap"><table>')
+    .replaceAll('</table>', '</table></div>');
+  return { html, headings };
+}
 
 export async function buildSite({ root = ROOT, out = join(root, 'dist') } = {}) {
-  const { version, tokens, components, foundations } = await readDesign(root);
+  const stale = await staleTokenOutputs(root);
+  if (stale.length) throw Error(`Out of date, run npm run tokens: ${stale.join(', ')}`);
+  const { version } = JSON.parse(await read(join(root, 'package.json')));
   await rm(out, { recursive: true, force: true });
-  await copyDesignAssets(root, out, tokens);
-  for (const directory of ['styles', 'scripts']) {
-    await cp(join(root, 'apps/website', directory), join(out, directory), { recursive: true });
-  }
-  const article = marked.parse(foundations).replaceAll('href="motion.md"', 'href="#motion-guidelines"')
-    + `<section id="motion-guidelines">${marked.parse(await read(join(root, 'design/motion.md')))}</section>`;
-const compHTML = components.map(c=>`<section class="component" id="c-${c.name}" data-search="${escape(c.name+' '+c.subtitle+' '+c.doc)}"><div class="component-head"><h3>${c.name}</h3><span>${escape(c.subtitle)}</span><a href="examples/html/${c.name}/preview.html" target="_blank" rel="noopener">独立预览 ↗</a></div><div class="preview"><iframe loading="lazy" title="${c.name} 组件预览" src="examples/html/${c.name}/preview.html" style="height:${c.height+32}px"></iframe></div><details><summary>使用规范与 SwiftUI 示例</summary><div class="prose">${marked.parse(c.doc)}</div></details></section>`).join('\n');
-const tokenHTML = GROUPS.map(g=>`<h3>${g}</h3><div class="token-grid">${tokens[g].tokens.map(t=>`<button class="token" data-copy="var(--${t.name})" title="复制 CSS 变量">${g==='color'?`<span class="swatch" style="background:var(--${t.name})"></span>`:''}<strong>${t.name}</strong><code>${escape(String(tokenValue(t.value,'light')))}</code><small>${escape(t.usage)}</small></button>`).join('')}</div>`).join('') + '<h3>Typography</h3>' + tokens.type.groups.map(g=>`<h4>${g.name}</h4>`+g.styles.map(t=>`<div class="type-row"><code>${t.name} · ${t.fontSize}/${t.lineHeight}</code><p style="font-family:var(--font-${t.family||g.family});font-size:${t.fontSize};line-height:${t.lineHeight};font-weight:${t.fontWeight}">${t.sample}</p><small>${t.usage}</small></div>`).join('')).join('');
+  for (const directory of ['styles', 'scripts']) await cp(join(root, SITE, directory), join(out, directory), { recursive: true });
+  await cp(join(root, SKILL_DIR, 'assets/tokens.css'), join(out, 'assets/tokens.css'));
+  await cp(join(root, SKILL_DIR, 'assets/screens'), join(out, 'assets/screens'), { recursive: true });
 
-  const sceneCopy = PHASES.map((phase, i) => `<div data-scene-copy${i ? ' style="opacity:0"' : ''}><p class="scene-title">${escape(phase.title)}</p><p class="hero-description">${escape(phase.description)}</p></div>`).join('\n');
-  const sceneSteps = PHASES.map((phase, i) => `<li data-scene-step${i ? '' : ' aria-current="step"'}>0${i+1} ${escape(phase.label)}</li>`).join('');
-  const replacements = { version, article, sceneCopy, sceneSteps, components: compHTML, tokens: tokenHTML, count: components.length, links: components.map(component => `<a href="#c-${component.name}">${component.name}</a>`).join('') };
-  for (const page of ['index', 'reference']) {
-    let html = await read(join(root, `apps/website/pages/${page}.html`));
-    for (const [key, value] of Object.entries(replacements)) html = html.replaceAll(`{{${key}}}`, String(value));
+  const sections = [];
+  const nav = [];
+  for (const [index, doc] of DOCS.entries()) {
+    const { html, headings } = renderDoc(doc, await read(join(root, SKILL_DIR, doc.file)));
+    const number = String(index + 1).padStart(2, '0');
+    sections.push(`<section class="doc" id="${doc.id}" aria-labelledby="${doc.id}-title">
+<p class="doc-meta"><span>${number}</span><code>${escape(doc.file)}</code></p>
+<h1 id="${doc.id}-title">${escape(doc.title)}</h1>
+${html}
+</section>`);
+    nav.push(`<li><a href="#${doc.id}"><span>${number}</span>${escape(doc.title)}</a>${headings.length
+      ? `<ol>${headings.map(heading => `<li><a href="#${heading.id}">${heading.text}</a></li>`).join('')}</ol>` : ''}</li>`);
+  }
+
+  const values = { version, docs: sections.join('\n'), nav: nav.join('\n') };
+  for (const page of ['index', 'guide']) {
+    let html = await read(join(root, SITE, `${page}.html`));
+    for (const [key, value] of Object.entries(values)) html = html.replaceAll(`{{${key}}}`, value);
     await write(join(out, `${page}.html`), html);
   }
-  const manifest = { version, sourceHash: await hashTree(out), components: components.map(component => component.name) };
-  await write(join(out, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
-  return manifest;
+  return { version, pages: ['index.html', 'guide.html'] };
 }
+
 if (isMain(import.meta.url)) {
-  const manifest = await buildSite();
-  console.log(`Built website ${manifest.version}: ${manifest.components.length} reference previews.`);
+  const site = await buildSite();
+  console.log(`Built website ${site.version} into dist/.`);
 }

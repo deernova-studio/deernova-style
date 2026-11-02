@@ -51,3 +51,37 @@ The intended product is a design reference skill installed into a specified repo
 - Official skill-creator validation passes. npm pack inventory: 92 files, 18 HTML examples, motion reference and generated tokens included, no website application files. Extracted an actual npm tarball and ran its install/doctor successfully in an isolated directory.
 - Browser verified homepage render, reference navigation, Button iframe with 12 controls, and light/dark theme propagation to the newly separated HTML path. No console errors or warnings observed. Screenshot: reviews/separate-html-references.png.
 - README and ARCHITECTURE.md document ownership, generation, hashes, maintenance and release boundaries. This change is committed to GitHub; no new npm version was published.
+
+# Skill-first restructure and new homepage
+
+- The skill now lives as hand-written source in `skills/deernova-style/` (SKILL.md, six references, tokens and six reference screenshots). It is usable straight from the repository; the npm package copies it unchanged and adds `manifest.json`.
+- Removed the per-component catalog (`design/components/*`, `examples/html/*`) and the build-time assembly of the skill. Component guidance was merged into `references/patterns.md`, organised by scenario (page skeletons, actions, input, navigation and lists, content, feedback, AI conversation).
+- `tokens.json` remains the only hand-edited data. `npm run tokens` generates `assets/tokens.css` and `references/tokens.md`; tests fail if either is stale.
+- Homepage (revised after review): modelled on the first screen of mimo.mi.com. A serif title "Deernova UI", a typed line, three pill actions, and a large card with a 26-second loop drawn in letters and halftone dots: the deer runs across a meadow by day (gray letter texture), slows, lifts its head as night falls (letters fade, halftone moon and stars, a shooting star), lowers it at dawn and runs again. One clock drives drawing and palette; the loop pauses off screen and in hidden tabs, has a pause control, and shows a still night frame under reduced motion. `?t=<seconds>&g=<stride>` pins a moment for review. `guide.html` renders the skill itself with a table of contents.
+- `npm test`: 9 tests pass (skill frontmatter, links and asset paths, skill contents, token sync, contrast in both themes, package equals source, build isolation and skill hash, site links and placeholders, CLI install/update/backup).
+- `npm pack --dry-run`: 19 files, 1.1 MB, no website files.
+- Browser (built-in pane, http://localhost:4173): homepage and guide at 1440 px in light and dark, theme toggle, eight pinned moments of the loop and eight stride phases, guide anchors and table-of-contents highlight, 375 px homepage with no horizontal overflow. Smooth scrolling did not advance inside the pane, so the guide now jumps to anchors instantly.
+- Not verified: real-time playback speed (the preview pane throttles animation frames to about 2.5 per second), OS-level reduced motion and reduced transparency, Safari and Firefox, a real npm publish. The published 0.2.0 package still contains the previous structure until a new version is released.
+- Screenshots: reviews/home-desktop.png, reviews/guide-desktop.png.
+
+# Homepage animation, second pass
+
+- The deer was redrawn as a stag from references: Muybridge's 1887 plates of a galloping Virginia deer (Wikimedia Commons, public domain) for the stride, and photographs of red deer stags for proportions and antlers. It is a rig in body lengths: trunk, neck and head outlines, five-segment legs with a ham that swings with the thigh, and six-tine antlers. Far-side legs, antler and ear print dimmer; the belly is shaded and the eye left out.
+- Gaits: an eight-key gallop and a six-key walk, blended by speed. The ground speed is derived from each gait's stance so planted hooves stay planted, and the loop holds a whole number of strides.
+- Story, 30 seconds: gallop by day; the sun sets ahead and the stag slows to a walk and stops; it looks up as the camera pulls back and the stars come out from the top; a new star flares where it is looking and the stars draw a leaping deer; dawn rises from the horizon, it lowers its head, walks and gallops again. Stride, travel and camera are integrated once from the clock, so `?t=` shows any second exactly; `?g=` pins the stride and `?halftone=0` shows the field without dots.
+- Printing: the field is supersampled 3×3 per cell, so thin legs and antler tines keep their shape instead of flickering; faint light thins out dots instead of shrinking them past a cutoff, so glows have no edge. Letters fill the sky only; the land is printed in dots.
+- Checked in headless Chrome: 16 moments of the loop at 1440 px, the gallop and walk cycles, the stop and the restart as filmstrips, the dark theme, and a 375 px card (cell 4 px there; the setting sun moves behind the stag so it does not merge with the head). Frame cost with a 1270 px card at 2× DPR: median 4.3 ms, 90th percentile 7.3 ms.
+- `npm test`: 9 tests pass.
+- Not verified: Safari and Firefox, real devices, OS-level reduced motion (the still frame is t = 20.2, the drawn star deer).
+- Screenshots: reviews/home-desktop.png (day gallop), reviews/home-night.png (the star deer).
+
+# Homepage: full-screen run, anime style
+
+- The homepage is now the animation alone, full screen, with a floating glass masthead and one glass card (name, one line, a link to the guide). The mimo-style title, typed line and three pills moved to the top of `guide.html`; the typed line now reads "写给 agent 的界面设计规范", and the old slogan is gone from both pages. The pause control was removed.
+- The stag never stops: one gallop the whole loop. 30 seconds: a meadow under cumulus clouds with a low sun, flowers and wind streaks; a misty forest with layered trunks, foliage and light shafts, and a trunk that passes in front of the lens; a ridge under the Milky Way with fireflies and shooting stars, where the hooves leave stardust; then back into the morning meadow. Each scene comes in from ahead of the stag with a wipe whose edge prints the picture in letters (a value ramp, with the darkest cells spelling DEERNOVA).
+- Style: scenes are painted in gray, snapped to five flat tones (like manga screentone or anime cel shading) and printed as halftone. The stag is white with a dark outline. Light theme prints ink on paper; dark theme prints light on black.
+- Photos from Wikimedia Commons (Muybridge plates, a prairie panorama, a misty forest, a Milky Way photograph; all public domain or CC0) were downloaded to the scratchpad with approval for reference. None are in the repository; after feedback asking for an anime look rather than photographs, the scenes are drawn in code.
+- Checked in headless Chrome: twelve moments across the loop and both scene changes at 1440 px, dark theme, three 375 px frames, and the guide header. Frame cost, full screen at 2× DPR: median 7.8 ms at 1440×900, 8.8 ms at 1920×1080, 4.1 ms on a phone.
+- `npm test`: 9 tests pass.
+- Not verified: Safari and Firefox, real devices, OS-level reduced motion (the still frame is t = 24.5, the night ridge).
+- Screenshots: reviews/home-desktop.png (meadow), reviews/home-night.png (night ridge), reviews/guide-desktop.png.

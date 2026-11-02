@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Deernova UI</title>
+  <meta name="description" content="Deernova UI：一套只用黑、白、灰的界面设计语言，写给 agent 读。">
+  <script>try { const theme = localStorage.getItem('deernova-theme'); if (theme) document.documentElement.dataset.theme = theme; } catch {}</script>
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/home.css">
+  <script src="scripts/site.js" defer></script>
+  <script src="scripts/meadow.js" defer></script>
+</head>
+<body class="home">
+  <header class="masthead masthead-float">
+    <a class="wordmark" href="./" aria-label="Deernova 首页">deernova<span>.</span></a>
+    <nav class="masthead-nav" aria-label="主导航">
+      <a href="guide.html">完整规范</a>
+      <a href="https://github.com/deernova-studio/deernova-style">GitHub</a>
+    </nav>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换外观"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor" stroke="none"/></svg><span data-theme-label>自动</span></button>
+  </header>
+
+  <main id="main" class="stage">
+    <div class="meadow" data-meadow>
+      <canvas aria-hidden="true"></canvas>
+      <p class="sr-only">一只白色的雄鹿一直在奔跑：穿过积云下的草原，穿过阳光照进来的森林，跑上银河下的山脊，再回到清晨的草原。</p>
+    </div>
+    <section class="home-card" aria-labelledby="home-title">
+      <h1 id="home-title">Deernova UI</h1>
+      <p>写给 agent 的界面设计语言 · v{{version}}</p>
+      <a class="pill pill-primary" href="guide.html">完整规范 <span aria-hidden="true">→</span></a>
+    </section>
+  </main>
+</body>
+</html>

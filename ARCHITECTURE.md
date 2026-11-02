@@ -1,89 +1,66 @@
 # 仓库架构
 
-Deernova Style 维护一套设计规范、一个可安装的 AI skill，以及用于浏览和体验设计语言的网站。HTML 示例是参考资料，不是独立组件库。唯一 npm 包是 `@deernova/style`。
+这个仓库只有一个真正的产品：`skills/deernova-style/` 这个 skill。网站和 npm 包都从它派生，不另外维护一份规范。
 
-## 源文件职责
-
-```text
- design/                       设计规则和结构化数据
-   README.md                   设计基础
-   motion.md                   动效与状态稳定性
-   tokens.json                 颜色、字体、尺寸等 token 源数据
-   components/<Name>/README.md 组件说明与 SwiftUI 参考
-   images/                     参考图片
- examples/html/                独立 HTML 视觉示例
-   <Name>/preview.html         可单独打开的预览
-   shared.css                  示例共用样式
- skill/                        AI 的入口与使用方法
-   SKILL.md                    按任务选择规范的工作流
-   references/                 Web、原生平台、设计审查指导
- apps/website/                 展示网站
-   pages/                      首页和完整规范页的 HTML 模板
-   styles/                     首页、动效、规范页样式
-   scripts/                    网站交互和鹿动画
- packages/style/               npm 分发与安装工具
-   bin/cli.mjs                 install / update / doctor
- scripts/                      构建与发布工具
- tests/                        安装、构建边界、资源引用及动效验证
- archive/Paperlight/            原始资料，保留用于追溯
-```
-
-`design/design-system.json` 是迁移时保留的编辑器元数据，不参与页面渲染或规范决策。原始截图不会因修改 HTML 自动重新拍摄；修改对应示例后，需要检查截图是否仍准确。
-
-## 两种 HTML
-
-- `examples/html/` 描述 UI 的外观、结构和状态。网站通过 iframe 展示这些文件，skill 也包含这些文件，AI 可以选择参考。
-- `apps/website/pages/` 是网站本身的页面模板，包括鹿动画首页和规范目录。它们不进入 skill，也不会写进使用者的业务仓库。
-
-示例依赖生成的 `design/tokens.css`。在源码里修改 `tokens.json`，构建后通过 `http://localhost:4173/examples/html/Button/preview.html` 查看示例，不直接双击源码 HTML。两类 HTML 的资源引用均通过测试检查。
-
-## 构建与分发
+## 源文件
 
 ```text
-design/ + examples/html/ ───┬── + apps/website/ ─→ dist/
-                           └── + skill/ ────────→ packages/style/skill/
-                                                          ↓
-                                         @deernova/style 安装 CLI
-                                                          ↓
-                                    目标仓库 .agents/skills/deernova-style/
+skills/deernova-style/          skill 本体，规范的唯一来源（直接提交，不经过生成）
+  SKILL.md                      入口：什么时候用、核心规则、平台速查、工作流程
+  references/
+    foundations.md              原则、颜色、字体、间距、圆角、线条、玻璃、动效、图标、文案、无障碍
+    tokens.md                   设计变量表（由 tokens.json 生成）
+    patterns.md                 按场景整理的界面做法：页面骨架、操作、输入、导航、内容、反馈、AI 对话
+    swiftui.md                  SwiftUI 落地
+    web.md                      Web 落地
+    review.md                   审查清单
+  assets/
+    tokens.json                 颜色、字体、尺寸的原始数据（手工编辑）
+    tokens.css                  CSS 变量（由 tokens.json 生成）
+    screens/                    Mac 窗口、iPhone 页面、iOS 按钮尺寸的效果截图，各有浅色和深色
+apps/website/                   官网
+  index.html                    首页：满屏动画，白鹿依次跑过草原、森林、星空（scripts/meadow.js），左下角一张入口卡片
+  guide.html                    完整规范页：头部是标题、打字行和三个按钮，下面把 skill 的 Markdown 按阅读顺序排成一页
+  styles/  scripts/             网站自己的样式和交互
+packages/style/                 npm 包 @deernova/style
+  bin/cli.mjs                   install / update / doctor
+scripts/                        tokens、build-site、build-skill、发布工具
+tests/                          skill、构建、安装器测试
+archive/Paperlight/             最初的设计稿资料，只做留档
 ```
 
-- `npm run build:site` 只生成 `dist/`，不会重建或覆盖 skill。
-- `npm run build:skill` 只生成 `packages/style/skill/`，不会修改网站输出。
-- `npm run build` 顺序执行两者；构建不会写回源文件。
-- `npm run dev` 构建网站后启动本地服务器。当前没有自动监听，修改后运行 `npm run build:site` 并刷新。
-- `npm run pack` 构建 skill 并产生本地 npm 压缩包，不发布。
+skill 里只有 Markdown、token 数据和截图。它描述应该做成什么样，不提供可安装的组件、类名或 HTML 模板；使用者用自己项目的组件实现。
 
-`dist/` 和 `packages/style/skill/` 都是忽略提交的构建产物，不直接编辑。`tokens.css` 分别生成到两个产物中。网站和 skill 共用 `scripts/lib/design.mjs` 中的 token 生成与参考资料读取逻辑；`build-site.mjs` 和 `build-skill.mjs` 各自负责输出。
-
-完整 skill 的结构为：
+## 生成与构建
 
 ```text
-SKILL.md
-references/          使用指导与从 design/ 生成的规范文本
-assets/design/       规范、结构化 token、生成的 CSS 和图片
-assets/examples/html/ HTML 示例及其共用样式
-manifest.json        版本和 skill 内容哈希
+assets/tokens.json ── npm run tokens ──→ assets/tokens.css + references/tokens.md   （提交进仓库）
+
+skills/deernova-style/ ─┬─ build-skill ─→ packages/style/skill/ + manifest.json ─→ npm 包 ─→ 目标仓库的 skill 目录
+                        └─ build-site ──→ dist/（index.html、guide.html、tokens.css、截图）
+apps/website/ ──────────┘
 ```
 
-两个产物有各自的 `sourceHash`，按实际输出文件计算，不包含自身 manifest、绝对路径和时间戳。网站的文案、动画或样式变化不会改变 skill 哈希；规范、参考 HTML 和 skill 指导的变化会改变它。版本号单独记录，不代替内容检查。
+- `tokens.css` 和 `tokens.md` 是生成文件，但会提交，因为 skill 要能直接从仓库里使用，不依赖构建。`npm test` 会检查它们和 `tokens.json` 是否一致；不一致时两个构建都会直接报错。
+- `build-skill` 原样复制 skill 文件夹，再写入 `manifest.json`（版本号和内容哈希）。安装器用这个哈希判断是否需要更新、文件是否被改过。
+- `build-site` 读取同一份 skill：首页引用 `tokens.css` 和截图，规范页把各个 Markdown 渲染出来，并把文件之间的链接改成页内锚点。
+- 两个构建互不影响，也都不会写回源文件。网站的改动不会改变 skill 的哈希。
 
 ## 改动应该落在哪里
 
-| 需要修改的内容 | 修改位置 | 后续动作 |
+| 想改的内容 | 改哪里 | 之后 |
 | --- | --- | --- |
-| 颜色、字体、间距 | `design/tokens.json` | 构建两者并检查主题/对比度 |
-| 组件使用规范或 SwiftUI 示例 | `design/components/` | 构建两者 |
-| UI 外观参考 HTML/CSS | `examples/html/` | 构建两者，检查预览和已有截图 |
-| AI 选择、应用、审查规范的方法 | `skill/` | 构建 skill |
-| 首页文案、布局、鹿动画 | `apps/website/` | 构建网站 |
-| 从网站实践中总结出的通用规则 | `design/`，必要时在 skill 入口增加路由 | 构建两者 |
-| 安装目标、更新和备份行为 | `packages/style/bin/` | 安装集成测试 |
+| 颜色、字体、间距、尺寸 | `skills/deernova-style/assets/tokens.json` | `npm run tokens`，检查对比度测试 |
+| 原则、文案、玻璃、动效等规则 | `references/foundations.md` | 必要时同步 `SKILL.md` 的核心规则 |
+| 某类界面的做法 | `references/patterns.md` | 涉及平台写法时同步 `swiftui.md` 或 `web.md` |
+| agent 什么时候读哪份文件 | `SKILL.md` 的「先读什么」 | |
+| 首页、规范页的样子 | `apps/website/` | 不需要发布 npm 版本 |
+| 安装、更新、备份行为 | `packages/style/bin/cli.mjs` | 运行安装器测试 |
 
-网站是规范的实例，不是规范的唯一来源。网站的新实现不会自动变成通用要求；需要人工判断其适用范围，再写回 `design/`。例如动效稳定性可复用，而鹿、星空和 ASCII 表现形式属于网站主题。
+网站是这套规范的一个应用实例。网站上为了展示而做的东西（首页的网点动画和字符转场、页面的分栏线）不是通用规则；需要变成规则时，写进 skill。
 
-## 验证与发布边界
+## 测试覆盖什么
 
-`npm test` 验证独立构建、源文件不被改写、资源链接、CLI 安装/更新/备份、对比度和动效边界。视觉和浏览器交互仍需在页面中检查。
+`npm test` 先构建，再检查：SKILL.md 的 frontmatter；skill 内所有链接和 `assets/` 路径都能找到；skill 只包含 Markdown、token 和截图；`tokens.css`、`tokens.md` 与 `tokens.json` 同步；两套主题的文字和控件对比度；npm 包里的 skill 与源文件逐字节一致；构建不改源文件、网站改动不改变 skill 哈希；网站页面没有遗漏的模板占位符、链接都能找到；安装器的安装、更新、改动保护和备份。
 
-GitHub 提交和 npm 发布是两件事。只有发布新版 `@deernova/style` 后，使用者执行 `npx @deernova/style@latest update` 才能取得新 skill；网站改版不需要发包。发布步骤见 README。此前的 `@deernova/ui` 和 `@deernova/tokens` 仅为历史版本，当前无依赖关系。
+页面的视觉效果、交互和响应式布局需要在浏览器里看。SwiftUI 示例是写法参考，没有在这个仓库里编译。

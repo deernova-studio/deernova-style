@@ -1,39 +1,41 @@
 import { TAU, DEG, clamp, mix, wrap, pulse, spline } from './math.js';
 
-// ---- The stag, in body lengths: x forward, y down, origin in the middle of the trunk ----
-// Proportions follow red deer; the stride follows Muybridge's 1887 plates of a galloping Virginia deer.
+// ---- The milu, in body lengths: x forward, y down, origin in the middle of the trunk ----
+// A long face, high neck, swept-back forked antlers and trailing tail give the
+// silhouette its identity. References: docs/plans/2026-11-02-homepage-milu-design.md.
 
 const TRUNK = [
-  [0.3, -0.27],
-  [0.15, -0.25, -0.1, -0.21, -0.28, -0.22],
-  [-0.4, -0.23, -0.5, -0.21, -0.55, -0.13],
-  [-0.6, -0.05, -0.58, 0.05, -0.52, 0.11],
-  [-0.48, 0.15, -0.4, 0.17, -0.33, 0.15],
-  [-0.2, 0.13, -0.05, 0.2, 0.12, 0.21],
-  [0.28, 0.22, 0.4, 0.22, 0.47, 0.14],
-  [0.53, 0.08, 0.54, -0.02, 0.5, -0.08],
-  [0.45, -0.18, 0.4, -0.25, 0.3, -0.27]
+  [0.34, -0.3],
+  [0.18, -0.34, -0.06, -0.27, -0.28, -0.28],
+  [-0.44, -0.3, -0.57, -0.24, -0.6, -0.1],
+  [-0.63, 0.02, -0.55, 0.14, -0.44, 0.16],
+  [-0.32, 0.17, -0.25, 0.12, -0.17, 0.14],
+  [0.02, 0.2, 0.23, 0.25, 0.4, 0.2],
+  [0.53, 0.17, 0.57, 0.06, 0.52, -0.09],
+  [0.48, -0.23, 0.44, -0.3, 0.34, -0.3]
 ];
 // The head, with the poll at the origin and x pointing down the muzzle.
 const HEAD = [
-  [-0.07, -0.05],
-  [-0.02, -0.09, 0.06, -0.095, 0.12, -0.075],
-  [0.2, -0.055, 0.28, -0.04, 0.33, -0.022],
-  [0.36, -0.012, 0.375, 0.02, 0.355, 0.04],
-  [0.33, 0.06, 0.26, 0.06, 0.18, 0.075],
-  [0.1, 0.09, 0.02, 0.1, -0.04, 0.07],
-  [-0.08, 0.04, -0.09, -0.02, -0.07, -0.05]
+  [-0.07, -0.07],
+  [-0.025, -0.13, 0.07, -0.13, 0.14, -0.09],
+  [0.23, -0.055, 0.32, -0.035, 0.4, -0.02],
+  [0.45, -0.01, 0.48, 0.025, 0.46, 0.065],
+  [0.43, 0.11, 0.36, 0.1, 0.3, 0.085],
+  [0.22, 0.065, 0.17, 0.125, 0.1, 0.14],
+  [0.025, 0.15, -0.07, 0.11, -0.085, 0.045],
+  [-0.1, 0.005, -0.1, -0.03, -0.07, -0.07]
 ];
-// Antlers as drawn when the head is at rest (muzzle 0.5 rad below level): a beam sweeping up and back,
-// brow, bez and trez tines forward, and a crown. Each entry: points, base width, tip width.
-const ANTLER_REST = -0.5;
+// Open forks grow backwards, rather than a dense row of upright tines. The
+// far antler is projected at a different angle so both crowns stay legible.
+// Each branch: points, base width, tip width.
+const ANTLER_REST = -0.35;
 const ANTLER = [
-  [[[0, 0], [-0.05, -0.2], [-0.16, -0.38], [-0.15, -0.56], [-0.1, -0.7], [-0.02, -0.79]], 0.052, 0.022],
-  [[[-0.01, -0.05], [0.07, -0.08], [0.15, -0.14]], 0.032, 0.012],
-  [[[-0.04, -0.14], [0.04, -0.18], [0.1, -0.26]], 0.028, 0.012],
-  [[[-0.15, -0.37], [-0.08, -0.43], [-0.03, -0.51]], 0.026, 0.01],
-  [[[-0.15, -0.56], [-0.22, -0.66], [-0.25, -0.76]], 0.024, 0.01],
-  [[[-0.1, -0.7], [-0.12, -0.79], [-0.1, -0.87]], 0.022, 0.01]
+  [[[0, 0], [-0.04, -0.18], [-0.19, -0.36], [-0.42, -0.5], [-0.68, -0.59], [-0.9, -0.76]], 0.058, 0.009],
+  [[[-0.18, -0.35], [-0.2, -0.56], [-0.14, -0.76], [-0.18, -0.94]], 0.042, 0.007],
+  [[[-0.2, -0.56], [-0.34, -0.7], [-0.43, -0.84]], 0.028, 0.007],
+  [[[-0.42, -0.5], [-0.55, -0.68], [-0.57, -0.86]], 0.032, 0.007],
+  [[[-0.68, -0.59], [-0.9, -0.6], [-1.07, -0.72]], 0.026, 0.007],
+  [[[-0.87, -0.73], [-0.89, -0.89]], 0.017, 0.006]
 ].map(([points, base, tip]) => {
   const curve = smooth(points);
   return [curve, curve.map((_, i) => mix(base, tip, i / (curve.length - 1)))];
@@ -41,8 +43,8 @@ const ANTLER = [
 
 // Legs are chains: hind = thigh, gaskin, cannon, pastern, hoof; fore = upper arm, forearm, cannon, pastern, hoof.
 // A pose gives the first four segments' angles from straight down, positive reaching forward; the hoof follows the pastern.
-const HIND = { root: [-0.36, -0.07], lengths: [0.3, 0.33, 0.3, 0.075, 0.05], widths: [0.24, 0.13, 0.07, 0.05, 0.046, 0.034] };
-const FORE = { root: [0.4, -0.06], lengths: [0.24, 0.3, 0.3, 0.075, 0.05], widths: [0.17, 0.11, 0.064, 0.05, 0.046, 0.034] };
+const HIND = { root: [-0.4, -0.02], lengths: [0.27, 0.29, 0.29, 0.075, 0.055], widths: [0.2, 0.115, 0.06, 0.036, 0.038, 0.03] };
+const FORE = { root: [0.39, -0.02], lengths: [0.26, 0.285, 0.29, 0.07, 0.055], widths: [0.16, 0.09, 0.05, 0.035, 0.038, 0.03] };
 // One key every eighth of a stride: touch down, load, push off, toe off, stretch out behind, fold, swing, reach.
 const GALLOP = {
   hind: [[0.75, -0.25, 0.45, 0.7], [0.55, -0.55, 0.2, 1], [0.25, -0.85, -0.25, 0.5], [-0.05, -1.1, -0.75, -0.3], [-0.2, -1.3, -1.1, -1], [0.2, -1.35, -0.35, -0.4], [0.65, -0.85, 0.35, 0.3], [0.85, -0.4, 0.6, 0.6]],
@@ -51,7 +53,7 @@ const GALLOP = {
   offsets: { hindFar: 0, hindNear: 0.1, foreFar: 0.42, foreNear: 0.52 }
 };
 const LEGS = ['hindFar', 'foreFar', 'hindNear', 'foreNear'];
-const NECK = { root: [0.36, -0.14], length: 0.36 };
+const NECK = { root: [0.34, -0.16], length: 0.51 };
 
 function smooth(points, steps = 4) {
   const out = [], n = points.length, at = i => points[clamp(i, 0, n - 1)];
@@ -89,7 +91,13 @@ export function pose(phase) {
   for (const key of LEGS) { const [x, y] = legs[key][5]; depth = Math.max(depth, x * Math.sin(pitch) + y * Math.cos(pitch)); }
   const air = 0.07 * pulse(phase, 0.86, 1.04);
   const swing = Math.sin(TAU * (phase - 0.2));
-  return { legs, pitch, air, lift: depth + 0.012 + air, neck: 0.52 + 0.06 * swing - pitch * 0.5, head: -0.12 - 0.05 * swing, ear: -2.7, tail: 3.2 + 0.15 * Math.sin(TAU * phase * 2) };
+  return {
+    legs, pitch, air, lift: depth + 0.012 + air,
+    neck: 0.94 + 0.035 * swing - pitch * 0.6,
+    head: -0.35 - 0.035 * swing,
+    ear: -2.65 + 0.06 * swing,
+    tail: Math.sin(TAU * (phase - 0.15))
+  };
 }
 
 function outline(g, points) {
@@ -137,21 +145,39 @@ function drawNeck(g, angle) {
   const [bx, by] = NECK.root, d = [Math.cos(angle), -Math.sin(angle)], n = [Math.sin(angle), Math.cos(angle)];
   const ex = bx + d[0] * NECK.length, ey = by + d[1] * NECK.length;
   g.beginPath();
-  g.moveTo(0.18, -0.25);
-  g.quadraticCurveTo(bx + d[0] * 0.19 - n[0] * 0.13, by + d[1] * 0.19 - n[1] * 0.13, ex - n[0] * 0.065, ey - n[1] * 0.065);
-  g.lineTo(ex + n[0] * 0.075, ey + n[1] * 0.075);
-  g.quadraticCurveTo(bx + d[0] * 0.15 + n[0] * 0.14, by + d[1] * 0.15 + n[1] * 0.14, 0.5, -0.04);
-  g.lineTo(0.3, -0.05);
+  g.moveTo(0.16, -0.29);
+  g.quadraticCurveTo(bx + d[0] * 0.22 - n[0] * 0.18, by + d[1] * 0.22 - n[1] * 0.18, ex - n[0] * 0.09, ey - n[1] * 0.09);
+  g.lineTo(ex + n[0] * 0.11, ey + n[1] * 0.11);
+  g.quadraticCurveTo(bx + d[0] * 0.22 + n[0] * 0.15, by + d[1] * 0.22 + n[1] * 0.15, 0.52, 0.12);
+  g.lineTo(0.28, 0.06);
   g.closePath();
   g.fill();
 }
 function drawEar(g, angle, dx) {
-  const bx = -0.02 + dx, by = -0.07;
+  g.save();
+  g.translate(-0.04 + dx, -0.055);
+  g.rotate(angle);
   g.beginPath();
-  g.ellipse(bx + Math.cos(angle) * 0.085, by + Math.sin(angle) * 0.085, 0.09, 0.034, angle, 0, TAU);
+  g.moveTo(0, -0.025);
+  g.quadraticCurveTo(0.1, -0.095, 0.245, 0);
+  g.quadraticCurveTo(0.12, 0.075, 0, 0.025);
+  g.closePath();
   g.fill();
+  g.restore();
 }
 function drawAntler(g) { for (const [points, widths] of ANTLER) tube(g, points, widths); }
+
+function drawTail(g, swing) {
+  const y = 0.16 + swing * 0.045;
+  g.beginPath();
+  g.moveTo(-0.56, -0.16);
+  g.bezierCurveTo(-0.73, -0.15, -0.77, y - 0.04, -0.94, y);
+  g.quadraticCurveTo(-1, y + 0.035, -0.96, y + 0.09);
+  g.quadraticCurveTo(-0.87, y + 0.08, -0.84, y + 0.02);
+  g.bezierCurveTo(-0.7, y - 0.03, -0.66, -0.08, -0.55, -0.1);
+  g.closePath();
+  g.fill();
+}
 
 export const GALLOP_RATE = GALLOP.rate;
 
@@ -171,7 +197,7 @@ export function createStagRenderer(f) {
   function drawStag(p, x, y, size, { cell, SS }) {
     const body = new DOMMatrix().scale(SS / cell).translate(x, y).scale(size).rotate(p.pitch * DEG);
     const head = body.translate(NECK.root[0] + Math.cos(p.neck) * NECK.length, NECK.root[1] - Math.sin(p.neck) * NECK.length).rotate(-p.head * DEG);
-    const antler = head.translate(0, -0.08).rotate(ANTLER_REST * DEG);
+    const antler = head.translate(0.015, -0.1).rotate(ANTLER_REST * DEG);
     for (const g of [far, near, mono]) {
       g.setTransform(1, 0, 0, 1, 0, 0);
       g.globalCompositeOperation = 'source-over';
@@ -183,17 +209,15 @@ export function createStagRenderer(f) {
     far.setTransform(body);
     drawLeg(far, p.legs.hindFar, HIND, true);
     drawLeg(far, p.legs.foreFar, FORE, false);
-    far.setTransform(antler.translate(-0.06, 0.01));
+    far.setTransform(antler.translate(0.075, 0.015).rotate(24).scale(0.84, 0.94));
     drawAntler(far);
     far.setTransform(head);
-    drawEar(far, p.ear + 0.2, -0.04);
+    drawEar(far, p.ear + 0.6, 0.015);
 
     near.setTransform(body);
+    drawTail(near, p.tail);
     outline(near, TRUNK);
     drawNeck(near, p.neck);
-    near.beginPath();
-    near.ellipse(-0.54 + Math.cos(p.tail) * 0.05, -0.13 + Math.sin(p.tail) * 0.05, 0.06, 0.028, p.tail, 0, TAU);
-    near.fill();
     drawLeg(near, p.legs.hindNear, HIND, true);
     drawLeg(near, p.legs.foreNear, FORE, false);
     near.setTransform(head);
@@ -222,9 +246,9 @@ export function createStagRenderer(f) {
     near.fillRect(-1.5, -0.05, 3, 1.3);
     near.setTransform(head);
     near.fillStyle = '#000';
-    near.beginPath(); near.ellipse(0.1, -0.028, 0.03, 0.024, -0.3, 0, TAU); near.fill();
+    near.beginPath(); near.ellipse(0.115, -0.035, 0.024, 0.018, -0.25, 0, TAU); near.fill();
     near.globalAlpha = 0.5;
-    near.beginPath(); near.arc(0.345, 0.005, 0.016, 0, TAU); near.fill();
+    near.beginPath(); near.ellipse(0.425, 0.03, 0.022, 0.013, 0.5, 0, TAU); near.fill();
     near.globalAlpha = 1;
 
     f.save();

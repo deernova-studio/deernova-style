@@ -19,7 +19,7 @@ skills/deernova-style/          skill 本体，规范的唯一来源（直接提
     tokens.css                  CSS 变量（由 tokens.json 生成）
     screens/                    Mac 窗口、iPhone 页面、iOS 按钮尺寸的效果截图，各有浅色和深色
 apps/website/                   官网
-  index.html                    首页：满屏动画，白鹿依次跑过草原、森林、星空（scripts/meadow.js），左下角一张入口卡片
+  index.html                    首页：满屏麋鹿动画，依次跑过草原、森林、星空；顶部保留玻璃导航
   guide.html                    完整规范页：头部是标题、打字行和三个按钮，下面把 skill 的 Markdown 按阅读顺序排成一页
   styles/                       网站自己的样式
   scripts/site.js               主题、复制命令、规范目录和打字效果

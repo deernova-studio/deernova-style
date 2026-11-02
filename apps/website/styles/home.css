@@ -1,4 +1,4 @@
-/* Home: the stag's run fills the window. The masthead and one card float over it, so they sit on glass.
+/* Home: the milu's run fills the window, with one quiet glass masthead.
    The picture is printed in halftone: ink dots on paper in the light theme, light dots on black in the dark one. */
 .home { overflow: hidden; background: var(--canvas); }
 .stage { position: fixed; inset: 0; }
@@ -10,20 +10,31 @@
 }
 .meadow canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 
-.masthead-float { position: fixed; top: var(--space-3); left: var(--space-3); right: var(--space-3); border: var(--stroke-hairline) solid var(--glass-stroke); border-radius: var(--radius-full); background: var(--glass-fill); box-shadow: 0 8px 32px rgb(0 0 0 / 0.08); }
+.masthead-float {
+  position: fixed;
+  top: var(--space-6);
+  left: clamp(32px, 6vw, 96px);
+  right: clamp(32px, 6vw, 96px);
+  padding-inline: var(--space-8);
+  border: var(--stroke-hairline) solid var(--glass-stroke);
+  border-radius: var(--radius-full);
+  background: var(--glass-fill);
+  box-shadow: 0 8px 32px rgb(0 0 0 / 0.08);
+}
 .masthead-float .theme-toggle { border-color: transparent; }
 
-.home-card { position: fixed; left: var(--space-6); bottom: var(--space-6); display: grid; justify-items: start; gap: var(--space-2); width: min(360px, calc(100vw - 2 * var(--space-6))); padding: var(--space-6); border: var(--stroke-hairline) solid var(--glass-stroke); border-radius: var(--radius-xl); background: var(--glass-fill); box-shadow: 0 8px 32px rgb(0 0 0 / 0.08); -webkit-backdrop-filter: blur(20px) saturate(1.5); backdrop-filter: blur(20px) saturate(1.5); }
-.home-card h1 { font-size: 40px; font-weight: 500; line-height: 1.05; letter-spacing: -0.02em; }
-.home-card p { font-size: 14px; color: var(--ink-secondary); }
-.home-card .pill { margin-top: var(--space-3); }
-
 @media (prefers-reduced-transparency: reduce) {
-  .masthead-float, .home-card { background: var(--surface-raised); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .masthead-float { background: var(--surface-raised); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 
 @media (max-width: 760px) {
-  .masthead-float { top: var(--space-2); left: var(--space-2); right: var(--space-2); }
-  .home-card { left: var(--space-3); right: var(--space-3); bottom: var(--space-3); width: auto; padding: var(--space-4) var(--space-4) var(--space-4) var(--space-6); }
-  .home-card h1 { font-size: 30px; }
+  .masthead-float {
+    top: var(--space-4);
+    left: var(--space-4);
+    right: var(--space-4);
+    gap: var(--space-2);
+    padding-inline: var(--space-3);
+  }
+  .masthead-float .wordmark { font-size: 20px; }
+  .masthead-float .masthead-nav a { padding-inline: var(--space-2); font-size: 12px; }
 }

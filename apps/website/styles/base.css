@@ -1,0 +1,64 @@
+/* Shared by both pages. Colors, type and sizes come from the skill's tokens.css. */
+:root {
+  --rule: color-mix(in srgb, var(--ink) 14%, var(--surface));
+  --frame: 1320px;
+  --masthead: 56px;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-padding-top: calc(var(--masthead) + var(--space-4)); -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--font-sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+code, pre { font-family: var(--font-mono); }
+h1, h2, h3 { margin: 0; font-family: var(--font-serif); font-weight: 600; letter-spacing: -0.01em; }
+p { margin: 0; }
+
+:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: 2px; border-radius: 2px; }
+.skip { position: absolute; left: var(--space-4); top: -100px; z-index: 10; padding: var(--space-2) var(--space-3); background: var(--accent); color: var(--on-accent); border-radius: var(--radius-sm); text-decoration: none; }
+.skip:focus { top: var(--space-2); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* The page is one sheet of paper with ruled edges, sitting on the canvas. */
+.frame { max-width: var(--frame); margin: 0 auto; background: var(--surface); border-inline: 1px solid var(--rule); min-height: 100vh; }
+
+@media (prefers-reduced-transparency: reduce) {
+  .masthead { background: var(--surface-raised); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+/* Masthead: the one piece of glass on the page, so content scrolls underneath it. */
+.masthead { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: var(--space-6); height: var(--masthead); padding: 0 var(--space-6); border-bottom: 1px solid var(--rule); background: color-mix(in srgb, var(--surface) 78%, transparent); -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4); }
+.wordmark { font-family: var(--font-serif); font-size: 22px; font-weight: 600; letter-spacing: -0.02em; text-decoration: none; line-height: 1; }
+.wordmark span { color: var(--ink-tertiary); }
+.masthead-nav { display: flex; gap: var(--space-1); margin-left: auto; }
+.masthead-nav a { padding: 6px var(--space-3); border-radius: var(--radius-full); font-size: 14px; line-height: 20px; color: var(--ink-secondary); text-decoration: none; transition: background-color 0.12s var(--ease), color 0.12s var(--ease); }
+.masthead-nav a:hover, .masthead-nav a[aria-current] { background: var(--fill-hover); color: var(--ink); }
+.theme-toggle { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 var(--space-3) 0 10px; border: 1px solid var(--rule); border-radius: var(--radius-full); background: transparent; color: var(--ink-secondary); font: inherit; font-size: 13px; cursor: pointer; transition: color 0.12s var(--ease), border-color 0.12s var(--ease); }
+.theme-toggle:hover { color: var(--ink); border-color: var(--line-control); }
+.theme-toggle svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+
+/* Pills: the site's buttons. */
+.pill { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-width: 148px; height: 44px; padding: 0 var(--space-6); border: 1px solid var(--ink); border-radius: var(--radius-full); background: transparent; color: var(--ink); font: inherit; font-size: 14px; text-decoration: none; cursor: pointer; transition: background-color 0.12s var(--ease), opacity 0.12s var(--ease); }
+.pill:hover { background: var(--fill-hover); }
+.pill-primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.pill-primary:hover { background: var(--accent); opacity: 0.88; }
+
+.eyebrow { font-family: var(--font-mono); font-size: 12px; line-height: 16px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-tertiary); }
+
+/* Colophon */
+.colophon { border-top: 1px solid var(--rule); padding: var(--space-10) var(--space-6) var(--space-6); overflow: hidden; }
+.colophon-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-secondary); }
+.colophon-meta a { text-decoration-color: var(--line-control); text-underline-offset: 3px; }
+.colophon-meta a:hover { text-decoration-color: currentColor; }
+
+@media (max-width: 760px) {
+  .masthead { gap: var(--space-3); padding: 0 var(--space-4); }
+  .theme-toggle span { display: none; }
+  .theme-toggle { width: 32px; padding: 0; justify-content: center; }
+  .colophon { padding: var(--space-8) var(--space-4) var(--space-4); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}

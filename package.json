@@ -11,14 +11,15 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
+    "build:site": "node scripts/build-site.mjs",
+    "build:skill": "node scripts/build-skill.mjs",
+    "tokens": "node scripts/tokens.mjs",
     "dev": "npm run build:site && node scripts/serve.mjs",
     "test": "npm run build && node --test",
     "check": "npm test",
     "pack": "npm run build:skill && npm pack --workspace @deernova/style --pack-destination releases",
     "release:version": "node scripts/version.mjs",
-    "release:publish": "npm test && node scripts/publish.mjs",
-    "build:site": "node scripts/build-site.mjs",
-    "build:skill": "node scripts/build-skill.mjs"
+    "release:publish": "npm test && node scripts/publish.mjs"
   },
   "devDependencies": {
     "marked": "18.1.2"

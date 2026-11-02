@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>完整规范 · Deernova</title>
+  <meta name="description" content="Deernova 设计语言的完整规范：也就是 agent 读的 deernova-style skill。">
+  <script>try { const theme = localStorage.getItem('deernova-theme'); if (theme) document.documentElement.dataset.theme = theme; } catch {}</script>
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/guide.css">
+  <script src="scripts/site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div class="frame">
+  <header class="masthead">
+    <a class="wordmark" href="./" aria-label="Deernova 首页">deernova<span>.</span></a>
+    <nav class="masthead-nav" aria-label="主导航">
+      <a href="guide.html" aria-current="page">完整规范</a>
+      <a href="https://github.com/deernova-studio/deernova-style">GitHub</a>
+    </nav>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换外观"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor" stroke="none"/></svg><span data-theme-label>自动</span></button>
+  </header>
+
+  <section class="hero" aria-labelledby="hero-title">
+    <h1 id="hero-title">Deernova UI</h1>
+    <p class="typed" data-typewriter="写给 agent 的界面设计规范"><span data-typed>写给 agent 的界面设计规范</span><span class="caret" aria-hidden="true">_</span></p>
+    <div class="pills">
+      <a class="pill pill-primary" href="#overview">开始阅读 <span aria-hidden="true">↓</span></a>
+      <button class="pill" type="button" data-copy="npx @deernova/style@latest install"><span data-copy-label>复制安装命令</span></button>
+      <a class="pill" href="https://github.com/deernova-studio/deernova-style">GitHub <span aria-hidden="true">↗</span></a>
+    </div>
+    <p class="hero-note">下面是 <code>skills/deernova-style/</code> 的全部内容，agent 读的就是这些。</p>
+  </section>
+
+  <div class="guide">
+    <aside class="toc" aria-label="目录">
+      <p class="eyebrow">deernova-style · v{{version}}</p>
+      <ol>
+{{nav}}
+      </ol>
+    </aside>
+    <main class="guide-main" id="main">
+{{docs}}
+    </main>
+  </div>
+
+  <footer class="colophon colophon-small">
+    <div class="colophon-meta">
+      <span>deernova.</span>
+      <span>v{{version}} · <a href="./">首页</a> · <a href="https://github.com/deernova-studio/deernova-style">GitHub</a></span>
+    </div>
+  </footer>
+</div>
+</body>
+</html>

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { cp, mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, relative, resolve } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
 import { buildSite } from '../scripts/build-site.mjs';
 import { buildSkill } from '../scripts/build-skill.mjs';
 import { SKILL_DIR } from '../scripts/lib/design.mjs';
@@ -47,7 +47,8 @@ test('builds leave sources alone, and website edits do not change the skill', as
     const guide = join(root, SKILL_DIR, 'references/review.md');
     await writeFile(guide, (await readFile(guide, 'utf8')) + '\n新增一条审查规则。\n');
     assert.notEqual((await buildSkill({ root })).sourceHash, skill.sourceHash, 'guideline changes must produce a new skill hash');
-    assert.match(await readFile(join(root, 'dist/guide.html'), 'utf8'), /审查清单/);
+    await buildSite({ root });
+    assert.match(await readFile(join(root, 'dist/guide.html'), 'utf8'), /新增一条审查规则。/);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -62,5 +63,11 @@ test('website pages are fully rendered and only reference files that exist', asy
       await stat(join('dist', target === './' ? 'index.html' : target));
     }
     for (const [, id] of html.matchAll(/href="#([^"]+)"/g)) assert.match(html, new RegExp(`id="${id}"`), `${page} links to missing #${id}`);
+  }
+  for (const file of await files('dist/scripts')) {
+    const source = await readFile(file, 'utf8');
+    for (const [, target] of source.matchAll(/\bfrom\s+['"](\.[^'"]+)['"]/g)) {
+      await stat(join(dirname(file), target));
+    }
   }
 });

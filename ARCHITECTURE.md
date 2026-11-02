@@ -21,11 +21,16 @@ skills/deernova-style/          skill 本体，规范的唯一来源（直接提
 apps/website/                   官网
   index.html                    首页：满屏动画，白鹿依次跑过草原、森林、星空（scripts/meadow.js），左下角一张入口卡片
   guide.html                    完整规范页：头部是标题、打字行和三个按钮，下面把 skill 的 Markdown 按阅读顺序排成一页
-  styles/  scripts/             网站自己的样式和交互
+  styles/                       网站自己的样式
+  scripts/site.js               主题、复制命令、规范目录和打字效果
+  scripts/meadow.js             动画入口：浏览器可见性、尺寸、主题事件
+  scripts/meadow/               时间轴、鹿、场景、渲染和共用数学函数
 packages/style/                 npm 包 @deernova/style
   bin/cli.mjs                   install / update / doctor
 scripts/                        tokens、build-site、build-skill、发布工具
-tests/                          skill、构建、安装器测试
+tests/                          skill、构建、安装器和动画测试
+reviews/verification.md         当前验证结果与未覆盖范围
+reviews/history.md              历史验收记录
 archive/Paperlight/             最初的设计稿资料，只做留档
 ```
 
@@ -46,6 +51,14 @@ apps/website/ ──────────┘
 - `build-site` 读取同一份 skill：首页引用 `tokens.css` 和截图，规范页把各个 Markdown 渲染出来，并把文件之间的链接改成页内锚点。
 - 两个构建互不影响，也都不会写回源文件。网站的改动不会改变 skill 的哈希。
 
+## 动画与安装器
+
+首页使用浏览器原生 ES 模块，不需要额外打包工具。`meadow.js` 负责连接浏览器事件；`timeline.js` 管理场景交接和唯一的活动时钟；`stag.js` 管理鹿的步态与绘制；`scenery.js` 管理三种场景及缓存；`renderer.js` 负责布局、合成和网点／字符输出。各模块通过明确的尺寸和帧数据交接，数学函数放在 `math.js`。
+
+`?t=24.5` 可以固定一个时刻，`?halftone=0` 可以查看网点处理前的灰度画面。时间轴和步态可以直接在 Node.js 中测试，浏览器事件和最终画面另做浏览器验证。
+
+安装器保留一个自包含入口 `packages/style/bin/cli.mjs`，分别处理参数、目录、完整性检查和替换。替换时先准备完整的新目录，再将旧安装移到备份位置；新目录就位失败时恢复备份。内容哈希算法保持兼容，避免整理代码后把旧安装误判为本地修改。
+
 ## 改动应该落在哪里
 
 | 想改的内容 | 改哪里 | 之后 |
@@ -61,6 +74,6 @@ apps/website/ ──────────┘
 
 ## 测试覆盖什么
 
-`npm test` 先构建，再检查：SKILL.md 的 frontmatter；skill 内所有链接和 `assets/` 路径都能找到；skill 只包含 Markdown、token 和截图；`tokens.css`、`tokens.md` 与 `tokens.json` 同步；两套主题的文字和控件对比度；npm 包里的 skill 与源文件逐字节一致；构建不改源文件、网站改动不改变 skill 哈希；网站页面没有遗漏的模板占位符、链接都能找到；安装器的安装、更新、改动保护和备份。
+`npm test` 先构建，再检查：SKILL.md 的 frontmatter；skill 内所有链接和 `assets/` 路径都能找到；skill 只包含 Markdown、token 和截图；`tokens.css`、`tokens.md` 与 `tokens.json` 同步；两套主题的文字和控件对比度；npm 包里的 skill 与源文件逐字节一致；构建不改源文件、网站改动不改变 skill 哈希；网站页面没有遗漏的模板占位符，链接和模块依赖都能找到；安装器的安装、更新、改动保护、备份和参数错误；动画场景交接、步态连续性、时钟和暂停恢复。
 
-页面的视觉效果、交互和响应式布局需要在浏览器里看。SwiftUI 示例是写法参考，没有在这个仓库里编译。
+页面的视觉效果、交互和响应式布局需要在浏览器里看。SwiftUI 示例是写法参考，没有在这个仓库里编译。当前验证结果和边界见 [验收记录](reviews/verification.md)。

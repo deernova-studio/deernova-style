@@ -12,7 +12,8 @@ Deernova 的设计语言，写成一个给 AI agent 读的 skill。agent 在你�
 | `apps/website/` | 官网。首页传达风格，`guide.html` 把 skill 原文排成一页给人读 |
 | `packages/style/` | npm 包 `@deernova/style`：把 skill 装进其他仓库的命令行工具 |
 | `scripts/` | 生成 token 文件、构建网站和 npm 包、发布 |
-| `tests/` | skill 结构、token 同步、对比度、构建边界和安装器 |
+| `tests/` | skill 结构、token 同步、对比度、构建边界、安装器和动画 |
+| `reviews/` | 当前验收结果、截图，以及单独保留的历史记录 |
 | `archive/Paperlight/` | 最初的设计稿资料，只做留档，不参与构建 |
 
 ## 在项目里使用
@@ -54,9 +55,11 @@ npm run pack         # 在 releases/ 生成 npm 包，不发布
 
 `dist/` 和 `packages/style/skill/` 是构建产物，已加入 `.gitignore`。网站没有自动监听，改完运行 `npm run build:site` 再刷新。架构和改动边界见 [ARCHITECTURE.md](ARCHITECTURE.md)。
 
+当前验证结果与未覆盖范围见 [验收记录](reviews/verification.md)。首页动画可通过 `?t=24.5` 固定时刻检查，通过 `?halftone=0` 查看原始灰度画面。
+
 ## 发布
 
-规范或 skill 内容有变化时，发布新版本，使用者运行 `update` 才能拿到：
+规范、skill 内容或安装器有变化时，发布新版本，使用者通过最新 CLI 安装或运行 `update` 才能拿到：
 
 ```sh
 npm run release:version -- 0.3.0

@@ -16,10 +16,10 @@ if (canvas) {
     start: Number.isFinite(pinned) ? pinned : reduced ? 24.5 : 0,
     render: renderer.render
   });
-  let onScreen = true;
+  let onScreen = true, assetsReady = false;
 
   const render = () => renderer.render(playback.state);
-  const sync = () => playback.setPlaying(onScreen && !document.hidden && !still);
+  const sync = () => playback.setPlaying(assetsReady && onScreen && !document.hidden && !still);
   const repaint = () => {
     renderer.readPalette();
     render();
@@ -40,6 +40,10 @@ if (canvas) {
   renderer.readPalette();
   renderer.resize();
   render();
-  renderer.ready.then(render);
+  renderer.ready.then(loaded => {
+    assetsReady = loaded;
+    render();
+    sync();
+  });
   sync();
 }

@@ -25,7 +25,7 @@ export function createPlayback({
   now = () => performance.now()
 }) {
   const state = { t: start % LOOP, lap: 0, clock: start % LOOP };
-  let playing = false, pending = null, last = 0, wait = 1;
+  let playing = false, pending = null, last = 0, wait = 0;
 
   function frame(time) {
     if (!playing) return;
@@ -40,7 +40,7 @@ export function createPlayback({
     }
     wait += dt;
     if (wait >= 1 / 30) {
-      wait = 0;
+      wait %= 1 / 30;
       render(state);
     }
     if (playing) pending = requestFrame(frame);

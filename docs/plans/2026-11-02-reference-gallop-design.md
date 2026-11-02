@@ -1,10 +1,12 @@
 # 按确认的参考图重做奔跑动画
 
+历史方案，已由 [完整逐帧版本](2026-11-02-generated-cycle-design.md) 替代。
+
 用户已确认 [imagegen 侧面奔跑图](../../reviews/reference/milu-running.png)，本轮在 `codex/refine-homepage-deer` 直接实现。此图作为造型依据，替代上一轮自行概括的高颈、长尾轮廓。
 
 ## 造型与画面
 
-使用确认图的横向躯干、前伸颈部、脸部、分叉鹿角与贴近后臀的尾巴。内置 imagegen 去除背景后，将透明插画保存到 [运行时素材](../../apps/website/assets/milu-running.png)。原始确认图保存在验收资料中。
+使用确认图的横向躯干、前伸颈部、脸部、分叉鹿角与贴近后臀的尾巴。内置 imagegen 去除背景后，将透明插画保存到 [运行时素材](../../reviews/reference/milu-running-transparent.png)。原始确认图保存在验收资料中。
 
 `profile.js` 记录躯干与四肢的区域、关节和纹理网格；`stag.js` 把图像转换为灰度，并按连续姿态变形四肢。头颈与躯干分层，以肩部为支点轻微反向转动。这样能保留参考图的轮廓和明暗，不必重新猜测鹿的形象。
 

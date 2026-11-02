@@ -1,5 +1,6 @@
-import { TAU, clamp, hash, wrap } from './math.js';
-import { GALLOP_RATE, RUN_SPEED, pose, createStagRenderer } from './stag.js';
+import { TAU, clamp, hash } from './math.js';
+import { RUN_SPEED } from './cycle.js';
+import { createStagRenderer } from './stag.js';
 import { createScenery } from './scenery.js';
 import { LOOP, shot } from './timeline.js';
 
@@ -38,7 +39,6 @@ export function createRenderer(stage, canvas, { raw = false } = {}) {
     rows = Math.ceil(H / cell);
     field.width = cols * SS;
     field.height = rows * SS;
-    stag.resize(field.width, field.height);
     bright = new Float32Array(cols * rows);
     grain = Float32Array.from({ length: cols * rows }, (_, i) => hash(i * 0.731 + 17));
     cellOf = Int32Array.from({ length: cols * SS }, (_, x) => Math.floor(x / SS));
@@ -65,8 +65,7 @@ export function createRenderer(stage, canvas, { raw = false } = {}) {
       side(0, line, () => scenery.drawBack(cut.from, v));
       side(line, W, () => scenery.drawBack(cut.to, v));
     } else scenery.drawBack(cut.from, v);
-    const p = pose(wrap(GALLOP_RATE * T));
-    stag.draw(p, deerX, groundY - p.lift * S, S, { cell, SS });
+    stag.draw(T, deerX, groundY, S);
     if (cut.to) {
       side(0, line, () => scenery.drawFront(cut.from, v));
       side(line, W, () => scenery.drawFront(cut.to, v));

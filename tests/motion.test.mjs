@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { LOOP, shot, createPlayback } from '../apps/website/scripts/meadow/timeline.js';
-import { GALLOP_RATE, RUN_SPEED, pose } from '../apps/website/scripts/meadow/stag.js';
-import { LEGS, STRIDE } from '../apps/website/scripts/meadow/gait.js';
+import { readFile } from 'node:fs/promises';
+import { GALLOP_RATE, FRAME_COUNT, FRAMES, ATLASES, frameAt } from '../apps/website/scripts/meadow/cycle.js';
 
 function clock(start = 0) {
   let time = 1000, nextId = 0;
@@ -83,68 +83,55 @@ test('pinned frames stay still until played and rendering is limited to 30 fps',
   near(playback.state.clock, 25.5);
 });
 
-test('the stag has a finite, continuous gait and repeats after a complete scene loop', () => {
-  assert.ok(RUN_SPEED > 0);
-  const values = value => typeof value === 'number'
-    ? [value]
-    : Object.values(value).flatMap(values);
-  for (let i = 0; i <= 100; i++) {
-    const sample = pose(i / 100);
-    assert.ok(values(sample).every(Number.isFinite));
-    assert.ok(sample.lift > 0);
-    for (const leg of Object.values(sample.legs)) assert.equal(leg.length, 6);
-  }
-  const first = values(pose(0));
-  const last = values(pose(GALLOP_RATE * LOOP));
-  first.forEach((value, i) => near(value, last[i]));
-});
-
-function groundPoint(sample, name) {
-  const [x, y] = sample.legs[name][5];
-  return [
-    x * Math.cos(sample.pitch) - y * Math.sin(sample.pitch),
-    x * Math.sin(sample.pitch) + y * Math.cos(sample.pitch) - sample.lift
-  ];
-}
-
-test('supporting hooves stay on the ground without sliding as the body moves', () => {
-  near(RUN_SPEED / GALLOP_RATE, STRIDE);
-  for (const [name, { anatomy, contact }] of Object.entries(LEGS)) {
-    const planted = groundPoint(pose(contact), name);
-    for (let i = 0; i <= 100; i++) {
-      const time = anatomy.stance * i / 100;
-      const foot = groundPoint(pose(contact + time), name);
-      near(foot[1], 0);
-      near(foot[0] + time * STRIDE, planted[0]);
-    }
-    for (let i = 0; i < 1000; i++) {
-      assert.ok(groundPoint(pose(i / 1000), name)[1] <= 1e-9, `${name} must not pass through the ground`);
+test('the cycle visits all 24 distinct generated poses in order at any loop', () => {
+  const duration = 1 / (GALLOP_RATE * FRAME_COUNT);
+  for (const cycle of [-5, 0, 1, 36, 1000]) {
+    for (let frame = 0; frame < FRAME_COUNT; frame++) {
+      const time = cycle / GALLOP_RATE + (frame + 0.5) * duration;
+      assert.equal(frameAt(time), frame);
     }
   }
+  assert.equal(new Set(FRAMES.map(frame => `${frame.atlas}:${frame.rect}`)).size, FRAME_COUNT);
 });
 
-test('every bone keeps its length through support, folding and the loop seam', () => {
-  for (let i = 0; i < 1200; i++) {
-    const sample = pose(i / 1200), next = pose((i + 1) / 1200);
-    for (const [name, { anatomy }] of Object.entries(LEGS)) {
-      const points = sample.legs[name];
-      for (let bone = 0; bone < anatomy.lengths.length; bone++) {
-        near(Math.hypot(points[bone + 1][0] - points[bone][0], points[bone + 1][1] - points[bone][1]), anatomy.lengths[bone]);
-      }
-      for (let joint = 0; joint < points.length; joint++) {
-        assert.ok(Math.hypot(next.legs[name][joint][0] - points[joint][0], next.legs[name][joint][1] - points[joint][1]) < 0.02,
-          `${name} joint ${joint} jumps at phase ${i / 1200}`);
-      }
-    }
+test('the final pose hands directly to the first without repeating an endpoint', () => {
+  const period = 1 / GALLOP_RATE;
+  assert.equal(frameAt(0), 0);
+  assert.equal(frameAt(period - 1e-6), FRAME_COUNT - 1);
+  assert.equal(frameAt(period), 0);
+  assert.equal(frameAt(-1e-6), FRAME_COUNT - 1);
+  assert.equal(frameAt(period + 1e-6), 0);
+});
+
+test('scene rollover and paused playback preserve the generated pose sequence', () => {
+  const playback = clock(LOOP - 0.04);
+  const before = frameAt(playback.state.clock);
+  playback.setPlaying(true);
+  playback.advance(50);
+  assert.equal(playback.state.lap, 1);
+  assert.equal(before, FRAME_COUNT - 2);
+  assert.equal(frameAt(playback.state.clock), 0);
+  assert.equal(frameAt(playback.state.lap * LOOP + playback.state.t), frameAt(playback.state.clock));
+  playback.setPlaying(false);
+  playback.advance(60000);
+  assert.equal(frameAt(playback.state.clock), 0);
+});
+
+test('all pose crops and registrations fit the shipped transparent atlases', async () => {
+  for (const atlas of ATLASES) {
+    const png = await readFile(atlas.src);
+    assert.equal(png.subarray(1, 4).toString(), 'PNG');
+    assert.equal(png.readUInt32BE(16), atlas.width);
+    assert.equal(png.readUInt32BE(20), atlas.height);
+    assert.equal(png[25], 6, 'atlas must carry an alpha channel');
   }
-});
-
-test('the stride includes both extended and gathered suspension with staggered landings', () => {
-  const landings = Object.values(LEGS).map(leg => leg.contact);
-  assert.equal(new Set(landings).size, 4);
-  for (const phase of [0.4, 0.92]) {
-    const sample = pose(phase);
-    assert.ok(Object.values(sample.contacts).every(contact => !contact));
-    assert.ok(Object.keys(LEGS).every(name => groundPoint(sample, name)[1] < 0));
+  for (const frame of FRAMES) {
+    const atlas = ATLASES[frame.atlas];
+    const [x, y, width, height] = frame.rect;
+    assert.ok(x >= 0 && y >= 0 && width > 0 && height > 0);
+    assert.ok(x + width <= atlas.width && y + height <= atlas.height);
+    assert.ok(frame.origin.every(Number.isFinite) && frame.unit > 0);
+    assert.ok(frame.origin[0] > 0 && frame.origin[0] < width);
+    assert.ok(frame.origin[1] > 0 && frame.origin[1] < height);
   }
 });

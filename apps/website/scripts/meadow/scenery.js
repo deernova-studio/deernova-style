@@ -1,4 +1,4 @@
-import { TAU, clamp, mix, hash, fbm, gray } from './math.js';
+import { TAU, clamp, mix, hash, fbm, gray, ease } from './math.js';
 
 // Scene layers own their cached galaxy and stars; resizing rebuilds these once.
 export function createScenery(f) {
@@ -338,8 +338,10 @@ export function createScenery(f) {
     hills(v.dist * 0.05, horizon + H * 0.1, H * 0.08, 600, 51, 0.12);
     // A faint glow around the stag, as if it gave off light.
     glow(v.deerX, groundY - S * 0.7, S * 1.5, 0.12);
-    // The ridge it runs along: always at its feet, rolling away on either side.
-    const ridge = sx => groundY + (fbm((sx + v.dist) / (S * 4)) - fbm((v.deerX + v.dist) / (S * 4))) * S * 0.5;
+    // Keep the full hoof span level, then blend back into the rolling ridge.
+    // Anchoring only the body's centre lets the front and rear feet sink into it.
+    const ridge = sx => groundY + (fbm((sx + v.dist) / (S * 4)) - fbm((v.deerX + v.dist) / (S * 4)))
+      * S * 0.5 * ease(1.2, 2, Math.abs(sx - v.deerX) / S);
     f.fillStyle = gray(0.03);
     f.beginPath();
     f.moveTo(0, H);

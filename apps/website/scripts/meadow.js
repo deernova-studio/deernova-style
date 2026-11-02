@@ -40,5 +40,6 @@ if (canvas) {
   renderer.readPalette();
   renderer.resize();
   render();
+  renderer.ready.then(render);
   sync();
 }

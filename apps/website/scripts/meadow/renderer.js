@@ -32,7 +32,7 @@ export function createRenderer(stage, canvas, { raw = false } = {}) {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
-    cell = phone ? 4 : clamp(Math.round(W / 300), 4, 6);
+    cell = phone ? 3 : clamp(Math.round(W / 360), 3, 5);
     SS = phone ? 2 : 3;
     cols = Math.ceil(W / cell);
     rows = Math.ceil(H / cell);
@@ -42,7 +42,7 @@ export function createRenderer(stage, canvas, { raw = false } = {}) {
     bright = new Float32Array(cols * rows);
     grain = Float32Array.from({ length: cols * rows }, (_, i) => hash(i * 0.731 + 17));
     cellOf = Int32Array.from({ length: cols * SS }, (_, x) => Math.floor(x / SS));
-    S = phone ? Math.min(W * 0.36, H * 0.2) : Math.min(W * 0.15, H * 0.25);
+    S = phone ? Math.min(W * 0.34, H * 0.2) : Math.min(W * 0.18, H * 0.28);
     groundY = H * (phone ? 0.64 : 0.79);
     horizon = H * (phone ? 0.46 : 0.56);
     deerX = W * (phone ? 0.47 : 0.42);
@@ -143,5 +143,5 @@ export function createRenderer(stage, canvas, { raw = false } = {}) {
     }
   }
 
-  return { resize: layout, readPalette, render };
+  return { resize: layout, readPalette, render, ready: stag.ready };
 }

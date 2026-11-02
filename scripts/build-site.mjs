@@ -43,7 +43,7 @@ export async function buildSite({ root = ROOT, out = join(root, 'dist') } = {}) 
   if (stale.length) throw Error(`Out of date, run npm run tokens: ${stale.join(', ')}`);
   const { version } = JSON.parse(await read(join(root, 'package.json')));
   await rm(out, { recursive: true, force: true });
-  for (const directory of ['styles', 'scripts']) await cp(join(root, SITE, directory), join(out, directory), { recursive: true });
+  for (const directory of ['styles', 'scripts', 'assets']) await cp(join(root, SITE, directory), join(out, directory), { recursive: true });
   await cp(join(root, SKILL_DIR, 'assets/tokens.css'), join(out, 'assets/tokens.css'));
   await cp(join(root, SKILL_DIR, 'assets/screens'), join(out, 'assets/screens'), { recursive: true });
 

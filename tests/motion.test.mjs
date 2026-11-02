@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { LOOP, shot, createPlayback } from '../apps/website/scripts/meadow/timeline.js';
 import { GALLOP_RATE, RUN_SPEED, pose } from '../apps/website/scripts/meadow/stag.js';
+import { LEGS, STRIDE } from '../apps/website/scripts/meadow/gait.js';
 
 function clock(start = 0) {
   let time = 1000, nextId = 0;
@@ -96,4 +97,54 @@ test('the stag has a finite, continuous gait and repeats after a complete scene 
   const first = values(pose(0));
   const last = values(pose(GALLOP_RATE * LOOP));
   first.forEach((value, i) => near(value, last[i]));
+});
+
+function groundPoint(sample, name) {
+  const [x, y] = sample.legs[name][5];
+  return [
+    x * Math.cos(sample.pitch) - y * Math.sin(sample.pitch),
+    x * Math.sin(sample.pitch) + y * Math.cos(sample.pitch) - sample.lift
+  ];
+}
+
+test('supporting hooves stay on the ground without sliding as the body moves', () => {
+  near(RUN_SPEED / GALLOP_RATE, STRIDE);
+  for (const [name, { anatomy, contact }] of Object.entries(LEGS)) {
+    const planted = groundPoint(pose(contact), name);
+    for (let i = 0; i <= 100; i++) {
+      const time = anatomy.stance * i / 100;
+      const foot = groundPoint(pose(contact + time), name);
+      near(foot[1], 0);
+      near(foot[0] + time * STRIDE, planted[0]);
+    }
+    for (let i = 0; i < 1000; i++) {
+      assert.ok(groundPoint(pose(i / 1000), name)[1] <= 1e-9, `${name} must not pass through the ground`);
+    }
+  }
+});
+
+test('every bone keeps its length through support, folding and the loop seam', () => {
+  for (let i = 0; i < 1200; i++) {
+    const sample = pose(i / 1200), next = pose((i + 1) / 1200);
+    for (const [name, { anatomy }] of Object.entries(LEGS)) {
+      const points = sample.legs[name];
+      for (let bone = 0; bone < anatomy.lengths.length; bone++) {
+        near(Math.hypot(points[bone + 1][0] - points[bone][0], points[bone + 1][1] - points[bone][1]), anatomy.lengths[bone]);
+      }
+      for (let joint = 0; joint < points.length; joint++) {
+        assert.ok(Math.hypot(next.legs[name][joint][0] - points[joint][0], next.legs[name][joint][1] - points[joint][1]) < 0.02,
+          `${name} joint ${joint} jumps at phase ${i / 1200}`);
+      }
+    }
+  }
+});
+
+test('the stride includes both extended and gathered suspension with staggered landings', () => {
+  const landings = Object.values(LEGS).map(leg => leg.contact);
+  assert.equal(new Set(landings).size, 4);
+  for (const phase of [0.4, 0.92]) {
+    const sample = pose(phase);
+    assert.ok(Object.values(sample.contacts).every(contact => !contact));
+    assert.ok(Object.keys(LEGS).every(name => groundPoint(sample, name)[1] < 0));
+  }
 });

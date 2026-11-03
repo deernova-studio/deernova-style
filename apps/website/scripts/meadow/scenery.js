@@ -122,7 +122,8 @@ export function createScenery(f) {
       const list = [];
       each(v, depth, 22 * depth + 4, 40, (i, x) => {
         const seed = i * 1.7 + k * 31, h = (5 + 14 * hash(seed)) * depth + 1;
-        for (let b = 0; b < 2; b++) list.push([x + (hash(seed + b) - 0.5) * 14 * depth, y, h * (1 - b * 0.3), Math.sin(v.clock * 1.8 + i * 0.4) * h * 0.25 + (b - 0.5) * h * 0.5, Math.max(0.6, depth * 1.4)]);
+        const gust = v.wind(x) * h * 1.3;
+        for (let b = 0; b < 2; b++) list.push([x + (hash(seed + b) - 0.5) * 14 * depth, y, h * (1 - b * 0.3), Math.sin(v.clock * 1.8 + i * 0.4) * h * 0.25 + (b - 0.5) * h * 0.5 - gust, Math.max(0.6, depth * 1.4)]);
       });
       blades(list, 0.42 - k * 0.015);
     }
@@ -149,8 +150,8 @@ export function createScenery(f) {
     each(v, 1.7, S * 0.75, S, (i, x) => {
       if (hash(i * 2.3) < 0.35) return;
       for (let b = 0; b < 7; b++) {
-        const seed = i * 7 + b, h = S * (0.16 + hash(seed + 0.4) * 0.22);
-        list.push([x + (hash(seed) - 0.5) * S * 0.4, H + 4, h, Math.sin(v.clock * 1.5 + seed) * h * 0.12 + (hash(seed + 0.8) - 0.5) * h * 0.7, S * 0.014]);
+        const seed = i * 7 + b, h = S * (0.16 + hash(seed + 0.4) * 0.22), bx = x + (hash(seed) - 0.5) * S * 0.4;
+        list.push([bx, H + 4, h, Math.sin(v.clock * 1.5 + seed) * h * 0.12 + (hash(seed + 0.8) - 0.5) * h * 0.7 - v.wind(bx) * h * 0.9, S * 0.014]);
       }
     });
     blades(list, 0.14);
@@ -324,7 +325,7 @@ export function createScenery(f) {
       }
     }
     // Shooting stars.
-    for (const [at, x0, y0] of [[22.4, 0.7, 0.08], [26, 0.45, 0.05]]) {
+    for (const [at, x0, y0] of [[27.4, 0.7, 0.08], [30.4, 0.45, 0.05]]) {
       const k = (v.t - at) / 0.8;
       if (k < 0 || k > 1) continue;
       const x = mix(x0, x0 - 0.3, k) * W, y = mix(y0, y0 + 0.22, k) * H, tail = W * 0.12;
@@ -380,7 +381,226 @@ export function createScenery(f) {
     f.globalAlpha = 1;
   }
 
-  const SCENE = { meadow: [meadow, meadowFront], forest: [forest, forestFront], night: [night, nightFront] };
+  // ---- Snow mountains: an overcast afternoon, peaks lit from the right, pines in snow ----
+
+  // A range of peaks, each a jagged triangle: the shaded left face, the lit right face, rock below the snow line.
+  function peaks(off, base, height, spacing, seed, lit, shade, rock) {
+    const first = Math.floor((off - spacing) / spacing), last = Math.ceil((off + W + spacing) / spacing);
+    for (let i = first; i <= last; i++) {
+      const s = seed + i * 7.1, cx = i * spacing - off + (hash(s) - 0.5) * spacing * 0.5;
+      const h = height * (0.55 + 0.45 * hash(s + 1)), w = spacing * (0.75 + 0.5 * hash(s + 2)), top = base - h;
+      const ridge = (k, side) => {
+        const t = k / 6, x = cx + side * w * t, y = top + h * t;
+        return [x, y + (k && k < 6 ? (hash(s + k * 3 + side) - 0.5) * h * 0.1 : 0)];
+      };
+      const left = [0, 1, 2, 3, 4, 5, 6].map(k => ridge(k, -1)), right = [0, 1, 2, 3, 4, 5, 6].map(k => ridge(k, 1));
+      f.fillStyle = gray(shade);
+      f.beginPath();
+      f.moveTo(...left[6]);
+      for (let k = 5; k >= 0; k--) f.lineTo(...left[k]);
+      for (let k = 1; k <= 6; k++) f.lineTo(...right[k]);
+      f.closePath();
+      f.fill();
+      // The lit face: from the summit, a crease drops down the middle of the peak to the right foot.
+      f.fillStyle = gray(lit);
+      f.beginPath();
+      f.moveTo(...right[0]);
+      for (let k = 1; k <= 6; k++) f.lineTo(...right[k]);
+      f.lineTo(cx + w * 0.15, base);
+      for (let k = 5; k >= 1; k--) f.lineTo(cx + w * 0.15 * (k / 6) + (hash(s + k * 5) - 0.5) * w * 0.06, top + h * (k / 6));
+      f.closePath();
+      f.fill();
+      // Rock shows below a ragged snow line.
+      f.fillStyle = gray(rock);
+      f.beginPath();
+      f.moveTo(cx - w, base);
+      for (let k = 0; k <= 10; k++) {
+        const x = cx - w + (2 * w * k) / 10;
+        f.lineTo(x, base - h * (0.18 + 0.14 * hash(s + k * 9)) * (1 - Math.abs(x - cx) / w));
+      }
+      f.lineTo(cx + w, base);
+      f.closePath();
+      f.fill();
+    }
+  }
+  // A snow-laden pine: tiers of dark needles, each capped with snow.
+  function pine(x, base, h, tone, cap) {
+    const tiers = 4;
+    for (let k = 0; k < tiers; k++) {
+      const y0 = base - h * (0.12 + 0.24 * k), y1 = y0 - h * 0.42, w = h * 0.34 * (1 - k * 0.2);
+      f.fillStyle = gray(tone);
+      f.beginPath(); f.moveTo(x - w, y0); f.lineTo(x, y1); f.lineTo(x + w, y0); f.closePath(); f.fill();
+      f.fillStyle = gray(cap);
+      f.beginPath(); f.moveTo(x - w * 0.55, y1 + (y0 - y1) * 0.55); f.lineTo(x, y1); f.lineTo(x + w * 0.7, y1 + (y0 - y1) * 0.5);
+      f.quadraticCurveTo(x, y1 + (y0 - y1) * 0.35, x - w * 0.55, y1 + (y0 - y1) * 0.55); f.fill();
+    }
+    f.fillStyle = gray(tone);
+    f.fillRect(x - h * 0.03, base - h * 0.14, h * 0.06, h * 0.14);
+  }
+  function snow(v) {
+    const { S, groundY, horizon } = v;
+    fillSky(0.56, 0.86, horizon);
+    glow(W * 0.78, H * 0.2, Math.min(W, H) * 0.3, 0.3);
+    peaks(v.dist * 0.012, horizon + H * 0.03, H * 0.44, W * 0.3, 101, 0.97, 0.74, 0.6);
+    peaks(v.dist * 0.04, horizon + H * 0.06, H * 0.24, W * 0.17, 211, 0.95, 0.78, 0.66);
+    const top = horizon + H * 0.05;
+    const plane = f.createLinearGradient(0, top, 0, H);
+    plane.addColorStop(0, gray(0.95));
+    plane.addColorStop(1, gray(0.82));
+    f.fillStyle = plane;
+    f.fillRect(0, top, W, H - top);
+    // Wind-carved drifts: soft gray grooves across the snowfield, at three depths.
+    f.strokeStyle = gray(0.78);
+    f.lineCap = 'round';
+    for (const [lane, depth] of [[0.15, 0.3], [0.45, 0.6], [0.85, 1.2]]) {
+      const y = mix(top, H, lane);
+      f.lineWidth = Math.max(1.2, cell * 0.5 * depth);
+      f.beginPath();
+      each(v, depth, S * 1.4, S, (i, x) => {
+        if (hash(i * 2.9 + lane) < 0.3) return;
+        const len = S * (0.6 + hash(i) * 0.8) * depth, yy = y + (hash(i * 1.3) - 0.5) * S * 0.12;
+        f.moveTo(x, yy); f.quadraticCurveTo(x + len * 0.5, yy - S * 0.03 * depth, x + len, yy);
+      });
+      f.stroke();
+    }
+    each(v, 0.25, S * 0.45, S, (i, x) => { if (hash(i * 3.1) > 0.35) pine(x, top + S * 0.05, S * (0.45 + hash(i) * 0.3), 0.5, 0.9); });
+    each(v, 0.6, S * 0.9, S, (i, x) => { if (hash(i * 4.7) > 0.45) pine(x, groundY - S * 0.08, S * (0.9 + hash(i) * 0.5), 0.32, 0.95); });
+    // Snow falling across everything, drifting back with the run.
+    f.fillStyle = gray(1);
+    f.beginPath();
+    for (let i = 0; i < 110; i++) {
+      const span = W * 1.2, size = cell * (0.35 + hash(i * 1.7) * 0.7);
+      const x = ((((hash(i * 2.3) * span - v.dist * 0.2 * (0.5 + hash(i)) - v.clock * 25) % span) + span) % span) - W * 0.1;
+      const y = (hash(i * 4.1) * H + v.clock * H * (0.06 + 0.06 * hash(i * 5.3))) % H;
+      f.moveTo(x + size, y); f.arc(x, y, size, 0, TAU);
+    }
+    f.fill();
+  }
+  function snowFront(v) {
+    const { S, groundY } = v;
+    each(v, 1.8, W * 1.1, S, (i, x) => { if (hash(i * 5.3) > 0.5) pine(x, H + S * 0.2, S * 2.6, 0.12, 0.92); });
+    // Powder kicked up behind the hooves.
+    f.fillStyle = gray(0.84);
+    f.beginPath();
+    for (let k = 1; k < 26; k++) {
+      const age = k * 0.04, x = v.deerX - S * 0.4 - v.speed * age * 0.6 + (hash(k * 3.7) - 0.5) * S * 0.2;
+      const y = groundY - age * S * (0.4 + hash(k * 1.9) * 0.5), r = S * 0.04 * (1 + age * 3) * (1 - k / 26);
+      f.moveTo(x + r, y); f.arc(x, y, r, 0, TAU);
+    }
+    f.fill();
+  }
+
+  // ---- Desert: dawn over dunes, the sun low on the left, slip faces in shadow ----
+
+  // A row of dunes: each rises gently from the left to a sharp crest and drops steeply on the right, in shadow.
+  function dunes(off, base, height, spacing, seed, lit, shade) {
+    const first = Math.floor((off - spacing * 2) / spacing), last = Math.ceil((off + W + spacing) / spacing);
+    for (let i = first; i <= last; i++) {
+      const s = seed + i * 5.3, x0 = i * spacing - off + (hash(s) - 0.5) * spacing * 0.4;
+      const w = spacing * (1.3 + 0.6 * hash(s + 1)), h = height * (0.5 + 0.5 * hash(s + 2));
+      const crest = [x0 + w * 0.68, base - h], x1 = x0 + w;
+      f.fillStyle = gray(lit);
+      f.beginPath();
+      f.moveTo(x0, base);
+      f.quadraticCurveTo(x0 + w * 0.4, base - h * 0.35, ...crest);
+      f.quadraticCurveTo(crest[0] + w * 0.12, base - h * 0.3, x1, base);
+      f.closePath();
+      f.fill();
+      f.fillStyle = gray(shade);
+      f.beginPath();
+      f.moveTo(...crest);
+      f.quadraticCurveTo(crest[0] + w * 0.12, base - h * 0.3, x1, base);
+      f.lineTo(crest[0] + w * 0.08, base);
+      f.quadraticCurveTo(crest[0] + w * 0.02, base - h * 0.5, ...crest);
+      f.fill();
+    }
+  }
+  function desert(v) {
+    const { S, groundY, horizon } = v;
+    fillSky(0.6, 0.97, horizon);
+    const sun = [W * 0.2, H * 0.24], r = Math.min(W, H) * 0.08;
+    glow(...sun, r * 5, 0.6);
+    f.fillStyle = gray(1);
+    f.beginPath(); f.arc(...sun, r, 0, TAU); f.fill();
+    // Flat-topped buttes far off, lit on their left.
+    each(v, 0.02, W * 0.45, W * 0.3, (i, x) => {
+      if (hash(i * 1.9) < 0.4) return;
+      const w = W * (0.08 + 0.1 * hash(i)), h = H * (0.06 + 0.07 * hash(i + 3)), base = horizon + H * 0.02;
+      f.fillStyle = gray(0.74);
+      f.beginPath(); f.moveTo(x - w * 0.6, base); f.lineTo(x - w * 0.42, base - h); f.lineTo(x + w * 0.42, base - h); f.lineTo(x + w * 0.6, base); f.fill();
+      f.fillStyle = gray(0.84);
+      f.beginPath(); f.moveTo(x - w * 0.6, base); f.lineTo(x - w * 0.42, base - h); f.lineTo(x - w * 0.15, base - h); f.lineTo(x - w * 0.25, base); f.fill();
+    });
+    // Heat shimmer over the horizon.
+    f.strokeStyle = gray(1, 0.45);
+    f.lineWidth = Math.max(1, cell * 0.4);
+    for (let k = 0; k < 4; k++) {
+      const y = horizon + H * (0.01 + k * 0.012);
+      f.beginPath();
+      for (let x = 0; x <= W; x += 12) f[x ? 'lineTo' : 'moveTo'](x, y + Math.sin(x / 40 + v.clock * 3 + k) * 2);
+      f.stroke();
+    }
+    dunes(v.dist * 0.06, horizon + H * 0.06, H * 0.12, W * 0.32, 303, 0.88, 0.66);
+    dunes(v.dist * 0.18, horizon + H * 0.13, H * 0.1, W * 0.26, 404, 0.84, 0.6);
+    const top = horizon + H * 0.12;
+    const plane = f.createLinearGradient(0, top, 0, H);
+    plane.addColorStop(0, gray(0.82));
+    plane.addColorStop(1, gray(0.7));
+    f.fillStyle = plane;
+    f.fillRect(0, top, W, H - top);
+    // Wind ripples in the sand, finer and slower toward the horizon.
+    f.strokeStyle = gray(0.6);
+    f.lineCap = 'round';
+    for (let k = 0; k < 9; k++) {
+      const y = mix(top + 6, H, (k / 8) ** 1.4), depth = (y - horizon) / (groundY - horizon);
+      f.lineWidth = Math.max(0.8, depth * cell * 0.35);
+      f.beginPath();
+      each(v, depth, 34 * depth + 8, 30, (i, x) => {
+        if (hash(i * 1.3 + k * 17) < 0.25) return;
+        const len = (20 + 30 * hash(i + k)) * depth, yy = y + (hash(i * 2.1 + k) - 0.5) * 10 * depth;
+        f.moveTo(x, yy); f.quadraticCurveTo(x + len * 0.5, yy - 3 * depth, x + len, yy);
+      });
+      f.stroke();
+    }
+    // Dry shrubs and stones along the stag's line, bending in a gust.
+    each(v, 1, S * 0.9, S, (i, x) => {
+      if (hash(i * 6.1) < 0.5) return;
+      const h = S * (0.12 + hash(i) * 0.12), lean = -v.wind(x) * h * 0.8;
+      f.strokeStyle = gray(0.3);
+      f.lineWidth = Math.max(1.2, S * 0.01);
+      f.beginPath();
+      for (let b = 0; b < 7; b++) {
+        const a = -Math.PI / 2 + (b - 3) * 0.32;
+        f.moveTo(x, groundY + S * 0.03);
+        f.quadraticCurveTo(x + Math.cos(a) * h * 0.4 + lean * 0.4, groundY - h * 0.4, x + Math.cos(a) * h * 0.7 + lean, groundY + S * 0.03 + Math.sin(a) * h);
+      }
+      f.stroke();
+    });
+  }
+  function desertFront(v) {
+    const { S, groundY } = v;
+    each(v, 1.7, W * 0.8, S, (i, x) => {
+      if (hash(i * 7.3) < 0.5) return;
+      f.fillStyle = gray(0.42);
+      f.beginPath(); f.ellipse(x, H + S * 0.05, S * (0.5 + hash(i) * 0.4), S * 0.22, 0, Math.PI, TAU); f.fill();
+      f.fillStyle = gray(0.58);
+      f.beginPath(); f.ellipse(x - S * 0.12, H + S * 0.05, S * (0.3 + hash(i) * 0.2), S * 0.18, 0, Math.PI, TAU); f.fill();
+    });
+    // Sand kicked up behind the hooves.
+    f.fillStyle = gray(0.62);
+    f.beginPath();
+    for (let k = 1; k < 26; k++) {
+      const age = k * 0.04, x = v.deerX - S * 0.4 - v.speed * age * 0.6 + (hash(k * 2.7) - 0.5) * S * 0.2;
+      const y = groundY - age * S * (0.25 + hash(k * 1.3) * 0.35), r = S * 0.035 * (1 + age * 3) * (1 - k / 26);
+      f.moveTo(x + r, y); f.arc(x, y, r, 0, TAU);
+    }
+    f.fill();
+  }
+
+  const SCENE = {
+    meadow: [meadow, meadowFront], forest: [forest, forestFront], snow: [snow, snowFront],
+    night: [night, nightFront], desert: [desert, desertFront]
+  };
 
   return {
     resize,

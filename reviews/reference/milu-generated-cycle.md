@@ -4,10 +4,10 @@
 
 | 文件 | 帧 | 来源输出 |
 | --- | --- | --- |
-| [收腿与后腿着地](../../apps/website/assets/milu-cycle-gather.png) | 01–06 | exec-55735961-47f3-44af-b88c-b4cd9a8c15d9.png |
-| [蹬伸与腾空](../../apps/website/assets/milu-cycle-flight.png) | 07–12 | exec-230077c7-cb0c-4a9d-9322-a128f3495bb2.png |
-| [前腿承重](../../apps/website/assets/milu-cycle-support.png) | 13–18 | exec-807127d6-c470-44fc-b661-afbefddae04f.png |
-| [离地回收](../../apps/website/assets/milu-cycle-recover.png) | 19–24 | exec-4f161e99-c9f6-4641-a92f-cb17036eb4e5.png |
+| [收腿与后腿着地](../../art/milu/source/milu-cycle-gather.png) | 01–06 | exec-55735961-47f3-44af-b88c-b4cd9a8c15d9.png |
+| [蹬伸与腾空](../../art/milu/source/milu-cycle-flight.png) | 07–12 | exec-230077c7-cb0c-4a9d-9322-a128f3495bb2.png |
+| [前腿承重](../../art/milu/source/milu-cycle-support.png) | 13–18 | exec-807127d6-c470-44fc-b661-afbefddae04f.png |
+| [离地回收](../../art/milu/source/milu-cycle-recover.png) | 19–24 | exec-4f161e99-c9f6-4641-a92f-cb17036eb4e5.png |
 
 每张图集为 1536×1024 RGBA，3列×2行。原始输出保留在本机 generated_images 中，项目使用副本；透明通道由 imagegen 生成。C 初稿带白底，追加背景提取；D 初稿的前腿回收顺序错误，追加定向重绘。最终透明性与裁切检查见 [验收记录](../verification.md)。
 

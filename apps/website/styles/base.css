@@ -31,12 +31,46 @@ p { margin: 0; }
 .masthead { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: var(--space-6); height: var(--masthead); padding: 0 var(--space-6); border-bottom: 1px solid var(--rule); background: color-mix(in srgb, var(--surface) 78%, transparent); -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4); }
 .wordmark { font-family: var(--font-serif); font-size: 22px; font-weight: 600; letter-spacing: -0.02em; text-decoration: none; line-height: 1; }
 .wordmark span { color: var(--ink-tertiary); }
-.masthead-nav { display: flex; gap: var(--space-1); margin-left: auto; }
-.masthead-nav a { padding: 6px var(--space-3); border-radius: var(--radius-full); font-size: 14px; line-height: 20px; color: var(--ink-secondary); text-decoration: none; transition: background-color 0.12s var(--ease), color 0.12s var(--ease); }
-.masthead-nav a:hover, .masthead-nav a[aria-current] { background: var(--fill-hover); color: var(--ink); }
-.theme-toggle { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 var(--space-3) 0 10px; border: 1px solid var(--rule); border-radius: var(--radius-full); background: transparent; color: var(--ink-secondary); font: inherit; font-size: 13px; cursor: pointer; transition: color 0.12s var(--ease), border-color 0.12s var(--ease); }
-.theme-toggle:hover { color: var(--ink); border-color: var(--line-control); }
-.theme-toggle svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.masthead-actions { position: relative; display: flex; align-items: center; justify-content: flex-end; gap: 0; margin-left: auto; }
+.masthead-action {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--ink-secondary);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.12s var(--ease);
+}
+/* Keep visible feedback smaller than the hit area, especially on touch screens. */
+.masthead-action::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: var(--control-mac-lg);
+  height: var(--control-mac-lg);
+  margin: auto;
+  border-radius: inherit;
+  pointer-events: none;
+  transition: background-color 0.12s var(--ease);
+}
+@media (hover: hover) {
+  .masthead-action:hover { color: var(--ink); }
+  .masthead-action:hover::before { background: var(--fill-hover); }
+}
+.masthead-action:active { color: var(--ink); }
+.masthead-action:active::before { background: var(--fill-selected); }
+.masthead-action svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
 /* Pills: the site's buttons. */
 .pill { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-width: 148px; height: 44px; padding: 0 var(--space-6); border: 1px solid var(--ink); border-radius: var(--radius-full); background: transparent; color: var(--ink); font: inherit; font-size: 14px; text-decoration: none; cursor: pointer; transition: background-color 0.12s var(--ease), opacity 0.12s var(--ease); }
@@ -54,9 +88,11 @@ p { margin: 0; }
 
 @media (max-width: 760px) {
   .masthead { gap: var(--space-3); padding: 0 var(--space-4); }
-  .theme-toggle span { display: none; }
-  .theme-toggle { width: 32px; padding: 0; justify-content: center; }
   .colophon { padding: var(--space-8) var(--space-4) var(--space-4); }
+}
+
+@media (pointer: coarse) {
+  .masthead-action { flex-basis: var(--control-ios); width: var(--control-ios); height: var(--control-ios); }
 }
 
 @media (prefers-reduced-motion: reduce) {

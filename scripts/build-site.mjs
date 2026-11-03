@@ -2,7 +2,7 @@ import { cp, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { marked } from 'marked';
 import { ROOT, escape, isMain, read, write } from './lib/files.mjs';
-import { SKILL_DIR } from './lib/design.mjs';
+import { SKILL_DIR, readTokens, renderTokensMarkdown } from './lib/design.mjs';
 import { staleTokenOutputs } from './tokens.mjs';
 
 const SITE = 'apps/website';
@@ -38,19 +38,18 @@ function renderDoc(doc, markdown) {
   return { html, headings };
 }
 
-export async function buildSite({ root = ROOT, out = join(root, 'dist') } = {}) {
-  const stale = await staleTokenOutputs(root);
-  if (stale.length) throw Error(`Out of date, run npm run tokens: ${stale.join(', ')}`);
+// The dev server and static build share the same document renderer.
+export async function renderSiteHtml(html, { root = ROOT } = {}) {
+  if (!/\{\{\w+\}\}/.test(html)) return html;
   const { version } = JSON.parse(await read(join(root, 'package.json')));
-  await rm(out, { recursive: true, force: true });
-  for (const directory of ['styles', 'scripts', 'assets']) await cp(join(root, SITE, directory), join(out, directory), { recursive: true });
-  await cp(join(root, SKILL_DIR, 'assets/tokens.css'), join(out, 'assets/tokens.css'));
-  await cp(join(root, SKILL_DIR, 'assets/screens'), join(out, 'assets/screens'), { recursive: true });
 
   const sections = [];
   const nav = [];
   for (const [index, doc] of DOCS.entries()) {
-    const { html, headings } = renderDoc(doc, await read(join(root, SKILL_DIR, doc.file)));
+    const markdown = doc.file === 'references/tokens.md'
+      ? renderTokensMarkdown(await readTokens(root))
+      : await read(join(root, SKILL_DIR, doc.file));
+    const { html, headings } = renderDoc(doc, markdown);
     const number = String(index + 1).padStart(2, '0');
     sections.push(`<section class="doc" id="${doc.id}" aria-labelledby="${doc.id}-title">
 <p class="doc-meta"><span>${number}</span><code>${escape(doc.file)}</code></p>
@@ -62,10 +61,21 @@ ${html}
   }
 
   const values = { version, docs: sections.join('\n'), nav: nav.join('\n') };
+  for (const [key, value] of Object.entries(values)) html = html.replaceAll(`{{${key}}}`, value);
+  return html;
+}
+
+export async function buildSite({ root = ROOT, out = join(root, 'dist') } = {}) {
+  const stale = await staleTokenOutputs(root);
+  if (stale.length) throw Error(`Out of date, run npm run tokens: ${stale.join(', ')}`);
+  const { version } = JSON.parse(await read(join(root, 'package.json')));
+  await rm(out, { recursive: true, force: true });
+  for (const directory of ['styles', 'scripts', 'assets']) await cp(join(root, SITE, directory), join(out, directory), { recursive: true });
+  await cp(join(root, SKILL_DIR, 'assets/tokens.css'), join(out, 'assets/tokens.css'));
+  await cp(join(root, SKILL_DIR, 'assets/screens'), join(out, 'assets/screens'), { recursive: true });
   for (const page of ['index', 'guide']) {
-    let html = await read(join(root, SITE, `${page}.html`));
-    for (const [key, value] of Object.entries(values)) html = html.replaceAll(`{{${key}}}`, value);
-    await write(join(out, `${page}.html`), html);
+    const template = await read(join(root, SITE, `${page}.html`));
+    await write(join(out, `${page}.html`), await renderSiteHtml(template, { root }));
   }
   return { version, pages: ['index.html', 'guide.html'] };
 }

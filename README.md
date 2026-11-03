@@ -10,9 +10,10 @@ Deernova 的设计语言，写成一个给 AI agent 读的 skill。agent 在你�
 | --- | --- |
 | `skills/deernova-style/` | **skill 本体，也是规范的唯一来源。** `SKILL.md` 是入口和核心规则；`references/` 是基础、设计变量、界面模式、SwiftUI、Web 和审查清单；`assets/` 是 `tokens.json`、生成的 `tokens.css` 和效果截图 |
 | `apps/website/` | 官网。首页传达风格，`guide.html` 把 skill 原文排成一页给人读 |
+| `art/milu/` | 首页麋鹿的原始插画和离线烘焙脚本，生成首页用的奔跑帧，不参与构建 |
 | `packages/style/` | npm 包 `@deernova/style`：把 skill 装进其他仓库的命令行工具 |
 | `scripts/` | 生成 token 文件、构建网站和 npm 包、发布 |
-| `tests/` | skill 结构、token 同步、对比度、构建边界、安装器和动画 |
+| `tests/` | skill 结构、token 同步、对比度、构建边界、开发热更新、安装器和动画 |
 | `reviews/` | 当前验收结果、截图，以及单独保留的历史记录 |
 | `archive/Paperlight/` | 最初的设计稿资料，只做留档，不参与构建 |
 
@@ -42,18 +43,23 @@ npx @deernova/style@latest doctor                   # 检查是否安装、是�
 
 ## 开发
 
-需要 Node.js 22 以上。
+需要 Node.js 22.12.0 以上。
 
 ```sh
 npm install
-npm run dev          # 构建网站并在 http://localhost:4173 预览
+npm run dev          # Vite 开发服务，默认 http://localhost:4173
+npm run preview      # 构建网站并预览静态产物，不监听修改
 npm run tokens       # 从 tokens.json 重新生成 tokens.css 和 tokens.md
 npm run build        # 构建网站（dist/）和 npm 包里的 skill（packages/style/skill/）
 npm test             # 构建并运行全部测试
 npm run pack         # 在 releases/ 生成 npm 包，不发布
 ```
 
-`dist/` 和 `packages/style/skill/` 是构建产物，已加入 `.gitignore`。网站没有自动监听，改完运行 `npm run build:site` 再刷新。架构和改动边界见 [ARCHITECTURE.md](ARCHITECTURE.md)。
+开发服务直接读取源码：CSS 保存后热更新，不重置首页动画；HTML、脚本和图片修改会自动刷新。规范 Markdown 修改后会刷新规范页；`tokens.json` 修改会即时更新样式和变量表，提交或构建前仍需运行 `npm run tokens` 同步生成文件。
+
+开发端口被占用时会直接提示，避免误看旧服务；也可以用 `npm run dev -- --port 4174` 指定其他端口。从旧静态服务切换后，手动刷新一次页面以加载热更新连接。
+
+`dist/` 和 `packages/style/skill/` 是构建产物，已加入 `.gitignore`。Vite 开发服务不写入这些目录，也不改写规范源文件。架构和改动边界见 [ARCHITECTURE.md](ARCHITECTURE.md)。
 
 当前验证结果与未覆盖范围见 [验收记录](reviews/verification.md)。首页动画可通过 `?t=24.5` 固定时刻检查，通过 `?halftone=0` 查看原始灰度画面。
 

@@ -3,3 +3,4 @@ dist/
 releases/*.tgz
 packages/style/skill/
 .DS_Store
+.venv/

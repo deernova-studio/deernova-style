@@ -1,22 +1,24 @@
 import { ease } from './math.js';
 
-export const LOOP = 30;
-
 // ---- The run, in seconds of the loop ----
-// 0–9.2 meadow · 9.2–10.8 into the forest · 10.8–19.2 forest · 19.2–20.8 out under the stars · 20.8–28.4 night ·
-// 28.4–30 into the morning meadow, where the loop starts again. Each new scene comes in from ahead of the stag.
-const SCENES = ['meadow', 'forest', 'night'];
-const CUTS = [[9.2, 10.8], [19.2, 20.8], [28.4, 30]];
+// Five scenes of 8.4 s each: meadow, forest, snow mountains, night, desert, and back to the meadow. Each scene
+// hands over in its last 1.6 s with a wipe that brings the next one in from ahead of the stag.
+export const SCENES = ['meadow', 'forest', 'snow', 'night', 'desert'];
+export const LOOP = 42;
+const SEGMENT = LOOP / SCENES.length, WIPE = 1.6;
+const CUTS = SCENES.map((_, i) => [(i + 1) * SEGMENT - WIPE, (i + 1) * SEGMENT]);
+
 export function shot(t) {
   for (let i = 0; i < CUTS.length; i++) {
     const [a, b] = CUTS[i];
     if (t >= a && t < b) return { from: SCENES[i], to: SCENES[(i + 1) % SCENES.length], wipe: ease(a, b, t) };
   }
-  return { from: t < CUTS[0][0] ? 'meadow' : t < CUTS[1][0] ? 'forest' : 'night', wipe: 0 };
+  return { from: SCENES[Math.min(SCENES.length - 1, Math.max(0, Math.floor(t / SEGMENT)))], wipe: 0 };
 }
 
 // Only active animation time advances the scene. A single pending frame is
 // cancelled on pause so a quick hide/show cannot create a second render loop.
+// Frames render at up to 60 a second, also on faster displays.
 export function createPlayback({
   start = 0,
   render,
@@ -25,22 +27,29 @@ export function createPlayback({
   now = () => performance.now()
 }) {
   const state = { t: start % LOOP, lap: 0, clock: start % LOOP };
-  let playing = false, pending = null, last = 0, wait = 0;
+  const interval = 1 / 60, jitter = 0.004;
+  let playing = false, pending = null, last = 0, nextPaint = null;
 
   function frame(time) {
     if (!playing) return;
     pending = null;
-    const dt = Math.min(0.1, (time - last) / 1000);
-    last = time;
+    // A frame's timestamp can be a little older than the moment playback started; never run backwards.
+    const dt = Math.min(0.1, Math.max(0, (time - last) / 1000));
+    last = Math.max(last, time);
     state.t += dt;
     state.clock += dt;
     if (state.t >= LOOP) {
       state.t -= LOOP;
       state.lap++;
     }
-    wait += dt;
-    if (wait >= 1 / 30) {
-      wait %= 1 / 30;
+    if (nextPaint === null || state.clock + jitter + 1e-9 >= nextPaint) {
+      // Anchor the cadence to the first drawn frame. A callback may arrive up to
+      // 4 ms early (alternating ±2 ms timestamps); retain its deadline so the
+      // allowance does not accumulate into a higher frame rate. Modulo rounding
+      // here would discard every other frame when callbacks alternate early/late.
+      // A genuine stall starts a new cadence, with no catch-up render burst.
+      nextPaint = nextPaint === null || state.clock - nextPaint >= interval
+        ? state.clock + interval : nextPaint + interval;
       render(state);
     }
     if (playing) pending = requestFrame(frame);
@@ -58,5 +67,5 @@ export function createPlayback({
     }
   }
 
-  return { state, setPlaying };
+  return { state, setPlaying, playing: () => playing };
 }

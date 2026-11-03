@@ -1,0 +1,505 @@
+{
+ "headReference": 30,
+ "frames": 50,
+ "prefix": "milu-run",
+ "perAtlas": 25,
+ "columns": 5,
+ "drawings": [
+  {
+   "source": 37,
+   "atlas": "milu-cycle-push.png",
+   "rect": [
+    512,
+    0,
+    512,
+    512
+   ],
+   "origin": [
+    217.2,
+    453
+   ],
+   "unit": 180,
+   "duration": 0.056819
+  },
+  {
+   "source": 39,
+   "atlas": "milu-cycle-push.png",
+   "rect": [
+    0,
+    512,
+    480,
+    512
+   ],
+   "origin": [
+    243.2,
+    431
+   ],
+   "unit": 180,
+   "duration": 0.056819
+  },
+  {
+   "source": 40,
+   "atlas": "milu-cycle-push.png",
+   "rect": [
+    480,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    246.7,
+    430
+   ],
+   "unit": 180,
+   "duration": 0.037879
+  },
+  {
+   "source": 41,
+   "atlas": "milu-cycle-push.png",
+   "rect": [
+    992,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    244.5,
+    441
+   ],
+   "unit": 180,
+   "duration": 0.034091
+  },
+  {
+   "source": 8,
+   "atlas": "milu-cycle-flight.png",
+   "rect": [
+    1024,
+    0,
+    512,
+    512
+   ],
+   "origin": [
+    262,
+    477.5
+   ],
+   "unit": 174,
+   "duration": 0.032197
+  },
+  {
+   "source": 9,
+   "atlas": "milu-cycle-flight.png",
+   "rect": [
+    0,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    271.2,
+    448
+   ],
+   "unit": 174,
+   "duration": 0.028409
+  },
+  {
+   "source": 24,
+   "atlas": "milu-cycle-descent.png",
+   "rect": [
+    0,
+    0,
+    512,
+    512
+   ],
+   "origin": [
+    271.3,
+    477.33
+   ],
+   "unit": 174,
+   "duration": 0.022727
+  },
+  {
+   "source": 25,
+   "atlas": "milu-cycle-descent.png",
+   "rect": [
+    512,
+    0,
+    512,
+    512
+   ],
+   "origin": [
+    262.9,
+    475.67
+   ],
+   "unit": 174,
+   "duration": 0.022727
+  },
+  {
+   "source": 10,
+   "atlas": "milu-cycle-flight.png",
+   "rect": [
+    512,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    261,
+    448.5
+   ],
+   "unit": 174,
+   "duration": 0.030303
+  },
+  {
+   "source": 26,
+   "atlas": "milu-cycle-descent.png",
+   "rect": [
+    1024,
+    0,
+    512,
+    512
+   ],
+   "origin": [
+    261,
+    472.33
+   ],
+   "unit": 174,
+   "duration": 0.022727
+  },
+  {
+   "source": 27,
+   "atlas": "milu-cycle-descent.png",
+   "rect": [
+    0,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    261,
+    439.17
+   ],
+   "unit": 174,
+   "duration": 0.022727
+  },
+  {
+   "source": 11,
+   "atlas": "milu-cycle-flight.png",
+   "rect": [
+    1024,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    254.5,
+    439
+   ],
+   "unit": 174,
+   "duration": 0.026515
+  },
+  {
+   "source": 28,
+   "atlas": "milu-cycle-descent.png",
+   "rect": [
+    512,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    257.08,
+    437.97
+   ],
+   "unit": 178.33,
+   "duration": 0.022727
+  },
+  {
+   "source": 29,
+   "atlas": "milu-cycle-descent.png",
+   "rect": [
+    1024,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    257.58,
+    446.29
+   ],
+   "unit": 182.67,
+   "duration": 0.022727
+  },
+  {
+   "source": 12,
+   "atlas": "milu-cycle-support.png",
+   "rect": [
+    0,
+    0,
+    512,
+    512
+   ],
+   "origin": [
+    239.5,
+    465
+   ],
+   "unit": 187,
+   "duration": 0.041667
+  },
+  {
+   "source": 13,
+   "atlas": "milu-cycle-support.png",
+   "rect": [
+    512,
+    0,
+    512,
+    512
+   ],
+   "origin": [
+    239.3,
+    465
+   ],
+   "unit": 187,
+   "duration": 0.043561
+  },
+  {
+   "source": 14,
+   "atlas": "milu-cycle-support.png",
+   "rect": [
+    1024,
+    0,
+    512,
+    512
+   ],
+   "origin": [
+    239.2,
+    465
+   ],
+   "unit": 187,
+   "duration": 0.043561
+  },
+  {
+   "source": 15,
+   "atlas": "milu-cycle-support.png",
+   "rect": [
+    0,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    238.3,
+    434
+   ],
+   "unit": 187,
+   "duration": 0.045455
+  },
+  {
+   "source": 16,
+   "atlas": "milu-cycle-support.png",
+   "rect": [
+    512,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    240,
+    434
+   ],
+   "unit": 187,
+   "duration": 0.043561
+  },
+  {
+   "source": 17,
+   "atlas": "milu-cycle-support.png",
+   "rect": [
+    1024,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    240.7,
+    434
+   ],
+   "unit": 187,
+   "duration": 0.034091
+  },
+  {
+   "source": 18,
+   "atlas": "milu-cycle-recover.png",
+   "rect": [
+    0,
+    0,
+    512,
+    512
+   ],
+   "origin": [
+    241,
+    468
+   ],
+   "unit": 187,
+   "duration": 0.032197
+  },
+  {
+   "source": 19,
+   "atlas": "milu-cycle-recover.png",
+   "rect": [
+    512,
+    0,
+    512,
+    512
+   ],
+   "origin": [
+    241,
+    472
+   ],
+   "unit": 187,
+   "duration": 0.030303
+  },
+  {
+   "source": 20,
+   "atlas": "milu-cycle-recover.png",
+   "rect": [
+    1024,
+    0,
+    512,
+    512
+   ],
+   "origin": [
+    241.1,
+    477
+   ],
+   "unit": 187,
+   "duration": 0.030303
+  },
+  {
+   "source": 21,
+   "atlas": "milu-cycle-recover.png",
+   "rect": [
+    0,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    241.1,
+    448
+   ],
+   "unit": 187,
+   "duration": 0.030303
+  },
+  {
+   "source": 22,
+   "atlas": "milu-cycle-recover.png",
+   "rect": [
+    512,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    241,
+    444
+   ],
+   "unit": 187,
+   "duration": 0.032197
+  },
+  {
+   "source": 30,
+   "atlas": "milu-cycle-reach.png",
+   "rect": [
+    0,
+    0,
+    512,
+    512
+   ],
+   "origin": [
+    242,
+    469
+   ],
+   "unit": 187,
+   "duration": 0.024621
+  },
+  {
+   "source": 31,
+   "atlas": "milu-cycle-reach.png",
+   "rect": [
+    512,
+    0,
+    512,
+    512
+   ],
+   "origin": [
+    242,
+    468
+   ],
+   "unit": 187,
+   "duration": 0.024621
+  },
+  {
+   "source": 32,
+   "atlas": "milu-cycle-reach.png",
+   "rect": [
+    1024,
+    0,
+    512,
+    512
+   ],
+   "origin": [
+    242,
+    466
+   ],
+   "unit": 187,
+   "duration": 0.024621
+  },
+  {
+   "source": 33,
+   "atlas": "milu-cycle-reach.png",
+   "rect": [
+    0,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    241.5,
+    439.5
+   ],
+   "unit": 187,
+   "duration": 0.024621
+  },
+  {
+   "source": 34,
+   "atlas": "milu-cycle-reach.png",
+   "rect": [
+    512,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    241,
+    437
+   ],
+   "unit": 187,
+   "duration": 0.024621
+  },
+  {
+   "source": 35,
+   "atlas": "milu-cycle-reach.png",
+   "rect": [
+    1024,
+    512,
+    512,
+    512
+   ],
+   "origin": [
+    241,
+    437
+   ],
+   "unit": 187,
+   "duration": 0.030303
+  }
+ ]
+}

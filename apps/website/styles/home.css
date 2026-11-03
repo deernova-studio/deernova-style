@@ -9,32 +9,121 @@
   :root:not([data-theme="light"]) .meadow { --print-paper: #101010; --print-ink: #e6e6e6; --print-mode: light; }
 }
 .meadow canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.animation-status {
+  position: absolute;
+  bottom: max(var(--space-6), env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100% - var(--space-8));
+  padding: var(--space-2) var(--space-3);
+  border: var(--stroke-hairline) solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink-secondary);
+  font-size: 13px;
+}
+.animation-status:not([hidden]) { display: flex; align-items: center; gap: var(--space-2); }
+.animation-status button { flex: none; min-height: var(--control-mac); padding: 0 var(--space-2); border: 0; border-radius: var(--radius-sm); background: var(--fill-hover); color: var(--ink); font: inherit; cursor: pointer; }
+.animation-status button:hover { background: var(--fill-selected); }
+.animation-status button:disabled { color: var(--ink-tertiary); cursor: wait; }
 
 .masthead-float {
+  --header-inset: clamp(48px, 10vw, 192px);
   position: fixed;
-  top: var(--space-6);
-  left: clamp(32px, 6vw, 96px);
-  right: clamp(32px, 6vw, 96px);
-  padding-inline: var(--space-8);
+  top: max(var(--space-8), calc(env(safe-area-inset-top) + var(--space-3)));
+  left: max(var(--header-inset), calc((100vw - 1120px) / 2), env(safe-area-inset-left));
+  right: max(var(--header-inset), calc((100vw - 1120px) / 2), env(safe-area-inset-right));
+  display: flex;
+  height: 64px;
+  padding: 0 var(--space-4) 0 var(--space-6);
   border: var(--stroke-hairline) solid var(--glass-stroke);
   border-radius: var(--radius-full);
-  background: var(--glass-fill);
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
   box-shadow: 0 8px 32px rgb(0 0 0 / 0.08);
 }
-.masthead-float .theme-toggle { border-color: transparent; }
+/* Separate the header's glass layer so the dropdown can blur the scene too. */
+.masthead-float::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.masthead-float::before, .product-panel {
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  backdrop-filter: blur(16px) saturate(1.4);
+}
+.masthead-trigger {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0 var(--space-6);
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.15s var(--ease);
+}
+.masthead-trigger:hover { color: var(--ink-secondary); }
+.masthead-trigger:focus-visible { border-radius: inherit; }
+.product-panel svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.product-panel {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  left: 0;
+  /* Half the header, from its left edge; never too narrow for a product name on a phone. */
+  width: min(100%, max(50%, 15rem));
+  max-height: min(20rem, calc(100dvh - 128px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-1);
+  border: var(--stroke-hairline) solid var(--glass-stroke);
+  border-radius: var(--radius-md);
+  color: var(--ink);
+  box-shadow: var(--shadow-float);
+}
+.product-options { margin: 0; padding: 0; list-style: none; }
+.product-option { display: flex; align-items: center; gap: var(--space-2); min-height: 32px; padding: var(--space-1) var(--space-2); border-radius: var(--radius-xs); text-decoration: none; }
+.product-option:hover, .product-option:focus-visible { background: var(--fill-hover); }
+.product-panel .product-symbol {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  stroke: none;
+}
+.product-name { min-width: 0; font-size: 0.875rem; line-height: 1.25rem; font-weight: 500; overflow-wrap: anywhere; }
+.product-panel .product-arrow { width: 14px; height: 14px; margin-left: auto; color: var(--ink-tertiary); }
 
 @media (prefers-reduced-transparency: reduce) {
-  .masthead-float { background: var(--surface-raised); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .masthead-float::before, .product-panel { background: var(--surface-raised); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 
 @media (max-width: 760px) {
   .masthead-float {
-    top: var(--space-4);
-    left: var(--space-4);
-    right: var(--space-4);
-    gap: var(--space-2);
-    padding-inline: var(--space-3);
+    --header-inset: var(--space-6);
+    top: max(var(--space-4), calc(env(safe-area-inset-top) + var(--space-2)));
+    height: 56px;
+    padding: 0 var(--space-2);
   }
+  .masthead-trigger { padding-inline: var(--space-4); }
   .masthead-float .wordmark { font-size: 20px; }
-  .masthead-float .masthead-nav a { padding-inline: var(--space-2); font-size: 12px; }
+}
+
+/* Match the repository's desktop density, while keeping touch rows easy to hit. */
+@media (pointer: coarse) {
+  .animation-status button { min-height: var(--control-ios); }
+  .product-option { min-height: var(--control-ios); }
+  .product-panel .product-symbol { flex-basis: 24px; width: 24px; height: 24px; }
+  .product-name { font-size: 1.0625rem; line-height: 1.4375rem; }
+  .product-panel .product-arrow { width: 16px; height: 16px; }
 }

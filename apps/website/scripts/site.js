@@ -11,7 +11,11 @@ function applyTheme(theme) {
   if (theme === 'auto') delete root.dataset.theme;
   else root.dataset.theme = theme;
   for (const label of document.querySelectorAll('[data-theme-label]')) label.textContent = LABELS[theme];
-  for (const button of document.querySelectorAll('[data-theme-toggle]')) button.setAttribute('aria-label', `外观：${LABELS[theme]}。点按切换`);
+  for (const button of document.querySelectorAll('[data-theme-toggle]')) {
+    const label = `外观：${LABELS[theme]}。点按切换`;
+    button.setAttribute('aria-label', label);
+    button.title = label;
+  }
   try {
     if (theme === 'auto') localStorage.removeItem('deernova-theme');
     else localStorage.setItem('deernova-theme', theme);

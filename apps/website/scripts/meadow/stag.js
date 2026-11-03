@@ -1,5 +1,4 @@
-import { clamp } from './math.js';
-import { ATLASES, CELL_SIZE, FRAMES, frameAt } from './cycle.js';
+import { ATLASES, EXTENTS, FRAMES, FRAME_SIZE, ORIGIN, UNIT } from './cycle.js';
 
 function canvas(width, height) {
   const layer = document.createElement('canvas');
@@ -8,68 +7,111 @@ function canvas(width, height) {
   return layer;
 }
 
-function load(src) {
+function load(src, timeout) {
   return new Promise((resolve, reject) => {
     const image = new Image();
-    image.onload = () => resolve(image);
-    image.onerror = () => reject(new Error(`Could not load deer atlas: ${src}`));
+    const finish = error => {
+      clearTimeout(timer);
+      image.onload = image.onerror = null;
+      if (error) {
+        image.src = '';
+        reject(error);
+      } else resolve(image);
+    };
+    const timer = setTimeout(() => finish(new Error(`Deer atlas timed out: ${src}`)), timeout);
+    image.onload = () => finish();
+    image.onerror = () => finish(new Error(`Could not load deer atlas: ${src}`));
     image.src = src;
   });
 }
 
-export function createStagRenderer(field) {
-  const frames = new Array(FRAMES.length);
-  // Prepare once. During playback the only animal operation is drawImage.
-  const ready = Promise.allSettled(ATLASES.map(async (atlas, atlasIndex) => {
-    const image = await load(atlas.src);
-    if (image.naturalWidth !== atlas.width || image.naturalHeight !== atlas.height) {
-      throw new Error(`Unexpected deer atlas size: ${atlas.src}`);
-    }
-    for (const [index, frame] of FRAMES.entries()) {
-      if (frame.atlas !== atlasIndex) continue;
-      const texture = canvas(CELL_SIZE, CELL_SIZE);
-      const paint = texture.getContext('2d', { willReadFrequently: true });
-      paint.drawImage(image, ...frame.rect, 0, 0, CELL_SIZE, CELL_SIZE);
-      const pixels = paint.getImageData(0, 0, CELL_SIZE, CELL_SIZE);
-      for (let i = 0; i < pixels.data.length; i += 4) {
-        const luminance = 0.2126 * pixels.data[i] + 0.7152 * pixels.data[i + 1] + 0.0722 * pixels.data[i + 2];
-        const value = luminance < 58 ? 30 + luminance * 1.6 : 150 + 105 * clamp((luminance - 58) / 172) ** 0.45;
-        pixels.data[i] = pixels.data[i + 1] = pixels.data[i + 2] = value;
-        // Discard near-zero matte noise; keep generated fur and antler edges.
-        if (pixels.data[i + 3] < 8) pixels.data[i + 3] = 0;
+export async function loadAtlas(atlas, { attempts = 3, timeout = 15000, retryDelay = 250 } = {}) {
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    if (attempt) await new Promise(resolve => setTimeout(resolve, retryDelay * attempt));
+    const src = new URL(atlas.src);
+    if (attempt) src.searchParams.set('retry', `${Date.now()}-${attempt}`);
+    try {
+      const image = await load(src, timeout);
+      if (image.naturalWidth !== atlas.width || image.naturalHeight !== atlas.height) {
+        throw new Error(`Unexpected deer atlas size: ${src}`);
       }
-      paint.putImageData(pixels, 0, 0);
-      const silhouette = canvas(CELL_SIZE, CELL_SIZE);
-      const edge = silhouette.getContext('2d');
-      edge.drawImage(texture, 0, 0);
-      edge.globalCompositeOperation = 'source-in';
-      edge.fillStyle = '#151515';
-      edge.fillRect(0, 0, CELL_SIZE, CELL_SIZE);
-      const outlined = canvas(CELL_SIZE, CELL_SIZE);
-      const ink = outlined.getContext('2d');
-      for (let i = 0; i < 8; i++) {
-        ink.drawImage(silhouette, Math.cos(i * Math.PI / 4) * 1.25, Math.sin(i * Math.PI / 4) * 1.25);
-      }
-      ink.drawImage(texture, 0, 0);
-      frames[index] = outlined;
+      return image;
+    } catch (error) {
+      if (attempt === attempts - 1) throw error;
     }
-  })).then(results => {
-    for (const result of results) {
-      if (result.status === 'rejected') console.warn(result.reason.message);
-    }
-    return results.every(result => result.status === 'fulfilled');
-  });
+  }
+}
 
-  function draw(seconds, x, groundY, size) {
-    const index = frameAt(seconds);
-    const texture = frames[index] || frames.find(Boolean);
-    if (!texture) return;
-    const frame = FRAMES[frames[index] ? index : frames.indexOf(texture)];
-    const scale = size / frame.unit;
-    field.drawImage(texture,
-      x - frame.origin[0] * scale, groundY - frame.origin[1] * scale,
-      CELL_SIZE * scale, CELL_SIZE * scale);
+// The baked frames are already gray and outlined; drawing one is a single copy from its atlas.
+export function createStagRenderer(field, { loadImage = loadAtlas } = {}) {
+  const images = new Array(ATLASES.length);
+  const blend = canvas(1, 1);
+  const mixer = blend.getContext('2d');
+  let loading = null, drawn = null;
+  const available = index => !!images[FRAMES[index].atlas];
+
+  function loadMissing() {
+    if (loading) return loading;
+    loading = Promise.allSettled(ATLASES.map(async (atlas, index) => {
+      if (!images[index]) images[index] = await loadImage(atlas);
+    }))
+      .then(results => {
+        for (const result of results) {
+          if (result.status === 'rejected') console.warn(result.reason.message);
+        }
+        return { complete: images.filter(Boolean).length === ATLASES.length, available: FRAMES.filter((_, i) => available(i)).length };
+      })
+      .finally(() => { loading = null; });
+    return loading;
+  }
+  const ready = loadMissing();
+
+  // Mix the neighbouring frames of the stride. Adding premultiplied pixels ('lighter') makes the mix an exact
+  // cross-dissolve, so the body stays solid. Both frames share one origin, so they land on one rectangle.
+  function draw(weights, x, groundY, size) {
+    const list = weights.filter(([index, w]) => w > 0.004 && available(index));
+    if (!list.length) {
+      const fallback = FRAMES.findIndex((_, i) => available(i));
+      if (fallback < 0) return;
+      list.push([fallback, 1]);
+    }
+    // A missing neighbour must not make the surviving pose translucent.
+    const total = list.reduce((sum, [, weight]) => sum + weight, 0);
+    const k = field.getTransform().a, scale = size / UNIT;
+    const dx = x - ORIGIN[0] * scale, dy = groundY - ORIGIN[1] * scale;
+    const x0 = Math.floor(dx * k), y0 = Math.floor(dy * k);
+    const width = Math.ceil(FRAME_SIZE[0] * scale * k) + 2, height = Math.ceil(FRAME_SIZE[1] * scale * k) + 2;
+    if (blend.width < width || blend.height < height) {
+      blend.width = Math.max(blend.width, width);
+      blend.height = Math.max(blend.height, height);
+    }
+    mixer.setTransform(1, 0, 0, 1, 0, 0);
+    mixer.globalCompositeOperation = 'source-over';
+    mixer.globalAlpha = 1;
+    mixer.clearRect(0, 0, width, height);
+    mixer.globalCompositeOperation = 'lighter';
+    for (const [index, w] of list) {
+      const frame = FRAMES[index];
+      mixer.globalAlpha = w / total;
+      mixer.drawImage(images[frame.atlas], ...frame.rect, dx * k - x0, dy * k - y0, FRAME_SIZE[0] * scale * k, FRAME_SIZE[1] * scale * k);
+    }
+    field.save();
+    field.setTransform(1, 0, 0, 1, 0, 0);
+    field.drawImage(blend, 0, 0, width, height, x0, y0, width, height);
+    field.restore();
+
+    // Remember the dominant frame's box for clicks, padded so the antlers and legs are easy to hit.
+    const [main] = list.reduce((a, b) => (b[1] > a[1] ? b : a));
+    const [bx0, by0, bx1, by1] = FRAMES[main].bounds;
+    const pad = size * 0.08;
+    drawn = [dx + bx0 * scale - pad, dy + by0 * scale - pad, dx + bx1 * scale + pad, dy + by1 * scale + pad];
   }
 
-  return { draw, ready };
+  const hit = (x, y) => !!drawn && x >= drawn[0] && x <= drawn[2] && y >= drawn[1] && y <= drawn[3];
+
+  return {
+    draw, hit, ready, retry: loadMissing,
+    get hasFrames() { return images.some(Boolean); },
+    leftExtent: EXTENTS.left, rightExtent: EXTENTS.right
+  };
 }

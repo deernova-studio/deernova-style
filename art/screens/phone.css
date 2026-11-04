@@ -1,0 +1,41 @@
+/*
+ * iPhone 示意图共用的机身和系统部分（iOS 26）。比例按 Apple HIG 里 iOS 26 的插图量出（以状态栏「9:41」的字高为尺子）：
+ * 屏幕 402 × 874（iPhone 16 Pro / 17 Pro），标签栏是离左右下边约 25 的悬浮玻璃胶囊、高 62，选中项是填满的胶囊；
+ * 顶部玻璃按钮 44，竖直中心离屏幕顶边约 85。屏幕里的内容用 Deernova 的触控密度。
+ */
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--surface-sunken); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; color: var(--ink); }
+.phones { display: flex; justify-content: center; gap: 48px; padding: 40px 40px 0; }
+.device { flex: none; width: 426px; }
+.phone { position: relative; width: 426px; height: 898px; padding: 12px; border-radius: 67px; background: #111; box-shadow: 0 0 0 1px var(--line), var(--shadow-float); }
+.screen { position: relative; width: 402px; height: 874px; overflow: hidden; border-radius: 55px; background: var(--canvas); color: var(--ink); }
+.island { position: absolute; z-index: 5; top: 11px; left: 50%; width: 126px; height: 37px; margin-left: -63px; border-radius: 19px; background: #000; }
+.status { position: absolute; z-index: 4; top: 0; left: 0; right: 0; height: 54px; display: flex; align-items: center; justify-content: space-between; padding: 4px 34px 0 52px; font: 600 17px/22px var(--font-sans); }
+.status-icons { display: flex; align-items: center; gap: 6px; }
+.status-icons svg { display: block; fill: currentColor; }
+.home { position: absolute; z-index: 5; bottom: 8px; left: 50%; width: 134px; height: 5px; margin-left: -67px; border-radius: 3px; background: var(--ink); }
+.caption { margin: 18px 6px 0; color: var(--ink-secondary); font: 400 14px/22px var(--font-sans); }
+.caption b { color: var(--ink); font-weight: 600; margin-right: 6px; }
+
+/* 系统玻璃：顶部按钮 44、标签栏 62，都由系统绘制，这里只是示意。 */
+.glass { border: 1px solid var(--glass-stroke); background: var(--glass-fill); box-shadow: var(--shadow-glass); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)); backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)); }
+.nav { position: absolute; z-index: 3; top: 63px; left: 24px; right: 24px; display: flex; align-items: center; justify-content: space-between; height: 44px; }
+.nav-title { font: 600 17px/22px var(--font-sans); }
+.circle { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; color: var(--ink); }
+.circle .dn-icon { width: 20px; height: 20px; stroke-width: 1.9; }
+.tabbar-row { position: absolute; z-index: 3; left: 25px; right: 25px; bottom: 25px; display: flex; gap: 8px; }
+.tabbar { flex: 1; display: flex; height: 62px; padding: 4px; border-radius: 31px; }
+.tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border-radius: 27px; color: var(--ink); font: 500 10px/12px var(--font-sans); }
+.tab .dn-icon { width: 24px; height: 24px; stroke-width: 1.7; }
+.tab.is-selected { background: var(--fill-selected); }
+.tab-search { display: grid; place-items: center; flex: none; width: 62px; height: 62px; border-radius: 50%; }
+.tab-search .dn-icon { width: 24px; height: 24px; stroke-width: 1.8; }
+
+/* 页面内容。 */
+.large-title { position: absolute; top: 112px; left: 16px; right: 16px; margin: 0; font: var(--type-display); letter-spacing: var(--type-display-tracking); }
+.page { position: absolute; left: 16px; right: 16px; }
+
+/* 点击区域示意：虚线框是 44 的命中区，实际界面里看不见。 */
+.hit { position: relative; }
+.hit::after { content: ""; position: absolute; top: 50%; left: 50%; width: calc(max(100%, var(--hit-min)) + 8px); height: var(--hit-min); transform: translate(-50%, -50%); border: 1px dashed var(--ink-tertiary); border-radius: 10px; pointer-events: none; }

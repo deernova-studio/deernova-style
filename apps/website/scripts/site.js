@@ -49,17 +49,6 @@ for (const button of document.querySelectorAll('[data-copy]')) {
   });
 }
 
-// Typed line: the text is in the HTML; it is retyped once unless motion is reduced.
-for (const line of document.querySelectorAll('[data-typewriter]')) {
-  const target = line.querySelector('[data-typed]');
-  const text = line.dataset.typewriter;
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) continue;
-  line.setAttribute('aria-label', text);
-  target.setAttribute('aria-hidden', 'true');
-  target.textContent = '';
-  [...text].forEach((char, i) => setTimeout(() => { target.textContent += char; }, 400 + i * 90));
-}
-
 // Guide: mark the section being read in the table of contents.
 const tocLinks = [...document.querySelectorAll('.toc a[href^="#"]')];
 const targets = tocLinks.map(link => document.getElementById(link.hash.slice(1))).filter(Boolean);

@@ -1,6 +1,6 @@
 {
   "name": "deernova-style",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -14,6 +14,7 @@
     "build:site": "node scripts/build-site.mjs",
     "build:skill": "node scripts/build-skill.mjs",
     "tokens": "node scripts/tokens.mjs",
+    "screens": "node scripts/render-screens.mjs",
     "dev": "vite",
     "preview": "npm run build:site && node scripts/serve.mjs",
     "test": "npm run build && node --test",

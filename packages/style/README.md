@@ -11,7 +11,7 @@ npx @deernova/style@latest doctor
 
 Run these inside the target project, or pass `--repo <path>`. The CLI writes only the skill directory. It does not add application code, CSS imports or package dependencies.
 
-The skill is guidance, not a component library: `SKILL.md` with the core rules and a reading guide, `references/` (foundations, tokens, interface patterns, SwiftUI, web, review checklist) and `assets/` (`tokens.json`, `tokens.css` and reference screenshots). Agents apply it through the project's existing framework and components.
+The skill is guidance, not a component library: `SKILL.md` picks the scene (macOS, iOS, iPadOS, web app, website) and routes to `references/` (`foundations/`, `components/` with size tables and reference CSS/SwiftUI, `scenes/`, the token table and a review checklist). `assets/` holds `tokens.json` and the files generated from it — `tokens.css` (themes × densities), `tailwind.css` (Tailwind v4) and `DeernovaTokens.swift` — plus reference screenshots. Agents apply it through the project's existing framework and components.
 
 Use `--agent claude|codex|agents` to choose the skill directory, `--dir <skills-parent>` for a custom destination, or `--global` for a user installation; these three destination modes are mutually exclusive. Repeat the same options on update.
 

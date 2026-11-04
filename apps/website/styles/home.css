@@ -18,14 +18,14 @@
   width: max-content;
   max-width: calc(100% - var(--space-8));
   padding: var(--space-2) var(--space-3);
-  border: var(--stroke-hairline) solid var(--line);
+  border: var(--stroke-line) solid var(--line);
   border-radius: var(--radius-md);
   background: var(--surface);
   color: var(--ink-secondary);
   font-size: 13px;
 }
 .animation-status:not([hidden]) { display: flex; align-items: center; gap: var(--space-2); }
-.animation-status button { flex: none; min-height: var(--control-mac); padding: 0 var(--space-2); border: 0; border-radius: var(--radius-sm); background: var(--fill-hover); color: var(--ink); font: inherit; cursor: pointer; }
+.animation-status button { flex: none; min-height: var(--button-height-md); padding: 0 var(--space-2); border: 0; border-radius: var(--radius-sm); background: var(--fill-hover); color: var(--ink); font: inherit; cursor: pointer; }
 .animation-status button:hover { background: var(--fill-selected); }
 .animation-status button:disabled { color: var(--ink-tertiary); cursor: wait; }
 
@@ -38,7 +38,7 @@
   display: flex;
   height: 64px;
   padding: 0 var(--space-4) 0 var(--space-6);
-  border: var(--stroke-hairline) solid var(--glass-stroke);
+  border: var(--stroke-line) solid var(--glass-stroke);
   border-radius: var(--radius-full);
   background: transparent;
   -webkit-backdrop-filter: none;
@@ -87,7 +87,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: var(--space-1);
-  border: var(--stroke-hairline) solid var(--glass-stroke);
+  border: var(--stroke-line) solid var(--glass-stroke);
   border-radius: var(--radius-md);
   color: var(--ink);
   box-shadow: var(--shadow-float);
@@ -102,7 +102,6 @@
   fill: currentColor;
   stroke: none;
 }
-.product-name { min-width: 0; font-size: 0.875rem; line-height: 1.25rem; font-weight: 500; overflow-wrap: anywhere; }
 .product-panel .product-arrow { width: 14px; height: 14px; margin-left: auto; color: var(--ink-tertiary); }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -122,9 +121,8 @@
 
 /* Match the repository's desktop density, while keeping touch rows easy to hit. */
 @media (pointer: coarse) {
-  .animation-status button { min-height: var(--control-ios); }
-  .product-option { min-height: var(--control-ios); }
+  .animation-status button { min-height: var(--hit-min); }
+  .product-option { min-height: var(--hit-min); }
   .product-panel .product-symbol { flex-basis: 24px; width: 24px; height: 24px; }
-  .product-name { font-size: 1.0625rem; line-height: 1.4375rem; }
   .product-panel .product-arrow { width: 16px; height: 16px; }
 }

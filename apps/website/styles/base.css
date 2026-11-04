@@ -31,6 +31,13 @@ p { margin: 0; }
 .masthead { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: var(--space-6); height: var(--masthead); padding: 0 var(--space-6); border-bottom: 1px solid var(--rule); background: color-mix(in srgb, var(--surface) 78%, transparent); -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4); }
 .wordmark { font-family: var(--font-serif); font-size: 22px; font-weight: 600; letter-spacing: -0.02em; text-decoration: none; line-height: 1; }
 .wordmark span { color: var(--ink-tertiary); }
+
+/* A product's icon and name: the homepage product menu and the product page header use the same pair. */
+.product-symbol { flex: 0 0 20px; width: 20px; height: 20px; fill: currentColor; stroke: none; }
+.product-name { min-width: 0; font-size: 0.875rem; line-height: 1.25rem; font-weight: 500; overflow-wrap: anywhere; }
+@media (pointer: coarse) {
+  .product-name { font-size: 1.0625rem; line-height: 1.4375rem; }
+}
 .masthead-actions { position: relative; display: flex; align-items: center; justify-content: flex-end; gap: 0; margin-left: auto; }
 .masthead-action {
   position: relative;
@@ -38,9 +45,9 @@ p { margin: 0; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 32px;
-  width: 32px;
-  height: 32px;
+  flex: 0 0 var(--glass-button-size);
+  width: var(--glass-button-size);
+  height: var(--glass-button-size);
   padding: 0;
   border: 0;
   border-radius: var(--radius-full);
@@ -57,8 +64,8 @@ p { margin: 0; }
   position: absolute;
   inset: 0;
   z-index: -1;
-  width: var(--control-mac-lg);
-  height: var(--control-mac-lg);
+  width: calc(var(--glass-button-size) - 4px);
+  height: calc(var(--glass-button-size) - 4px);
   margin: auto;
   border-radius: inherit;
   pointer-events: none;
@@ -72,12 +79,6 @@ p { margin: 0; }
 .masthead-action:active::before { background: var(--fill-selected); }
 .masthead-action svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
-/* Pills: the site's buttons. */
-.pill { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-width: 148px; height: 44px; padding: 0 var(--space-6); border: 1px solid var(--ink); border-radius: var(--radius-full); background: transparent; color: var(--ink); font: inherit; font-size: 14px; text-decoration: none; cursor: pointer; transition: background-color 0.12s var(--ease), opacity 0.12s var(--ease); }
-.pill:hover { background: var(--fill-hover); }
-.pill-primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
-.pill-primary:hover { background: var(--accent); opacity: 0.88; }
-
 .eyebrow { font-family: var(--font-mono); font-size: 12px; line-height: 16px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-tertiary); }
 
 /* Colophon */
@@ -89,10 +90,6 @@ p { margin: 0; }
 @media (max-width: 760px) {
   .masthead { gap: var(--space-3); padding: 0 var(--space-4); }
   .colophon { padding: var(--space-8) var(--space-4) var(--space-4); }
-}
-
-@media (pointer: coarse) {
-  .masthead-action { flex-basis: var(--control-ios); width: var(--control-ios); height: var(--control-ios); }
 }
 
 @media (prefers-reduced-motion: reduce) {

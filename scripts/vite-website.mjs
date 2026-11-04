@@ -2,6 +2,8 @@ import { join } from 'node:path';
 import { normalizePath } from 'vite';
 import { renderSiteHtml } from './build-site.mjs';
 import { SKILL_DIR, readTokens, renderTokensCss } from './lib/design.mjs';
+// Note: tailwind.css, DeernovaTokens.swift and tokens.json are served as committed; only tokens.css is
+// regenerated in memory, because it is the one the pages render with.
 import { ROOT } from './lib/files.mjs';
 
 // Serve shared design assets from their source, without copying or writing to dist.
@@ -25,6 +27,7 @@ export function websitePlugin({ root = ROOT } = {}) {
         // Vite must see the real CSS URL so its link HMR updates the right stylesheet.
         return rendered
           .replaceAll('href="assets/tokens.css"', `href="/@fs/${tokensCss}"`)
+          .replace(/href="assets\/(tokens\.json|tailwind\.css|DeernovaTokens\.swift)"/g, `href="/@fs/${skill}/assets/$1"`)
           .replaceAll('src="assets/screens/', `src="/@fs/${skill}/assets/screens/`);
       }
     },

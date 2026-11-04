@@ -1,14 +1,12 @@
 import { join } from 'node:path';
 import { ROOT, isMain, read, write } from './lib/files.mjs';
-import { SKILL_DIR, readTokens, renderTokensCss, renderTokensMarkdown } from './lib/design.mjs';
+import { readTokens, renderTokenOutputs } from './lib/design.mjs';
 
-// tokens.json is edited by hand; these two files are derived from it and committed with the skill.
+// tokens.json is edited by hand. Everything below is derived from it and committed with the skill:
+// tokens.css, tailwind.css, DeernovaTokens.swift, references/tokens.md, and the generated tables
+// inside hand-written Markdown (between <!-- tokens:name --> and <!-- /tokens -->).
 export async function tokenOutputs(root = ROOT) {
-  const tokens = await readTokens(root);
-  return {
-    [join(SKILL_DIR, 'assets/tokens.css')]: renderTokensCss(tokens),
-    [join(SKILL_DIR, 'references/tokens.md')]: renderTokensMarkdown(tokens)
-  };
+  return renderTokenOutputs(root, await readTokens(root));
 }
 
 export async function staleTokenOutputs(root = ROOT) {
@@ -28,7 +26,8 @@ if (isMain(import.meta.url)) {
       process.exitCode = 1;
     } else console.log('Token outputs are up to date.');
   } else {
-    for (const [path, content] of Object.entries(await tokenOutputs())) await write(join(ROOT, path), content);
-    console.log('Wrote assets/tokens.css and references/tokens.md.');
+    const outputs = await tokenOutputs();
+    for (const [path, content] of Object.entries(outputs)) await write(join(ROOT, path), content);
+    console.log(`Wrote ${Object.keys(outputs).length} generated files.`);
   }
 }

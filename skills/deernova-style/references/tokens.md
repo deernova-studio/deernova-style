@@ -1,44 +1,105 @@
 # 设计变量
 
-由 `assets/tokens.json` 生成（在 deernova-style 仓库里运行 `npm run tokens`），不要手改。CSS 版本是 `assets/tokens.css`，变量名和这里一致，例如 `var(--ink)`；SwiftUI 里按同名建 Color Set，见 [SwiftUI 落地](swiftui.md)。
+由 `assets/tokens.json` 生成（在 deernova-style 仓库里运行 `npm run tokens`），不要手改。同一份数据还生成了 `assets/tokens.css`（CSS 变量）、`assets/tailwind.css`（Tailwind v4 主题）和 `assets/DeernovaTokens.swift`（SwiftUI）。CSS 变量名和这里的 token 名一致，例如 `var(--ink)`、`var(--button-height-md)`。
 
-“= `ink`” 表示这个变量直接引用另一个变量。
+每个 token 的值只取决于两件事：**主题**（浅色 / 深色）和**密度**（紧凑 / 常规 / 触控 / 舒展）。token 名字里不出现平台，平台差异全部放在值里。
+
+## 场景与密度
+
+| 场景 | 密度 | 输入 | 怎么启用 | 读这里 |
+| --- | --- | --- | --- | --- |
+| Web 应用 | 桌面（`desktop`） | 指针 | tokens.css 的默认值 | [scenes/web.md](scenes/web.md) |
+| Web 触屏 | 触控（`touch`） | 触摸 | `@media (pointer: coarse)` 自动切换 | [scenes/web.md](scenes/web.md) |
+| macOS | 桌面（`desktop`） | 指针 | 系统控件用系统尺寸；内容区用 `DeernovaTokens.swift` 的 `#if os(macOS)` | [scenes/macos.md](scenes/macos.md) |
+| iOS | 触控（`touch`） | 触摸 | `DeernovaTokens.swift` 的 `#else` | [scenes/ios.md](scenes/ios.md) |
+| iPadOS | 触控（`touch`） | 触摸和指针 | 同 iOS；分栏布局另见场景说明 | [scenes/ipados.md](scenes/ipados.md) |
+| 官网与文档 | 舒展（`comfortable`） | 指针 | 根元素加 `data-density="comfortable"` | [scenes/web-marketing.md](scenes/web-marketing.md) |
+
+| 密度 | 说明 |
+| --- | --- |
+| 桌面（`desktop`） | 指针操作。tokens.css 的默认值：正文 15/24，控件 28，侧边栏行 32。macOS 的侧边栏、工具栏、菜单用系统控件和系统尺寸，自己画的内容区用这一档。 |
+| 触控（`touch`） | 手指操作。正文 17pt，按钮看起来 36pt，点击区域至少 44pt。 |
+| 舒展（`comfortable`） | 以阅读为主。字号和留白更大，控件只用于少量导航。 |
+
+## 原始色板
+
+原始色板。名字里的数字是 HSL 亮度（0 黑，100 白）。只在 tokens.json 里被语义颜色引用，代码里不要直接用。
+
+| Token | 值 |
+| --- | --- |
+| `gray-100` | `#ffffff` |
+| `gray-98` | `#fafafa` |
+| `gray-96` | `#f5f5f5` |
+| `gray-93` | `#ededed` |
+| `gray-92` | `#ebebeb` |
+| `gray-91` | `#e8e8e8` |
+| `gray-89` | `#e3e3e3` |
+| `gray-64` | `#a3a3a3` |
+| `gray-55` | `#8c8c8c` |
+| `gray-54` | `#8a8a8a` |
+| `gray-45` | `#737373` |
+| `gray-40` | `#666666` |
+| `gray-32` | `#525252` |
+| `gray-18` | `#2f2f2f` |
+| `gray-15` | `#252525` |
+| `gray-11` | `#1c1c1c` |
+| `gray-9` | `#171717` |
+| `gray-7` | `#111111` |
+| `teal-90` | `#ddeeec` |
+| `teal-59` | `#6cc3b4` |
+| `teal-27` | `#1f6b66` |
+| `teal-15` | `#183230` |
+| `amber-89` | `#f5ead3` |
+| `amber-61` | `#e2b054` |
+| `amber-29` | `#8a5a0b` |
+| `amber-16` | `#3a2e17` |
+| `crimson-93` | `#f7e1e4` |
+| `crimson-71` | `#f07a8a` |
+| `crimson-42` | `#b0283f` |
+| `crimson-18` | `#3d2027` |
+| `blue-92` | `#e1ebf3` |
+| `blue-69` | `#82b4dc` |
+| `blue-35` | `#2c5f86` |
+| `blue-17` | `#1d2c3a` |
 
 ## 颜色
 
+语义颜色，按主题取值。代码里只用这些名字。
+“= `ink`” 表示这个变量直接引用另一个语义颜色。
+
 | Token | 浅色 | 深色 | 用途 |
 | --- | --- | --- | --- |
-| `canvas` | `#f5f5f5` | `#161616` | 窗口底色、iOS 分组列表的底色。最底层的纸面。 |
-| `surface` | `#fafafa` | `#1c1c1c` | 内容区、卡片。比 canvas 略亮一层。 |
-| `surface-raised` | `#ffffff` | `#252525` | 输入框、Composer、iOS 分组列表、弹出层。最亮的纸面。 |
-| `surface-sunken` | `#ebebeb` | `#111111` | 代码块、用户消息气泡、展开的步骤详情。凹下去的纸面。 |
-| `ink` | `#171717` | `#ededed` | 正文与标题，用在四种纸面上（最低 13:1）。 |
-| `ink-secondary` | `#525252` | `#a3a3a3` | 次要文字、说明、列表的值、未选中图标，用在四种纸面上（最低 6:1）。 |
-| `ink-tertiary` | `#666666` | `#8c8c8c` | 占位符、时间戳、计数、分组标题，用在四种纸面上（最低 4.5:1）。 |
-| `line` | `#e3e3e3` | `#2f2f2f` | 分隔线、卡片描边、按钮描边。装饰性，不承载信息。 |
-| `line-control` | `#8a8a8a` | `#737373` | 输入框边框、拖拽条。在 canvas、surface、surface-raised 上不低于 3:1，让人一眼看出可输入。 |
-| `accent` | = `ink` | = `ink` | 强调：主按钮填充、选中指示、焦点环。就是墨色本身，浅色主题为黑、深色主题为白；强调靠明暗对比，不靠彩色。 |
-| `accent-soft` | `#e8e8e8` | `#2e2e2e` | 强调的浅底：强调标签、列表图标底、输入框聚焦光晕。上面的文字用 ink。 |
-| `on-accent` | `#ffffff` | `#161616` | accent 填充上的文字和图标：浅色主题白字，深色主题黑字。 |
-| `focus-ring` | = `accent` | = `accent` | 键盘焦点环：2pt 实线，外偏移 2pt。在所有纸面上不低于 13:1。 |
-| `success` | `#1f6b66` | `#6cc3b4` | 成功、已完成、已同步。界面里只有状态色是彩色，只在表达状态时出现。作为文字用在纸面和 success-soft 上。 |
-| `success-soft` | `#ddeeec` | `#183230` | 成功状态的浅底（标签、横幅）。 |
-| `warning` | `#8a5a0b` | `#e2b054` | 需要注意但不阻断：额度将用完、网络较慢。作为文字用在纸面和 warning-soft 上。 |
-| `warning-soft` | `#f5ead3` | `#3a2e17` | 警告状态的浅底。 |
-| `danger` | `#b0283f` | `#f07a8a` | 错误、失败、删除。永远同时配图标或文字。作为文字用在纸面和 danger-soft 上。 |
-| `danger-soft` | `#f7e1e4` | `#3d2027` | 错误状态的浅底、危险按钮的底色。 |
-| `info` | `#2c5f86` | `#82b4dc` | 中性提示。作为文字用在纸面和 info-soft 上。 |
-| `info-soft` | `#e1ebf3` | `#1d2c3a` | 提示状态的浅底。 |
+| `canvas` | `gray-96` `#f5f5f5` | `gray-9` `#171717` | 窗口底色、Web 应用的内容区、分组列表的底色。最底层的纸面。 |
+| `surface` | `gray-98` `#fafafa` | `gray-11` `#1c1c1c` | 卡片、侧边栏（比内容区亮一层）。 |
+| `surface-raised` | `gray-100` `#ffffff` | `gray-15` `#252525` | 输入框、Composer、用户消息气泡、分组列表、弹出层。最亮的纸面。 |
+| `surface-sunken` | `gray-92` `#ebebeb` | `gray-7` `#111111` | 代码块、展开的步骤详情。凹下去的纸面。 |
+| `ink` | `gray-9` `#171717` | `gray-93` `#ededed` | 正文与标题，在四种纸面上不低于 13:1。 |
+| `ink-secondary` | `gray-32` `#525252` | `gray-64` `#a3a3a3` | 次要文字、说明、列表的值、未选中的图标，在四种纸面上不低于 6:1。 |
+| `ink-tertiary` | `gray-40` `#666666` | `gray-55` `#8c8c8c` | 占位符、时间戳、计数、分组标题，在四种纸面上不低于 4.5:1。 |
+| `line` | `gray-89` `#e3e3e3` | `gray-18` `#2f2f2f` | 分隔线、卡片描边、按钮描边。装饰性，不承载信息。 |
+| `line-control` | `gray-54` `#8a8a8a` | `gray-45` `#737373` | 输入框边框、拖拽条、链接下划线。在 canvas、surface、surface-raised 上不低于 3:1。 |
+| `accent` | = `ink` | = `ink` | 强调：主按钮填充、选中指示、焦点环。就是墨色本身，浅色主题是黑，深色主题是白。 |
+| `accent-soft` | `gray-91` `#e8e8e8` | `gray-18` `#2f2f2f` | 强调的浅底：列表图标底、输入框聚焦光晕。上面的文字用 ink。 |
+| `on-accent` | `gray-100` `#ffffff` | `gray-9` `#171717` | accent 填充上的文字和图标：浅色主题白字，深色主题黑字。 |
+| `focus-ring` | = `accent` | = `accent` | 键盘焦点环：stroke-focus 宽的实线，外偏移 focus-offset。 |
+| `success` | `teal-27` `#1f6b66` | `teal-59` `#6cc3b4` | 成功、已完成、已同步、开关打开。作为文字用在纸面和 success-soft 上。 |
+| `success-soft` | `teal-90` `#ddeeec` | `teal-15` `#183230` | 成功状态的浅底（标签、横幅）。 |
+| `warning` | `amber-29` `#8a5a0b` | `amber-61` `#e2b054` | 需要注意但不阻断：额度将用完、网络较慢。 |
+| `warning-soft` | `amber-89` `#f5ead3` | `amber-16` `#3a2e17` | 警告状态的浅底。 |
+| `danger` | `crimson-42` `#b0283f` | `crimson-71` `#f07a8a` | 错误、失败、删除。永远同时配图标或文字。 |
+| `danger-soft` | `crimson-93` `#f7e1e4` | `crimson-18` `#3d2027` | 错误状态的浅底、危险按钮的底色。 |
+| `info` | `blue-35` `#2c5f86` | `blue-69` `#82b4dc` | 中性提示。 |
+| `info-soft` | `blue-92` `#e1ebf3` | `blue-17` `#1d2c3a` | 提示状态的浅底。 |
 | `fill-hover` | `#0000000a` | `#ffffff0f` | 悬停底色，叠在任何纸面上（列表行、文字按钮、侧边栏项）。 |
-| `fill-selected` | `#00000012` | `#ffffff1a` | 选中底色（侧边栏当前项、分段控件底槽、中性标签底）。 |
-| `knob` | `#ffffff` | `#ffffff` | 开关的圆钮，两套主题都是白色，与系统一致。 |
+| `fill-selected` | `#00000017` | `#ffffff26` | 选中底色：侧边栏当前项、分段控件底槽、次按钮、中性标签底。比悬停明显，一眼能看出当前在哪。 |
+| `knob` | `gray-100` `#ffffff` | `gray-100` `#ffffff` | 开关的圆钮，两套主题都是白色，与系统一致。 |
 | `scrim` | `#00000052` | `#00000080` | 弹窗背后压暗内容的遮罩。 |
-| `glass-fill` | `#ffffffa6` | `#2a2a2aa6` | 仅用于网页预览模拟 Liquid Glass。App 里用系统 .glassEffect()，不要用这个值自己画玻璃。 |
-| `glass-stroke` | `#ffffffcc` | `#ffffff24` | 仅用于网页预览：玻璃边缘的高光描边。 |
+| `glass-fill` | `#ffffffa6` | `#2a2a2aa6` | 仅官网与文档的页眉：用 backdrop-filter 近似玻璃。Web 应用不用玻璃；App 里用系统玻璃。 |
+| `glass-stroke` | `#ffffffcc` | `#ffffff24` | 仅官网与文档的页眉：玻璃边缘的高光描边。 |
 
 ## 字体
 
-只用系统字体，不打包字体文件。
+字号按角色组织，每个角色在三种密度下各有一组字号和行高。界面文字和 AI 回答都用无衬线；衬线只给 display、title 和文章类长文 prose。iOS 用文本样式，让动态字体生效。
 
 | 字族 | CSS 变量 | 字体栈 |
 | --- | --- | --- |
@@ -46,71 +107,66 @@
 | sans | `--font-sans` | `-apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif` |
 | mono | `--font-mono` | `ui-monospace, "SF Mono", Menlo, "PingFang SC", monospace` |
 
-### macOS
+### 字重
 
-Mac 正文 13pt，行高收紧到约 1.4 倍。衬线只用于标题和长文阅读，界面文字一律无衬线。
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `weight-regular` | `400` | 正文、说明、输入的文字。 |
+| `weight-medium` | `500` | 按钮、标签、侧边栏选中项、表单标签。 |
+| `weight-semibold` | `600` | 标题、区块标题、列表行标题。不用 700 以上。 |
 
-| 样式 | 字族 | 字号 / 行高 | 字重 | 用途 |
-| --- | --- | --- | --- | --- |
-| `mac-display` | serif | 22px / 28px | 600 | 空状态、引导页的大标题。每屏最多一个。SwiftUI: .system(size: 22, weight: .semibold, design: .serif) |
-| `mac-title` | serif | 17px / 22px | 600 | 文章标题、设置页标题。SwiftUI: .system(.title3, design: .serif).weight(.semibold) |
-| `mac-headline` | sans | 13px / 17px | 600 | 窗口标题、区块标题、横幅标题。SwiftUI: .headline |
-| `mac-body` | sans | 13px / 18px | 400 | 界面正文、按钮、列表、表单、用户消息。SwiftUI: .body |
-| `mac-prose` | serif | 14px / 22px | 400 | 长文阅读、AI 回答。栏宽不超过 content-max。 |
-| `mac-callout` | sans | 12px / 16px | 400 | 表单说明、卡片摘要、次要信息。SwiftUI: .callout |
-| `mac-caption` | sans | 11px / 13px | 500 | 时间戳、计数、侧边栏分组标题、标签。SwiftUI: .caption |
+### 字号角色
 
-### iOS
+每个角色生成 `--type-<角色>`（`font` 简写，可以直接写 `font: var(--type-body)`）、`--type-<角色>-size` 和 `--type-<角色>-line`。表里是“字号 / 行高”。
 
-iOS 正文保持系统默认的 17pt，让动态字体正常缩放，只收紧行高和标题。
-
-| 样式 | 字族 | 字号 / 行高 | 字重 | 用途 |
-| --- | --- | --- | --- | --- |
-| `ios-large-title` | serif | 30px / 36px | 600 | 页面大标题。SwiftUI: .system(.largeTitle, design: .serif).weight(.semibold) |
-| `ios-title` | serif | 20px / 25px | 600 | 弹窗标题、文章标题、空状态标题。SwiftUI: .system(.title3, design: .serif) |
-| `ios-headline` | sans | 17px / 22px | 600 | 列表行标题、卡片标题、按钮。SwiftUI: .headline |
-| `ios-body` | sans | 17px / 23px | 400 | 界面正文、列表行。SwiftUI: .body |
-| `ios-prose` | serif | 17px / 26px | 400 | 长文阅读、AI 回答。SwiftUI: .system(.body, design: .serif)，行距 .lineSpacing(4) |
-| `ios-callout` | sans | 15px / 20px | 400 | 说明文字、弹窗正文、用户消息。SwiftUI: .callout |
-| `ios-footnote` | sans | 13px / 17px | 400 | 分组列表的页头页脚、卡片摘要。SwiftUI: .footnote |
-| `ios-caption` | sans | 12px / 15px | 500 | 时间戳、计数、标签。SwiftUI: .caption |
-
-### Code
-
-代码、命令、文件路径、数据。
-
-| 样式 | 字族 | 字号 / 行高 | 字重 | 用途 |
-| --- | --- | --- | --- | --- |
-| `code-mac` | mono | 12px / 17px | 400 | Mac 上的代码块、步骤摘要。SwiftUI: .system(.callout, design: .monospaced) |
-| `code-ios` | mono | 13px / 18px | 400 | iOS 上的代码块。SwiftUI: .system(.footnote, design: .monospaced) |
+| 角色 | 字族 | 字重 | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | SwiftUI（macOS · iOS） | 用途 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `display` | serif | 600 | 26 / 32 | 30 / 36 | 44 / 52 | `.system(size: 26, weight: .semibold, design: .serif)` · `.system(.largeTitle, design: .serif).weight(.semibold)` | 空状态、引导页、页面的大标题（衬线）。每屏最多一个。 |
+| `title` | serif | 600 | 18 / 24 | 20 / 25 | 24 / 32 | `.system(size: 18, weight: .semibold, design: .serif)` · `.system(.title3, design: .serif).weight(.semibold)` | 文章标题、弹窗标题（衬线）。 |
+| `headline` | sans | 600 | 15 / 22 | 17 / 22 | 16 / 24 | `.system(size: 15, weight: .semibold)` · `.headline` | 区块标题、卡片标题、横幅标题、列表行标题。 |
+| `body` | sans | 400 | 15 / 24 | 17 / 23 | 15 / 24 | `.system(size: 15)` · `.body` | 界面正文、AI 回答、用户消息、列表、表单。 |
+| `prose` | serif | 400 | 16 / 26 | 17 / 26 | 17 / 28 | `.system(size: 16, design: .serif)` · `.system(.body, design: .serif)` | 文章、文档这类长文阅读（衬线）。AI 回答不用它。 |
+| `callout` | sans | 400 | 14 / 20 | 15 / 20 | 14 / 22 | `.system(size: 14)` · `.callout` | 说明文字、弹窗正文、输入区下方的模型和权限信息。 |
+| `footnote` | sans | 400 | 13 / 18 | 13 / 17 | 13 / 20 | `.system(size: 13)` · `.footnote` | 侧边栏分组标题、分组列表的页头页脚、卡片摘要。 |
+| `caption` | sans | 400 | 12 / 16 | 12 / 15 | 12 / 16 | `.system(size: 12)` · `.caption` | 时间戳、计数、标签。界面里最小的字。 |
+| `code` | mono | 400 | 13 / 20 | 13 / 18 | 13 / 20 | `.system(size: 13, design: .monospaced)` · `.system(.footnote, design: .monospaced)` | 代码块、命令、文件路径、需要对齐的数据。 |
 
 ## 间距
 
-4pt 网格，整体偏紧凑。组与组之间的间距至少是组内间距的 2 倍。
+4pt 网格。刻度是固定值；语义间距按密度取值。组与组之间的间距至少是组内的 2 倍。
 
 | Token | 值 | 用途 |
 | --- | --- | --- |
-| `space-1` | `4px` | 图标与文字之间、卡片内标题与摘要之间。 |
-| `space-2` | `8px` | Mac 列表项内边距、横幅上下内边距、Composer 内边距。 |
-| `space-3` | `12px` | Mac 按钮左右内边距、卡片内边距、横幅左右内边距。 |
-| `space-4` | `16px` | Mac 内容区边距、对话中消息之间、iOS 页面左右边距。 |
-| `space-5` | `20px` | iOS 分组之间、Mac 区块之间。 |
+| `space-1` | `4px` | 图标与文字之间、标题与摘要之间。 |
+| `space-2` | `8px` | 列表项内边距、横幅上下内边距、卡片网格间距。 |
+| `space-3` | `12px` | 卡片内边距、横幅左右内边距。 |
+| `space-4` | `16px` | 内容区里段落、工具调用行、卡片之间。 |
+| `space-5` | `20px` | 分组之间、区块之间。 |
 | `space-6` | `24px` | 空状态内边距、大区块之间。 |
 | `space-8` | `32px` | 页面级留白。 |
-| `space-10` | `40px` | 引导页、首屏的大留白。 |
+| `space-10` | `40px` | 引导页、首屏的留白。 |
+| `space-12` | `48px` | 官网与文档的章节间距。 |
+| `space-16` | `64px` | 官网首屏的上下留白。 |
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `gap-inline` | 6 | 6 | 8 | 同一行里图标和文字之间、按钮里图标和标签之间。 |
+| `gap-stack` | 8 | 8 | 12 | 同一组里相邻元素之间：表单项、卡片里的段落、并排的按钮。 |
+| `gap-group` | 24 | 20 | 48 | 组与组之间：设置分组、页面区块。至少是 gap-stack 的 2 倍。 |
+| `page-margin` | 32 | 16 | 32 | 页面和内容区的左右边距。 |
 
 ## 圆角
 
-嵌套保持同心：内圆角 = 外圆角 − 内边距。
+圆角刻度。各组件实际用哪一档见组件尺寸里的 *-radius。嵌套保持同心：内圆角 = 外圆角 − 内边距。
 
 | Token | 值 | 用途 |
 | --- | --- | --- |
-| `radius-xs` | `4px` | 标签、复选框、分段控件里的选中块（外层 radius-sm、内边距 2）。 |
-| `radius-sm` | `6px` | Mac 按钮、输入框、侧边栏选中块、iOS 列表图标底。 |
-| `radius-md` | `8px` | Mac 卡片、横幅、代码块、弹出菜单。 |
-| `radius-lg` | `12px` | iOS 卡片、iOS 分组列表、Composer、用户消息气泡、Mac 侧边栏面板。 |
-| `radius-xl` | `24px` | iOS 底部弹窗、iOS 单行 Composer。 |
-| `radius-full` | `999px` | 胶囊与圆形：玻璃按钮、iOS 主按钮、发送按钮、状态圆点。 |
+| `radius-xs` | `4px` | 标签、复选框、小按钮。 |
+| `radius-sm` | `6px` | 桌面端的按钮、输入框、工具栏图标按钮。 |
+| `radius-md` | `8px` | 侧边栏选中块、代码块、弹出菜单。 |
+| `radius-lg` | `12px` | 卡片、用户消息气泡、分组列表、任务清单。 |
+| `radius-xl` | `24px` | 底部弹窗、触控端单行 Composer。 |
+| `radius-full` | `999px` | 胶囊与圆形：触控端按钮、玻璃按钮、状态圆点。 |
 
 ## 线宽
 
@@ -118,33 +174,268 @@ iOS 正文保持系统默认的 17pt，让动态字体正常缩放，只收紧�
 
 | Token | 值 | 用途 |
 | --- | --- | --- |
-| `stroke-hairline` | `0.5px` | 分隔线、卡片描边：1 个物理像素。SwiftUI: 1 / displayScale。 |
-| `stroke-control` | `1px` | 输入框边框。 |
-| `stroke-focus` | `2px` | 焦点环。 |
+| `stroke-line` | `1px` | 分隔线、卡片、输入区、侧边栏和顶栏的边线。SwiftUI 里自己画的边框用 1pt，系统自带的分隔线保持系统样式。 |
+| `stroke-control` | `1px` | 输入框边框、选中卡片的描边（配 line-control 或 ink 色）。 |
+| `stroke-focus` | `2px` | 键盘焦点环。 |
+| `focus-offset` | `2px` | 焦点环和控件边缘之间的距离。 |
 
-## 尺寸
+## 线形
 
-控件高度与布局尺寸。Mac 偏紧凑，iOS 遵守 44pt 最小点击区域。
+线形：线条画成什么样。
 
 | Token | 值 | 用途 |
 | --- | --- | --- |
-| `control-mac-sm` | `20px` | Mac 小按钮、行内操作、分段控件。 |
-| `control-mac` | `24px` | Mac 默认按钮、输入框、图标按钮、步骤行。 |
-| `control-mac-lg` | `28px` | Mac 大按钮（引导页、空状态）。 |
-| `row-mac` | `26px` | Mac 侧边栏项、列表行。 |
-| `control-ios` | `44px` | iOS 最小可点区域（按钮看起来可以更小，点击区域仍补足到 44）、列表行、输入框、导航栏玻璃按钮。 |
-| `button-ios-sm` | `30px` | iOS 小按钮的可见高度：卡片和列表里的「获取」「关注」这类行内操作。 |
-| `button-ios` | `36px` | iOS 默认按钮的可见高度。 |
-| `control-ios-lg` | `46px` | iOS 通栏主按钮（页面底部、弹窗里的唯一主操作）。 |
-| `sidebar-mac` | `220px` | Mac 侧边栏默认宽度。 |
-| `content-max` | `680px` | 长文阅读栏的最大宽度，14pt 下约每行 45 个汉字。 |
+| `line-style-divider` | `solid` | 分隔线、卡片和输入框的边框。界面里的线默认都是实线。 |
+| `line-style-dropzone` | `dashed` | 拖放区、待添加的占位块。只有这类“还空着”的区域用虚线。 |
+| `line-dash` | `4 4` | SVG 虚线的 stroke-dasharray。（仅网页） |
+| `line-cap` | `round` | 图标和自绘线条的端点。 |
+| `line-join` | `round` | 图标和自绘线条的拐角。 |
 
 ## 阴影
 
-卡片不加阴影。只有真正浮起来的东西才有阴影。
+阴影就是层级。卡片不加阴影，只有真正浮起来的东西才有。
 
 | Token | 浅色 | 深色 | 用途 |
 | --- | --- | --- | --- |
-| `shadow-control` | `0 1px 1px rgba(0, 0, 0, 0.05)` | `0 1px 1px rgba(0, 0, 0, 0.30)` | 次按钮、分段控件的选中块：一点点厚度。 |
-| `shadow-float` | `0 1px 2px rgba(0, 0, 0, 0.05), 0 6px 20px rgba(0, 0, 0, 0.08)` | `0 1px 2px rgba(0, 0, 0, 0.40), 0 6px 20px rgba(0, 0, 0, 0.45)` | Composer、弹出菜单、弹窗、浮动面板。 |
-| `shadow-glass` | `0 4px 14px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.70)` | `0 4px 14px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.10)` | 仅用于网页预览模拟玻璃。App 里系统玻璃自带阴影。 |
+| `shadow-control` | `0 1px 1px rgba(0, 0, 0, 0.05)` | `0 1px 1px rgba(0, 0, 0, 0.30)` | 第 1 层：次按钮、分段控件的选中块，一点点厚度。 |
+| `shadow-float` | `0 1px 2px rgba(0, 0, 0, 0.05), 0 6px 20px rgba(0, 0, 0, 0.08)` | `0 1px 2px rgba(0, 0, 0, 0.40), 0 6px 20px rgba(0, 0, 0, 0.45)` | 第 2 层：Composer、弹出菜单、弹窗、浮动面板。 |
+| `shadow-glass` | `0 4px 14px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.70)` | `0 4px 14px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.10)` | 仅网页：模拟玻璃的阴影和顶部高光。App 里系统玻璃自带阴影。 |
+
+## 层级
+
+叠放顺序（z-index）。和阴影的层级一一对应。
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `z-sticky` | `10` | 吸顶的工具栏和页眉。 |
+| `z-dropdown` | `100` | 弹出菜单、下拉列表、popover。 |
+| `z-overlay` | `1000` | 遮罩和弹窗。 |
+| `z-toast` | `1100` | 轻提示，压在弹窗之上。 |
+
+## 动效
+
+动效时长和缓动。SwiftUI 里默认用 .spring(response: 0.35, dampingFraction: 0.85)。
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `duration-instant` | `120ms` | 悬停、按压、选中这类即时反馈。 |
+| `duration-base` | `200ms` | 展开、收起、切换、开关。 |
+| `duration-slow` | `320ms` | 面板滑入、页面级转场。 |
+| `ease-standard` | `cubic-bezier(0.2, 0.8, 0.2, 1)` | 默认缓动：快进、缓停。 |
+
+## 不透明度
+
+不透明度。
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `opacity-disabled` | `0.35` | 禁用的控件。禁用时保持原位，不隐藏。 |
+| `opacity-solid-hover` | `0.88` | 实色（accent 填充）按钮悬停和按下。 |
+
+## 玻璃
+
+仅官网与文档的页眉：用 backdrop-filter 近似 Liquid Glass。Web 应用不用玻璃，App 里用系统玻璃。
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `glass-blur` | `16px` | 官网页眉玻璃背后的模糊半径。（仅网页） |
+| `glass-saturate` | `1.4` | 官网页眉玻璃背后的饱和度增强。（仅网页） |
+
+## 布局
+
+布局尺寸。断点只能写在媒体查询里，所以不生成 CSS 变量。
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `content-max` | `680px` | 对话栏和长文阅读栏的最大宽度。 |
+| `breakpoint-sm` | `760px` | 窄屏：侧边栏收起，多栏变单栏。 |
+| `breakpoint-md` | `960px` | 中等宽度：目录和次要栏收起。 |
+| `breakpoint-lg` | `1280px` | 宽屏：内容不再继续变宽，两侧留白。 |
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `hit-min` | 24 | 44 | 24 | 最小点击区域。可见尺寸比它小时，用透明的命中区补足，不加大可见的按钮。 |
+| `sidebar-width` | 288 | 320 | 260 | 侧边栏默认宽度。iPhone 没有侧边栏；macOS 用系统侧边栏，宽度只作参考。 |
+| `toolbar-height` | 44 | 44 | 52 | Web 应用顶栏、侧面板标签头的高度。macOS 用系统工具栏。 |
+
+## 组件尺寸
+
+按密度取值。每个组件的完整规格和写法见对应的组件说明。
+
+### 按钮
+
+见 [components/button.md](components/button.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `button-height-sm` | 24 | 30 | 32 | 小按钮的可见高度：列表行、卡片角落里的行内操作。 |
+| `button-height-md` | 28 | 36 | 36 | 默认按钮、图标按钮、发送按钮、步骤行的高度。 |
+| `button-height-lg` | 32 | 46 | 44 | 大按钮：空状态、引导页；触控端是整页唯一的通栏主按钮。 |
+| `button-padding-x-sm` | 8 | 12 | 14 | 小按钮左右内边距。上下内边距永远是 0。 |
+| `button-padding-x-md` | 12 | 16 | 18 | 默认按钮左右内边距。 |
+| `button-padding-x-lg` | 16 | 20 | 24 | 大按钮左右内边距。 |
+| `button-font-size-sm` | 12 | 13 | 13 | 小按钮字号。 |
+| `button-font-size-md` | 14 | 15 | 14 | 默认按钮字号。 |
+| `button-font-size-lg` | 14 | 16 | 15 | 大按钮字号。 |
+| `button-font-weight` | 500 | 600 | 500 | 按钮字重。 |
+| `button-radius` | 6 | 胶囊 | 胶囊 | 默认和大按钮的圆角：指针端是 radius-sm，触控端和官网是胶囊。 |
+| `button-radius-sm` | 4 | 胶囊 | 胶囊 | 小按钮的圆角。 |
+
+### 顶栏与侧面板
+
+见 [components/toolbar.md](components/toolbar.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `toolbar-title-size` | 15 | 17 | 15 | 顶栏标题字号（常规字重）。 |
+| `panel-tab-height` | 28 | 36 | 32 | 侧面板标签头里每个标签的高度。 |
+
+### 玻璃操作层
+
+见 [components/glass-controls.md](components/glass-controls.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `glass-button-size` | 34 | 44 | 36 | 玻璃按钮的边长：macOS 26 工具栏按钮约 34（系统绘制，这里只作参考和自绘时对齐），官网页眉的图标按钮也用它；按钮组里的按钮比它小 8。Web 应用的工具栏不用玻璃，用 button-height-md。 |
+
+### 分段控件
+
+见 [components/segmented.md](components/segmented.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `segmented-height` | 24 | 28 | 28 | 选项块的高度；外层再加上下各 segmented-padding。 |
+| `segmented-padding` | 2 | 2 | 2 | 底槽内边距。 |
+| `segmented-padding-x` | 12 | 16 | 16 | 选项块左右内边距。 |
+| `segmented-font-size` | 13 | 14 | 14 | 选项字号。 |
+| `segmented-radius` | 6 | 胶囊 | 胶囊 | 底槽圆角；选项块圆角 = 它减去 segmented-padding。 |
+
+### 文本框
+
+见 [components/text-field.md](components/text-field.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `field-height` | 28 | 44 | 40 | 单行输入框和下拉选择的高度。 |
+| `field-padding-x` | 10 | 12 | 14 | 输入框左右内边距。 |
+| `field-font-size` | 14 | 17 | 15 | 输入文字字号。触控端不小于 16，避免浏览器放大页面。 |
+| `field-radius` | 6 | 8 | 8 | 输入框圆角。 |
+
+### Composer 输入区
+
+见 [components/composer.md](components/composer.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `composer-radius` | 14 | 24 | 16 | Composer 外框圆角。 |
+| `composer-min-height` | 44 | 44 | 48 | 单行时的高度：加号、输入、发送排在同一行，输入多行时向上长高。 |
+
+### 侧边栏与列表行
+
+见 [components/sidebar.md](components/sidebar.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `row-height` | 32 | 44 | 40 | 侧边栏项、列表行的最小高度。 |
+| `row-padding-x` | 10 | 16 | 12 | 行的左右内边距；分隔线从这里开始。 |
+| `row-radius` | 8 | 10 | 8 | 悬停和选中底色的圆角。 |
+| `row-gap` | 2 | 0 | 2 | 侧边栏项之间的间隔。触控端的列表用分隔线，不留间隔。 |
+
+### 分组列表与设置页
+
+见 [components/list.md](components/list.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `row-icon-size` | 20 | 28 | 24 | 列表行左侧图标底的边长。 |
+| `switch-width` | 36 | 51 | 44 | 开关宽度。 |
+| `switch-height` | 20 | 31 | 24 | 开关高度；圆钮直径 = 高度 − 4。 |
+
+### 卡片
+
+见 [components/card.md](components/card.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `card-padding-x` | 16 | 16 | 24 | 卡片左右内边距。 |
+| `card-padding-y` | 12 | 14 | 24 | 卡片上下内边距。 |
+| `card-radius` | 12 | 12 | 12 | 卡片、分组列表、任务清单的圆角。 |
+| `card-gap` | 12 | 12 | 16 | 卡片网格的间距。 |
+
+### 标签
+
+见 [components/tag.md](components/tag.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `tag-height` | 20 | 22 | 24 | 标签高度。 |
+| `tag-padding-x` | 6 | 8 | 10 | 标签左右内边距。 |
+| `tag-font-size` | 12 | 12 | 12 | 标签字号。 |
+| `tag-radius` | 4 | 胶囊 | 胶囊 | 标签圆角。 |
+
+### 代码块
+
+见 [components/code-block.md](components/code-block.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `code-header-height` | 32 | 36 | 36 | 代码块表头的高度。 |
+
+### 任务清单
+
+见 [components/task-list.md](components/task-list.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `task-row-height` | 28 | 44 | 32 | 任务清单每一行的高度。 |
+| `task-glyph-size` | 16 | 20 | 18 | 左侧状态圈的直径。 |
+
+### 空状态
+
+见 [components/empty-state.md](components/empty-state.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `empty-title-size` | 24 | 20 | 32 | 空状态标题（衬线）字号。 |
+| `empty-icon-size` | 32 | 36 | 40 | 空状态图标的边长。 |
+
+### 横幅与轻提示
+
+见 [components/banner.md](components/banner.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `toast-height` | 36 | 40 | 40 | 轻提示胶囊的高度。 |
+| `banner-radius` | 10 | 12 | 12 | 横幅和贴在输入区上方的提示条的圆角。 |
+
+### 弹窗与底部弹窗
+
+见 [components/sheet.md](components/sheet.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `sheet-radius` | 12 | 24 | 16 | 弹窗和底部弹窗的圆角。 |
+| `menu-radius` | 8 | 12 | 12 | 弹出菜单、popover 的圆角。 |
+
+### 消息
+
+见 [components/message.md](components/message.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `message-font-size` | 15 | 15 | 15 | 用户消息气泡的字号。AI 回答用 type-body，和界面正文一致。 |
+| `message-action-size` | 24 | 32 | 28 | AI 消息下方操作按钮的可见尺寸。 |
+
+### 图标
+
+见 [foundations/iconography.md](foundations/iconography.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `icon-size-sm` | 14 | 17 | 16 | 按钮和标签里的图标。 |
+| `icon-size-md` | 16 | 20 | 18 | 侧边栏、列表、横幅、工具栏里的图标。 |
+| `icon-size-lg` | 20 | 24 | 24 | 玻璃按钮、标签栏里的图标。 |
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `icon-stroke` | `1.75px` | 线性图标在 24×24 viewBox 里的描边宽度，接近 SF Symbols 的常规粗细。（仅网页） |

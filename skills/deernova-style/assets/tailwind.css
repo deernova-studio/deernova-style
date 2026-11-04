@@ -1,0 +1,106 @@
+/* Generated from tokens.json by `npm run tokens`. Do not edit by hand.
+ *
+ * Tailwind CSS v4。在全局样式里依次引入：
+ *   @import "tailwindcss";
+ *   @import "./tokens.css";
+ *   @import "./tailwind.css";
+ * tokens.css 不要放进 @layer：它要覆盖 Tailwind 默认主题里同名的 --font-*、--radius-*。
+ * 用法：bg-surface text-ink border-line、text-body、h-control-md px-button-x-md rounded-button、shadow-float。
+ */
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-ink: var(--ink);
+  --color-ink-secondary: var(--ink-secondary);
+  --color-ink-tertiary: var(--ink-tertiary);
+  --color-line: var(--line);
+  --color-line-control: var(--line-control);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --color-focus-ring: var(--focus-ring);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-fill-hover: var(--fill-hover);
+  --color-fill-selected: var(--fill-selected);
+  --color-knob: var(--knob);
+  --color-scrim: var(--scrim);
+  --color-glass-fill: var(--glass-fill);
+  --color-glass-stroke: var(--glass-stroke);
+
+  --text-display: var(--type-display-size);
+  --text-display--line-height: var(--type-display-line);
+  --text-display--font-weight: 600;
+  --text-title: var(--type-title-size);
+  --text-title--line-height: var(--type-title-line);
+  --text-title--font-weight: 600;
+  --text-headline: var(--type-headline-size);
+  --text-headline--line-height: var(--type-headline-line);
+  --text-headline--font-weight: 600;
+  --text-body: var(--type-body-size);
+  --text-body--line-height: var(--type-body-line);
+  --text-body--font-weight: 400;
+  --text-prose: var(--type-prose-size);
+  --text-prose--line-height: var(--type-prose-line);
+  --text-prose--font-weight: 400;
+  --text-callout: var(--type-callout-size);
+  --text-callout--line-height: var(--type-callout-line);
+  --text-callout--font-weight: 400;
+  --text-footnote: var(--type-footnote-size);
+  --text-footnote--line-height: var(--type-footnote-line);
+  --text-footnote--font-weight: 400;
+  --text-caption: var(--type-caption-size);
+  --text-caption--line-height: var(--type-caption-line);
+  --text-caption--font-weight: 400;
+  --text-code: var(--type-code-size);
+  --text-code--line-height: var(--type-code-line);
+  --text-code--font-weight: 400;
+
+  --spacing-control-sm: var(--button-height-sm);
+  --spacing-control-md: var(--button-height-md);
+  --spacing-control-lg: var(--button-height-lg);
+  --spacing-button-x-sm: var(--button-padding-x-sm);
+  --spacing-button-x-md: var(--button-padding-x-md);
+  --spacing-button-x-lg: var(--button-padding-x-lg);
+  --spacing-field: var(--field-height);
+  --spacing-row: var(--row-height);
+  --spacing-hit: var(--hit-min);
+  --spacing-sidebar: var(--sidebar-width);
+  --spacing-gap-inline: var(--gap-inline);
+  --spacing-gap-stack: var(--gap-stack);
+  --spacing-gap-group: var(--gap-group);
+  --spacing-page: var(--page-margin);
+  --spacing-card-x: var(--card-padding-x);
+  --spacing-card-y: var(--card-padding-y);
+  --spacing-icon-sm: var(--icon-size-sm);
+  --spacing-icon-md: var(--icon-size-md);
+  --spacing-icon-lg: var(--icon-size-lg);
+  --container-content: var(--content-max);
+
+  --radius-button: var(--button-radius);
+  --radius-button-sm: var(--button-radius-sm);
+  --radius-field: var(--field-radius);
+  --radius-card: var(--card-radius);
+  --radius-tag: var(--tag-radius);
+  --radius-menu: var(--menu-radius);
+  --radius-sheet: var(--sheet-radius);
+  --radius-composer: var(--composer-radius);
+  --radius-row: var(--row-radius);
+
+  --shadow-control: var(--shadow-control);
+  --shadow-float: var(--shadow-float);
+  --shadow-glass: var(--shadow-glass);
+  --ease-standard: var(--ease-standard);
+  --default-transition-duration: var(--duration-instant);
+  --default-transition-timing-function: var(--ease-standard);
+}
+

@@ -1,6 +1,32 @@
 # 当前验收状态
 
-更新于 2026-11-04，分支 `codex/refine-homepage-deer`。
+更新于 2026-11-05。
+
+## Mac 和 iPhone 截图重画（2026-11-05）
+
+- 旧的 `mac-window-*.png` 是最早设计稿里画的示意图：工具栏玻璃胶囊约 39pt 高、按钮 36pt，是把 iPhone 的尺寸搬到了 Mac 上。本机是 macOS 15.5，没有 Liquid Glass，无法实测。
+- Apple 没有公布 macOS 工具栏按钮的点数（HIG「Toolbars」只说由系统分组和绘制）。改用 HIG 页面里 macOS 26 备忘录的 2 倍截图，以红绿灯（直径 12、间距 20）为尺子量：工具栏按钮约 34、胶囊和按钮同高、竖直中心和红绿灯同在离窗口顶边约 22 处；窗口圆角约 22。
+- 按这个比例重画了 Mac 窗口：源页面 `art/screens/mac-window.html` 直接用 skill 的 tokens.css 和组件参考 CSS，`npm run screens` 用本机 Chrome 无头模式渲染浅色和深色两张 1920 × 1180 的 PNG。`glass-button-size` 桌面档从 32 改为 34，macOS 场景说明补上了系统部分的比例。
+- iPhone 两张也按同样的方式重画：用 HIG 里 iOS 26 的插图，以状态栏「9:41」的字高为尺子（换算出屏幕宽 401，和 iPhone 16 / 17 Pro 的 402 吻合）量出：标签栏是离左右下边约 25、高约 62 的悬浮玻璃胶囊，选中项填满高度；顶部玻璃按钮约 44。屏幕按 402 × 874 画，内容用触控密度的组件：AI 回答无衬线、用户气泡提亮、次按钮灰底、品牌名换成 Deernova。源页面 `art/screens/iphone-screens.html`、`iphone-button-sizes.html`，共用 `phone.css`。iOS 场景说明补上了系统部分的比例。
+- 三组截图都是按比例画的示意图，玻璃用网页效果近似，不是系统真实渲染；没有在 macOS 26 / iOS 26 真机上对照过。
+
+## 对标 Claude 桌面端（v0.3.0，2026-11-04）
+
+- 用 `screencapture -l` 只截取本机 Claude 窗口（深色主题，2 倍图），按像素量尺寸、拟合圆角、用字形高度推字号；对照写在 [实测对照](../docs/plans/2026-11-04-claude-desktop-benchmark.md)。截图只留在会话临时目录，不进仓库。
+- 密度合并为桌面、触控、舒展三档。桌面档按实测：正文 15/24、侧边栏 288 宽、行 32（间隔 2、圆角 8）、顶栏 44、按钮 28、卡片和气泡圆角 12、Composer 单行 44 圆角 14、提示条圆角 10；线统一 1px（`stroke-hairline` 改名为 `stroke-line`）；`caption` 和分组标题改为常规字重。
+- 规则：SwiftUI 端保留系统 Liquid Glass，Web 应用不用玻璃；界面和 AI 回答改为无衬线，衬线只给 `display`、`title`、`prose`；次按钮改为灰底无描边；侧边栏比内容区亮一层，选中底色加深。
+- 组件：重写 Composer（提示条 + 单行输入 + 信息行）、侧边栏（全局入口 + 可折叠项目分组 + 账号栏）、消息、工具调用（摘要行 + 执行步骤 + 运行中）；新增任务清单、顶栏与侧面板。
+- 规范页上实测活样例：侧边栏 288、行 32、顶栏 44、按钮 28、单行 Composer 44（桌面和触控都是）、气泡 48 高 12 × 16 内边距、AI 回答 15/24 无衬线、卡片和任务清单圆角 12、线 1px。浅色和深色都看过，无横向滚动、无失败请求。`npm test` 63 项通过；`DeernovaTokens.swift` 对 macOS 和 iOS 模拟器 SDK 类型检查通过。
+- 未验证：Claude 桌面端的浅色主题、阴影、菜单、弹窗、设置页、表单输入框和代码块没有实测；`assets/screens/` 的 Mac 窗口截图里 Composer 仍是旧结构；`tailwind.css` 没有实际编译。
+
+## 规范重构：场景与密度、规范页（v0.3.0，2026-11-04）
+
+- token 改成“主题 × 密度”两个维度：紧凑（macOS）、常规（Web 应用，默认）、触控（iOS、iPadOS、Web 触屏）、舒展（官网与文档），名字里不再出现平台。新增原始色板、字号角色、字重、线形、层级、动效、不透明度、玻璃、布局和 14 组组件尺寸。`canvas`、`on-accent` 的深色值从 `#161616` 并入 `#171717`，`accent-soft` 的深色值从 `#2e2e2e` 并入 `#2f2f2f`。
+- references 拆成 `foundations/`、`components/`、`scenes/`；每个组件有生成的尺寸表、`dn-` 参考 CSS、示例 HTML 和 SwiftUI 写法。生成 `tailwind.css`（v4）和 `DeernovaTokens.swift`。
+- Web 按钮过高的问题：在规范页的活样例里实测，默认按钮在四种密度下分别是 24 / 28 / 36 / 36，小、大按钮、输入框、列表行也都等于对应 token；触控密度下命中区 44。新增测试锁定按钮的高度来源、上下内边距和行高。
+- 规范页改成样例优先：首屏是核心规则和场景速查，色卡、字阶、间距、圆角、线条、层级直接由 `tokens.json` 生成，16 个活样例跟随顶栏的场景切换，代码默认收起。内置浏览器 1440 宽和 375 宽、浅色和深色看过，无横向滚动；首页顶栏尺寸不变，无控制台错误。
+- `npm test` 63 项通过。`DeernovaTokens.swift` 用 `swiftc -typecheck` 对 macOS 14 和 iOS 17 模拟器 SDK 检查通过。本机全局安装的 skill 已从 0.2.0 更新到 0.3.0。
+- 未验证：`tailwind.css` 没有用 Tailwind 实际编译（本机访问 npm registry 超时）；组件说明里的 SwiftUI 片段没有编译；iPadOS 规则没有真机截图；新版本没有发布到 npm。
 
 ## 腿部交叠与完整步态（2026-11-04）
 

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>iOS 按钮尺寸</title>
+<script>document.documentElement.dataset.theme = location.hash.slice(1) || 'light';</script>
+<style>
+{{tokens}}
+{{reference}}
+{{file:phone.css}}
+.section { top: 168px; display: grid; gap: 6px; }
+.apps .dn-list-row { min-height: 72px; }
+.app-icon { display: grid; place-items: center; flex: none; width: 48px; height: 48px; border-radius: 11px; background: var(--fill-selected); color: var(--ink); font: 600 22px/1 var(--font-serif); }
+.app-icon.is-solid { background: var(--accent); color: var(--on-accent); }
+.app-text { display: grid; gap: 1px; min-width: 0; }
+.app-text small { color: var(--ink-secondary); font: var(--type-footnote); }
+.apps .dn-list-row .dn-button { margin-left: auto; }
+.remind { top: 486px; }
+.remind .dn-card { gap: var(--space-2); padding: var(--space-4); }
+.remind .actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-top: var(--space-2); }
+.remind .actions .dn-button { width: 100%; }
+.pay { top: 150px; bottom: 34px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.pay-icon { display: grid; place-items: center; width: 88px; height: 88px; border-radius: 20px; background: var(--accent); color: var(--on-accent); font: 600 46px/1 var(--font-serif); }
+.pay h2 { margin: var(--space-6) 0 var(--space-1); font: var(--type-display); letter-spacing: var(--type-display-tracking); }
+.pay p { margin: 0; color: var(--ink-secondary); font: var(--type-callout); }
+.perks { display: grid; gap: var(--space-4); margin: var(--space-8) 0 0; padding: 0; list-style: none; text-align: left; font: var(--type-body); }
+.perks li { display: flex; align-items: center; gap: var(--space-3); }
+.perks .dn-icon { width: 20px; height: 20px; color: var(--success); }
+.pay-bottom { display: grid; justify-items: center; gap: var(--space-2); width: 100%; margin-top: auto; }
+.pay-bottom small { color: var(--ink-tertiary); font: var(--type-footnote); }
+</style>
+</head>
+<body data-density="touch">
+<div class="phones">
+  <div class="device">
+    <div class="phone"><div class="screen">
+      <div class="island"></div>
+      <div class="status"><span>9:41</span><span class="status-icons"><svg width="19" height="12" viewBox="0 0 19 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="6" width="3" height="6" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.2c2.4 0 4.6.9 6.3 2.5l1.2-1.2C13.9 1.5 11.3.4 8.5.4S3.1 1.5 1 3.5l1.2 1.2c1.7-1.6 3.9-2.5 6.3-2.5zm0 3.4c1.4 0 2.7.5 3.7 1.4l1.2-1.2C12.2 4.6 10.4 3.8 8.5 3.8S4.8 4.6 3.6 5.8L4.8 7c1-.9 2.3-1.4 3.7-1.4zm0 3.4c.5 0 1 .2 1.3.5L8.5 11 7.2 9.5c.3-.3.8-.5 1.3-.5z"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity="0.4"/><rect x="2" y="2" width="20" height="9" rx="2"/><rect x="25" y="4" width="1.6" height="5" rx="0.8" opacity="0.4"/></svg></span></div>
+      <div class="nav"><span></span><span class="circle glass"><svg class="dn-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span></div>
+      <h1 class="large-title">发现</h1>
+      <section class="page section apps">
+        <h3 class="dn-list-header">为你推荐</h3>
+        <ul class="dn-list">
+          <li class="dn-list-row"><span class="app-icon is-solid">D</span><span class="app-text">Deernova 笔记<small>写作 · 免费</small></span><button class="dn-button is-sm hit" type="button">获取</button></li>
+          <li class="dn-list-row"><span class="app-icon">译</span><span class="app-text">随手翻译<small>工具 · 免费</small></span><button class="dn-button is-sm" type="button">获取</button></li>
+          <li class="dn-list-row"><span class="app-icon">日</span><span class="app-text">安静日程<small>效率 · 已安装</small></span><button class="dn-button is-sm" type="button">打开</button></li>
+        </ul>
+      </section>
+      <section class="page remind">
+        <div class="dn-card">
+          <h3 class="dn-card-title">开启每日提醒</h3>
+          <p class="dn-card-summary">每天早上 9 点提醒你回顾昨天写下的笔记，可以随时关闭。</p>
+          <div class="actions"><button class="dn-button" type="button">以后再说</button><button class="dn-button is-primary hit" type="button">开启</button></div>
+        </div>
+      </section>
+      <div class="tabbar-row">
+        <nav class="tabbar glass">
+          <span class="tab is-selected"><svg class="dn-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>发现</span>
+          <span class="tab"><svg class="dn-icon" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg>笔记</span>
+          <span class="tab"><svg class="dn-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>我的</span>
+        </nav>
+      </div>
+      <div class="home"></div>
+    </div></div>
+    <p class="caption"><b>浏览页</b>列表行里的「获取」用小号 30；卡片里并排的两个按钮用默认 36，次按钮是灰底。搜索和标签栏是系统玻璃，尺寸由系统决定。</p>
+  </div>
+
+  <div class="device">
+    <div class="phone"><div class="screen">
+      <div class="island"></div>
+      <div class="status"><span>9:41</span><span class="status-icons"><svg width="19" height="12" viewBox="0 0 19 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="6" width="3" height="6" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.2c2.4 0 4.6.9 6.3 2.5l1.2-1.2C13.9 1.5 11.3.4 8.5.4S3.1 1.5 1 3.5l1.2 1.2c1.7-1.6 3.9-2.5 6.3-2.5zm0 3.4c1.4 0 2.7.5 3.7 1.4l1.2-1.2C12.2 4.6 10.4 3.8 8.5 3.8S4.8 4.6 3.6 5.8L4.8 7c1-.9 2.3-1.4 3.7-1.4zm0 3.4c.5 0 1 .2 1.3.5L8.5 11 7.2 9.5c.3-.3.8-.5 1.3-.5z"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity="0.4"/><rect x="2" y="2" width="20" height="9" rx="2"/><rect x="25" y="4" width="1.6" height="5" rx="0.8" opacity="0.4"/></svg></span></div>
+      <div class="nav"><span class="circle glass"><svg class="dn-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span></span></div>
+      <section class="page pay">
+        <span class="pay-icon">D</span>
+        <h2>Deernova Pro</h2>
+        <p>一个订阅，所有应用通用</p>
+        <ul class="perks">
+          <li><svg class="dn-icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>不限次数的 AI 对话</li>
+          <li><svg class="dn-icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Mac 和 iPhone 同步</li>
+          <li><svg class="dn-icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>新功能优先体验</li>
+        </ul>
+        <div class="pay-bottom">
+          <small>¥18 / 月，可随时取消</small>
+          <button class="dn-button is-primary is-lg is-block" type="button">订阅 Pro</button>
+          <button class="dn-button is-plain hit" type="button">恢复购买</button>
+        </div>
+      </section>
+      <div class="home"></div>
+    </div></div>
+    <p class="caption"><b>付费页</b>整页唯一的主操作放在底部，用通栏 46；下面的「恢复购买」是文字按钮，36。虚线是 44 的点击区域，实际界面里看不见。</p>
+  </div>
+</div>
+</body>
+</html>

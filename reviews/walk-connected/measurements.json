@@ -1,0 +1,64 @@
+{
+  "before": {
+    "head": {
+      "rangeXY": [
+        5.049,
+        0.257
+      ],
+      "maxStepXY": [
+        0.491,
+        0.24
+      ],
+      "minCorrelation": 0.9824
+    },
+    "torso": {
+      "rangeXY": [
+        0.001,
+        0.35
+      ],
+      "maxStepXY": [
+        0.001,
+        0.091
+      ],
+      "minCorrelation": 0.9722
+    },
+    "headRelativeToTorso": {
+      "rangeXY": [
+        5.049,
+        0.516
+      ]
+    },
+    "headBodyVerticalCorrelation": -0.2296
+  },
+  "after": {
+    "head": {
+      "rangeXY": [
+        1.142,
+        4.03
+      ],
+      "maxStepXY": [
+        0.425,
+        0.573
+      ],
+      "minCorrelation": 0.9959
+    },
+    "torso": {
+      "rangeXY": [
+        1.027,
+        3.236
+      ],
+      "maxStepXY": [
+        0.453,
+        0.159
+      ],
+      "minCorrelation": 0.9968
+    },
+    "headRelativeToTorso": {
+      "rangeXY": [
+        0.918,
+        1.151
+      ]
+    },
+    "headBodyVerticalCorrelation": 0.9969
+  }
+}

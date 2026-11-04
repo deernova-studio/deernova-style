@@ -1,18 +1,17 @@
-"""Bake the homepage stride from the generated deer drawings.
+"""Bake the homepage walk from the generated deer drawings.
 
 The drawings were generated separately, so their heads, antlers and coat tones
 differ slightly. Cross-fading them at 60 Hz showed two heads and two sets of legs
 at every handover. This script
 
 1. registers every drawing on one torso origin and ground line,
-2. gives every head the same size and a smooth path through the stride (each
-   drawing keeps its own head and neck; only the head is moved, along the neck),
-   and aligns the antlers rigidly to the head,
+2. chooses one connected upper-body drawing: head, antlers, neck and torso,
 3. matches the gray tones,
-4. draws real in-between poses with optical flow at even steps, one per 60 Hz
-   refresh at running speed, so that every frame is a single animal rather than
-   two half-transparent ones,
-5. prints the site's gray tone curve and outline, and packs the frames into
+4. binds the torso and near legs to one surface, poses the far legs behind it,
+   and constrains anatomical joints along measured hoof paths,
+5. moves that connected upper body with the walking phase, carrying its movement
+   into the leg roots while keeping the grounded hooves on the floor,
+6. prints the site's gray tone curve and outline, and packs the frames into
    grayscale atlases with a small generated module that describes them.
 
 Usage: pip install -r art/milu/requirements.txt
@@ -23,6 +22,9 @@ import argparse, json, math, pathlib
 import numpy as np
 import cv2
 from PIL import Image
+from limbs import LayeredLegs, load_guides
+from motion import atlas_motion
+from body import ConnectedBody
 
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
@@ -64,87 +66,15 @@ def gray(img):
     return np.dstack([v * a / 255, a]).astype(np.float32)  # premultiplied gray, alpha
 
 
-# ---- 2. Heads ----------------------------------------------------------------
-
-REF_EYE = np.array([CX + 165.0, 235.0])
-# Signed distance to a withers -> chest line; negative on the head side.
-NECK = (90 * (yy - 250) - 90 * (xx - (CX + 70))) / 127.0
-FACE = ((NECK < -30) & (yy > 175) & (xx > CX + 100) & (yy < 330)).astype(np.uint8)
-HEAD = (np.maximum(smooth(25, -45, NECK), smooth(225, 185, yy) * smooth(CX - 80, CX - 20, xx)) * smooth(370, 330, yy)).astype(np.float32)
-ANTLERS = smooth(215, 190, yy) * smooth(CX - 60, CX - 20, xx)  # in reference-head coordinates
-ANTLER_FIT = (ANTLERS > 0.5).astype(np.uint8)
+# ---- 2. Shared image operations ----------------------------------------------
 
 
 def feature(img):
     return np.clip(0.5 * img[..., 0] + 0.5 * img[..., 1], 0, 255).astype(np.uint8)
 
 
-def ecc(template, image, mask):
-    """Affine map from template coordinates to image coordinates, fitted coarse to fine."""
-    T, I, warp = template.astype(np.float32), image.astype(np.float32), np.eye(2, 3, dtype=np.float32)
-    for scale in (0.5, 1.0):
-        t, im = cv2.resize(T, None, fx=scale, fy=scale), cv2.resize(I, None, fx=scale, fy=scale)
-        m = cv2.resize(mask, None, fx=scale, fy=scale, interpolation=cv2.INTER_NEAREST)
-        w = warp.copy(); w[:, 2] *= scale
-        _, w = cv2.findTransformECC(t, im, w, cv2.MOTION_AFFINE,
-                                    (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 200, 1e-6), m, 5)
-        warp = w.copy(); warp[:, 2] /= scale
-    return np.vstack([warp, [0, 0, 1]]).astype(np.float64)
-
-
-def fourier(phases, values, k):
-    basis = lambda p: np.stack([np.ones_like(p)] + [g(2 * np.pi * j * p) for j in range(1, k + 1) for g in (np.cos, np.sin)], -1)
-    coef, *_ = np.linalg.lstsq(basis(np.asarray(phases)), np.asarray(values), rcond=None)
-    return basis(np.asarray(phases)) @ coef
-
-
-def similarity(angle, eye):
-    c, s = math.cos(angle), math.sin(angle)
-    T = np.array([[c, -s, 0], [s, c, 0], [0, 0, 1.0]])
-    T[:2, 2] = np.asarray(eye) - T[:2, :2] @ REF_EYE
-    return T
-
-
 def remap(img, field_x, field_y):
     return cv2.remap(img, field_x.astype(np.float32), field_y.astype(np.float32), cv2.INTER_LINEAR, borderValue=0)
-
-
-def apply(M, x, y):
-    return M[0, 0] * x + M[0, 1] * y + M[0, 2], M[1, 0] * x + M[1, 1] * y + M[1, 2]
-
-
-def heads(frames, phases, reference):
-    """Move each drawing's own head onto one size and a smooth path; the neck absorbs the difference."""
-    feats = [feature(f) for f in frames]
-    fits = [ecc(feats[reference], f, FACE) for f in feats]  # reference head -> drawing
-    eyes = np.array([(M @ [*REF_EYE, 1])[:2] for M in fits])
-    angles = np.array([math.atan2(M[1, 0] - M[0, 1], M[0, 0] + M[1, 1]) for M in fits])
-    # Keep the stride's own head motion (two rises per stride) and drop the drawing-to-drawing noise.
-    ex, ey, th = fourier(phases, eyes[:, 0], 2), fourier(phases, eyes[:, 1], 4), fourier(phases, angles, 2)
-    targets = [similarity(th[i], (ex[i], ey[i])) for i in range(len(frames))]
-    out = []
-    for i, f in enumerate(frames):
-        inv = np.linalg.inv(targets[i])
-        sx, sy = apply(fits[i] @ inv, xx, yy)             # target -> drawing, for the head
-        out.append(remap(f, xx + HEAD * (sx - xx), yy + HEAD * (sy - yy)))
-    # Antlers are bone: fit each set to the reference set on the now-aligned head, and move it rigidly.
-    to_ref = lambda img, i: cv2.warpAffine(img, targets[i][:2].astype(np.float32), (W, H), flags=cv2.WARP_INVERSE_MAP | cv2.INTER_LINEAR)
-    ref = feature(to_ref(out[reference], reference))
-    final = []
-    for i, f in enumerate(out):
-        try:
-            A = ecc(ref, feature(to_ref(f, i)), ANTLER_FIT)  # reference antlers -> this drawing's, in head space
-        except cv2.error:
-            A = np.eye(3)
-        inv = np.linalg.inv(targets[i])
-        rx, ry = apply(inv, xx, yy)                       # where each target pixel sits on the reference head
-        weight = remap(ANTLERS.astype(np.float32), rx, ry) * HEAD
-        ax, ay = apply(targets[i] @ A @ inv, xx, yy)
-        final.append(remap(f, xx + weight * (ax - xx), yy + weight * (ay - yy)))
-    report = [dict(eye=[round(float(v), 1) for v in eyes[i]], to=[round(float(ex[i]), 1), round(float(ey[i]), 1)],
-                   angle=round(math.degrees(angles[i]), 2), to_angle=round(math.degrees(th[i]), 2),
-                   scale=round(float(np.sqrt(np.linalg.det(fits[i][:2, :2]))), 3)) for i in range(len(frames))]
-    return final, report
 
 
 # ---- 3. Tones ----------------------------------------------------------------
@@ -174,8 +104,18 @@ def flow(a, b):
     return cv2.calcOpticalFlowFarneback(a, b, None, 0.5, 8, 51, 10, 7, 1.5, cv2.OPTFLOW_FARNEBACK_GAUSSIAN)
 
 
-def warp(img, f):
-    return cv2.remap(img, xx + f[..., 0], yy + f[..., 1], cv2.INTER_LINEAR, borderValue=0)
+def advect(img, field, amount):
+    """Invert source-space flow instead of looking it up at destination pixels.
+
+    Rotating feet travel far enough that simply negating their forward flow
+    samples the wrong part of the leg. Damped iteration follows the source point.
+    """
+    sx, sy = xx - amount * field[..., 0], yy - amount * field[..., 1]
+    for _ in range(5):
+        sampled = remap(field, sx, sy)
+        sx = .5 * sx + .5 * (xx - amount * sampled[..., 0])
+        sy = .5 * sy + .5 * (yy - amount * sampled[..., 1])
+    return remap(img, sx, sy)
 
 
 def ground_lock(f, src, dst):
@@ -191,18 +131,25 @@ def ground_lock(f, src, dst):
 
 
 def inbetween(A, B, fab, fba, t):
-    At, Bt = warp(A, -t * fab), warp(B, -(1 - t) * fba)
-    # Where the flow found the same animal in both, blend gently. Where a fast leg
-    # could not be matched, show only the nearer drawing's leg, never two faint legs.
-    miss = cv2.GaussianBlur(np.clip((np.abs(At[..., 1] - Bt[..., 1]) / 255 - 0.05) / 0.25, 0, 1), (0, 0), 2.5)
-    wb = (1 - miss) * smooth(0, 1, t) + miss * float(t >= 0.5)
-    return tidy((1 - wb[..., None]) * At + wb[..., None] * Bt)
+    At, Bt = advect(A, fab, t), advect(B, fba, 1 - t)
+    # Continuous at every time, including 0.5. A confidence-based hard switch
+    # hid double legs by teleporting the hoof; fix correspondence before mixing.
+    return clean_matte((1 - t) * At + t * Bt)
+
+
+def clean_matte(frame):
+    # Continuous alpha cleanup. Reclassifying connected components in every
+    # intermediate frame can make a thin hoof disappear at an arbitrary threshold.
+    # The ground is a shared plane: warping a slanted hoof must not stretch its
+    # sole below it. A subpixel edge keeps the outline antialiased after packing.
+    coverage = smooth(2, 12, frame[..., 1]) * smooth(CG + .75, CG - .75, yy)
+    return frame * coverage[..., None]
 
 
 def tidy(frame):
     """Drop specks the warp tore off a leg, and faint smears it stretched away from the
     solid animal; a real edge is never more than a couple of pixels from solid fur.
-    Every frame gets the same treatment, so edges do not change between drawings and in-betweens."""
+    Apply once to source drawings, before motion; never threshold moving fragments."""
     out = frame.copy()
     count, labels, sizes, _ = cv2.connectedComponentsWithStats((out[..., 1] > 24).astype(np.uint8), connectivity=8)
     small = np.isin(labels, [k for k in range(1, count) if sizes[k, cv2.CC_STAT_AREA] < 120])
@@ -215,23 +162,66 @@ def tidy(frame):
     return out * cv2.GaussianBlur(near.astype(np.float32), (0, 0), 0.7)[..., None]
 
 
-def bake_stride(frames, starts, drawings, count):
-    """`count` frames at even steps through the stride: one per 60 Hz refresh at running speed."""
+def bake_stride(frames, starts, drawings, count, guide=None, halves=1):
+    """Evenly sample motion; the player interpolates these samples at 60 Hz."""
     n = len(frames)
+    if halves != 1 and guide is None:
+        raise ValueError('A full stride needs persistent leg identities')
     flows = {}
     baked, sources = [], []
     for k in range(count):
-        p = k / count
-        i = max(j for j in range(n) if starts[j] <= p + 1e-12)
-        t = (p - starts[i]) / (starts[i + 1] - starts[i])
+        p = k / count * halves
+        lap, phase = divmod(p, 1)
+        i = max(j for j in range(n) if starts[j] <= phase + 1e-12)
+        t = (phase - starts[i]) / (starts[i + 1] - starts[i])
+        if guide is not None:
+            # Clean the complete surface once, after the shared body transform.
+            # Repeated matte cleanup erodes fine edges such as antlers.
+            baked.append(guide.draw(i + int(lap) * n, t))
+            sources.append(drawings[i]['source'] if t < 1e-9 and lap == 0 else None)
+            continue
         if t < 1e-9:
-            baked.append(tidy(frames[i])); sources.append(drawings[i]['source']); continue
+            baked.append(clean_matte(frames[i])); sources.append(drawings[i]['source']); continue
         if i not in flows:
             A, B = frames[i], frames[(i + 1) % n]
             a, b = feature(A), feature(B)
             flows[i] = (ground_lock(flow(a, b), A, B), ground_lock(flow(b, a), B, A))
-        baked.append(inbetween(frames[i], frames[(i + 1) % n], *flows[i], t)); sources.append(None)
+        baked.append(inbetween(frames[i], frames[(i + 1) % n], *flows[i], t))
+        sources.append(None)
     return baked, [k / count for k in range(count)], sources
+
+
+def ground_speed(frames, rate):
+    """How fast the planted hooves move back under the body, in scene units per second.
+    The page uses this estimate to reduce sliding. A walk moves a hoof
+    only a few pixels per frame, so follow each planted hoof for as long as it stays down and
+    fit a straight line to its path."""
+    def feet(f):
+        touch = np.concatenate([[0], (f[int(CG) - 3:int(CG) + 1, :, 1] > 128).any(axis=0).astype(np.int8), [0]])
+        edges = np.flatnonzero(np.diff(touch))
+        return [(a + b) / 2 for a, b in zip(edges[::2], edges[1::2])]
+    n = len(frames)
+    contacts = [feet(f) for f in frames]
+    # A rough step first: the typical shift of a hoof that stays down between neighbouring frames.
+    shifts = [min((y - x for y in contacts[(k + 1) % n] if -40 <= y - x <= 8), key=abs, default=None)
+              for k in range(n) for x in contacts[k]]
+    shifts = [d for d in shifts if d is not None]
+    assert shifts, 'no hoof stands on the ground line'
+    step = float(np.median(shifts))
+    # Then the tracks: chain each hoof to the one that many pixels behind it in the next frame.
+    slopes, weights = [], []
+    for k in range(n):
+        for x in contacts[k]:
+            if any(abs(y - (x - step)) < 2.5 for y in contacts[k - 1]): continue   # not a track start
+            path = [x]
+            while len(path) < n:
+                ahead = [y for y in contacts[(k + len(path)) % n] if abs(y - (path[-1] + step)) < 2.5]
+                if not ahead: break
+                path.append(min(ahead, key=lambda y: abs(y - (path[-1] + step))))
+            if len(path) >= 6:
+                slopes.append(np.polyfit(np.arange(len(path)), path, 1)[0]); weights.append(len(path))
+    per_frame = float(np.average(slopes, weights=weights)) if slopes else step
+    return -per_frame / U * rate * n
 
 
 # ---- 5. Print and pack -------------------------------------------------------
@@ -287,22 +277,36 @@ def main():
     drawings = spec['drawings']
     durations = np.array([d['duration'] for d in drawings], float)
     starts = np.concatenate([[0], np.cumsum(durations / durations.sum())]).tolist()
-    reference = next(i for i, d in enumerate(drawings) if d['source'] == spec['headReference'])
+    reference = next(i for i, d in enumerate(drawings) if d['source'] == spec['bodyReference'])
 
     frames = [gray(f) for f in register(drawings)]
-    frames, report = heads(frames, starts[:-1], reference)
-    frames = match_tones(frames)
-    baked, phases, sources = bake_stride(frames, starts, drawings, spec['frames'])
-    keys = {str(d['source']): round(starts[i], 6) for i, d in enumerate(drawings)}
+    frames = [tidy(f) for f in match_tones(frames)]
+    guide = None
+    if spec.get('landmarks'):
+        points, swap = load_guides(HERE / spec['landmarks'], drawings, HERE / 'source', (W, H), (CX, CG), U)
+        guide = LayeredLegs(frames, points, starts, swap, xx, yy, smooth, remap, reference)
+    halves = spec.get('halves', 1)
+    baked, phases, sources = bake_stride(frames, starts, drawings, spec['frames'], guide, halves)
+    body = ConnectedBody(frames[reference], xx, yy, smooth, remap, feature, (CX, CG))
+    baked = [clean_matte(body.draw(frame, phase * halves, aligned_roots=guide is not None)) for frame, phase in zip(baked, phases)]
+    keys = {str(d['source']): round(starts[i] / halves, 6) for i, d in enumerate(drawings)}
     meta = pack([outline(f) for f in baked], phases, sources, keys, spec['perAtlas'], spec['columns'], spec['prefix'])
+    meta.update(rate=spec['rate'], groundSpeed=round(ground_speed(baked, spec['rate']), 4), alert=spec['alert'], halves=halves)
+    meta['bodyMotion'] = body.description(spec['bodyReference'])
+    if guide is not None:
+        meta['skin'] = dict(model='connected-surface-v1', roots=guide.source[:, 0].tolist(),
+                            hindLengths=np.round(guide.hind_lengths, 4).tolist())
+    meta.update(atlas_motion(meta, SITE / 'assets'))
     module = ('// Generated by art/milu/bake.py from the drawings in art/milu. Do not edit by hand.\n'
               '// Baked stride frames: size and origin in frame pixels, unit = frame pixels per scene unit,\n'
-              '// phases = where each frame sits in the stride; sources = the drawing a frame reproduces, or null for an in-between;\n'
-              '// keys = where each source drawing sits in the stride.\n'
+              '// phases = where each frame sits in the stride; sources = the leg-pose drawing at this phase, or null for an in-between;\n'
+              '// keys = where each source drawing sits in the stride; rate = strides per second;\n'
+              '// groundSpeed = how fast the planted hooves move back (scene units per second), which the ground matches;\n'
+              '// alert = the leg pose the stag stops on; bodyMotion = the connected upper-body motion.\n'
               f'export const STRIDE = {json.dumps(meta, separators=(",", ":"))};\n')
     (SITE / 'scripts/meadow/stride.js').write_text(module)
-    (HERE / 'heads.json').write_text(json.dumps(report, indent=1))
-    print(f'{len(baked)} frames, {meta["size"][0]}x{meta["size"][1]} px, {len(meta["atlases"])} atlases')
+    print(f'{len(baked)} frames, {meta["size"][0]}x{meta["size"][1]} px, {len(meta["atlases"])} atlases, '
+          f'planted hooves move back at {meta["groundSpeed"]:.3f} scene units/s')
     if args.preview:
         tiles = []
         for k, f in enumerate(baked):

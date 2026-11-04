@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { runInNewContext } from 'node:vm';
-import { ATLASES, FRAMES, FRAME_COUNT, FRAME_SIZE } from '../apps/website/scripts/meadow/cycle.js';
+import { ATLASES, FRAMES, FRAME_COUNT, FRAME_SIZE, UNIT, WALK_RATE, poseAt } from '../apps/website/scripts/meadow/cycle.js';
 import { loadAtlas, createStagRenderer } from '../apps/website/scripts/meadow/stag.js';
 import { createRenderer } from '../apps/website/scripts/meadow/renderer.js';
 import { createPlayback } from '../apps/website/scripts/meadow/timeline.js';
@@ -144,7 +144,13 @@ test('complete atlas failure settles explicitly and drawing without a deer is sa
   assert.equal(stag.hit(100, 300), false);
 });
 
-test('neighbouring frames are copied from their own cells onto one rectangle, unstretched', async t => {
+test('the homepage preloads every deer atlas', async () => {
+  const html = await readFile('apps/website/index.html', 'utf8');
+  const preloaded = [...html.matchAll(/<link rel="preload" href="assets\/(milu-[^"]+)" as="image">/g)].map(match => match[1]);
+  assert.deepEqual(preloaded, ATLASES.map(atlas => atlas.src.pathname.split('/').pop()));
+});
+
+test('neighbouring drawings keep their scale and height while their whole-frame horizontal drift is corrected', async t => {
   const { created, makeCanvas } = canvases(t);
   const stag = createStagRenderer(makeCanvas().ctx, { loadImage: async atlas => ({ atlas }) });
   await stag.ready;
@@ -158,7 +164,8 @@ test('neighbouring frames are copied from their own cells onto one rectangle, un
     near(alpha, weight, 1e-12);
     near(args[7] / args[8], FRAME_SIZE[0] / FRAME_SIZE[1], 1e-9);
   }
-  assert.deepEqual(first.args.slice(5), second.args.slice(5), 'two frames of one stride never land apart');
+  assert.deepEqual(first.args.slice(6), second.args.slice(6), 'vertical position and both dimensions stay unchanged');
+  near(second.args[5] - first.args[5], (FRAMES[a + 1].offsetX - FRAMES[a].offsetX) * 180 / UNIT, 1e-9);
 });
 
 async function mount(t, { reduced = false, search = '', rendererFactory = createRenderer } = {}) {
@@ -197,7 +204,7 @@ async function mount(t, { reduced = false, search = '', rendererFactory = create
   });
   await renderer.ready;
   return {
-    screen, created, palette, status, message, retry, playback, pending, hooks,
+    screen, created, palette, status, message, retry, playback, pending, hooks, renderer,
     advance(ms) {
       time += ms;
       const callbacks = [...pending.values()];
@@ -262,4 +269,82 @@ test('failed loading starts the scene, exposes a retry and recovers without rese
       assert.equal(view.pending.size, 1);
     });
   }
+});
+
+
+function dispatch(node, type, properties) {
+  const event = Object.assign(new Event(type, { cancelable: true }), properties);
+  node.dispatchEvent(event);
+  return event;
+}
+
+test('deer hit testing follows the blended alpha, including gaps and scaled coordinates', async t => {
+  const { created, makeCanvas } = canvases(t);
+  const field = makeCanvas().ctx;
+  field.getTransform = () => ({ a: 0.75 });
+  const stag = createStagRenderer(field, { loadImage: async () => ({}) });
+  await stag.ready;
+  stag.draw([[0, 1]], 100, 300, 100);
+  const mixer = created[1].ctx;
+  let read;
+  mixer.getImageData = (...args) => { read = args; return { data: [0, 0, 0, 255] }; };
+  assert.equal(stag.hit(100, 200), true);
+  assert.deepEqual(read.slice(2), [1, 1], 'input reads only one silhouette pixel');
+  const placement = field.draws.at(-1).args;
+  assert.equal(read[0], Math.floor(100 * 0.75 - placement[5]));
+  assert.equal(read[1], Math.floor(200 * 0.75 - placement[6]));
+  mixer.getImageData = () => ({ data: [0, 0, 0, 0] });
+  assert.equal(stag.hit(100, 200), false, 'air within the image rectangle belongs to the scenery');
+  assert.equal(stag.hit(-100, -100), false);
+});
+
+test('deer clicks reveal colour while surrounding clicks keep every scene effect', async t => {
+  const view = await mount(t), renderer = view.renderer;
+  const effects = ['gust', 'leaves', 'flurry', 'meteors', 'sand'];
+  for (let i = 0; i < effects.length; i++) {
+    const clock = i * 8.4 + 1;
+    renderer.render({ clock, t: clock, lap: 0 });
+    assert.equal(renderer.interact(150, 300, clock), 'color');
+    assert.equal(renderer.interact(1, 1, clock), effects[i]);
+    // Advancing within the colour interval still uses the normal gait samples.
+    const before = view.created.flatMap(c => c.ctx.draws)
+      .filter(draw => draw.args[0]?.url?.includes('milu-run'));
+    renderer.render({ clock: clock + 0.1, t: clock + 0.1, lap: 0 });
+    const after = view.created.flatMap(c => c.ctx.draws)
+      .filter(draw => draw.args[0]?.url?.includes('milu-run'));
+    const rendered = after.slice(before.length);
+    const expected = poseAt((clock + 0.1) * WALK_RATE);
+    assert.equal(rendered.length, expected.length);
+    expected.forEach(([index, weight], n) => {
+      assert.deepEqual(rendered[n].args.slice(1, 5), FRAMES[index].rect);
+      near(rendered[n].alpha, weight, 1e-9);
+    });
+  }
+  renderer.render({ clock: 7.6, t: 7.6, lap: 0 });
+  assert.equal(renderer.interact(1, 1, 7.6), 'gust');
+  assert.equal(renderer.interact(319, 1, 7.6), 'leaves', 'scene wipes keep separate effects on each side');
+});
+
+test('mouse, keyboard and assistive activation colour the scene without changing the playback clock', async t => {
+  let interactions = [], activations = [], renders = 0;
+  const view = await mount(t, { reduced: true, rendererFactory: (_stage, _canvas, options) => {
+    assert.equal(options.still, true);
+    return {
+      ready: Promise.resolve({ complete: true }), render() { renders++; }, resize() {}, readPalette() {},
+      interact: (...args) => interactions.push(args), colorize: clock => activations.push(clock)
+    };
+  } });
+  const initial = renders, before = { ...view.playback.state };
+  dispatch(view.screen, 'click', { button: 0, detail: 1, clientX: 100, clientY: 200 });
+  dispatch(view.screen, 'click', { button: 2, detail: 1, clientX: 100, clientY: 200 });
+  assert.deepEqual(interactions, [[100, 200, before.clock]]);
+  for (const code of ['Space', 'Enter']) {
+    assert.ok(dispatch(view.screen, 'keydown', { code, repeat: false }).defaultPrevented);
+    dispatch(view.screen, 'keydown', { code, repeat: true });
+  }
+  dispatch(view.screen, 'click', { button: 0, detail: 0 });
+  assert.deepEqual(activations, [before.clock, before.clock, before.clock]);
+  assert.equal(renders, initial + 4, 'still scenes repaint immediately without starting a loop');
+  assert.equal(view.pending.size, 0);
+  assert.deepEqual(view.playback.state, before);
 });

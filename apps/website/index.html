@@ -51,8 +51,8 @@
   <main id="main" class="stage">
     <h1 class="sr-only">Deernova UI</h1>
     <div class="meadow" data-meadow>
-      <canvas aria-hidden="true"></canvas>
-      <p class="sr-only">一只白色的麋鹿舒展着鹿角奔跑：穿过积云下的草原，穿过阳光照进来的森林，跑上银河下的山脊，再回到清晨的草原。</p>
+      <canvas role="button" tabindex="0" aria-label="为风景上色" aria-describedby="meadow-description"></canvas>
+      <p class="sr-only" id="meadow-description">麋鹿在风景中缓缓行走。点击麋鹿，颜色向整幅画面扩散，停留片刻后恢复黑白；点击周围可触发风、落叶等场景效果。聚焦画面后也可按空格或回车上色。减弱动态效果时，画面保持静止，再次激活恢复黑白。</p>
       <div class="animation-status" data-animation-status hidden>
         <span role="status" data-animation-message></span>
         <button type="button" data-animation-retry>重试</button>

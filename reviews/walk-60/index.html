@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deernova · 60 帧走路</title>
+<style>
+  :root { color-scheme: light; font: 16px/1.6 system-ui,sans-serif; color:#242421; background:#f4f4f1; }
+  body { max-width:1000px; margin:36px auto; padding:0 24px; }
+  h1 { font-size:24px; font-weight:500; margin:0; }
+  p { color:#666660; margin:6px 0 24px; }
+  video { width:100%; display:block; background:#fff; border:1px solid #ddd; border-radius:16px; }
+  nav { display:flex; gap:12px; flex-wrap:wrap; margin:18px 0 32px; }
+  button,a { color:inherit; font:inherit; background:#fff; border:1px solid #d7d7d2; border-radius:8px; padding:7px 14px; text-decoration:none; }
+  button { cursor:pointer; }
+  button[aria-pressed="true"] { background:#242421; color:white; border-color:#242421; }
+  details { border-top:1px solid #d7d7d2; padding-top:16px; }
+  summary { cursor:pointer; }
+  #still { display:block; max-width:100%; width:416px; margin:18px auto; background:white; }
+  label { display:flex; align-items:center; gap:14px; }
+  input { flex:1; min-width:0; }
+  output { min-width:75px; font-variant-numeric:tabular-nums; }
+  .contact { max-width:100%; display:block; margin-top:20px; }
+</style>
+<h1>Deernova · 60 帧走路</h1>
+<p>60 张新姿态按顺序直接连接。可切换慢放，或逐张检查。</p>
+<video id="player" controls loop playsinline preload="metadata" src="walk-60fps.mp4"></video>
+<nav>
+  <button type="button" data-speed="1" aria-pressed="true">原速</button>
+  <button type="button" data-speed="0.5" aria-pressed="false">半速</button>
+  <a href="walk-60-frames.zip" download>下载 60 张原图</a>
+  <a href="contact-sheet.jpg">查看全部姿态</a>
+</nav>
+<details>
+  <summary>逐帧查看</summary>
+  <img id="still" src="frames/frame-001.png" alt="走路姿态第 1 帧" width="416" height="416">
+  <label>帧 <input id="frame" type="range" min="1" max="60" value="1" step="1"><output id="number">01 / 60</output></label>
+</details>
+<script>
+  const video=document.querySelector('#player');
+  document.querySelectorAll('[data-speed]').forEach(button=>button.addEventListener('click',()=>{
+    video.playbackRate=Number(button.dataset.speed);
+    document.querySelectorAll('[data-speed]').forEach(other=>other.setAttribute('aria-pressed',String(other===button)));
+  }));
+  document.querySelector('#frame').addEventListener('input',event=>{
+    const value=Number(event.target.value), image=document.querySelector('#still');
+    image.src=`frames/frame-${String(value).padStart(3,'0')}.png`;
+    image.alt=`走路姿态第 ${value} 帧`;
+    document.querySelector('#number').textContent=`${String(value).padStart(2,'0')} / 60`;
+  });
+</script>
+</html>

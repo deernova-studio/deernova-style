@@ -1,7 +1,10 @@
-import { TAU, clamp, mix, hash, fbm, gray, ease } from './math.js';
+import { TAU, clamp, mix, hash, fbm, gray as neutral, ease } from './math.js';
+import { pigment } from './color.js';
 
 // Scene layers own their cached galaxy and stars; resizing rebuilds these once.
-export function createScenery(f) {
+export function createScenery(f, { colored = false } = {}) {
+  let material = 'meadow';
+  const gray = (light, alpha = 1, surface = material) => colored ? pigment(light, surface, alpha) : neutral(light, alpha);
   const galaxy = document.createElement('canvas');
   const gx = galaxy.getContext('2d');
   let W = 0, H = 0, cell = 6, cols = 0, rows = 0, stars = [];
@@ -16,7 +19,7 @@ export function createScenery(f) {
     paintGalaxy();
   }
 
-  // ---- Scenery, painted in gray light ----
+  // Geometry is shared by the monochrome print and the optional pigment layer.
 
   // Features of a layer that slides by at `depth` times the stag's speed, one every `spacing` pixels.
   function each(v, depth, spacing, pad, draw) {
@@ -25,8 +28,9 @@ export function createScenery(f) {
   }
   function fillSky(top, bottom, y1) {
     const g = f.createLinearGradient(0, 0, 0, y1);
-    g.addColorStop(0, gray(top));
-    g.addColorStop(1, gray(bottom));
+    const sky = { meadow: 'sky', forest: 'forest', snow: 'cloud', night: 'night', desert: 'dusk' }[material];
+    g.addColorStop(0, gray(top, 1, sky));
+    g.addColorStop(1, gray(bottom, 1, sky));
     f.fillStyle = g;
     f.fillRect(0, 0, W, H);
   }
@@ -41,8 +45,8 @@ export function createScenery(f) {
   }
   function glow(x, y, r, a) {
     const g = f.createRadialGradient(x, y, 0, x, y, r);
-    g.addColorStop(0, `rgb(255 255 255 / ${a})`);
-    g.addColorStop(1, 'rgb(255 255 255 / 0)');
+    g.addColorStop(0, gray(1, a, 'light'));
+    g.addColorStop(1, gray(1, 0, 'light'));
     f.fillStyle = g;
     f.fillRect(x - r, y - r, r * 2, r * 2);
   }
@@ -75,11 +79,11 @@ export function createScenery(f) {
       const x = ((((c.x * W - v.dist * 0.012 - v.clock * 5) % span) + span) % span) - s * 0.8, base = c.y * H;
       f.save();
       f.beginPath(); f.rect(x - s, 0, s * 2, base); f.clip();
-      f.fillStyle = gray(0.7);
+      f.fillStyle = gray(0.7, 1, 'cloud');
       f.beginPath();
       for (const [dx, dy, r] of c.puffs) { f.moveTo(x + dx * s + r * s, base + dy * s); f.arc(x + dx * s, base + dy * s, r * s, 0, TAU); }
       f.fill();
-      f.fillStyle = gray(1);
+      f.fillStyle = gray(1, 1, 'cloud');
       f.beginPath();
       for (const [dx, dy, r] of c.puffs) { const cx = x + (dx - 0.04) * s, cy = base + (dy - 0.06) * s; f.moveTo(cx + r * s * 0.86, cy); f.arc(cx, cy, r * s * 0.86, 0, TAU); }
       f.fill();
@@ -163,8 +167,8 @@ export function createScenery(f) {
       const span = W * 1.6, x = (((W * (0.15 + k * 0.3) - v.dist * 0.05 + Math.sin(v.clock * 0.3 + k) * 20) % span) + span) % span - W * 0.2;
       const w = W * (0.03 + hash(k + 9) * 0.04), drop = H * 0.55;
       const g = f.createLinearGradient(0, 0, 0, H);
-      g.addColorStop(0, `rgb(255 255 255 / ${a})`);
-      g.addColorStop(1, 'rgb(255 255 255 / 0)');
+      g.addColorStop(0, gray(1, a, 'light'));
+      g.addColorStop(1, gray(1, 0, 'light'));
       f.fillStyle = g;
       f.beginPath();
       f.moveTo(x, 0); f.lineTo(x + w, 0); f.lineTo(x + w * 2.4 - drop, H); f.lineTo(x - drop, H);
@@ -199,7 +203,7 @@ export function createScenery(f) {
     f.fill();
     each(v, 0.12, S * 0.22, S, (i, x) => {
       if (hash(i * 1.3) < 0.35) return;
-      f.fillStyle = gray(0.83 - hash(i + 0.5) * 0.05);
+      f.fillStyle = gray(0.83 - hash(i + 0.5) * 0.05, 1, 'bark');
       trunk(x, S * (0.025 + hash(i) * 0.035), H * 0.1, groundY - S * 0.12, S * 0.01);
     });
     shafts(v, 0.38);
@@ -210,7 +214,7 @@ export function createScenery(f) {
     f.fill();
     each(v, 0.4, S * 0.55, S, (i, x) => {
       if (hash(i * 2.1) < 0.3) return;
-      f.fillStyle = gray(0.64 - hash(i + 0.7) * 0.06);
+      f.fillStyle = gray(0.64 - hash(i + 0.7) * 0.06, 1, 'bark');
       trunk(x, S * (0.07 + hash(i + 1) * 0.06), 0, groundY - S * 0.05, S * 0.03);
     });
     const floor = f.createLinearGradient(0, groundY - S * 0.08, 0, H);
@@ -226,7 +230,7 @@ export function createScenery(f) {
     // Near trees, just behind the stag.
     each(v, 0.85, S * 1.3, S, (i, x) => {
       if (hash(i * 3.7) < 0.35) return;
-      f.fillStyle = gray(0.36);
+      f.fillStyle = gray(0.36, 1, 'bark');
       trunk(x, S * (0.18 + hash(i + 2) * 0.12), 0, groundY + S * 0.03, S * 0.08);
     });
     // The canopy overhead, close enough to pass quickly.
@@ -259,7 +263,7 @@ export function createScenery(f) {
     // Now and then a trunk passes right in front of the lens.
     each(v, 1.9, W * 1.25, S, (i, x) => {
       if (hash(i * 5.1) < 0.45) return;
-      f.fillStyle = gray(0.06);
+      f.fillStyle = gray(0.06, 1, 'bark');
       trunk(x, S * 0.55, 0, H + 2, 0);
     });
     const fronds = [];
@@ -284,7 +288,7 @@ export function createScenery(f) {
       const [x, y] = arch(i / 700), r = m * (0.03 + hash(i * 2.7) * 0.05);
       const g = gx.createRadialGradient(x, y, 0, x, y, r);
       g.addColorStop(0, `rgb(255 255 255 / ${0.03 + 0.03 * hash(i * 1.3)})`);
-      g.addColorStop(1, 'rgb(255 255 255 / 0)');
+      g.addColorStop(1, gray(1, 0, 'light'));
       gx.fillStyle = g;
       gx.fillRect(x - r, y - r, r * 2, r * 2);
     }
@@ -330,7 +334,7 @@ export function createScenery(f) {
       if (k < 0 || k > 1) continue;
       const x = mix(x0, x0 - 0.3, k) * W, y = mix(y0, y0 + 0.22, k) * H, tail = W * 0.12;
       const g = f.createLinearGradient(x + tail, y - tail * 0.7, x, y);
-      g.addColorStop(0, 'rgb(255 255 255 / 0)');
+      g.addColorStop(0, gray(1, 0, 'light'));
       g.addColorStop(1, `rgb(255 255 255 / ${Math.sin(Math.PI * k)})`);
       f.strokeStyle = g;
       f.lineWidth = cell * 0.7;
@@ -363,22 +367,6 @@ export function createScenery(f) {
       const a = 0.5 + 0.5 * Math.sin(v.clock * (1.5 + hash(i) * 2) + i);
       glow(x, y, cell * 3, 0.8 * a);
     }
-  }
-  function nightFront(v) {
-    // Stardust left behind by the hooves, rising and fading.
-    const { S, groundY } = v;
-    f.fillStyle = gray(1);
-    for (let k = 1; k < 48; k++) {
-      const age = k * 0.035, x = v.deerX - S * 0.35 - v.speed * age + (hash(k * 3.1 + Math.floor(v.t * 30 - k)) - 0.5) * S * 0.2;
-      const y = groundY - S * 0.03 - age * S * (0.3 + hash(k * 1.7) * 0.6);
-      const a = (1 - k / 48) * (0.5 + 0.5 * hash(k * 2.9 + Math.floor(v.clock * 12)));
-      if (a < 0.05) continue;
-      f.globalAlpha = a;
-      const r = cell * (0.6 + 0.8 * (1 - k / 48));
-      f.fillRect(x - r * 1.6, y - r * 0.3, r * 3.2, r * 0.6);
-      f.fillRect(x - r * 0.3, y - r * 1.6, r * 0.6, r * 3.2);
-    }
-    f.globalAlpha = 1;
   }
 
   // ---- Snow mountains: an overcast afternoon, peaks lit from the right, pines in snow ----
@@ -428,13 +416,13 @@ export function createScenery(f) {
     const tiers = 4;
     for (let k = 0; k < tiers; k++) {
       const y0 = base - h * (0.12 + 0.24 * k), y1 = y0 - h * 0.42, w = h * 0.34 * (1 - k * 0.2);
-      f.fillStyle = gray(tone);
+      f.fillStyle = gray(tone, 1, 'pine');
       f.beginPath(); f.moveTo(x - w, y0); f.lineTo(x, y1); f.lineTo(x + w, y0); f.closePath(); f.fill();
       f.fillStyle = gray(cap);
       f.beginPath(); f.moveTo(x - w * 0.55, y1 + (y0 - y1) * 0.55); f.lineTo(x, y1); f.lineTo(x + w * 0.7, y1 + (y0 - y1) * 0.5);
       f.quadraticCurveTo(x, y1 + (y0 - y1) * 0.35, x - w * 0.55, y1 + (y0 - y1) * 0.55); f.fill();
     }
-    f.fillStyle = gray(tone);
+    f.fillStyle = gray(tone, 1, 'pine');
     f.fillRect(x - h * 0.03, base - h * 0.14, h * 0.06, h * 0.14);
   }
   function snow(v) {
@@ -477,17 +465,8 @@ export function createScenery(f) {
     f.fill();
   }
   function snowFront(v) {
-    const { S, groundY } = v;
+    const { S } = v;
     each(v, 1.8, W * 1.1, S, (i, x) => { if (hash(i * 5.3) > 0.5) pine(x, H + S * 0.2, S * 2.6, 0.12, 0.92); });
-    // Powder kicked up behind the hooves.
-    f.fillStyle = gray(0.84);
-    f.beginPath();
-    for (let k = 1; k < 26; k++) {
-      const age = k * 0.04, x = v.deerX - S * 0.4 - v.speed * age * 0.6 + (hash(k * 3.7) - 0.5) * S * 0.2;
-      const y = groundY - age * S * (0.4 + hash(k * 1.9) * 0.5), r = S * 0.04 * (1 + age * 3) * (1 - k / 26);
-      f.moveTo(x + r, y); f.arc(x, y, r, 0, TAU);
-    }
-    f.fill();
   }
 
   // ---- Desert: dawn over dunes, the sun low on the left, slip faces in shadow ----
@@ -578,7 +557,7 @@ export function createScenery(f) {
     });
   }
   function desertFront(v) {
-    const { S, groundY } = v;
+    const { S } = v;
     each(v, 1.7, W * 0.8, S, (i, x) => {
       if (hash(i * 7.3) < 0.5) return;
       f.fillStyle = gray(0.42);
@@ -586,25 +565,16 @@ export function createScenery(f) {
       f.fillStyle = gray(0.58);
       f.beginPath(); f.ellipse(x - S * 0.12, H + S * 0.05, S * (0.3 + hash(i) * 0.2), S * 0.18, 0, Math.PI, TAU); f.fill();
     });
-    // Sand kicked up behind the hooves.
-    f.fillStyle = gray(0.62);
-    f.beginPath();
-    for (let k = 1; k < 26; k++) {
-      const age = k * 0.04, x = v.deerX - S * 0.4 - v.speed * age * 0.6 + (hash(k * 2.7) - 0.5) * S * 0.2;
-      const y = groundY - age * S * (0.25 + hash(k * 1.3) * 0.35), r = S * 0.035 * (1 + age * 3) * (1 - k / 26);
-      f.moveTo(x + r, y); f.arc(x, y, r, 0, TAU);
-    }
-    f.fill();
   }
 
   const SCENE = {
     meadow: [meadow, meadowFront], forest: [forest, forestFront], snow: [snow, snowFront],
-    night: [night, nightFront], desert: [desert, desertFront]
+    night: [night], desert: [desert, desertFront]
   };
 
   return {
     resize,
-    drawBack: (name, frame) => SCENE[name][0](frame),
-    drawFront: (name, frame) => SCENE[name][1](frame)
+    drawBack: (name, frame) => { material = name; SCENE[name][0](frame); },
+    drawFront: (name, frame) => { material = name; SCENE[name][1]?.(frame); }
   };
 }

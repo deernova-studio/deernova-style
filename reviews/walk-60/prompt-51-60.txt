@@ -1,0 +1,27 @@
+Use case: illustration-story. Production cel animation, not a poster.
+We are drawing one complete 60-FRAME slow four-beat deer WALK. This request is ONLY ten consecutive frames of that cycle, not an entire walk cycle. Tiny progressive changes from one cell to the next are essential. No repeated cels, no skipped steps, no motion blur.
+
+OUTPUT: one wide landscape sprite sheet of EXACTLY TEN equal square cells, FIVE COLUMNS and TWO ROWS, reading left-to-right then top-to-bottom. Recommended canvas 2500x1000, aspect ratio 5:2. Pure opaque white background. Every cell has one full deer, antler tips and hoof soles fully visible, ample clear gutters. No text, numbers, grid lines, shadows, scenery or decorative objects. Same orthographic side view facing RIGHT, same scale and framing in every cell.
+
+CHARACTER: reference image 1 gives the deer identity and natural-history illustration style ONLY; do not copy its incorrect repeated walking poses. An elegant adult antlered milu-like stag, slender muzzle and legs, warm pale tawny/ivory coat, compact ribcage, short relaxed tail, same branching antlers and coat markings in every cel. Use restrained, consistent shading. Near limbs are light like the body, far limbs darker warm gray. Exactly four anatomically correct legs. No additional hooves, floating limbs, bone stretching, torso swelling, or face redesign.
+
+REGISTRATION in each square cell: think of local coordinates 0–100, x increasing right and y down. Antler top about y=7, muzzle at (90,40), shoulder joint at (62,54), hip joint at (31,53), withers around y=46, belly around y=64, ground at y=90, tail at x=10. Keep the head, neck, ribcage and antlers together as ONE stable coherent animal. No independent head stabilization or changing body size.
+
+MOVEMENT: calm four-beat WALK with overlapping support, never trot, prance, gallop or hop. The feet on the ground move BACKWARD relative to this fixed-camera body; a recovering hoof bends its joints and swings FORWARD in a LOW arc. The backward bend of the hind hock must remain anatomically correct. Feet on the ground share y=90. At least two feet support the body. No lifting the entire animal into the air. Do not recycle a full cycle within these ten images.
+
+FOLLOW THE HOOF BLOCKING BELOW. These are the approximate hoof centers in each cell's 0–100 coordinates. Connect each hoof to its own shoulder/hip through anatomically bent joints of constant length. This table specifies the intended drawing positions, not text to include in the image. NF = light NEAR FRONT, FF = dark FAR FRONT, NH = light NEAR HIND, FH = dark FAR HIND. 'G' means ground/support and 'S' means swinging. Preserve limb identities even at crossings. Every listed row corresponds to one output cel.
+
+REFERENCE IMAGE 2 is the OPENING ten cels of this SAME cycle (01–10). Match the exact same animal drawing, same size, same upper-body proportions and local cell coordinates, head, antlers, fur and framing. You are drawing the LAST ten cels, frames 51–60. The last output cel must connect immediately into the TOP-LEFT cel of reference image 2, with only a tiny change. Do NOT copy the first ten cels or duplicate the opening pose at the end. Think of the output as the ten images immediately BEFORE that first reference pose.
+
+BATCH 6/6: ONLY frames 51–60. The light near FRONT is initially trailing behind the shoulder and bearing weight, then releases its hoof, bends its elbow and carpus, and starts the low forward recovery toward the folded-under-chest opening pose. The dark far FRONT has already landed ahead and supports while sweeping slowly backward. The light near HIND finishes its forward recovery, extends softly toward the ground just in front of the hip, and prepares to land into the first pose. The dark far HIND supports and sweeps slowly backward. Each of these ten drawings moves only a LITTLE from its predecessor; no full gait cycle within the sheet. At the end the light front is gently bent and recovering, the far front supports, the light hind approaches landing and the far hind supports. Do not lift the body or toss the head.
+
+Frame 51: NF=(53.2,90.0)G ; FF=(69.3,90.0)G ; NH=(33.6,82.3)S ; FH=(30.1,90.0)G
+Frame 52: NF=(52.6,90.0)G ; FF=(68.8,90.0)G ; NH=(35.5,82.8)S ; FH=(29.5,90.0)G
+Frame 53: NF=(52.1,90.0)G ; FF=(68.2,90.0)G ; NH=(37.2,83.6)S ; FH=(28.8,90.0)G
+Frame 54: NF=(51.7,89.9)S ; FF=(67.7,90.0)G ; NH=(38.8,84.6)S ; FH=(28.2,90.0)G
+Frame 55: NF=(51.6,89.5)S ; FF=(67.2,90.0)G ; NH=(40.2,85.7)S ; FH=(27.5,90.0)G
+Frame 56: NF=(51.8,88.9)S ; FF=(66.6,90.0)G ; NH=(41.5,86.8)S ; FH=(26.9,90.0)G
+Frame 57: NF=(52.3,88.0)S ; FF=(66.1,90.0)G ; NH=(42.4,87.8)S ; FH=(26.2,90.0)G
+Frame 58: NF=(53.1,87.0)S ; FF=(65.5,90.0)G ; NH=(43.1,88.7)S ; FH=(25.6,90.0)G
+Frame 59: NF=(54.1,85.9)S ; FF=(65.0,90.0)G ; NH=(43.4,89.4)S ; FH=(24.9,90.0)G
+Frame 60: NF=(55.2,84.8)S ; FF=(64.5,90.0)G ; NH=(43.4,89.8)S ; FH=(24.3,90.0)G

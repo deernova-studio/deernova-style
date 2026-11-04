@@ -1,0 +1,22 @@
+{
+  "before": {
+    "horizontalRangePixels": 7.642,
+    "largestFrameStepPixels": 0.513,
+    "minimumCorrelation": 0.9722
+  },
+  "after": {
+    "horizontalRangePixels": 0.161,
+    "largestFrameStepPixels": 0.106,
+    "minimumCorrelation": 0.9719
+  },
+  "footfalls": [
+    {
+      "phase": 0.1875,
+      "x": 0.7301
+    },
+    {
+      "phase": 0.8375,
+      "x": -0.2716
+    }
+  ]
+}

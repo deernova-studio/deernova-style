@@ -10,7 +10,7 @@ Deernova 的设计语言，写成一个给 AI agent 读的 skill。agent 在你�
 | --- | --- |
 | `skills/deernova-style/` | **skill 本体，也是规范的唯一来源。** `SKILL.md` 是入口和核心规则；`references/` 是基础、设计变量、界面模式、SwiftUI、Web 和审查清单；`assets/` 是 `tokens.json`、生成的 `tokens.css` 和效果截图 |
 | `apps/website/` | 官网。首页传达风格，`guide.html` 把 skill 原文排成一页给人读 |
-| `art/milu/` | 首页麋鹿的原始插画和离线烘焙脚本，生成首页用的奔跑帧，不参与构建 |
+| `art/milu/` | 首页麋鹿的原始插画和离线烘焙脚本，生成首页用的散步帧，不参与构建 |
 | `packages/style/` | npm 包 `@deernova/style`：把 skill 装进其他仓库的命令行工具 |
 | `scripts/` | 生成 token 文件、构建网站和 npm 包、发布 |
 | `tests/` | skill 结构、token 同步、对比度、构建边界、开发热更新、安装器和动画 |

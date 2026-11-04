@@ -1,0 +1,18 @@
+{
+  "source": "walk-poses-v2.png",
+  "video": "walk-preview.mp4",
+  "key_poses": 16,
+  "cycle_seconds": 1.6,
+  "output_fps": 60,
+  "duration_seconds": 8,
+  "frame_count": 480,
+  "image_generation": "builtin image_gen",
+  "interpolation": "RIFE ncnn 20221029, rife-v4.6, spatial + temporal TTA",
+  "homepage_replaced": false,
+  "sha256": {
+    "walk-poses-v2.png": "38e959c48208861d320416778de6c8ea452afd75667154a2891a2c0e7230d5bc",
+    "walk-preview.mp4": "d8a0c3abee34d9c2dd664deb80132f80fceb27309b09c261ef2ee640c6e0a592"
+  },
+  "status": "rejected",
+  "reason": "User rejected the entire walking motion; do not use as a pose source."
+}

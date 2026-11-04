@@ -1,0 +1,31 @@
+{
+  "performanceResults": [
+    {
+      "deviceScaleFactor": 1,
+      "monochrome": {
+        "fps": 60,
+        "medianDrawMs": 7.2,
+        "p95DrawMs": 7.5
+      },
+      "color": {
+        "fps": 60,
+        "medianDrawMs": 7.4,
+        "p95DrawMs": 7.8
+      }
+    },
+    {
+      "deviceScaleFactor": 2,
+      "monochrome": {
+        "fps": 60,
+        "medianDrawMs": 7.1,
+        "p95DrawMs": 7.5
+      },
+      "color": {
+        "fps": 60,
+        "medianDrawMs": 7,
+        "p95DrawMs": 7.4
+      }
+    }
+  ],
+  "errors": []
+}

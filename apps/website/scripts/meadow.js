@@ -11,7 +11,7 @@ if (canvas) {
   const pinned = Number.parseFloat(query.get('t'));
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const still = reduced || (Number.isFinite(pinned) && !query.has('play'));
-  const renderer = createRenderer(stage, canvas, { raw: query.get('halftone') === '0' });
+  const renderer = createRenderer(stage, canvas, { raw: query.get('halftone') === '0', still });
   const playback = createPlayback({
     start: Number.isFinite(pinned) ? pinned : reduced ? 28.6 : 0,
     render: renderer.render
@@ -47,20 +47,24 @@ if (canvas) {
     renderer.retry().then(settled);
   });
 
-  // Click the stag to make it jump; click anywhere else for the sky's answer. Space also jumps.
-  // With reduced motion the picture stays still, so clicks do nothing.
-  canvas.addEventListener('pointerdown', event => {
-    if (still || !event.isPrimary) return;
-    renderer.interact(...point(event), playback.state.clock);
+  // The stag reveals colour; the scenery keeps its own effects. Neither changes
+  // the gait. Still/reduced-motion scenes switch colour without an expanding wave.
+  canvas.addEventListener('click', event => {
+    if (event.button !== 0) return;
+    if (event.detail === 0) renderer.colorize(playback.state.clock); // Assistive activation has no pointer coordinates.
+    else renderer.interact(...point(event), playback.state.clock);
+    if (still) render();
   });
   canvas.addEventListener('pointermove', event => {
-    if (still || event.pointerType !== 'mouse') return;
+    if (event.pointerType !== 'mouse') return;
     canvas.style.cursor = renderer.overStag(...point(event)) ? 'pointer' : '';
   });
-  document.addEventListener('keydown', event => {
-    if (still || event.code !== 'Space' || event.repeat || document.activeElement !== document.body) return;
+  canvas.addEventListener('pointerleave', () => { canvas.style.cursor = ''; });
+  canvas.addEventListener('keydown', event => {
+    if ((event.code !== 'Space' && event.code !== 'Enter') || event.repeat) return;
     event.preventDefault();
-    renderer.jump(playback.state.clock);
+    renderer.colorize(playback.state.clock);
+    if (still) render();
   });
 
   new IntersectionObserver(([entry]) => {

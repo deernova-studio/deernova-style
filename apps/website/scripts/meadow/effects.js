@@ -30,7 +30,7 @@ export function createEffects(f) {
   }
 
   // Wind: long white strokes sweeping off with the gust, and seeds tumbling after them.
-  function gust(e, age) {
+  function gust(f, e, age) {
     const fade = ease(0, 0.15, age) * (1 - ease(1.3, 2, age));
     f.lineCap = 'round';
     for (let k = 0; k < 9; k++) {
@@ -54,7 +54,7 @@ export function createEffects(f) {
   }
 
   // The canopy shakes: leaves flutter down from where it was touched and a few birds take off.
-  function leaves(e, age) {
+  function leaves(f, e, age) {
     const fade = 1 - ease(2.1, 2.8, age);
     for (let k = 0; k < 26; k++) {
       const r = hash(e.seed + k), burst = 1 - Math.exp(-age * 3);
@@ -80,7 +80,7 @@ export function createEffects(f) {
   }
 
   // A whirl of snow spiralling out of the click, with ice glints flashing in it.
-  function flurry(e, age) {
+  function flurry(f, e, age) {
     const fade = ease(0, 0.12, age) * (1 - ease(1.7, 2.4, age));
     f.fillStyle = gray(1, fade);
     f.beginPath();
@@ -103,7 +103,7 @@ export function createEffects(f) {
   }
 
   // A small shower: a few meteors set off from the click, one after another, down and away.
-  function meteors(e, age) {
+  function meteors(f, e, age) {
     for (let k = 0; k < 5; k++) {
       const a = (age - k * 0.14 - hash(e.seed + k) * 0.08) / 0.85;
       if (a < 0 || a > 1) continue;
@@ -133,7 +133,7 @@ export function createEffects(f) {
   }
 
   // Sand lifts off the dunes: dark ribbons and grains blown across the sky.
-  function sand(e, age) {
+  function sand(f, e, age) {
     const fade = ease(0, 0.2, age) * (1 - ease(1.5, 2.2, age));
     f.lineCap = 'round';
     for (let k = 0; k < 7; k++) {
@@ -158,13 +158,13 @@ export function createEffects(f) {
 
   const DRAW = { gust, leaves, flurry, meteors, sand };
 
-  function draw(clock) {
+  function draw(clock, target = f) {
     for (const e of list) {
       const age = clock - e.t0;
       if (age < 0 || age > DURATION[e.kind]) continue;
-      f.save();
-      DRAW[e.kind](e, age);
-      f.restore();
+      target.save();
+      DRAW[e.kind](target, e, age);
+      target.restore();
     }
   }
 

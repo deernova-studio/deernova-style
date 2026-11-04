@@ -1,9 +1,11 @@
 import { clamp, gray, hash } from './math.js';
-import { JUMP, RUN_SPEED, createGait } from './cycle.js';
+import { WALK_SPEED, createGait } from './cycle.js';
 import { createStagRenderer } from './stag.js';
 import { createScenery } from './scenery.js';
+import { createFootsteps } from './footsteps.js';
 import { EFFECT_FOR, createEffects } from './effects.js';
 import { LOOP, shot } from './timeline.js';
+import { createColorReveal } from './color.js';
 
 const MONO = 'ui-monospace, "SF Mono", Menlo, monospace';
 const RAMP = ' .:-=+*';
@@ -20,16 +22,21 @@ function layer(width = 1, height = 1, options) {
 }
 
 // Compose the scene into an offscreen field, then print it as dots and letters.
-export function createRenderer(stage, canvas, { raw = false } = {}) {
+export function createRenderer(stage, canvas, { raw = false, still = false } = {}) {
   const ctx = canvas.getContext('2d');
   const [field, f] = layer(1, 1, { willReadFrequently: true });
   const [small, s] = layer(1, 1, { willReadFrequently: true });
   const [dots, d] = layer();
+  const [pigments, p] = layer();
+  const [colorPrint, cp] = layer();
   const masks = [1, 2, 3, 4].map(() => layer());
   const stag = createStagRenderer(f);
   const scenery = createScenery(f);
+  const colorScenery = createScenery(p, { colored: true });
+  const color = createColorReveal({ still });
   const effects = createEffects(f);
   const gait = createGait();
+  const footsteps = createFootsteps();
 
   let W = 0, H = 0, dpr = 1, cell = 6, SS = 3, cols = 0, rows = 0, S = 200, groundY = 0, horizon = 0, deerX = 0;
   let level = new Uint8Array(0), value = new Float32Array(0), buffers = [], patterns = [], palette = {}, last = null;
@@ -71,6 +78,10 @@ export function createRenderer(stage, canvas, { raw = false } = {}) {
     rows = Math.ceil(H / cell);
     field.width = cols * SS;
     field.height = rows * SS;
+    pigments.width = field.width;
+    pigments.height = field.height;
+    colorPrint.width = canvas.width;
+    colorPrint.height = canvas.height;
     small.width = cols;
     small.height = rows;
     dots.width = canvas.width;
@@ -84,11 +95,12 @@ export function createRenderer(stage, canvas, { raw = false } = {}) {
     horizon = H * (phone ? 0.46 : 0.56);
     deerX = W * (phone ? 0.47 : 0.42);
     if (phone) {
-      // Reserve room for both stretched hind legs and a small forward leap.
+      // Reserve room for the hind legs stretched back and the forelegs reaching forward.
       S = Math.min(S, (W - cell * 8) / (stag.leftExtent + stag.rightExtent + 0.2));
       deerX = Math.max(deerX, cell * 4 + stag.leftExtent * S);
     }
     scenery.resize({ W, H, cell, cols, rows });
+    colorScenery.resize({ W, H, cell, cols, rows });
     effects.resize({ W, H, cell });
     makePatterns();
   }
@@ -99,40 +111,78 @@ export function createRenderer(stage, canvas, { raw = false } = {}) {
     if (!cols) return;
     last = sim;
     const t = sim.t, T = sim.lap * LOOP + t, cut = shot(t);
-    const pose = gait.pose(sim.clock), up = pose.lift / JUMP.height;
-    const leadLimit = clamp((W - deerX - cell * 4) / S - stag.rightExtent, 0, JUMP.lead);
-    const lead = pose.lead * leadLimit, animalX = deerX + lead * S;
+    const pose = gait.pose(sim.clock), animalX = deerX;
     const v = {
-      t, clock: sim.clock, dist: (RUN_SPEED * T + pose.travel - lead) * S,
-      speed: RUN_SPEED * S, S, groundY, horizon, deerX: animalX,
+      t, clock: sim.clock, dist: (WALK_SPEED * T + pose.travel) * S,
+      speed: WALK_SPEED * pose.pace * S, S, groundY, horizon, deerX: animalX,
       wind: x => effects.wind(x, sim.clock)
     };
     const line = cut.to ? W * (1 - cut.wipe) : W;
-    const side = (x0, x1, draw) => { f.save(); f.beginPath(); f.rect(x0, 0, x1 - x0, H); f.clip(); draw(); f.restore(); };
-
-    f.setTransform(SS / cell, 0, 0, SS / cell, 0, 0);
-    f.globalCompositeOperation = 'source-over';
-    f.globalAlpha = 1;
-    if (cut.to) {
-      side(0, line, () => scenery.drawBack(cut.from, v));
-      side(line, W, () => scenery.drawBack(cut.to, v));
-    } else scenery.drawBack(cut.from, v);
-
-    // The stag and its shadow, which shrinks and fades as it leaves the ground.
-    if (stag.hasFrames) {
-      f.fillStyle = gray(0, 0.2 * (1 - 0.6 * up));
-      f.beginPath();
-      f.ellipse(animalX - S * 0.05, groundY + S * 0.03, S * 0.55 * (1 - 0.35 * up), S * 0.05 * (1 - 0.3 * up), 0, 0, Math.PI * 2);
-      f.fill();
-      stag.draw(pose.weights, animalX, groundY - pose.lift * S, S);
+    footsteps.update({ clock: sim.clock, phase: gait.phase(sim.clock), distance: v.dist / S,
+      pace: stag.hasFrames ? pose.pace : 0, scene: sceneAt(animalX) });
+    function paint(target, landscape, drawStag) {
+      const side = (x0, x1, draw) => { target.save(); target.beginPath(); target.rect(x0, 0, x1 - x0, H); target.clip(); draw(); target.restore(); };
+      const split = draw => {
+        if (cut.to) {
+          side(0, line, () => draw(cut.from));
+          side(line, W, () => draw(cut.to));
+        } else draw(cut.from);
+      };
+      target.setTransform(SS / cell, 0, 0, SS / cell, 0, 0);
+      target.globalCompositeOperation = 'source-over';
+      target.globalAlpha = 1;
+      split(scene => landscape.drawBack(scene, v));
+      if (stag.hasFrames) {
+        target.fillStyle = gray(0, 0.2);
+        target.beginPath();
+        target.ellipse(animalX - S * 0.05, groundY + S * 0.03, S * 0.55, S * 0.05, 0, 0, Math.PI * 2);
+        target.fill();
+        drawStag();
+      }
+      split(scene => { footsteps.draw(target, v, scene); landscape.drawFront(scene, v); });
+      effects.draw(sim.clock, target);
     }
-
-    if (cut.to) {
-      side(0, line, () => scenery.drawFront(cut.from, v));
-      side(line, W, () => scenery.drawFront(cut.to, v));
-    } else scenery.drawFront(cut.from, v);
-    effects.draw(sim.clock);
+    paint(f, scenery, () => stag.draw(pose.weights, animalX, groundY, S));
     print(cut.to ? line : null, sim.clock);
+    const reveal = color.sample(sim.clock);
+    if (reveal.amount > 0 && reveal.spread > 0) {
+      paint(p, colorScenery, () => stag.paintColor(p));
+      printColor(reveal);
+    }
+  }
+
+  function printColor({ amount, spread, origin }) {
+    const width = canvas.width, height = canvas.height;
+    cp.setTransform(1, 0, 0, 1, 0, 0);
+    cp.globalAlpha = 1;
+    cp.globalCompositeOperation = 'source-over';
+    cp.clearRect(0, 0, width, height);
+    cp.drawImage(pigments, 0, 0, width, height);
+    // Keep the exact monochrome dots and letters as printed texture over the
+    // pigments. In dark mode light ink uses screen instead of multiply.
+    if (!raw) {
+      cp.globalCompositeOperation = palette.mode === 'light' ? 'screen' : 'multiply';
+      cp.globalAlpha = palette.mode === 'light' ? 0.25 : 0.38;
+      cp.drawImage(canvas, 0, 0);
+      cp.globalAlpha = 1;
+    }
+    if (spread < 1) {
+      const x = origin[0] * width, y = origin[1] * height;
+      const reach = Math.hypot(Math.max(x, width - x), Math.max(y, height - y));
+      const feather = Math.min(width, height) * 0.14;
+      const radius = (reach + feather) * spread;
+      const wave = cp.createRadialGradient(x, y, Math.max(0, radius - feather), x, y, radius);
+      wave.addColorStop(0, '#fff');
+      wave.addColorStop(1, 'transparent');
+      cp.globalCompositeOperation = 'destination-in';
+      cp.fillStyle = wave;
+      cp.fillRect(0, 0, width, height);
+    }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = amount;
+    ctx.drawImage(colorPrint, 0, 0);
+    ctx.globalAlpha = 1;
   }
 
   function print(line, clock) {
@@ -202,7 +252,7 @@ export function createRenderer(stage, canvas, { raw = false } = {}) {
     }
   }
 
-  // ---- Clicks: the stag jumps; anywhere else, the sky of the scene under the pointer answers ----
+  // ---- Clicks change the painting, never the gait ----
 
   function sceneAt(x) {
     const cut = shot(last ? last.t : 0);
@@ -210,15 +260,16 @@ export function createRenderer(stage, canvas, { raw = false } = {}) {
   }
   const overStag = (x, y) => stag.hit(x, y);
   function interact(x, y, clock) {
-    if (stag.hit(x, y)) return gait.jump(clock) ? 'jump' : null;
+    if (stag.hit(x, y)) { color.trigger(x / W, y / H, clock); return 'color'; }
+    if (still) return null;
     const kind = EFFECT_FOR[sceneAt(x)];
     effects.spawn(kind, x, clamp(y, H * 0.08, groundY - S * 0.35), clock);
     return kind;
   }
-  const jump = clock => gait.jump(clock);
+  const colorize = clock => color.trigger(deerX / W, (groundY - S * 0.9) / H, clock);
 
   const afterLoad = status => { layout(); return status; };
   const ready = stag.ready.then(afterLoad);
   const retry = () => stag.retry().then(afterLoad);
-  return { resize: layout, readPalette, render, interact, jump, overStag, ready, retry };
+  return { resize: layout, readPalette, render, interact, colorize, overStag, ready, retry };
 }

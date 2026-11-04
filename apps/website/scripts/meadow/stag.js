@@ -46,7 +46,8 @@ export async function loadAtlas(atlas, { attempts = 3, timeout = 15000, retryDel
 export function createStagRenderer(field, { loadImage = loadAtlas } = {}) {
   const images = new Array(ATLASES.length);
   const blend = canvas(1, 1);
-  const mixer = blend.getContext('2d');
+  const mixer = blend.getContext('2d', { willReadFrequently: true });
+  const tinted = canvas(1, 1), tint = tinted.getContext('2d');
   let loading = null, drawn = null;
   const available = index => !!images[FRAMES[index].atlas];
 
@@ -67,7 +68,8 @@ export function createStagRenderer(field, { loadImage = loadAtlas } = {}) {
   const ready = loadMissing();
 
   // Mix the neighbouring frames of the stride. Adding premultiplied pixels ('lighter') makes the mix an exact
-  // cross-dissolve, so the body stays solid. Both frames share one origin, so they land on one rectangle.
+  // cross-dissolve, so the body stays solid. Registration moves each complete drawing
+  // horizontally; its head, body and legs keep their relative positions and scale.
   function draw(weights, x, groundY, size) {
     const list = weights.filter(([index, w]) => w > 0.004 && available(index));
     if (!list.length) {
@@ -79,8 +81,10 @@ export function createStagRenderer(field, { loadImage = loadAtlas } = {}) {
     const total = list.reduce((sum, [, weight]) => sum + weight, 0);
     const k = field.getTransform().a, scale = size / UNIT;
     const dx = x - ORIGIN[0] * scale, dy = groundY - ORIGIN[1] * scale;
-    const x0 = Math.floor(dx * k), y0 = Math.floor(dy * k);
-    const width = Math.ceil(FRAME_SIZE[0] * scale * k) + 2, height = Math.ceil(FRAME_SIZE[1] * scale * k) + 2;
+    const shifts = list.map(([index]) => FRAMES[index].offsetX * scale);
+    const x0 = Math.floor((dx + Math.min(...shifts)) * k), y0 = Math.floor(dy * k);
+    const width = Math.ceil((dx + Math.max(...shifts) + FRAME_SIZE[0] * scale) * k) - x0 + 2;
+    const height = Math.ceil(FRAME_SIZE[1] * scale * k) + 2;
     if (blend.width < width || blend.height < height) {
       blend.width = Math.max(blend.width, width);
       blend.height = Math.max(blend.height, height);
@@ -93,24 +97,48 @@ export function createStagRenderer(field, { loadImage = loadAtlas } = {}) {
     for (const [index, w] of list) {
       const frame = FRAMES[index];
       mixer.globalAlpha = w / total;
-      mixer.drawImage(images[frame.atlas], ...frame.rect, dx * k - x0, dy * k - y0, FRAME_SIZE[0] * scale * k, FRAME_SIZE[1] * scale * k);
+      mixer.drawImage(images[frame.atlas], ...frame.rect, (dx + frame.offsetX * scale) * k - x0, dy * k - y0, FRAME_SIZE[0] * scale * k, FRAME_SIZE[1] * scale * k);
     }
     field.save();
     field.setTransform(1, 0, 0, 1, 0, 0);
     field.drawImage(blend, 0, 0, width, height, x0, y0, width, height);
     field.restore();
 
-    // Remember the dominant frame's box for clicks, padded so the antlers and legs are easy to hit.
-    const [main] = list.reduce((a, b) => (b[1] > a[1] ? b : a));
-    const [bx0, by0, bx1, by1] = FRAMES[main].bounds;
-    const pad = size * 0.08;
-    drawn = [dx + bx0 * scale - pad, dy + by0 * scale - pad, dx + bx1 * scale + pad, dy + by1 * scale + pad];
+    drawn = { x0, y0, width, height, k };
   }
 
-  const hit = (x, y) => !!drawn && x >= drawn[0] && x <= drawn[2] && y >= drawn[1] && y <= drawn[3];
+  // Test the visible blended silhouette, not the air between the legs/antlers.
+  // One pixel is read only on input, never in the animation loop.
+  function hit(x, y) {
+    if (!drawn) return false;
+    const px = Math.floor(x * drawn.k - drawn.x0), py = Math.floor(y * drawn.k - drawn.y0);
+    return px >= 0 && py >= 0 && px < drawn.width && py < drawn.height
+      && mixer.getImageData(px, py, 1, 1).data[3] >= 96;
+  }
+
+  // Reuse the exact blended animal; colour never resamples or retimes a pose.
+  function paintColor(target) {
+    if (!drawn) return;
+    const { x0, y0, width, height } = drawn;
+    if (tinted.width !== blend.width || tinted.height !== blend.height) {
+      tinted.width = blend.width; tinted.height = blend.height;
+    }
+    tint.globalCompositeOperation = 'source-over';
+    tint.clearRect(0, 0, tinted.width, tinted.height);
+    tint.drawImage(blend, 0, 0, width, height, 0, 0, width, height);
+    tint.globalCompositeOperation = 'multiply';
+    tint.fillStyle = '#dbc9a3';
+    tint.fillRect(0, 0, width, height);
+    tint.globalCompositeOperation = 'destination-in';
+    tint.drawImage(blend, 0, 0, width, height, 0, 0, width, height);
+    target.save();
+    target.setTransform(1, 0, 0, 1, 0, 0);
+    target.drawImage(tinted, 0, 0, width, height, x0, y0, width, height);
+    target.restore();
+  }
 
   return {
-    draw, hit, ready, retry: loadMissing,
+    draw, paintColor, hit, ready, retry: loadMissing,
     get hasFrames() { return images.some(Boolean); },
     leftExtent: EXTENTS.left, rightExtent: EXTENTS.right
   };

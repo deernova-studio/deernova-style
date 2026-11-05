@@ -1,5 +1,6 @@
 import { TAU, clamp, mix, hash, fbm, gray as neutral, ease } from './math.js';
 import { pigment } from './color.js';
+import { createPlaces } from './scenery-places.js';
 
 // Scene layers own their cached galaxy and stars; resizing rebuilds these once.
 export function createScenery(f, { colored = false } = {}) {
@@ -8,9 +9,11 @@ export function createScenery(f, { colored = false } = {}) {
   const galaxy = document.createElement('canvas');
   const gx = galaxy.getContext('2d');
   let W = 0, H = 0, cell = 6, cols = 0, rows = 0, stars = [];
+  const places = createPlaces(f, { gray, each, fillSky, hills, blades, glow });
 
   function resize(layout) {
     ({ W, H, cell, cols, rows } = layout);
+    places.resize(layout);
     stars = [];
     for (let i = 0; i < Math.round((W * H) / 9000); i++) {
       const b = hash(i * 1.91 + 5);
@@ -28,7 +31,8 @@ export function createScenery(f, { colored = false } = {}) {
   }
   function fillSky(top, bottom, y1) {
     const g = f.createLinearGradient(0, 0, 0, y1);
-    const sky = { meadow: 'sky', forest: 'forest', snow: 'cloud', night: 'night', desert: 'dusk' }[material];
+    const sky = { meadow: 'sky', forest: 'forest', snow: 'cloud', night: 'night', desert: 'dusk',
+      city: 'city', factory: 'cloud', coast: 'sky', rice: 'sky' }[material];
     g.addColorStop(0, gray(top, 1, sky));
     g.addColorStop(1, gray(bottom, 1, sky));
     f.fillStyle = g;
@@ -569,7 +573,7 @@ export function createScenery(f, { colored = false } = {}) {
 
   const SCENE = {
     meadow: [meadow, meadowFront], forest: [forest, forestFront], snow: [snow, snowFront],
-    night: [night], desert: [desert, desertFront]
+    night: [night], desert: [desert, desertFront], ...places.scenes
   };
 
   return {

@@ -44,8 +44,8 @@ test('a landing stays attached to the ground, stays low, and never expands into 
   });
 });
 
-test('grass, night, seeks and first paint produce no artificial trail', () => {
-  for (const scene of ['meadow', 'forest', 'night']) {
+test('landscapes without snow or dunes, seeks and first paint produce no artificial trail', () => {
+  for (const scene of ['meadow', 'forest', 'night', 'city', 'factory', 'coast', 'rice']) {
     const steps = createFootsteps(contacts);
     steps.update(sample(0, 0, { scene }));
     steps.update(sample(0.21, 0.21, { scene }));

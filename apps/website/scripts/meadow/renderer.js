@@ -140,7 +140,7 @@ export function createRenderer(stage, canvas, { raw = false, still = false } = {
         drawStag();
       }
       split(scene => { footsteps.draw(target, v, scene); landscape.drawFront(scene, v); });
-      effects.draw(sim.clock, target);
+      effects.draw(sim.clock, target, target === p);
     }
     paint(f, scenery, () => stag.draw(pose.weights, animalX, groundY, S));
     print(cut.to ? line : null, sim.clock);

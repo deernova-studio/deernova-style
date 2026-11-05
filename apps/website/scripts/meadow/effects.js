@@ -1,9 +1,12 @@
 import { TAU, ease, gray, hash } from './math.js';
+import { pigment } from './color.js';
+import { drawGull } from './gull.js';
 
 // What a click in the sky sets off, one kind per scene. Effects are painted into the gray field like everything
 // else, so they print as dots. They run on the playback clock, so they pause with it.
-export const EFFECT_FOR = { meadow: 'gust', forest: 'leaves', snow: 'flurry', night: 'meteors', desert: 'sand' };
-const DURATION = { gust: 2, leaves: 2.8, flurry: 2.4, meteors: 1.8, sand: 2.2 };
+export const EFFECT_FOR = { meadow: 'gust', forest: 'leaves', snow: 'flurry', night: 'meteors', desert: 'sand',
+  rice: 'gust', city: 'lights', factory: 'steam', coast: 'gulls' };
+const DURATION = { gust: 2, leaves: 2.8, flurry: 2.4, meteors: 1.8, sand: 2.2, gulls: 2.8, steam: 2.8, lights: 2.8 };
 const LIMIT = 6;
 
 export function createEffects(f) {
@@ -156,14 +159,66 @@ export function createEffects(f) {
     f.fill();
   }
 
-  const DRAW = { gust, leaves, flurry, meteors, sand };
+  function gulls(f, e, age) {
+    const fade = ease(0, 0.15, age) * (1 - ease(1.8, 2.8, age));
+    for (let k = 0; k < 7; k++) {
+      const r = hash(e.seed + k * 7), a = Math.max(0, age - k * 0.045);
+      const x = e.x + a * W * (0.1 + r * 0.12) + (r - 0.5) * W * 0.08;
+      const y = e.y - a * H * (0.08 + hash(k + e.seed) * 0.1) - Math.sin(Math.min(a, 1) * Math.PI / 2) * H * 0.06;
+      drawGull(f, x, y, cell * (4.2 + r * 2.2), a * 6 + k, fade);
+    }
+  }
 
-  function draw(clock, target = f) {
+  function lights(f, e, age, colored) {
+    const fade = ease(0, 0.2, age) * (1 - ease(1.4, 2.8, age));
+    const tint = (light, alpha, material) => colored ? pigment(light, material, alpha) : gray(light, alpha);
+    const radius = Math.min(W, H) * 0.18;
+    f.globalCompositeOperation = 'screen';
+    const halo = f.createRadialGradient(e.x, e.y, 0, e.x, e.y, radius);
+    halo.addColorStop(0, tint(0.95, fade * 0.65, 'neonCyan'));
+    halo.addColorStop(0.2, tint(0.65, fade * 0.26, 'neonCyan'));
+    halo.addColorStop(1, tint(0.5, 0, 'neonCyan'));
+    f.fillStyle = halo; f.fillRect(e.x - radius, e.y - radius, radius * 2, radius * 2);
+    for (const side of [-1, 1]) {
+      const material = side < 0 ? 'neonCyan' : 'neonRose';
+      const tipX = e.x + side * W * 0.1 + Math.sin(age * 0.8 + side * 0.6) * W * 0.09;
+      const tipY = e.y - H * 0.6, spread = W * 0.095;
+      const beam = f.createLinearGradient(e.x, e.y, tipX, tipY);
+      beam.addColorStop(0, tint(1, fade * 0.42, material));
+      beam.addColorStop(0.25, tint(0.8, fade * 0.2, material));
+      beam.addColorStop(1, tint(0.6, 0, material));
+      f.fillStyle = beam;
+      f.beginPath(); f.moveTo(e.x, e.y); f.lineTo(tipX - spread, tipY);
+      f.lineTo(tipX + spread, tipY); f.closePath(); f.fill();
+    }
+    const length = radius * 1.45, flare = f.createLinearGradient(e.x - length, e.y, e.x + length, e.y);
+    flare.addColorStop(0, tint(0.7, 0, 'neonRose'));
+    flare.addColorStop(0.5, tint(1, fade * 0.9, 'neonCyan'));
+    flare.addColorStop(1, tint(0.7, 0, 'neonCyan'));
+    f.strokeStyle = flare; f.lineWidth = Math.max(1.5, cell * 0.65);
+    f.beginPath(); f.moveTo(e.x - length, e.y); f.lineTo(e.x + length, e.y); f.stroke();
+  }
+
+  function steam(f, e, age) {
+    const fade = ease(0, 0.2, age) * (1 - ease(1.4, 2.8, age));
+    for (let k = 0; k < 9; k++) {
+      const r = hash(e.seed + k), a = Math.max(0, age - k * 0.055);
+      const radius = cell * (2 + a * (5 + r * 3));
+      const x = e.x - a * W * 0.07 + Math.sin(a * 2 + k) * cell * 2;
+      const y = e.y - a * H * (0.08 + r * 0.05);
+      f.fillStyle = gray(k % 3 ? 0.86 : 0.54, fade * 0.35);
+      f.beginPath(); f.ellipse(x, y, radius * 1.4, radius, -0.3, 0, TAU); f.fill();
+    }
+  }
+
+  const DRAW = { gust, leaves, flurry, meteors, sand, gulls, steam, lights };
+
+  function draw(clock, target = f, colored = false) {
     for (const e of list) {
       const age = clock - e.t0;
       if (age < 0 || age > DURATION[e.kind]) continue;
       target.save();
-      DRAW[e.kind](target, e, age);
+      DRAW[e.kind](target, e, age, colored);
       target.restore();
     }
   }

@@ -1,0 +1,78 @@
+{
+  "scenes": {
+    "rice": {
+      "baseline": {
+        "callbacks": 70,
+        "fps": 60,
+        "medianDrawMs": 7.199999988079071,
+        "p95DrawMs": 8.099999994039536
+      },
+      "color": {
+        "callbacks": 51,
+        "fps": 60.002400096003825,
+        "medianDrawMs": 7.5,
+        "p95DrawMs": 7.800000011920929
+      },
+      "coloredPixels": 1016451
+    },
+    "city": {
+      "baseline": {
+        "callbacks": 73,
+        "fps": 60,
+        "medianDrawMs": 5.199999988079071,
+        "p95DrawMs": 5.5999999940395355
+      },
+      "color": {
+        "callbacks": 50,
+        "fps": 59.997551120362445,
+        "medianDrawMs": 5.299999997019768,
+        "p95DrawMs": 5.4000000059604645
+      },
+      "coloredPixels": 738130
+    },
+    "factory": {
+      "baseline": {
+        "callbacks": 73,
+        "fps": 60,
+        "medianDrawMs": 4.5,
+        "p95DrawMs": 5
+      },
+      "color": {
+        "callbacks": 50,
+        "fps": 60.004898359049726,
+        "medianDrawMs": 4.600000008940697,
+        "p95DrawMs": 5
+      },
+      "coloredPixels": 250733
+    },
+    "coast": {
+      "baseline": {
+        "callbacks": 74,
+        "fps": 59.998356209418915,
+        "medianDrawMs": 5,
+        "p95DrawMs": 5.700000002980232
+      },
+      "color": {
+        "callbacks": 50,
+        "fps": 60.004898359049726,
+        "medianDrawMs": 5,
+        "p95DrawMs": 5.800000011920929
+      },
+      "coloredPixels": 1004029
+    }
+  },
+  "transitions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "runtimeErrors": [],
+  "reducedMotionScene": "night",
+  "mobileScenes": 4
+}

@@ -1,5 +1,5 @@
 import { createRenderer } from './meadow/renderer.js';
-import { createPlayback } from './meadow/timeline.js';
+import { createPlayback, STILL_TIME } from './meadow/timeline.js';
 
 // Browser lifecycle and input only. Rendering, scenery, effects, the stag and its clock live in separate
 // modules. ?t= pins a moment (add &play to keep it running), ?halftone=0 shows the gray painting.
@@ -13,7 +13,7 @@ if (canvas) {
   const still = reduced || (Number.isFinite(pinned) && !query.has('play'));
   const renderer = createRenderer(stage, canvas, { raw: query.get('halftone') === '0', still });
   const playback = createPlayback({
-    start: Number.isFinite(pinned) ? pinned : reduced ? 28.6 : 0,
+    start: Number.isFinite(pinned) ? pinned : reduced ? STILL_TIME : 0,
     render: renderer.render
   });
   let onScreen = true, assetsSettled = false;

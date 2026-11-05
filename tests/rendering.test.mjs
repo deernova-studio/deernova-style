@@ -5,7 +5,8 @@ import { runInNewContext } from 'node:vm';
 import { ATLASES, FRAMES, FRAME_COUNT, FRAME_SIZE, UNIT, WALK_RATE, poseAt } from '../apps/website/scripts/meadow/cycle.js';
 import { loadAtlas, createStagRenderer } from '../apps/website/scripts/meadow/stag.js';
 import { createRenderer } from '../apps/website/scripts/meadow/renderer.js';
-import { createPlayback } from '../apps/website/scripts/meadow/timeline.js';
+import { createPlayback, SCENES, SEGMENT, STILL_TIME } from '../apps/website/scripts/meadow/timeline.js';
+import { EFFECT_FOR } from '../apps/website/scripts/meadow/effects.js';
 
 function globalFor(t, name, value) {
   const original = Object.getOwnPropertyDescriptor(globalThis, name);
@@ -191,7 +192,7 @@ async function mount(t, { reduced = false, search = '', rendererFactory = create
   const source = (await readFile('apps/website/scripts/meadow.js', 'utf8'))
     .replace(/^import .*;\n/gm, '').replaceAll('import.meta.hot', 'hot');
   runInNewContext(source, {
-    document: doc, location: { search }, URLSearchParams,
+    document: doc, location: { search }, URLSearchParams, STILL_TIME,
     matchMedia: query => ({ matches: query.includes('reduced-motion') && reduced, addEventListener() {} }),
     IntersectionObserver: class { observe() {} }, ResizeObserver: class { observe() {} },
     hot: { on: (name, listener) => hooks.set(name, listener) },
@@ -300,9 +301,11 @@ test('deer hit testing follows the blended alpha, including gaps and scaled coor
 
 test('deer clicks reveal colour while surrounding clicks keep every scene effect', async t => {
   const view = await mount(t), renderer = view.renderer;
-  const effects = ['gust', 'leaves', 'flurry', 'meteors', 'sand'];
+  assert.equal(EFFECT_FOR.city, 'lights');
+  assert.equal(EFFECT_FOR.coast, 'gulls', 'the coast has its own white gull effect, not city lighting');
+  const effects = SCENES.map(scene => EFFECT_FOR[scene]);
   for (let i = 0; i < effects.length; i++) {
-    const clock = i * 8.4 + 1;
+    const clock = i * SEGMENT + 1;
     renderer.render({ clock, t: clock, lap: 0 });
     assert.equal(renderer.interact(150, 300, clock), 'color');
     assert.equal(renderer.interact(1, 1, clock), effects[i]);
@@ -320,9 +323,10 @@ test('deer clicks reveal colour while surrounding clicks keep every scene effect
       near(rendered[n].alpha, weight, 1e-9);
     });
   }
-  renderer.render({ clock: 7.6, t: 7.6, lap: 0 });
-  assert.equal(renderer.interact(1, 1, 7.6), 'gust');
-  assert.equal(renderer.interact(319, 1, 7.6), 'leaves', 'scene wipes keep separate effects on each side');
+  const transition = 3 * SEGMENT - 0.8;
+  renderer.render({ clock: transition, t: transition, lap: 0 });
+  assert.equal(renderer.interact(1, 1, transition), 'lights');
+  assert.equal(renderer.interact(319, 1, transition), 'steam', 'scene wipes keep separate effects on each side');
 });
 
 test('mouse, keyboard and assistive activation colour the scene without changing the playback clock', async t => {

@@ -1,0 +1,50 @@
+{
+  "scenes": {
+    "city": {
+      "baseline": {
+        "callbacks": 66,
+        "fps": 60.00184621065264,
+        "medianDrawMs": 7,
+        "p95DrawMs": 7.4000000059604645
+      },
+      "colorWithInteraction": {
+        "callbacks": 48,
+        "fps": 60.01021450459654,
+        "medianDrawMs": 7.700000002980232,
+        "p95DrawMs": 8.100000008940697
+      },
+      "interaction": "lights",
+      "coloredPixels": 782651
+    },
+    "coast": {
+      "baseline": {
+        "callbacks": 72,
+        "fps": 60.00676132521974,
+        "medianDrawMs": 4.800000011920929,
+        "p95DrawMs": 5.200000002980232
+      },
+      "colorWithInteraction": {
+        "callbacks": 50,
+        "fps": 60.004898359049726,
+        "medianDrawMs": 5,
+        "p95DrawMs": 5.200000002980232
+      },
+      "interaction": "gulls",
+      "coloredPixels": 1001958
+    }
+  },
+  "transitions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "runtimeErrors": [],
+  "reducedMotionScene": "night",
+  "mobileScenes": 2
+}

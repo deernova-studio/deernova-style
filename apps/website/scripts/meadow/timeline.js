@@ -1,11 +1,12 @@
 import { ease } from './math.js';
 
-// ---- The run, in seconds of the loop ----
-// Five scenes of 8.4 s each: meadow, forest, snow mountains, night, desert, and back to the meadow. Each scene
-// hands over in its last 1.6 s with a wipe that brings the next one in from ahead of the stag.
-export const SCENES = ['meadow', 'forest', 'snow', 'night', 'desert'];
-export const LOOP = 42;
-const SEGMENT = LOOP / SCENES.length, WIPE = 1.6;
+// Keep each visit at 8.4 s as the route grows. Its last 1.6 s brings the next
+// place in from ahead of the stag, without changing the animal's clock.
+export const SCENES = ['meadow', 'rice', 'city', 'factory', 'coast', 'forest', 'snow', 'night', 'desert'];
+export const SEGMENT = 8.4;
+export const LOOP = SEGMENT * SCENES.length;
+export const STILL_TIME = SCENES.indexOf('night') * SEGMENT + 3.4;
+const WIPE = 1.6;
 const CUTS = SCENES.map((_, i) => [(i + 1) * SEGMENT - WIPE, (i + 1) * SEGMENT]);
 
 export function shot(t) {

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { LOOP, SCENES, shot, createPlayback } from '../apps/website/scripts/meadow/timeline.js';
+import { LOOP, SCENES, SEGMENT, STILL_TIME, shot, createPlayback } from '../apps/website/scripts/meadow/timeline.js';
 import { readFile } from 'node:fs/promises';
 import {
   WALK_RATE, WALK_SPEED, FRAME_COUNT, FRAMES, FRAME_SIZE, ORIGIN, PHASES, KEYS, EXTENTS, ATLASES,
@@ -38,8 +38,11 @@ const phaseOf = weights => {
 };
 const wrapped = x => x - Math.floor(x);
 
-test('the run passes meadow, forest, snow, night and desert, then returns to the meadow', () => {
-  assert.deepEqual(SCENES, ['meadow', 'forest', 'snow', 'night', 'desert']);
+test('the walk visits all nine landscapes at the original pace and returns to the meadow', () => {
+  assert.deepEqual(SCENES, ['meadow', 'rice', 'city', 'factory', 'coast', 'forest', 'snow', 'night', 'desert']);
+  near(SEGMENT, 8.4);
+  near(LOOP, 75.6);
+  assert.deepEqual(shot(STILL_TIME), { from: 'night', wipe: 0 }, 'reduced motion retains its quiet night scene');
   assert.deepEqual(shot(0), { from: 'meadow', wipe: 0 });
   const segment = LOOP / SCENES.length;
   for (let i = 0; i < SCENES.length; i++) {

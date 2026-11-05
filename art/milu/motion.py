@@ -56,6 +56,16 @@ def atlas_frames(meta, directory):
 
 def footfalls(frames, meta, offsets):
     """Find new ground contacts that persist, ignoring single-frame edge noise."""
+    if meta.get('gait'):
+        gait = meta['gait']
+        # Occlusion can hide a landing, and the painted sole can touch the
+        # sampling band before the foot is down. Use the authored contacts
+        # when available, not extra events inferred from those pixel edges.
+        distances = np.broadcast_to(gait['distance'], (4,))
+        return sorted([{'phase': phase,
+                        'x': round((centre + distance / 2 - gait['origin']) / gait['unit'], 4)}
+                       for phase, centre, distance in zip(gait['landings'], gait['centres'], distances)],
+                      key=lambda e: e['phase'])
     ground = round(meta['origin'][1])
     contacts = []
     for frame, offset in zip(frames, offsets):

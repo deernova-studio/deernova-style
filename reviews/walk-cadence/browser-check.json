@@ -1,0 +1,15 @@
+{
+  "baseline": {
+    "callbacks": 171,
+    "fps": 60.00282366228999,
+    "medianDrawMs": 7.299999997019768,
+    "p95DrawMs": 7.700000002980232
+  },
+  "color": {
+    "callbacks": 175,
+    "fps": 56.13265371959482,
+    "medianDrawMs": 7.4000000059604645,
+    "p95DrawMs": 7.9000000059604645
+  },
+  "runtimeErrors": []
+}

@@ -56,7 +56,10 @@ class ConnectedBodyTests(unittest.TestCase):
         lock = json.loads((bake.HERE / baseline).read_text())
         self.assertEqual(meta['bodyMotion'], lock['bodyMotion'])
         self.assertEqual(meta['unit'], lock['unit'])
-        self.assertEqual(meta['rate'] * meta['halves'], lock['halfStrideRate'])
+        # The reference changes stride duration, not the accepted upper-body
+        # path. Compare every pose's original pixels at the same stride phase.
+        spec = json.loads((bake.HERE / 'drawings.json').read_text())
+        self.assertEqual(meta['rate'], spec['rate'])
         self.assertEqual(len(meta['phases']), len(lock['sha256']) * meta['halves'])
         origin = np.floor(meta['origin']).astype(int)
         for i, frame in enumerate(atlas_frames(meta, bake.SITE / 'assets')):

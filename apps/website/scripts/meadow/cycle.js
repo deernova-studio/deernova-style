@@ -1,14 +1,14 @@
-// The walk is baked offline (art/milu/bake.py). Measured limb paths guide the
-// in-betweens; runtime samples the resulting complete-animal frames continuously.
+// The walk is baked offline (art/milu/bake.py). One gait drives all four limbs;
+// runtime samples the resulting complete-animal frames continuously.
 // The loop contains both halves of a stride so near/far leg identities and their
 // occlusion order stay consistent through crossings and the loop seam.
-// Baking at twice the playback rate keeps adjacent samples close, including when
+// Baking above the playback rate keeps adjacent samples close, including when
 // display callbacks arrive between frame boundaries.
 import { clamp, wrap } from './math.js';
 import { STRIDE } from './stride.js';
 
 export const WALK_RATE = STRIDE.rate;   // full strides per second
-// Ground speed is estimated from the planted-hoof tracks in the baked drawings.
+// Ground speed matches the common planted-hoof velocity used by the bake.
 export const WALK_SPEED = STRIDE.groundSpeed;
 export const FRAME_COUNT = STRIDE.phases.length;
 // Every frame shares one size and one torso origin (frame pixels); UNIT is frame pixels per scene unit.

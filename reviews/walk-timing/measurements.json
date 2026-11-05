@@ -1,0 +1,78 @@
+{
+  "before": [
+    {
+      "leg": "far hind",
+      "groundVelocityPercentiles": [
+        57.97,
+        85.08,
+        429.25
+      ],
+      "maximumLift": 52.0
+    },
+    {
+      "leg": "near hind",
+      "groundVelocityPercentiles": [
+        57.97,
+        85.08,
+        429.25
+      ],
+      "maximumLift": 52.0
+    },
+    {
+      "leg": "far fore",
+      "groundVelocityPercentiles": [
+        7.52,
+        100.85,
+        509.42
+      ],
+      "maximumLift": 36.0
+    },
+    {
+      "leg": "near fore",
+      "groundVelocityPercentiles": [
+        7.52,
+        100.85,
+        509.42
+      ],
+      "maximumLift": 36.0
+    }
+  ],
+  "after": [
+    {
+      "leg": "far hind",
+      "groundVelocityPercentiles": [
+        90.44,
+        90.44,
+        90.44
+      ],
+      "maximumLift": 26.0
+    },
+    {
+      "leg": "near hind",
+      "groundVelocityPercentiles": [
+        90.44,
+        90.44,
+        90.44
+      ],
+      "maximumLift": 26.0
+    },
+    {
+      "leg": "far fore",
+      "groundVelocityPercentiles": [
+        90.44,
+        90.44,
+        90.44
+      ],
+      "maximumLift": 24.0
+    },
+    {
+      "leg": "near fore",
+      "groundVelocityPercentiles": [
+        90.44,
+        90.44,
+        90.44
+      ],
+      "maximumLift": 24.0
+    }
+  ]
+}

@@ -142,16 +142,13 @@ test('changing display refresh rate and resuming after a stall do not cause catc
 });
 
 
-test('the baked walk steps evenly through its drawings', async () => {
+test('the baked gait samples one coordinated stride evenly', async () => {
   const spec = JSON.parse(await readFile(new URL('../art/milu/drawings.json', import.meta.url), 'utf8'));
   assert.equal(FRAME_COUNT, spec.frames);
   near(WALK_RATE, spec.rate);
-  const sum = spec.drawings.reduce((total, d) => total + d.duration, 0);
-  let start = 0;
-  for (const d of spec.drawings) {
-    near(KEYS[d.source], start, 1e-5);
-    start += d.duration / sum / spec.halves;
-  }
+  assert.deepEqual(KEYS, {}, 'retimed limbs do not reproduce any whole source drawing');
+  assert.ok(FRAMES.every(frame => frame.source === null));
+  assert.deepEqual(STRIDE.gait.landings, spec.gait.landings);
   assert.equal(PHASES.length, FRAME_COUNT + 1);
   for (let i = 0; i < FRAME_COUNT; i++) {
     near(PHASES[i], i / FRAME_COUNT, 1e-6);
@@ -162,7 +159,7 @@ test('the baked walk steps evenly through its drawings', async () => {
   assert.equal(new Set(FRAMES.map(frame => `${frame.atlas}:${frame.rect}`)).size, FRAME_COUNT);
 });
 
-test('walking and slowing sample neighbouring frames continuously, including the loop seam', () => {
+test('gait playback and slowing sample neighbouring frames continuously, including the loop seam', () => {
   for (const speed of [0, 0.1, WALK_RATE / 2, WALK_RATE, WALK_RATE * 1.01]) {
     let previous = null;
     for (let n = 0; n <= 4800; n++) {
@@ -180,8 +177,8 @@ test('walking and slowing sample neighbouring frames continuously, including the
   }
 });
 
-test('walking samples the actual timestamp without rounding or holding poses', () => {
-  assert.ok(WALK_RATE * FRAME_COUNT >= 120, 'motion samples oversample the 60 Hz player');
+test('gait playback samples the actual timestamp without rounding or holding poses', () => {
+  assert.ok(WALK_RATE * FRAME_COUNT >= 90, 'motion samples oversample the 60 Hz player even at the slower reference pace');
   for (const offset of [0, 0.13, 0.49, 0.77]) {
     for (let n = 0; n < 120; n++) {
       const time = (n + offset) / 60 + (n % 2 ? 0.0001 : -0.0001);
@@ -194,10 +191,18 @@ test('walking samples the actual timestamp without rounding or holding poses', (
   }
 });
 
-test('the walk always stands on the ground line, and the ground moves with the planted hooves', () => {
+test('the walk keeps ground contact and matches the planted-hoof speed', () => {
+  assert.equal(STRIDE.gait.model, 'reference-walk-v1');
   for (const frame of FRAMES) near(ORIGIN[1] - frame.bounds[3], 0, 2);
   near(WALK_SPEED, STRIDE.groundSpeed);
-  assert.ok(WALK_SPEED > 0.2 && WALK_SPEED < 2, 'a walk, slower than the old run at 3.6');
+  near(WALK_SPEED, STRIDE.gait.groundTravel / STRIDE.gait.unit * WALK_RATE, .00005);
+  for (let leg = 0; leg < 4; leg++) {
+    near(STRIDE.gait.distance[leg] / STRIDE.gait.stance[leg], STRIDE.gait.groundTravel);
+    const contact = STRIDE.footfalls.find(event => event.phase === STRIDE.gait.landings[leg]);
+    near(contact.x, (STRIDE.gait.centres[leg] + STRIDE.gait.distance[leg] / 2 - STRIDE.gait.origin) / STRIDE.gait.unit, .00005);
+  }
+  assert.deepEqual(STRIDE.footfalls.map(event => event.phase), [0, .15, .5, .65]);
+  assert.ok(WALK_SPEED > 0.2 && WALK_SPEED < 1, 'keep the walking pace');
 });
 
 test('every frame fits its grayscale atlas and shares one origin', async () => {
@@ -220,7 +225,7 @@ test('every frame fits its grayscale atlas and shares one origin', async () => {
   assert.ok(EXTENTS.left > 0.8 && EXTENTS.left < 2 && EXTENTS.right > 0.8 && EXTENTS.right < 2);
 });
 
-test('walking phase and planted-hoof travel remain tied to elapsed time', () => {
+test('stride phase and planted-hoof travel remain tied to elapsed time', () => {
   const gait = createGait(), dt = 1 / 60;
   for (let i = 0; i < 600; i++) {
     const time = i * dt, pose = gait.pose(time);

@@ -10,6 +10,7 @@ import json
 import cv2
 import numpy as np
 from skin import ConnectedSkin
+from walk import WalkCycle
 
 
 def load_guides(path, drawings, source_dir, size, origin, unit):
@@ -92,7 +93,7 @@ def over(front, back):
 
 
 class LayeredLegs:
-    def __init__(self, frames, points, starts, swap, xx, yy, smooth, remap, reference=0):
+    def __init__(self, frames, points, starts, swap, xx, yy, smooth, remap, reference=0, gait=None):
         self.points, self.starts, self.swap = np.asarray(points, dtype=float), starts, swap
         self.xx, self.yy, self.remap = xx, yy, remap
         self.height, self.width = xx.shape
@@ -126,6 +127,13 @@ class LayeredLegs:
         # measurements. The old midpoint marker made the tibia too short.
         self.hind_lengths = np.quantile(np.linalg.norm(np.diff(points[:, :2, 1:4], axis=2), axis=-1), .9, axis=(0, 1))
         self.floor = float(self.points[..., 4, 1].max())
+        self.walk = WalkCycle(gait, self.floor) if gait else None
+        # The partly hidden far foreleg cannot supply a separate shorter rig.
+        # Share its lower bone lengths, with upper lengths adjusted for the
+        # higher near shoulder and slight foreshortening of the reference.
+        self.fore_lengths = np.linalg.norm(np.diff(self.source[3, 1:4], axis=0), axis=-1)
+        self.fore_upper = (np.linalg.norm(self.source[3, 1] - self.source[3, 0]) + 4
+                           + self.source[3, 0, 1] - self.source[2:, 0, 1])
 
     def distance(self, path):
         dist = np.full_like(self.xx, np.inf)
@@ -136,38 +144,66 @@ class LayeredLegs:
         return np.sqrt(dist)
 
     def pose(self, index, t):
-        target = sample_pose(self.points, self.starts, self.swap, index, t).astype(float)
+        if self.walk:
+            lap, key = divmod(index, len(self.points))
+            phase = (lap + self.starts[key] + t * (self.starts[key + 1] - self.starts[key])) / 2
+            target = self.source.copy()
+            target[:, 4] = self.walk.feet(phase)
+            thighs = self.walk.thigh_angles(phase)
+        else:
+            target = sample_pose(self.points, self.starts, self.swap, index, t).astype(float)
         target[:, 0] = self.source[:, 0]
-        for leg in (0, 1):
-            upper = target[leg, 1] - target[leg, 0]
-            length = np.linalg.norm(self.source[leg, 1] - self.source[leg, 0])
-            target[leg, 1] = target[leg, 0] + upper / np.linalg.norm(upper) * length
+        if not self.walk:
+            for leg in (0, 1):
+                upper = target[leg, 1] - target[leg, 0]
+                length = np.linalg.norm(self.source[leg, 1] - self.source[leg, 0])
+                target[leg, 1] = target[leg, 0] + upper / np.linalg.norm(upper) * length
         for leg, source in enumerate(self.template_ids):
             # Keep the toe track, including ground contacts. Rotate a constant
             # hoof shape instead of shrinking the foot during a swing.
-            toe = target[leg, 4] - target[leg, 3]
             planted = self.source[source, 4] - self.source[source, 3]
             length = np.linalg.norm(planted)
-            landing = np.clip((target[leg, 4, 1] - (self.floor - 12)) / 12, 0, 1)
-            landing = landing * landing * (3 - 2 * landing)
-            direction = (1 - landing) * toe / np.linalg.norm(toe) + landing * planted / length
+            if self.walk:
+                u = self.walk.swing(phase)[leg]
+                angle = np.deg2rad(35 if leg < 2 else 40) * self.walk.clearance(u)
+                rotation = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]])
+                direction = rotation @ planted / length
+            else:
+                toe = target[leg, 4] - target[leg, 3]
+                landing = np.clip((target[leg, 4, 1] - (self.floor - 12)) / 12, 0, 1)
+                landing = landing * landing * (3 - 2 * landing)
+                direction = (1 - landing) * toe / np.linalg.norm(toe) + landing * planted / length
             # Set the sole down smoothly. Once planted it translates with the
             # ground instead of rocking on its toe or hovering between contacts.
             target[leg, 3] = target[leg, 4] - direction / np.linalg.norm(direction) * length
-            if leg >= 2:
+            if leg >= 2 and not self.walk:
                 continue
+            if self.walk:
+                upper = (np.linalg.norm(self.source[leg, 1] - self.source[leg, 0])
+                         if leg < 2 else self.fore_upper[leg - 2])
+                if leg >= 2:
+                    # Aim the upper foreleg along its reach. Keeping the old
+                    # cubic shoulder sweep here held the elbow behind the
+                    # chest, forcing an exaggerated corner at the carpus.
+                    reach = target[leg, 3] - target[leg, 0]
+                    angle = np.arctan2(reach[1], reach[0]) + np.deg2rad(4 - 7 * self.walk.clearance(u))
+                else:
+                    angle = thighs[leg]
+                direction = np.array([np.cos(angle), np.sin(angle)])
+                target[leg, 1] = target[leg, 0] + direction * upper
             a, b = target[leg, 1], target[leg, 3]
-            first, second = self.hind_lengths
+            first, second = self.hind_lengths if leg < 2 else self.fore_lengths
             delta = b - a
             distance = np.linalg.norm(delta)
             if not abs(first - second) < distance < first + second:
-                raise ValueError('Hind leg cannot reach its hoof: revise the measured path')
+                raise ValueError(f'Leg {leg} cannot reach its hoof ({distance:.2f} / {first + second:.2f}): revise the walking path')
             direction = delta / distance
             along = (first**2 - second**2 + distance**2) / (2 * distance)
             height = np.sqrt(max(0, first**2 - along**2))
             # Always the same bending side; choosing a new IK branch at a
             # crossing would flip the hock through the other leg.
-            target[leg, 2] = a + direction * along + np.array([-direction[1], direction[0]]) * height
+            side = 1 if leg < 2 else -1
+            target[leg, 2] = a + direction * along + np.array([-direction[1], direction[0]]) * height * side
         return target
 
     def deform(self, layer, source, target):

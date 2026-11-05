@@ -1,7 +1,15 @@
 {
  "bodyReference": 101,
  "frames": 160,
- "rate": 0.75,
+ "rate": 0.625,
+ "gait": {
+  "stance": [0.55, 0.55, 0.6, 0.6],
+  "groundTravel": 135,
+  "landings": [0.5, 0, 0.15, 0.65],
+  "centres": [183, 190, 375, 367],
+  "lift": [26, 26, 24, 24],
+  "recovery": [0.22, 0.22, 0.12, 0.12]
+ },
  "alert": [
   101
  ],

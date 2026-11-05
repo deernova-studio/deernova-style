@@ -1,0 +1,50 @@
+{
+  "before": {
+    "strideSeconds": 1.3333333333333333,
+    "landingPhases": [
+      0.0,
+      0.25,
+      0.5,
+      0.75
+    ],
+    "swingSeconds": [
+      0.4267,
+      0.4267,
+      0.4267,
+      0.4267
+    ],
+    "peakHoofSpeedWorkingPixelsPerSecond": [
+      439.49,
+      439.49,
+      439.49,
+      439.49
+    ]
+  },
+  "after": {
+    "strideSeconds": 1.6,
+    "landingPhases": [
+      0.0,
+      0.15,
+      0.5,
+      0.65
+    ],
+    "swingSeconds": [
+      0.72,
+      0.72,
+      0.64,
+      0.64
+    ],
+    "peakHoofSpeedWorkingPixelsPerSecond": [
+      313.35,
+      313.35,
+      340.14,
+      340.14
+    ]
+  },
+  "checks": {
+    "python": 17,
+    "node": 63,
+    "upperBody": "All 160 phase samples retain the prior head, neck, torso-core and tail pixel hashes; only the common cycle duration changes.",
+    "reference": "Visual estimates and retargeting decisions: art/milu/reference-walk.json"
+  }
+}

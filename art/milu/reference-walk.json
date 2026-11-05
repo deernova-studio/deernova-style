@@ -1,0 +1,29 @@
+{
+  "source": "https://www.shutterstock.com/zh/video/clip-3978135683-deer-large-antlers-walking-gracefully-forest-clearing",
+  "kind": "Visual timing observations from the user's playing cartoon preview; not motion capture",
+  "observed": "2026-11-05",
+  "timebase": "Seconds in the 13.75-second local screen observation; these are not source-video timestamps",
+  "sampleIntervalSeconds": 0.1,
+  "strideSeconds": 1.6,
+  "visibleLandingWindowsSeconds": {
+    "nearHind": [12.4, 12.5],
+    "farFore": [12.6, 12.8],
+    "farHind": [13.2, 13.3],
+    "nearFore": [13.5, 13.6]
+  },
+  "observations": [
+    "Opposite legs repeat approximately half a stride apart.",
+    "Hind and opposite fore recover together for part of their swing, but contact is staggered.",
+    "The hind hoof lifts while still behind the pelvis, then advances and extends for landing.",
+    "The foreleg reaches forward through the shoulder; the elbow does not stay behind the chest.",
+    "Some ground contacts are ambiguous because of perspective, occlusion and the drawn foot shapes."
+  ],
+  "retargeting": [
+    "drawings.json is the authoritative playback configuration; these observations document its reference.",
+    "Use two staggered pairs at phases 0, 0.15, 0.5 and 0.65, not simultaneous paired impacts.",
+    "Keep two or three supporting hooves throughout; do not reproduce the reference's ambiguous floating soles.",
+    "Adapt stride length to our existing bone lengths. Use one ground velocity for all supporting hooves.",
+    "Keep the existing connected head/neck/trunk path at every pose; slow its common clock with the legs.",
+    "Retain our source illustration and skin. No stock-video image pixels are included in the homepage assets."
+  ]
+}

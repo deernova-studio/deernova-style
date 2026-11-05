@@ -1,0 +1,72 @@
+{
+  "strideSeconds": 1.3333333333333333,
+  "description": "Changes in upper-limb sweep direction per full stride; a forward and a backward sweep require two reversals.",
+  "before": [
+    {
+      "leg": "far hind",
+      "directionChanges": 6,
+      "angleRangeDegrees": [
+        56.98,
+        99.93
+      ]
+    },
+    {
+      "leg": "near hind",
+      "directionChanges": 6,
+      "angleRangeDegrees": [
+        72.72,
+        112.89
+      ]
+    },
+    {
+      "leg": "far fore",
+      "directionChanges": 4,
+      "angleRangeDegrees": [
+        83.98,
+        126.36
+      ]
+    },
+    {
+      "leg": "near fore",
+      "directionChanges": 4,
+      "angleRangeDegrees": [
+        80.86,
+        123.17
+      ]
+    }
+  ],
+  "after": [
+    {
+      "leg": "far hind",
+      "directionChanges": 2,
+      "angleRangeDegrees": [
+        68.76,
+        106.24
+      ]
+    },
+    {
+      "leg": "near hind",
+      "directionChanges": 2,
+      "angleRangeDegrees": [
+        68.76,
+        106.24
+      ]
+    },
+    {
+      "leg": "far fore",
+      "directionChanges": 2,
+      "angleRangeDegrees": [
+        79.59,
+        114.0
+      ]
+    },
+    {
+      "leg": "near fore",
+      "directionChanges": 2,
+      "angleRangeDegrees": [
+        79.59,
+        114.0
+      ]
+    }
+  ]
+}

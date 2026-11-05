@@ -2,6 +2,11 @@
 
 更新于 2026-11-05。
 
+## 安装命令分项目和全局（2026-11-06）
+
+- 规范页「文件与安装」、README 和 npm 包说明都列出两组命令：装进项目（`.agents` 或 `.claude`），以及装到全局（`--global --agent claude` 写到 `~/.claude/skills`，`--global` 写到 Codex 的 `$CODEX_HOME/skills`），全局的更新和检查带上同样的参数。
+- 命令列表放宽到 960，桌面上命令和说明各占一行；窄屏时命令在空格处折行，不再只露出前半段。1440 和 375 宽下检查过，没有溢出。
+
 ## 与 Paperlight 对照、规范页修整（2026-11-05）
 
 - 对照 `archive/Paperlight/` 与现行 skill：颜色、强调、纸面与线条、圆角、间距、SwiftUI 玻璃、iOS 尺寸和文案规则保持不变；v0.3.0 对标 Claude 桌面端时放宽了桌面档尺寸、AI 回答改无衬线、发丝线改 1px、Web 应用去掉玻璃。异同记在 [ARCHITECTURE.md](../ARCHITECTURE.md) 的「与 Paperlight 的关系」。

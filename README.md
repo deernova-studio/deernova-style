@@ -19,13 +19,22 @@ Deernova 的设计语言，写成一个给 AI agent 读的 skill。agent 在你�
 
 ## 在项目里使用
 
-在项目根目录运行：
+**装进项目**：在项目根目录运行。skill 跟着仓库走，团队共用，每个项目可以停在自己的版本上。
 
 ```sh
 npx @deernova/style@latest install                  # 写入 .agents/skills/deernova-style/
 npx @deernova/style@latest install --agent claude   # Claude Code：写入 .claude/skills/deernova-style/
-npx @deernova/style@latest update                   # 更新到最新版本
+npx @deernova/style@latest update                   # 更新到最新版本（安装时加了 --agent 的，这里也加上）
 npx @deernova/style@latest doctor                   # 检查是否安装、是否被改过、是否最新
+```
+
+**装到全局**：装到用户目录，所有项目都能用。
+
+```sh
+npx @deernova/style@latest install --global --agent claude   # Claude Code：写入 ~/.claude/skills/deernova-style/
+npx @deernova/style@latest install --global                  # Codex：写入 $CODEX_HOME/skills/deernova-style/（默认 ~/.codex）
+npx @deernova/style@latest update --global --agent claude    # 更新全局安装，参数和安装时一致
+npx @deernova/style@latest doctor --global --agent claude    # 检查全局安装
 ```
 
 然后直接告诉 agent：「参考 deernova-style，给这个应用做一个设置页。」

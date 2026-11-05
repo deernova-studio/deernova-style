@@ -282,18 +282,27 @@ export async function renderGuide(root) {
 
   nav.push('<p class="toc-group">资源</p><ol><li><a href="#resources">文件与安装</a></li><li><a href="#review">审查清单</a></li><li><a href="#tokens">全部变量</a></li></ol>');
   const downloads = DOWNLOADS.map(([file, text]) => `<li><a class="download" href="assets/${file}" download><code>${file}</code><span>${text}</span></a></li>`).join('');
-  const commands = [
+  const commandList = rows => rows.map(([command, text]) =>
+    `<li><code>${command}</code><span>${text}</span><button class="dn-button is-sm" type="button" data-copy="${command}"><span data-copy-label>复制</span></button></li>`).join('');
+  const projectCommands = commandList([
     ['npx @deernova/style@latest install', '写入项目的 .agents/skills/deernova-style/'],
-    ['npx @deernova/style@latest install --agent claude', 'Claude Code：写入 .claude/skills/deernova-style/'],
-    ['npx @deernova/style@latest update', '更新到最新版本'],
+    ['npx @deernova/style@latest install --agent claude', 'Claude Code：写入项目的 .claude/skills/deernova-style/'],
+    ['npx @deernova/style@latest update', '更新到最新版本；安装时加了 --agent 的，这里也加上'],
     ['npx @deernova/style@latest doctor', '检查是否安装、是否被改过、是否最新']
-  ].map(([command, text]) => `<li><code>${command}</code><span>${text}</span><button class="dn-button is-sm" type="button" data-copy="${command}"><span data-copy-label>复制</span></button></li>`).join('');
+  ]);
+  const globalCommands = commandList([
+    ['npx @deernova/style@latest install --global --agent claude', 'Claude Code：写入 ~/.claude/skills/deernova-style/'],
+    ['npx @deernova/style@latest install --global', 'Codex：写入 $CODEX_HOME/skills/deernova-style/（默认 ~/.codex）'],
+    ['npx @deernova/style@latest update --global --agent claude', '更新全局安装，参数和安装时一致'],
+    ['npx @deernova/style@latest doctor --global --agent claude', '检查全局安装']
+  ]);
   docs.push(`<section class="doc" id="resources" aria-labelledby="resources-title">
 <header class="doc-head"><h2 id="resources-title">文件与安装</h2></header>
 <div class="doc-body"><p>这一页的内容都来自 <code>skills/deernova-style/</code>：agent 读的是同一份 Markdown 和 <code>tokens.json</code>，所以页面和规范不会对不上。</p>
 <h3 id="resources-1">设计变量文件</h3><ul class="downloads">${downloads}</ul>
-<h3 id="resources-2">把 skill 装进项目</h3><ul class="commands">${commands}</ul>
-<p>装好后直接告诉 agent：「参考 deernova-style，给这个应用做一个设置页。」不想用 npm 时，也可以把 <code>skills/deernova-style/</code> 整个文件夹复制到项目的 skill 目录里。</p></div>
+<h3 id="resources-2">装进项目</h3><p>在项目根目录运行。skill 跟着仓库走：团队里谁拉代码都能读到同一份，每个项目可以停在自己的版本上。</p><ul class="commands">${projectCommands}</ul>
+<h3 id="resources-3">装到全局</h3><p>装到用户目录，在你所有的项目里都能用，不用每个项目装一遍。</p><ul class="commands">${globalCommands}</ul>
+<p>装好后直接告诉 agent：「参考 deernova-style，给这个应用做一个设置页。」不想用 npm 时，也可以把 <code>skills/deernova-style/</code> 整个文件夹复制到项目或用户目录的 skill 文件夹里。</p></div>
 </section>`);
   const review = await read(join(root, SKILL_DIR, 'references/review.md'));
   docs.push(docSection('references/review.md', review, tokens));

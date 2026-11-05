@@ -1,7 +1,8 @@
-/* Style guide: specimens first, the skill's words second. The page itself is a reading page;
-   the specimens inside it are app UI and follow the scene picked in the masthead. */
+/* Style guide: specimens first, the skill's words second. The page is documentation, so it reads in
+   the comfortable density (data-density on <html>); the specimens inside it are app UI and carry the
+   desktop density, or touch on a touch screen (scripts/guide.js). */
 html:has(body.guide-page) { --masthead: 52px; }
-body.guide-page { background: var(--surface); font-size: 14px; line-height: 1.6; }
+body.guide-page { background: var(--surface); font: var(--type-body); }
 
 /* Masthead */
 .guide-masthead { gap: var(--space-3); max-width: none; }
@@ -9,7 +10,7 @@ body.guide-page { background: var(--surface); font-size: 14px; line-height: 1.6;
 .masthead-product:hover .product-name { color: var(--ink-secondary); }
 
 /* Layout */
-.guide { display: grid; grid-template-columns: 232px minmax(0, 1fr); max-width: 1480px; margin: 0 auto; }
+.guide { display: grid; grid-template-columns: var(--sidebar-width) minmax(0, 1fr); max-width: 1480px; margin: 0 auto; }
 .toc { position: sticky; top: var(--masthead); align-self: start; max-height: calc(100vh - var(--masthead)); overflow: auto; padding: var(--space-5) var(--space-3) var(--space-10); border-right: 1px solid var(--rule); overscroll-behavior: contain; }
 .toc-details > summary { display: none; }
 .toc nav { display: grid; }
@@ -26,14 +27,14 @@ body.guide-page { background: var(--surface); font-size: 14px; line-height: 1.6;
 .doc { padding: var(--space-6) 0 var(--space-4); border-top: 1px solid var(--rule); }
 .doc:first-child { border-top: 0; }
 .doc-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-3); margin-bottom: var(--space-3); }
-.doc-head h2 { font-size: 22px; line-height: 28px; scroll-margin-top: calc(var(--masthead) + var(--space-4)); }
+.doc-head h2 { font: var(--type-title); scroll-margin-top: calc(var(--masthead) + var(--space-4)); }
 .doc-path { font: 11px/16px var(--font-mono); color: var(--ink-tertiary); }
 
 .doc-body > p, .doc-body > ul, .doc-body > ol { max-width: 760px; margin: 0 0 var(--space-3); }
 .doc-body > ul, .doc-body > ol, .overview-rules ol, .overview-rules ul { padding-left: 1.25em; }
 .doc-body > ul > li + li, .doc-body > ol > li + li, .overview-rules li + li { margin-top: 3px; }
 .doc-body li::marker { color: var(--ink-tertiary); }
-.doc-body > h3, .overview-grid h3 { margin: var(--space-5) 0 6px; font: 600 15px/22px var(--font-sans); letter-spacing: 0; scroll-margin-top: calc(var(--masthead) + var(--space-4)); }
+.doc-body > h3, .overview-grid h3 { margin: var(--space-5) 0 6px; font: var(--type-headline); letter-spacing: 0; scroll-margin-top: calc(var(--masthead) + var(--space-4)); }
 .doc-body > h4 { margin: var(--space-4) 0 var(--space-2); font: 600 13px/20px var(--font-sans); }
 .doc-body strong { font-weight: 600; }
 .doc-body a { text-decoration-color: var(--line-control); text-underline-offset: 3px; }
@@ -56,6 +57,7 @@ body.guide-page { background: var(--surface); font-size: 14px; line-height: 1.6;
 .token-table [data-col] { padding-left: 8px; font-variant-numeric: tabular-nums; }
 .summary-table tbody th { font-weight: 500; white-space: nowrap; }
 .summary-table td:last-child { color: inherit; }
+.scenes-table td:nth-child(2), .scenes-table td:nth-child(3) { white-space: nowrap; }
 
 /* Code samples: collapsed until asked for */
 .sample { margin: var(--space-2) 0; border: 1px solid var(--rule); border-radius: var(--radius-md); background: var(--surface-sunken); }
@@ -154,10 +156,10 @@ body.guide-page { background: var(--surface); font-size: 14px; line-height: 1.6;
 /* Overview */
 .doc-overview { padding-top: var(--space-6); }
 .overview-head { display: grid; gap: var(--space-2); margin-bottom: var(--space-2); }
-.overview-head h1 { font-size: 30px; line-height: 36px; }
-.lede { max-width: 760px; font-size: 15px; color: var(--ink-secondary); }
+.overview-head h1 { font: var(--type-display); letter-spacing: var(--type-display-tracking); }
+.lede { max-width: 760px; color: var(--ink-secondary); }
 .overview-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: var(--space-4) var(--space-10); }
-.overview-rules { font-size: 13.5px; }
+.overview-rules { font: var(--type-callout); }
 .overview-rules p { margin: 0; }
 
 /* Resources */
@@ -175,8 +177,10 @@ body.guide-page { background: var(--surface); font-size: 14px; line-height: 1.6;
 .guide-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2); padding-top: var(--space-5); border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--ink-secondary); }
 .guide-footer a { text-decoration-color: var(--line-control); text-underline-offset: 3px; }
 
-@media (max-width: 1200px) {
+/* Side by side only when the quick reference has room for its tables; otherwise they stack. */
+@media (max-width: 1560px) {
   .overview-grid { grid-template-columns: minmax(0, 1fr); }
+  .overview-rules { max-width: 760px; }
 }
 
 @media (max-width: 960px) {

@@ -44,6 +44,10 @@ const section = (markdown, heading) => markdown.match(new RegExp(`^## ${heading}
 
 // ---------- tables and specimens generated from tokens.json ----------
 
+// Specimens are app UI: they show the desktop density (the page script switches them to touch on touch
+// screens), while the page around them reads in the comfortable density of a documentation site.
+const APP = 'data-density="desktop"';
+
 function densityHead(tokens) {
   return tokens.densities.map(density => `<th data-col="${density.id}">${density.name}<span>${escape(density.scenes)}</span></th>`).join('');
 }
@@ -77,7 +81,7 @@ function summaryTable(tokens) {
 function scenesTable(tokens) {
   const name = id => tokens.densities.find(density => density.id === id).name;
   const rows = tokens.scenes.map(scene => `<tr><th scope="row"><a href="#${docId(scene.reference)}">${scene.name}</a></th><td data-col="${scene.density}">${name(scene.density)}</td><td>${scene.input}</td><td>${inline(scene.apply)}</td></tr>`);
-  return `<div class="table-wrap"><table class="token-table"><thead><tr><th>场景</th><th>密度</th><th>输入</th><th>怎么启用</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
+  return `<div class="table-wrap"><table class="token-table scenes-table"><thead><tr><th>场景</th><th>密度</th><th>输入</th><th>怎么启用</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
 }
 
 const inline = text => escape(text).replace(/`([^`]+)`/g, '<code>$1</code>');
@@ -97,7 +101,7 @@ function colorSpecimen(tokens) {
   const byName = Object.fromEntries(tokens.color.tokens.map(token => [token.name, token]));
   const known = new Set(COLOR_GROUPS.flatMap(([, names]) => names));
   const groups = [...COLOR_GROUPS, ['其他', tokens.color.tokens.map(token => token.name).filter(name => !known.has(name))]];
-  const out = ['<div class="specimen-panel">'];
+  const out = [`<div class="specimen-panel" ${APP}>`];
   for (const [title, names] of groups) {
     const present = names.filter(name => byName[name]);
     if (!present.length) continue;
@@ -130,23 +134,23 @@ function typeSpecimen(tokens) {
     return `<div class="type-row"><div class="type-meta"><code>${role.name}</code><span>${role.family} ${role.weight}</span></div>
 <div class="type-sample" style="font: var(--type-${role.name})${tracking}">${escape(role.sample)}</div><div class="type-values">${values}</div></div>`;
   });
-  return `<div class="specimen-panel type-ramp"><div class="type-row type-head"><span>角色</span><span>样例</span><div class="type-values">${tokens.densities.map(d => `<span data-col="${d.id}">${d.name}</span>`).join('')}</div></div>${rows.join('')}</div>`;
+  return `<div class="specimen-panel type-ramp" ${APP}><div class="type-row type-head"><span>角色</span><span>样例</span><div class="type-values">${tokens.densities.map(d => `<span data-col="${d.id}">${d.name}</span>`).join('')}</div></div>${rows.join('')}</div>`;
 }
 
 function spacingSpecimen(tokens) {
   const scale = tokens.space.tokens.filter(token => !isDensity(token)).map(token =>
     `<div class="scale-row"><code>${token.name}</code><span class="space-bar" style="width: var(--${token.name})"></span><span>${token.value}</span></div>`);
   const layout = tokens.layout.tokens.filter(isDensity);
-  return `<div class="specimen-panel"><div class="scale">${scale.join('')}</div></div>${tokenTable(tokens, [...tokens.space.tokens.filter(isDensity), ...layout])}`;
+  return `<div class="specimen-panel" ${APP}><div class="scale">${scale.join('')}</div></div>${tokenTable(tokens, [...tokens.space.tokens.filter(isDensity), ...layout])}`;
 }
 
 function radiusSpecimen(tokens) {
   const boxes = tokens.radius.tokens.map(token => `<figure class="radius-box"><span style="border-radius: var(--${token.name})"></span><figcaption><code>${token.name}</code> ${token.value}</figcaption></figure>`);
-  return `<div class="specimen-panel"><div class="radius-row">${boxes.join('')}</div></div>`;
+  return `<div class="specimen-panel" ${APP}><div class="radius-row">${boxes.join('')}</div></div>`;
 }
 
 function strokeSpecimen() {
-  return `<div class="specimen-panel"><div class="stroke-row">
+  return `<div class="specimen-panel" ${APP}><div class="stroke-row">
 <figure><span class="stroke-sample is-line"></span><figcaption><code>stroke-line</code> 分隔线</figcaption></figure>
 <figure><span class="stroke-sample is-control"></span><figcaption><code>stroke-control</code> 输入框边框</figcaption></figure>
 <figure><span class="stroke-sample is-focus"></span><figcaption><code>stroke-focus</code> 焦点环</figcaption></figure>
@@ -155,7 +159,7 @@ function strokeSpecimen() {
 }
 
 function elevationSpecimen() {
-  return `<div class="specimen-panel elevation-panel"><div class="elevation-row">
+  return `<div class="specimen-panel elevation-panel" ${APP}><div class="elevation-row">
 <figure><span class="elevation-card">纸面</span><figcaption>0 · 细线，无阴影</figcaption></figure>
 <figure><span class="elevation-card is-control">控件</span><figcaption>1 · <code>shadow-control</code></figcaption></figure>
 <figure><span class="elevation-card is-float">浮层</span><figcaption>2 · <code>shadow-float</code></figcaption></figure>
@@ -168,7 +172,7 @@ const FOUNDATION_SPECIMENS = {
   stroke: strokeSpecimen, elevation: elevationSpecimen
 };
 
-const specimen = html => `<div class="specimen">${html}</div>`;
+const specimen = html => `<div class="specimen" ${APP}>${html}</div>`;
 const sample = (label, text) => `<details class="sample"><summary>${label}</summary><pre><code>${escape(text).replaceAll('>', '&gt;')}</code></pre></details>`;
 
 // ---------- Markdown ----------

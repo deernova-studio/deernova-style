@@ -15,7 +15,7 @@ Deernova 的设计语言，写成一个给 AI agent 读的 skill。agent 在你�
 | `scripts/` | 生成 token 文件、构建网站和 npm 包、发布 |
 | `tests/` | skill 结构、token 同步、对比度、构建边界、开发热更新、安装器和动画 |
 | `reviews/` | 当前验收结果、截图，以及单独保留的历史记录 |
-| `archive/Paperlight/` | 最初的设计稿资料，只做留档，不参与构建 |
+| `archive/Paperlight/` | 最初的设计稿资料，只做留档，不参与构建；现行规范和它的异同见 [ARCHITECTURE.md](ARCHITECTURE.md) |
 
 ## 在项目里使用
 

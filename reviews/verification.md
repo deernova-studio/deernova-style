@@ -2,6 +2,20 @@
 
 更新于 2026-11-05。
 
+## 细滚动条与交互状态规范（2026-11-06）
+
+- 滚动条按用户意见改成统一的细滚动条：网页所有滚动区域（包括页面本身）占 `scrollbar-size`（10px），中间 `scrollbar-thumb-size`（6px）的胶囊滑块，`line-control` 色，悬停和拖动时 `ink-tertiary`，轨道透明、没有箭头。全局写一次：Chrome、Edge、Safari 用 `::-webkit-scrollbar`，Firefox 用 `scrollbar-width: thin` 加 `scrollbar-color`。因为 Chrome 里设置了这两个属性的元素会忽略 `::-webkit-scrollbar`，上一版加在菜单、弹窗、代码块、侧面板和网站上的 `scrollbar-width: thin` 都已去掉。SwiftUI 仍用系统滚动条。网站 `base.css` 加了同一段全局样式。
+- 新增 `references/foundations/states.md`「交互状态」：各元素在悬停、按下、选中时怎么变的总表；规则（悬停只用 `fill-hover`；三档不叠加，选中项悬停不加深；只改颜色，不加阴影不位移；底色形状和元素一致；`:hover` 只写在 `@media (hover: hover)` 里，触屏用 `:active`；`duration-instant`；焦点用焦点环；禁用没有反馈；光标；拖放）；通用 `.dn-state` 写法和示例；SwiftUI 的 `ButtonStyle` 和 `.hoverEffect`。SKILL.md 核心规则加「状态只有两种底色」（原第 9、10 条顺序也顺手理正），颜色、Web 场景、审查清单链到它。
+- 组件参考 CSS 按新规则对齐：按钮、图标按钮、卡片、侧边栏、分段控件、步骤行、顶栏、Composer 的 `:hover` 都放进 `@media (hover: hover)`；图标按钮、侧边栏项、步骤行、顶栏标题、Composer 信息按钮、菜单项补上按下时的 `fill-selected`。网站的悬停规则同样放进媒体查询，目录行补按下状态，首页「重试」按钮改成次按钮的写法（灰底，悬停和按下叠加）。
+- 实测：规范页根滚动条、目录、示例框的滚动条都是 10px 宽，滑块深色 `#737373`、浅色 `#8a8a8a`；横向筛选条不显示滚动条。交互状态示例在 `canvas` 和卡片上：深色主题悬停白 6%、按下和选中白 15%，浅色主题黑 4% 和 9%，禁用 0.35，行高 32；真实悬停默认行出现 `fill-hover`、文字变 `ink`，悬停选中行保持 15% 不加深。首页无预留空白，控制台无错误。规范页的参考 CSS 在开发服务器启动时读取，这次改了 `guide.mjs` 的文件列表后需要重启开发服务器才生效。`npm test` 63 项通过。
+
+## 滚动条规范（2026-11-06）
+
+- skill 原来没有滚动条的说明，只有 `tokens.css` 里按主题设置的 `color-scheme`（让系统滚动条跟着变色），规范里没写出来。「布局与对齐」新增「滚动条」一节：用系统滚动条、不自己画；主内容区保持默认；辅助区域（侧边栏、列表栏、侧面板、目录、菜单、弹窗内容区、代码块、表格横向滚动）用细滚动条，滑块 `line-control`、轨道透明；整页滚动的页面和居中的主滚动区域用 `scrollbar-gutter: stable`，应用的 `html` 不预留；内边距写在滚动容器里，右侧至少 `space-2`；只有横向滑动条可以隐藏滚动条，并要有末端渐隐等提示；没有可聚焦内容的滚动区域加 `tabindex="0"`、`role="region"`、`aria-label`；两种滚动条形态都要检查；不接管滚轮，平滑滚动只用于锚点；用线提示还有内容。参考 CSS 加 `.dn-scroll.is-thin`、`.is-stable`、`.dn-scroll-x`，规范页有示例；SwiftUI 只在横向卡片条隐藏指示条。
+- 组件参考 CSS 跟着改：菜单、弹窗内容区、代码块、侧面板正文用细滚动条；应用内容区 `.dn-app-content` 预留滚动条位置。
+- 网站：规范页在 `html` 上预留滚动条位置，目录、代码示例、表格、示例区用细滚动条；首页产品菜单用细滚动条，首页不预留。
+- 实测（这个浏览器显示常驻滚动条，宽 15，细滚动条 11）：规范页根滚动条预留 15；目录和示例框是 11 宽的细滚动条，颜色 `#8a8a8a`；横向筛选条滚动条为 0、可以横向滚动、末端渐隐。打开弹窗锁住页面滚动时，页眉右侧按钮位移 0；临时去掉预留后同样操作位移 15。首页没有预留空白（0），产品菜单是细滚动条。`npm test` 63 项通过。
+
 ## Tooltip 与悬停浮层规范（2026-11-06）
 
 - skill 原来没有 tooltip 和悬停卡片的说明。新增 `references/components/tooltip.md`：什么时候用（只有图标的按钮、被截断的文字；说明和可点的内容改用 popover，必须看到的信息直接写出来）；外观（反色 `accent` 底、`on-accent` 字、无箭头无描边）和尺寸；位置（下方居中、放不下翻到上方、离窗口边缘至少 `space-2`）；显示与关闭（停留 `tooltip-delay`、相邻控件在 `tooltip-skip-window` 内立即切换、键盘聚焦立即显示、Esc、按下、滚动关闭、指针可以移到 tooltip 上）；触屏不用；悬停卡片；悬停才出现的操作；Web 的无障碍写法（`aria-label` 加 `aria-keyshortcuts`，重复名称的 tooltip 设 `aria-hidden`，补充信息用 `aria-describedby`，禁用原因用 `aria-disabled`，不用 `title`）；SwiftUI 的 `.help()`。

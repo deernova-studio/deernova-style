@@ -45,7 +45,7 @@
   cursor: pointer;
   transition: background-color var(--duration-instant) var(--ease-standard), color var(--duration-instant) var(--ease-standard);
 }
-.dn-segmented button:hover { color: var(--ink); }
+@media (hover: hover) { .dn-segmented button:hover { color: var(--ink); } }
 .dn-segmented button[aria-pressed="true"], .dn-segmented button[aria-selected="true"] { background: var(--surface-raised); color: var(--ink); box-shadow: var(--shadow-control); }
 .dn-segmented button:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
 ```

@@ -30,7 +30,7 @@ AI 在对话里做了什么。分两层：平时只显示一行灰色的**摘要
   cursor: pointer;
 }
 .dn-activity > summary::-webkit-details-marker { display: none; }
-.dn-activity > summary:hover { color: var(--ink); }
+@media (hover: hover) { .dn-activity > summary:hover { color: var(--ink); } }
 .dn-activity > summary .dn-icon { width: var(--icon-size-sm); height: var(--icon-size-sm); transition: transform var(--duration-base) var(--ease-standard); }
 .dn-activity[open] > summary .dn-icon { transform: rotate(90deg); }
 .dn-activity > .dn-steps { margin: var(--space-1) 0 0 6px; padding-left: var(--space-3); border-left: var(--stroke-line) solid var(--line); }
@@ -50,7 +50,8 @@ AI 在对话里做了什么。分两层：平时只显示一行灰色的**摘要
 }
 .dn-step::-webkit-details-marker { display: none; }
 details > .dn-step { cursor: pointer; }
-.dn-step:hover { background: var(--fill-hover); }
+@media (hover: hover) { .dn-step:hover { background: var(--fill-hover); } }
+.dn-step:active { background: var(--fill-selected); }
 .dn-step .dn-icon { width: var(--icon-size-md); height: var(--icon-size-md); }
 .dn-step-name { color: var(--ink); font-weight: var(--weight-semibold); white-space: nowrap; }
 .dn-step-summary { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: var(--weight-regular) var(--type-caption-size)/1 var(--font-mono); }

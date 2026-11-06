@@ -74,7 +74,7 @@ Web 上按钮“上下特别宽”几乎都是同一个原因：用内边距和�
 - 分段控件、开关这类有状态的控件，用 `aria-pressed`、`role="switch"` 或 `role="tab"` 标出当前状态。
 - 弹窗用 `<dialog>` 的 `showModal()`，自带焦点管理和 Esc 关闭；popover 用 `popover` 属性。打开、关闭和焦点规则见 [弹窗与 popover](../components/sheet.md)。
 - 菜单和下拉：选值优先用原生 `<select>`，命令菜单和链接列表按 [菜单与下拉](../components/menu.md) 选语义、处理键盘。
-- 悬停效果放在 `@media (hover: hover)` 里，触屏上不会卡在悬停状态。
+- 悬停效果放在 `@media (hover: hover)` 里，触屏上不会卡在悬停状态。各元素的悬停、按下、选中见 [交互状态](../foundations/states.md)。
 
 ## 验证
 

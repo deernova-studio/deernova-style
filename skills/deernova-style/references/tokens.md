@@ -254,6 +254,8 @@
 | `breakpoint-sm` | `760px` | 窄屏：侧边栏收起，多栏变单栏。 |
 | `breakpoint-md` | `960px` | 中等宽度：目录和次要栏收起。 |
 | `breakpoint-lg` | `1280px` | 宽屏：内容不再继续变宽，两侧留白。 |
+| `scrollbar-size` | `10px` | 网页滚动条占的宽度（横向滚动条是高度）。（仅网页） |
+| `scrollbar-thumb-size` | `6px` | 滚动条里胶囊滑块的粗细，两边各留 (scrollbar-size − 它) ÷ 2。（仅网页） |
 
 | Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
 | --- | --- | --- | --- | --- |

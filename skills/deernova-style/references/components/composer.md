@@ -124,7 +124,8 @@
   font: var(--weight-regular) var(--type-callout-size)/1 var(--font-sans);
   cursor: pointer;
 }
-.dn-meta-button:hover { background: var(--fill-hover); }
+@media (hover: hover) { .dn-meta-button:hover { background: var(--fill-hover); } }
+.dn-meta-button:active { background: var(--fill-selected); }
 .dn-meta-button b { color: var(--ink); font-weight: var(--weight-regular); }
 .dn-context-ring {
   width: var(--icon-size-sm);

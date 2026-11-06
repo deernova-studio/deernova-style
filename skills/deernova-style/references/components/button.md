@@ -72,15 +72,16 @@
   cursor: pointer;
   transition: background-color var(--duration-instant) var(--ease-standard), opacity var(--duration-instant) var(--ease-standard);
 }
-.dn-button:hover:not(:disabled) { background-image: linear-gradient(var(--fill-hover), var(--fill-hover)); }
+@media (hover: hover) { .dn-button:hover:not(:disabled) { background-image: linear-gradient(var(--fill-hover), var(--fill-hover)); } }
 .dn-button:active:not(:disabled) { background-image: linear-gradient(var(--fill-selected), var(--fill-selected)); }
 .dn-button:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
 .dn-button:disabled { opacity: var(--opacity-disabled); cursor: default; }
 
 .dn-button.is-primary { background: var(--accent); color: var(--on-accent); }
-.dn-button.is-primary:hover:not(:disabled), .dn-button.is-primary:active { background-image: none; opacity: var(--opacity-solid-hover); }
+@media (hover: hover) { .dn-button.is-primary:hover:not(:disabled) { background-image: none; opacity: var(--opacity-solid-hover); } }
+.dn-button.is-primary:active:not(:disabled) { background-image: none; opacity: var(--opacity-solid-hover); }
 .dn-button.is-plain { background: transparent; color: var(--ink-secondary); }
-.dn-button.is-plain:hover:not(:disabled) { background: var(--fill-hover); color: var(--ink); }
+@media (hover: hover) { .dn-button.is-plain:hover:not(:disabled) { background: var(--fill-hover); color: var(--ink); } }
 .dn-button.is-danger { background: var(--danger-soft); color: var(--danger); }
 .dn-button.is-primary.is-danger { background: var(--danger); color: var(--on-accent); }
 
@@ -104,7 +105,8 @@
   cursor: pointer;
   transition: background-color var(--duration-instant) var(--ease-standard);
 }
-.dn-icon-button:hover { background: var(--fill-hover); color: var(--ink); }
+@media (hover: hover) { .dn-icon-button:hover { background: var(--fill-hover); color: var(--ink); } }
+.dn-icon-button:active { background: var(--fill-selected); color: var(--ink); }
 .dn-icon-button:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
 
 /* 点击区域：可见尺寸不变，用透明的伪元素把可点范围撑到 hit-min。

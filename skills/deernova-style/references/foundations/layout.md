@@ -57,6 +57,19 @@
 - 弹出层和面板内部滚动时加 `overscroll-behavior: contain`，不带动后面的页面。
 - 跳到页面锚点时，用 `scroll-padding-top` 留出吸顶元素的高度。
 
+## 滚动条
+
+- **Web 统一用一种细滚动条。** 所有滚动区域，包括页面本身，都用同一种：占 `scrollbar-size`（10px），中间是 `scrollbar-thumb-size`（6px）粗的胶囊滑块，`line-control` 色，悬停和拖动时变 `ink-tertiary`；轨道透明，没有两端的箭头按钮。滑块颜色来自 token，深色主题自动跟着换。
+- **在全局样式里写一次。** 用下面的 CSS：Chrome、Edge、Safari 用 `::-webkit-scrollbar` 画，Firefox 用 `scrollbar-width: thin` 加 `scrollbar-color`。Chrome 里一个元素只要设置了 `scrollbar-width` 或 `scrollbar-color`，`::-webkit-scrollbar` 对它就失效，所以除了隐藏滚动条，组件里不要再写这两个属性，也不要给某个组件单独写一套滚动条或用脚本模拟。
+- **SwiftUI 用系统滚动条。** 原生端的滚动指示条跟随用户的系统设置，不要改。
+- **预留位置，不让内容跳动。** 整页滚动的页面（文档、官网）在 `html` 上设 `scrollbar-gutter: stable`；内容居中的主滚动区域（对话栏）也一样。这样内容从不满一屏变成超出一屏、或者弹窗打开锁住页面滚动时，滚动条出现和消失不会让内容左右跳。应用里页面本身不滚动，不要在 `html` 上预留。
+- **内容别被压住。** 滚动区域的内边距写在滚动容器里面，右侧至少留 `space-2`，滚动时才浮现的滚动条不会盖住文字。
+- **能隐藏的只有横向滑动条。** 标签、筛选项、卡片排成一行横向滑动时，可以隐藏滚动条（`scrollbar-width: none`），但必须有提示：末端渐隐、露出半张卡片，或者左右翻页按钮；滚到底时去掉渐隐。纵向的滚动区域一律不隐藏滚动条。
+- **键盘也能滚。** 滚动区域里没有可以聚焦的内容时，给容器加 `tabindex="0"`、`role="region"` 和 `aria-label`，键盘用户才能用方向键滚动它，读屏也能读出它是什么。
+- **把宽度算进去。** 细滚动条在 Chrome、Edge、Safari 里一直显示，占 `scrollbar-size`，在 Mac 上也不再是滚动时才浮现；Firefox 跟随系统设置。栏宽、居中和右侧留白按占位的情况检查：内容不被挤窄，没有多出来的横向滚动条。
+- **滚动不加戏。** 不接管滚轮和触控板，不改滚动速度和惯性；`scroll-behavior: smooth` 只用于页内锚点跳转，开启「减弱动态效果」时去掉；吸附滚动（`scroll-snap`）只用于横向卡片条。
+- **提示还有内容，用线不用阴影。** 顶栏、表头本来就有 1px 底线；弹窗、面板这类平时没有分隔线的区域，内容能滚动时才加上（见[弹窗](../components/sheet.md)）。不在内容边缘加阴影或渐变遮罩，横向滑动条的末端渐隐除外。
+
 ## 响应式
 
 - `breakpoint-sm`（760）以下侧边栏收起成抽屉，多栏变单栏；`breakpoint-md`（960）以下侧面板变成抽屉，目录这类次要栏收起；`breakpoint-lg`（1280）以上内容不再变宽，两侧留白。断点只能写在媒体查询里，没有对应的 CSS 变量。
@@ -71,6 +84,11 @@
 .dn-column.is-form { width: min(100%, var(--form-max) + 2 * var(--page-margin)); }
 .dn-column.is-wide { width: min(100%, var(--wide-max) + 2 * var(--page-margin)); }
 .dn-scroll { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.dn-scroll.is-stable { scrollbar-gutter: stable; }
+.dn-scroll-x { display: flex; gap: var(--gap-inline); overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; scroll-snap-type: x proximity; }
+.dn-scroll-x::-webkit-scrollbar { display: none; }
+.dn-scroll-x > * { flex: none; scroll-snap-align: start; }
+.dn-scroll-x:not(.is-end) { mask-image: linear-gradient(to left, transparent, var(--ink) var(--space-8)); }
 .dn-baseline { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2); }
 .dn-baseline-title { margin: 0; font: var(--type-title); }
 .dn-baseline-meta { color: var(--ink-tertiary); font: var(--type-footnote); font-variant-numeric: tabular-nums; }
@@ -85,6 +103,16 @@
 .dn-item.is-top > .dn-item-end { margin-top: calc((var(--type-body-line) - var(--button-height-sm)) / 2); }
 .dn-centered { display: grid; grid-template-rows: 2fr auto 3fr; justify-items: center; min-height: 100%; text-align: center; }
 .dn-centered > * { grid-row: 2; }
+@supports selector(::-webkit-scrollbar) {
+  ::-webkit-scrollbar { width: var(--scrollbar-size); height: var(--scrollbar-size); }
+  ::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent; }
+  ::-webkit-scrollbar-thumb { border: calc((var(--scrollbar-size) - var(--scrollbar-thumb-size)) / 2) solid transparent; border-radius: var(--radius-full); background: var(--line-control) padding-box; }
+  ::-webkit-scrollbar-thumb:hover, ::-webkit-scrollbar-thumb:active { background-color: var(--ink-tertiary); }
+  ::-webkit-scrollbar-button { display: none; }
+}
+@supports not selector(::-webkit-scrollbar) {
+  * { scrollbar-width: thin; scrollbar-color: var(--line-control) transparent; }
+}
 ```
 
 不同字号并排，按基线对齐：
@@ -134,9 +162,28 @@
 </div>
 ```
 
+滚动区域用细滚动条；横向滑动条隐藏滚动条、末端渐隐：
+
+```html
+<div class="dn-scroll" tabindex="0" role="region" aria-label="最近的会话">
+  <p class="dn-item-title">整理周会记录</p>
+  <p class="dn-item-title">修复登录页的焦点顺序</p>
+  <p class="dn-item-title">起草发布说明</p>
+  <p class="dn-item-title">对比三种排版方案</p>
+  <p class="dn-item-title">检查深色主题的对比度</p>
+  <p class="dn-item-title">补全弹窗的键盘操作</p>
+  <p class="dn-item-title">写 tooltip 的测试</p>
+  <p class="dn-item-title">更新安装说明</p>
+  <p class="dn-item-title">导出图标</p>
+</div>
+<div class="dn-scroll-x" tabindex="0" role="region" aria-label="筛选">
+  <span class="dn-tag">全部</span><span class="dn-tag">今天</span><span class="dn-tag">本周</span><span class="dn-tag">已完成</span><span class="dn-tag">进行中</span><span class="dn-tag">有附件</span><span class="dn-tag">我创建的</span><span class="dn-tag">共享给我</span><span class="dn-tag">已归档</span><span class="dn-tag">草稿</span>
+</div>
+```
+
 ## SwiftUI
 
-`Form`、`List`、`NavigationSplitView` 自带对齐和滚动，不要改。自己排的内容按下面写：
+`Form`、`List`、`NavigationSplitView` 自带对齐和滚动，不要改；滚动指示条保持系统默认，跟随用户的系统设置。只有横向卡片条可以用 `.scrollIndicators(.hidden)`，并露出半张卡片提示还能滑动。自己排的内容按下面写：
 
 ```swift
 // 图标和文字：用 Label，图标会对齐到第一行文字
@@ -170,6 +217,17 @@ ScrollView {
         .frame(maxWidth: .infinity)
 }
 
+// 横向卡片条：隐藏滚动条，按卡片吸附，露出下一张的一部分
+ScrollView(.horizontal) {
+    LazyHStack(spacing: Deernova.cardGap) {
+        ForEach(notes) { NoteCard(note: $0).frame(width: 240) }
+    }
+    .scrollTargetLayout()
+}
+.scrollIndicators(.hidden)
+.scrollTargetBehavior(.viewAligned)
+.contentMargins(.horizontal, Deernova.pageMargin)
+
 // 空状态：系统组件已经处理了视觉居中
 ContentUnavailableView("还没有笔记", systemImage: "doc", description: Text("点右上角的加号新建一条。"))
 ```
@@ -183,4 +241,5 @@ ContentUnavailableView("还没有笔记", systemImage: "doc", description: Text(
 - 把空状态贴在顶部，或者正好放在几何中心。
 - 把正文拉满宽屏；正文和普通标题居中排版。
 - 页面和里面的栏同时滚动；同一方向嵌套滚动；页面出现横向滚动。
+- 给单个组件另写一套滚动条，或者用脚本模拟滚动条；隐藏纵向滚动区域的滚动条；接管滚轮或改滚动速度；在应用的 `html` 上预留滚动条位置。
 - 按设备型号写死布局；用可用宽度和尺寸类别判断。

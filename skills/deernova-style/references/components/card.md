@@ -39,7 +39,7 @@
   text-decoration: none;
   transition: border-color var(--duration-instant) var(--ease-standard);
 }
-a.dn-card:hover, button.dn-card:hover { border-color: var(--line-control); }
+@media (hover: hover) { a.dn-card:hover, button.dn-card:hover { border-color: var(--line-control); } }
 .dn-card:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
 .dn-card[aria-current="true"], .dn-card.is-selected { border-color: var(--ink); }
 .dn-card-title { margin: 0; font: var(--type-headline); }

@@ -25,8 +25,9 @@
   font-size: 13px;
 }
 .animation-status:not([hidden]) { display: flex; align-items: center; gap: var(--space-2); }
-.animation-status button { flex: none; min-height: var(--button-height-md); padding: 0 var(--space-2); border: 0; border-radius: var(--radius-sm); background: var(--fill-hover); color: var(--ink); font: inherit; cursor: pointer; }
-.animation-status button:hover { background: var(--fill-selected); }
+.animation-status button { flex: none; min-height: var(--button-height-md); padding: 0 var(--space-2); border: 0; border-radius: var(--radius-sm); background: var(--fill-selected); color: var(--ink); font: inherit; cursor: pointer; }
+@media (hover: hover) { .animation-status button:hover:not(:disabled) { background-image: linear-gradient(var(--fill-hover), var(--fill-hover)); } }
+.animation-status button:active:not(:disabled) { background-image: linear-gradient(var(--fill-selected), var(--fill-selected)); }
 .animation-status button:disabled { color: var(--ink-tertiary); cursor: wait; }
 
 .masthead-float {
@@ -74,7 +75,7 @@
   cursor: pointer;
   transition: color 0.15s var(--ease);
 }
-.masthead-trigger:hover { color: var(--ink-secondary); }
+@media (hover: hover) { .masthead-trigger:hover { color: var(--ink-secondary); } }
 .masthead-trigger:focus-visible { border-radius: inherit; }
 /* The product list follows references/components/menu.md: a disclosure of links in the header's glass.
    It carries the comfortable density of the marketing scene, or touch on a touch screen (product-menu.js). */

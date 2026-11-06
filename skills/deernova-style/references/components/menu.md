@@ -119,6 +119,7 @@
 .dn-menu-item:is([aria-checked="true"], [aria-selected="true"]) > .dn-menu-check { visibility: visible; }
 .dn-menu-item > .dn-menu-more { width: var(--icon-size-sm); height: var(--icon-size-sm); color: var(--ink-tertiary); }
 @media (hover: hover) { .dn-menu-item:hover { background: var(--fill-hover); } }
+.dn-menu-item:active { background: var(--fill-selected); }
 .dn-menu-item:focus { outline: none; }
 .dn-menu-item:focus-visible, .dn-menu-item[aria-expanded="true"] { background: var(--fill-hover); }
 .dn-menu-item:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: calc(var(--stroke-focus) * -1); }

@@ -53,11 +53,12 @@ description: Deernova 的界面设计语言：只用黑白灰，内容放在不�
 2. **黑白灰，强调靠对比。** `accent` 就是墨色 `ink`：主按钮在浅色主题是黑底白字，在深色主题是白底黑字，文字用 `on-accent`，不要写死白色。唯一的彩色是状态色 `success`、`warning`、`danger`、`info`，只用来表达状态，而且必须同时带图标或文字。
 3. **线条代替阴影。** 区块之间用 `line` 色的 1px 线分隔（`stroke-line`）。卡片不加阴影；只有菜单、弹窗、浮动面板和 Composer 这类真正浮起来的东西才用 `shadow-float`。
 4. **无衬线做界面，衬线点题。** 界面文字、AI 回答、用户消息、标题栏都用系统无衬线（SF Pro）；代码和需要对齐的数字用等宽（SF Mono）。衬线（New York）只用在页面大标题和空状态标题（`display`、`title`）、官网与文档，以及文章类的长文阅读（`prose`）。中文统一落到苹方。
-5. **层次靠字号和灰度，少用粗体。** 600 只给真正的标题（`display`、`title`、`headline`）。分组标题、会话名、说明、时间戳用常规字重，靠 `ink-secondary`、`ink-tertiary` 和小一号的字区分层级。
-6. **控件高度由 token 决定，点击区域单独补。** 按钮、输入框、列表行的可见高度直接用 `button-height-*`、`field-height`、`row-height`，上下内边距为 0，不让页面行高把它撑高。可见尺寸小于 `hit-min` 时，用透明的命中区补足，不加大可见的控件。
-7. **间距成组。** 间距走 4pt 网格。组内用 `gap-stack`，组与组之间用 `gap-group`（至少 2 倍）；内容区里段落、工具调用、卡片之间 `space-4`。用细线和少量留白分组，不靠大块空白和外框。
-9. **对齐按内容选。** 单行的控件和行在固定高度里垂直居中；图标和文字按中线，不同字号的文字按基线；三行以上的内容，图标和头像对齐第一行；空状态放在略高于正中的位置。不用内边距或 `top` 微调去凑居中。内容栏限宽并在主内容区里居中，见 [布局与对齐](references/foundations/layout.md)。
-8. **原生端用系统控件，Web 端用同一套自绘组件。** SwiftUI 端的导航结构、侧边栏、工具栏、菜单、表单、弹窗直接用系统控件和系统尺寸，只通过颜色和字体让它们融入；自己画的内容区（对话、卡片、输入区、任务清单）用 token。Web 应用没有系统控件可借，按组件说明里的规格画，骨架见 [Web 应用](references/scenes/web.md)。
+5. **状态只有两种底色。** 悬停 `fill-hover`，按下和选中 `fill-selected`，都是半透明的，叠在任何纸面上都成立；选中项悬停时不再加深。悬停只改颜色，不加阴影、不位移，只写在 `@media (hover: hover)` 里，见 [交互状态](references/foundations/states.md)。
+6. **层次靠字号和灰度，少用粗体。** 600 只给真正的标题（`display`、`title`、`headline`）。分组标题、会话名、说明、时间戳用常规字重，靠 `ink-secondary`、`ink-tertiary` 和小一号的字区分层级。
+7. **控件高度由 token 决定，点击区域单独补。** 按钮、输入框、列表行的可见高度直接用 `button-height-*`、`field-height`、`row-height`，上下内边距为 0，不让页面行高把它撑高。可见尺寸小于 `hit-min` 时，用透明的命中区补足，不加大可见的控件。
+8. **间距成组。** 间距走 4pt 网格。组内用 `gap-stack`，组与组之间用 `gap-group`（至少 2 倍）；内容区里段落、工具调用、卡片之间 `space-4`。用细线和少量留白分组，不靠大块空白和外框。
+9. **原生端用系统控件，Web 端用同一套自绘组件。** SwiftUI 端的导航结构、侧边栏、工具栏、菜单、表单、弹窗直接用系统控件和系统尺寸，只通过颜色和字体让它们融入；自己画的内容区（对话、卡片、输入区、任务清单）用 token。Web 应用没有系统控件可借，按组件说明里的规格画，骨架见 [Web 应用](references/scenes/web.md)。
+10. **对齐按内容选。** 单行的控件和行在固定高度里垂直居中；图标和文字按中线，不同字号的文字按基线；三行以上的内容，图标和头像对齐第一行；空状态放在略高于正中的位置。不用内边距或 `top` 微调去凑居中。内容栏限宽并在主内容区里居中，见 [布局与对齐](references/foundations/layout.md)。
 
 ## 读什么
 
@@ -73,7 +74,7 @@ description: Deernova 的界面设计语言：只用黑白灰，内容放在不�
 
 ### 基础
 
-[颜色](references/foundations/color.md) · [字体](references/foundations/typography.md) · [间距](references/foundations/spacing.md) · [布局与对齐](references/foundations/layout.md) · [圆角](references/foundations/radius.md) · [线条](references/foundations/stroke.md) · [层级与阴影](references/foundations/elevation.md) · [玻璃](references/foundations/glass.md) · [动效](references/foundations/motion.md) · [图标](references/foundations/iconography.md) · [文案](references/foundations/writing.md) · [无障碍](references/foundations/accessibility.md)
+[颜色](references/foundations/color.md) · [交互状态](references/foundations/states.md) · [字体](references/foundations/typography.md) · [间距](references/foundations/spacing.md) · [布局与对齐](references/foundations/layout.md) · [圆角](references/foundations/radius.md) · [线条](references/foundations/stroke.md) · [层级与阴影](references/foundations/elevation.md) · [玻璃](references/foundations/glass.md) · [动效](references/foundations/motion.md) · [图标](references/foundations/iconography.md) · [文案](references/foundations/writing.md) · [无障碍](references/foundations/accessibility.md)
 
 ### 组件
 

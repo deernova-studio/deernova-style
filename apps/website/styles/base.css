@@ -19,6 +19,18 @@ p { margin: 0; }
 .skip { position: absolute; left: var(--space-4); top: -100px; z-index: 10; padding: var(--space-2) var(--space-3); background: var(--accent); color: var(--on-accent); border-radius: var(--radius-sm); text-decoration: none; }
 .skip:focus { top: var(--space-2); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* One slim scrollbar everywhere (skill: references/foundations/layout.md, 滚动条). */
+@supports selector(::-webkit-scrollbar) {
+  ::-webkit-scrollbar { width: var(--scrollbar-size); height: var(--scrollbar-size); }
+  ::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent; }
+  ::-webkit-scrollbar-thumb { border: calc((var(--scrollbar-size) - var(--scrollbar-thumb-size)) / 2) solid transparent; border-radius: var(--radius-full); background: var(--line-control) padding-box; }
+  ::-webkit-scrollbar-thumb:hover, ::-webkit-scrollbar-thumb:active { background-color: var(--ink-tertiary); }
+  ::-webkit-scrollbar-button { display: none; }
+}
+@supports not selector(::-webkit-scrollbar) {
+  * { scrollbar-width: thin; scrollbar-color: var(--line-control) transparent; }
+}
+
 /* Tooltip for icon-only controls (skill: references/components/tooltip.md); site.js shows and places it. */
 .tooltip {
   position: fixed;
@@ -109,7 +121,7 @@ p { margin: 0; }
 .colophon { border-top: 1px solid var(--rule); padding: var(--space-10) var(--space-6) var(--space-6); overflow: hidden; }
 .colophon-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-secondary); }
 .colophon-meta a { text-decoration-color: var(--line-control); text-underline-offset: 3px; }
-.colophon-meta a:hover { text-decoration-color: currentColor; }
+@media (hover: hover) { .colophon-meta a:hover { text-decoration-color: currentColor; } }
 
 @media (max-width: 760px) {
   .masthead { gap: var(--space-3); padding: 0 var(--space-4); }

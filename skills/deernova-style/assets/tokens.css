@@ -160,6 +160,8 @@
   --content-max: 680px;
   --form-max: 560px;
   --wide-max: 1120px;
+  --scrollbar-size: 10px;
+  --scrollbar-thumb-size: 6px;
   --menu-max-width: 320px;
   --sheet-grabber-width: 36px;
   --sheet-grabber-height: 5px;

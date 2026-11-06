@@ -9,7 +9,7 @@ import {
 // so the page cannot drift from what agents read.
 export const SECTIONS = [
   { id: 'foundations', title: '基础', dir: 'references/foundations',
-    docs: ['color', 'typography', 'spacing', 'layout', 'radius', 'stroke', 'elevation', 'glass', 'motion', 'iconography', 'writing', 'accessibility'] },
+    docs: ['color', 'states', 'typography', 'spacing', 'layout', 'radius', 'stroke', 'elevation', 'glass', 'motion', 'iconography', 'writing', 'accessibility'] },
   { id: 'components', title: '组件', dir: 'references/components',
     docs: ['button', 'toolbar', 'sidebar', 'composer', 'message', 'step-row', 'task-list', 'glass-controls', 'segmented', 'text-field', 'menu', 'list', 'card', 'tag', 'code-block', 'empty-state', 'banner', 'sheet', 'tooltip'] },
   { id: 'scenes', title: '场景', dir: 'references/scenes',
@@ -243,7 +243,7 @@ const screens = name => (SCREENS[name] || []).map(([file, alt]) => `<figure clas
 
 // Reference CSS from the component docs, applied to the live specimens on the page.
 export async function referenceCss(root) {
-  const files = [...SECTIONS[1].docs.map(name => docPath(SECTIONS[1], name)), 'references/foundations/layout.md', 'references/foundations/iconography.md'];
+  const files = [...SECTIONS[1].docs.map(name => docPath(SECTIONS[1], name)), 'references/foundations/states.md', 'references/foundations/layout.md', 'references/foundations/iconography.md'];
   const out = [];
   for (const file of files) {
     const markdown = await read(join(root, SKILL_DIR, file));

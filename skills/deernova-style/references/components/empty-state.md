@@ -13,7 +13,7 @@
 | `empty-icon-size` | 32 | 36 | 40 | 空状态图标的边长。 |
 <!-- /tokens -->
 
-- 在可用区域里居中。图标 `empty-icon-size`、细线、`ink-tertiary`；标题用衬线 `empty-title-size`、半粗；正文 `type-body`、`ink-secondary`，最大宽度 320。
+- 在可用区域里视觉居中：水平居中，垂直方向略高于正中（上下留白约 2 : 3），见 [布局与对齐](../foundations/layout.md)。图标 `empty-icon-size`、细线、`ink-tertiary`；标题用衬线 `empty-title-size`、半粗；正文 `type-body`、`ink-secondary`，最大宽度 320。
 - 按钮用[大号](button.md)。
 - 搜索没有结果时不放按钮，标题写成「没有找到“关键词”」，正文给出修改建议。
 

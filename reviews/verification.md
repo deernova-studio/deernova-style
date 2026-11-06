@@ -2,6 +2,20 @@
 
 更新于 2026-11-05。
 
+## Tooltip 与悬停浮层规范（2026-11-06）
+
+- skill 原来没有 tooltip 和悬停卡片的说明。新增 `references/components/tooltip.md`：什么时候用（只有图标的按钮、被截断的文字；说明和可点的内容改用 popover，必须看到的信息直接写出来）；外观（反色 `accent` 底、`on-accent` 字、无箭头无描边）和尺寸；位置（下方居中、放不下翻到上方、离窗口边缘至少 `space-2`）；显示与关闭（停留 `tooltip-delay`、相邻控件在 `tooltip-skip-window` 内立即切换、键盘聚焦立即显示、Esc、按下、滚动关闭、指针可以移到 tooltip 上）；触屏不用；悬停卡片；悬停才出现的操作；Web 的无障碍写法（`aria-label` 加 `aria-keyshortcuts`，重复名称的 tooltip 设 `aria-hidden`，补充信息用 `aria-describedby`，禁用原因用 `aria-disabled`，不用 `title`）；SwiftUI 的 `.help()`。
+- `tokens.json` 新增 tooltip 组（`tooltip-height` 24/28/28、`tooltip-padding-x`、`tooltip-font-size`、`tooltip-radius`、`tooltip-offset`、`tooltip-max-width`，以及只给网页用的 `tooltip-delay` 500ms、`tooltip-skip-window` 300ms）和层级 `z-tooltip`。按钮、无障碍、层级、Web 场景、消息和审查清单都链到它。
+- 网站首页和规范页右上角的两个图标按钮原来用 `title`，换成按规范实现的 tooltip（`site.js` 加 `base.css`），外观主题切换后提示文字跟着变（「外观：自动」）。规范页色板小块的 `title` 保留：它们是带名称的色块，不是控件。
+- 实测：首页指针停在 GitHub 按钮上，立即检查时没有显示，停留后显示；高 24、字号 12、圆角 6，离按钮 8，水平居中，黑底白字。移到相邻的外观按钮立即切换；Esc 关闭；Tab 聚焦立即显示，按 Enter 后关闭（外观已切回自动）。规范页是舒展密度：高 28、字号 13、圆角 8，间距 8（去掉了取整造成的 1px 偏差）。375 宽触屏模拟下指针停在按钮上不显示。控制台无错误，`npm test` 63 项通过。
+
+## 布局与对齐规范（2026-11-06）
+
+- 原来布局只在「间距与布局」里有一小节，加上各场景的骨架；对齐（包括垂直居中）没有任何规则，组件 CSS 里各自写 `align-items: center`。新增 `references/foundations/layout.md`「布局与对齐」：六种页面结构及内容宽度、12 栏网格、水平对齐、十条垂直对齐规则（单行控件在固定高度里居中；图标和文字按中线；不同字号按基线；两行条目整行居中；长内容对齐第一行；标签与控件中线对齐；表格；卡片顶部对齐；空状态按 2 : 3 视觉居中；不对称图标的 1px 光学修正）、滚动与固定、响应式（媒体查询管骨架，`@container` 管组件，安全区）、Web 和 SwiftUI 写法、不要。`spacing.md` 改名「间距」，布局部分移过去。SKILL.md 核心规则加第 9 条「对齐按内容选」，审查清单加「对齐」。
+- `tokens.json` 布局组新增 `form-max`（560）、`wide-max`（1120）、`sidebar-width-min/max`、`pane-width`、`grid-gutter`；macOS、iPadOS 的 `navigationSplitViewColumnWidth` 改用这些 token；官网说明改用 `wide-max` 和 `grid-gutter`；空状态改成视觉居中。规范页加了布局一节，展示全部布局变量和四个对齐示例。
+- 实测规范页示例：两行条目的图标、文字、按钮中线一致；长内容的图标和按钮中线等于第一行中线；空状态上方 31、下方 47（约 2 : 3）；桌面和 375 宽触屏模拟都一致，没有横向滚动。
+- 对照新规则检查网站：首页页眉、产品菜单、规范页页眉、安装命令行都已居中对齐；规范页目录原来用 3px 上下内边距加行高凑出 24 高，改为 `min-height: 24px` 加 flex 居中，外观不变。代码示例的「HTML」展开行仍用内边距，因为原生展开箭头需要块级显示。`npm test` 63 项通过。
+
 ## 弹窗与 popover 规范（2026-11-06）
 
 - 原来的弹窗说明只写了外观、标题字体和按钮排法。现在 `sheet.md` 改名为「弹窗、底部弹窗与 popover」，新增：先选对控件（轻提示、横幅、确认弹窗、弹窗、popover、菜单、新页面）；三档宽度和结构（标题区、内容区、按钮区，长内容只滚动中间并加分隔线）；关闭按钮的使用条件；危险确认（问句标题、写后果、实色危险按钮、默认聚焦「取消」）；打开与关闭（初始焦点、背景不能操作也不滚动、哪些情况点遮罩可以关闭、「放弃修改？」、回车提交、焦点回到原处）；动效；触控端底部弹窗（安全区、档位、键盘）；popover 的外观和 `popover` 属性；SwiftUI 的 `.sheet`、`.confirmationDialog`、`.alert`、`.popover`、`.fullScreenCover`。

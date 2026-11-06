@@ -9,6 +9,7 @@
 | 2 浮层 | Composer、弹出菜单、弹窗、浮动面板 | `shadow-float` | `z-dropdown`、`z-overlay` |
 | 玻璃 | SwiftUI 端的工具栏、标签栏、浮动按钮；官网页眉 | 系统玻璃自带；官网页眉用 `shadow-glass` | `z-sticky` |
 | 提示 | 轻提示 | 跟随玻璃 | `z-toast` |
+| Tooltip | tooltip、悬停卡片 | `shadow-float` | `z-tooltip` |
 
 - 卡片不加阴影。卡片和纸面的区分靠 `line` 线和亮度差。
 - Web 应用的顶栏是不透明的纸面，吸顶时用 `z-sticky`，底部一条 `stroke-line`，不加阴影。

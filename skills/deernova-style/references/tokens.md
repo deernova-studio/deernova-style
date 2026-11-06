@@ -211,6 +211,7 @@
 | `z-dropdown` | `100` | 弹出菜单、下拉列表、popover。 |
 | `z-overlay` | `1000` | 遮罩和弹窗。 |
 | `z-toast` | `1100` | 轻提示，压在弹窗之上。 |
+| `z-tooltip` | `1200` | tooltip 和悬停卡片，压在所有层之上。 |
 
 ## 动效
 
@@ -248,6 +249,8 @@
 | Token | 值 | 用途 |
 | --- | --- | --- |
 | `content-max` | `680px` | 对话栏和长文阅读栏的最大宽度。 |
+| `form-max` | `560px` | 表单页、设置页内容栏的最大宽度。 |
+| `wide-max` | `1120px` | 表格、看板和官网内容的最大宽度。 |
 | `breakpoint-sm` | `760px` | 窄屏：侧边栏收起，多栏变单栏。 |
 | `breakpoint-md` | `960px` | 中等宽度：目录和次要栏收起。 |
 | `breakpoint-lg` | `1280px` | 宽屏：内容不再继续变宽，两侧留白。 |
@@ -256,7 +259,11 @@
 | --- | --- | --- | --- | --- |
 | `hit-min` | 24 | 44 | 24 | 最小点击区域。可见尺寸比它小时，用透明的命中区补足，不加大可见的按钮。 |
 | `sidebar-width` | 288 | 320 | 260 | 侧边栏默认宽度。iPhone 没有侧边栏；macOS 用系统侧边栏，宽度只作参考。 |
+| `sidebar-width-min` | 200 | 260 | 200 | 侧边栏拖动时的最小宽度。 |
+| `sidebar-width-max` | 400 | 400 | 320 | 侧边栏拖动时的最大宽度。 |
+| `pane-width` | 320 | 360 | 320 | 列表加详情里列表栏的默认宽度，也是右侧 inspector 的默认宽度。 |
 | `toolbar-height` | 44 | 44 | 52 | Web 应用顶栏、侧面板标签头的高度。macOS 用系统工具栏。 |
+| `grid-gutter` | 24 | 16 | 32 | 官网和文档 12 栏网格的栏间距。应用里的卡片网格用 card-gap。 |
 
 ## 组件尺寸
 
@@ -444,6 +451,24 @@
 | --- | --- | --- |
 | `sheet-grabber-width` | `36px` | 底部弹窗顶部拖拽条的宽度。 |
 | `sheet-grabber-height` | `5px` | 拖拽条的高度。 |
+
+### Tooltip 与悬停浮层
+
+见 [components/tooltip.md](components/tooltip.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `tooltip-height` | 24 | 28 | 28 | 单行 tooltip 的高度；折成两行时随内容长高。 |
+| `tooltip-padding-x` | 8 | 10 | 10 | tooltip 左右内边距。 |
+| `tooltip-font-size` | 12 | 13 | 13 | tooltip 字号。 |
+| `tooltip-radius` | 6 | 8 | 8 | tooltip 圆角。 |
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `tooltip-offset` | `8px` | tooltip 和触发它的控件之间的距离。 |
+| `tooltip-max-width` | `240px` | tooltip 最大宽度，超过时折行，最多两行。 |
+| `tooltip-delay` | `500ms` | 指针停留多久后显示 tooltip 和悬停卡片。SwiftUI 的 .help() 用系统的时间。（仅网页） |
+| `tooltip-skip-window` | `300ms` | 一个 tooltip 刚关闭的这段时间里，移到相邻控件立即显示，不再等待。（仅网页） |
 
 ### 消息
 

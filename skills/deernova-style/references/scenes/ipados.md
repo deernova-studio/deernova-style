@@ -15,7 +15,7 @@ iPad 应用和 iPhone 一样用**触控**密度（`touch`），导航结构用�
 ```swift
 NavigationSplitView {
     SidebarView()
-        .navigationSplitViewColumnWidth(min: 260, ideal: Deernova.sidebarWidth, max: 400)
+        .navigationSplitViewColumnWidth(min: Deernova.sidebarWidthMin, ideal: Deernova.sidebarWidth, max: Deernova.sidebarWidthMax)
 } detail: {
     ScrollView { ThreadView().frame(maxWidth: Deernova.contentMax) }
         .safeAreaInset(edge: .bottom) { Composer().frame(maxWidth: Deernova.contentMax).padding(Deernova.pageMargin) }

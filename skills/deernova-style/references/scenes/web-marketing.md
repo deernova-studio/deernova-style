@@ -13,7 +13,7 @@
 - 大标题用 `type-display`（衬线）。首屏标题可以再放大，用 `clamp()` 跟随视口，例如 `font-size: clamp(40px, 6vw, 88px)`，但每页只有一个。
 - 正文 `type-body`，长文 `type-prose`，栏宽不超过 `content-max`。
 - 章节之间 `gap-group`（48），首屏上下留白 `space-16`。
-- 一页只用一套网格；左右边距 `page-margin`，宽屏时内容不超过 `breakpoint-lg` 宽，两侧留白。
+- 一页只用一套 12 栏网格，栏间距 `grid-gutter`；左右边距 `page-margin`，内容不超过 `wide-max`，两侧留白。见 [布局与对齐](../foundations/layout.md)。
 
 ## 控件
 

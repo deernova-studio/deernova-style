@@ -10,7 +10,7 @@
 - **次按钮**（默认）：`fill-selected` 灰底、无描边、无阴影、`ink` 字。半透明的灰底放在任何纸面上都成立。
 - **文字按钮** `is-plain`：无底，`ink-secondary` 字，悬停时出现 `fill-hover`。工具栏和卡片里的次要操作。
 - **危险按钮** `is-danger`：`danger-soft` 底、`danger` 字。只有在最终的[危险确认弹窗](sheet.md)里，才用实色的危险样式 `is-primary is-danger`：`danger` 底、`on-accent` 字（SwiftUI 的 `role: .destructive`）。
-- **图标按钮** `dn-icon-button`：只有图标，无底，`ink-secondary`，必须有无障碍标签。
+- **图标按钮** `dn-icon-button`：只有图标，无底，`ink-secondary`，必须有无障碍标签；指针端用 [tooltip](tooltip.md) 显示它的名称。
 
 ## 尺寸
 

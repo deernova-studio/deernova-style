@@ -1,6 +1,6 @@
 ---
 name: deernova-style
-description: Deernova 的界面设计语言：只用黑白灰，内容放在不透明纸面上，原生端的操作层用系统 Liquid Glass，Web 应用用不透明平面加 1px 线；界面和 AI 回答用无衬线，衬线只给大标题和长文；按场景（Web 应用、macOS、iOS、iPadOS、官网与文档）切换密度。在 Deernova 的应用或网站里新建、修改或审查界面时使用，包括颜色、字体、间距、圆角、线条、阴影、按钮、输入框、菜单与下拉选择、侧边栏、顶栏、列表、卡片、弹窗、空状态、AI 对话和任务清单，以及对应的 CSS、Tailwind 或 SwiftUI 实现。
+description: Deernova 的界面设计语言：只用黑白灰，内容放在不透明纸面上，原生端的操作层用系统 Liquid Glass，Web 应用用不透明平面加 1px 线；界面和 AI 回答用无衬线，衬线只给大标题和长文；按场景（Web 应用、macOS、iOS、iPadOS、官网与文档）切换密度。在 Deernova 的应用或网站里新建、修改或审查界面时使用，包括颜色、字体、间距、圆角、线条、阴影、按钮、输入框、菜单与下拉选择、侧边栏、顶栏、列表、卡片、弹窗、tooltip、空状态、AI 对话和任务清单，以及对应的 CSS、Tailwind 或 SwiftUI 实现。
 ---
 
 # Deernova 设计语言
@@ -56,6 +56,7 @@ description: Deernova 的界面设计语言：只用黑白灰，内容放在不�
 5. **层次靠字号和灰度，少用粗体。** 600 只给真正的标题（`display`、`title`、`headline`）。分组标题、会话名、说明、时间戳用常规字重，靠 `ink-secondary`、`ink-tertiary` 和小一号的字区分层级。
 6. **控件高度由 token 决定，点击区域单独补。** 按钮、输入框、列表行的可见高度直接用 `button-height-*`、`field-height`、`row-height`，上下内边距为 0，不让页面行高把它撑高。可见尺寸小于 `hit-min` 时，用透明的命中区补足，不加大可见的控件。
 7. **间距成组。** 间距走 4pt 网格。组内用 `gap-stack`，组与组之间用 `gap-group`（至少 2 倍）；内容区里段落、工具调用、卡片之间 `space-4`。用细线和少量留白分组，不靠大块空白和外框。
+9. **对齐按内容选。** 单行的控件和行在固定高度里垂直居中；图标和文字按中线，不同字号的文字按基线；三行以上的内容，图标和头像对齐第一行；空状态放在略高于正中的位置。不用内边距或 `top` 微调去凑居中。内容栏限宽并在主内容区里居中，见 [布局与对齐](references/foundations/layout.md)。
 8. **原生端用系统控件，Web 端用同一套自绘组件。** SwiftUI 端的导航结构、侧边栏、工具栏、菜单、表单、弹窗直接用系统控件和系统尺寸，只通过颜色和字体让它们融入；自己画的内容区（对话、卡片、输入区、任务清单）用 token。Web 应用没有系统控件可借，按组件说明里的规格画，骨架见 [Web 应用](references/scenes/web.md)。
 
 ## 读什么
@@ -72,11 +73,11 @@ description: Deernova 的界面设计语言：只用黑白灰，内容放在不�
 
 ### 基础
 
-[颜色](references/foundations/color.md) · [字体](references/foundations/typography.md) · [间距与布局](references/foundations/spacing.md) · [圆角](references/foundations/radius.md) · [线条](references/foundations/stroke.md) · [层级与阴影](references/foundations/elevation.md) · [玻璃](references/foundations/glass.md) · [动效](references/foundations/motion.md) · [图标](references/foundations/iconography.md) · [文案](references/foundations/writing.md) · [无障碍](references/foundations/accessibility.md)
+[颜色](references/foundations/color.md) · [字体](references/foundations/typography.md) · [间距](references/foundations/spacing.md) · [布局与对齐](references/foundations/layout.md) · [圆角](references/foundations/radius.md) · [线条](references/foundations/stroke.md) · [层级与阴影](references/foundations/elevation.md) · [玻璃](references/foundations/glass.md) · [动效](references/foundations/motion.md) · [图标](references/foundations/iconography.md) · [文案](references/foundations/writing.md) · [无障碍](references/foundations/accessibility.md)
 
 ### 组件
 
-[按钮](references/components/button.md) · [顶栏与侧面板](references/components/toolbar.md) · [玻璃操作层](references/components/glass-controls.md) · [分段控件](references/components/segmented.md) · [文本框](references/components/text-field.md) · [菜单与下拉](references/components/menu.md) · [Composer](references/components/composer.md) · [侧边栏](references/components/sidebar.md) · [分组列表](references/components/list.md) · [卡片](references/components/card.md) · [标签](references/components/tag.md) · [代码块](references/components/code-block.md) · [任务清单](references/components/task-list.md) · [空状态](references/components/empty-state.md) · [横幅与轻提示](references/components/banner.md) · [弹窗与 popover](references/components/sheet.md) · [消息](references/components/message.md) · [工具调用与执行步骤](references/components/step-row.md)
+[按钮](references/components/button.md) · [顶栏与侧面板](references/components/toolbar.md) · [玻璃操作层](references/components/glass-controls.md) · [分段控件](references/components/segmented.md) · [文本框](references/components/text-field.md) · [菜单与下拉](references/components/menu.md) · [Composer](references/components/composer.md) · [侧边栏](references/components/sidebar.md) · [分组列表](references/components/list.md) · [卡片](references/components/card.md) · [标签](references/components/tag.md) · [代码块](references/components/code-block.md) · [任务清单](references/components/task-list.md) · [空状态](references/components/empty-state.md) · [横幅与轻提示](references/components/banner.md) · [弹窗与 popover](references/components/sheet.md) · [Tooltip 与悬停浮层](references/components/tooltip.md) · [消息](references/components/message.md) · [工具调用与执行步骤](references/components/step-row.md)
 
 ### 场景
 
@@ -96,7 +97,7 @@ description: Deernova 的界面设计语言：只用黑白灰，内容放在不�
 - 在 SwiftUI 端给系统工具栏、侧边栏加实色背景盖掉玻璃；在 Web 应用里用模糊效果模仿玻璃。
 - 给卡片加阴影；在玻璃上放正文或列表。
 - 给界面文字、AI 回答或按钮用衬线；到处用粗体。
-- 用上下内边距撑出按钮高度；为了凑 44 点击区域把可见的按钮做大。
+- 用上下内边距撑出按钮高度；为了凑 44 点击区域把可见的按钮做大；用 `padding-top`、`top: 1px` 或等高的 `line-height` 凑垂直居中。
 - 把官网的大按钮、大字号搬进应用界面；把桌面端的尺寸直接搬到触屏上。
 - 一屏出现两个主按钮；用「确定」「OK」当按钮文字。
 - 只靠颜色表达状态。

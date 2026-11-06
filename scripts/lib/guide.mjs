@@ -9,9 +9,9 @@ import {
 // so the page cannot drift from what agents read.
 export const SECTIONS = [
   { id: 'foundations', title: '基础', dir: 'references/foundations',
-    docs: ['color', 'typography', 'spacing', 'radius', 'stroke', 'elevation', 'glass', 'motion', 'iconography', 'writing', 'accessibility'] },
+    docs: ['color', 'typography', 'spacing', 'layout', 'radius', 'stroke', 'elevation', 'glass', 'motion', 'iconography', 'writing', 'accessibility'] },
   { id: 'components', title: '组件', dir: 'references/components',
-    docs: ['button', 'toolbar', 'sidebar', 'composer', 'message', 'step-row', 'task-list', 'glass-controls', 'segmented', 'text-field', 'menu', 'list', 'card', 'tag', 'code-block', 'empty-state', 'banner', 'sheet'] },
+    docs: ['button', 'toolbar', 'sidebar', 'composer', 'message', 'step-row', 'task-list', 'glass-controls', 'segmented', 'text-field', 'menu', 'list', 'card', 'tag', 'code-block', 'empty-state', 'banner', 'sheet', 'tooltip'] },
   { id: 'scenes', title: '场景', dir: 'references/scenes',
     docs: ['web', 'web-marketing', 'macos', 'ios', 'ipados', 'swiftui'] }
 ];
@@ -140,8 +140,11 @@ function typeSpecimen(tokens) {
 function spacingSpecimen(tokens) {
   const scale = tokens.space.tokens.filter(token => !isDensity(token)).map(token =>
     `<div class="scale-row"><code>${token.name}</code><span class="space-bar" style="width: var(--${token.name})"></span><span>${token.value}</span></div>`);
-  const layout = tokens.layout.tokens.filter(isDensity);
-  return `<div class="specimen-panel" ${APP}><div class="scale">${scale.join('')}</div></div>${tokenTable(tokens, [...tokens.space.tokens.filter(isDensity), ...layout])}`;
+  return `<div class="specimen-panel" ${APP}><div class="scale">${scale.join('')}</div></div>${tokenTable(tokens, tokens.space.tokens.filter(isDensity))}`;
+}
+
+function layoutSpecimen(tokens) {
+  return tokenTable(tokens, tokens.layout.tokens);
 }
 
 function radiusSpecimen(tokens) {
@@ -168,7 +171,7 @@ function elevationSpecimen() {
 }
 
 const FOUNDATION_SPECIMENS = {
-  color: colorSpecimen, typography: typeSpecimen, spacing: spacingSpecimen, radius: radiusSpecimen,
+  color: colorSpecimen, typography: typeSpecimen, spacing: spacingSpecimen, layout: layoutSpecimen, radius: radiusSpecimen,
   stroke: strokeSpecimen, elevation: elevationSpecimen
 };
 
@@ -240,7 +243,7 @@ const screens = name => (SCREENS[name] || []).map(([file, alt]) => `<figure clas
 
 // Reference CSS from the component docs, applied to the live specimens on the page.
 export async function referenceCss(root) {
-  const files = [...SECTIONS[1].docs.map(name => docPath(SECTIONS[1], name)), 'references/foundations/iconography.md'];
+  const files = [...SECTIONS[1].docs.map(name => docPath(SECTIONS[1], name)), 'references/foundations/layout.md', 'references/foundations/iconography.md'];
   const out = [];
   for (const file of files) {
     const markdown = await read(join(root, SKILL_DIR, file));

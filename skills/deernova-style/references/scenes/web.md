@@ -60,6 +60,7 @@ Web 上按钮“上下特别宽”几乎都是同一个原因：用内边距和�
 - **底部**：[Composer](../components/composer.md) 悬浮在内容之上，上面可以贴一条提示，下面是模型和权限的信息行；内容区底部留出它的高度。
 - **侧面板**：右边可以并排打开终端、预览等面板，标签头和顶栏同高。
 - 窄于 `breakpoint-md`（960）时侧面板变成抽屉；窄于 `breakpoint-sm`（760）时侧边栏也收起成抽屉，顶栏左侧放菜单按钮。不能出现横向滚动。
+- 页面本身不滚动，侧边栏、内容区、侧面板各自滚动。其他页面类型（列表加详情、设置页、表格）的宽度，以及对齐规则，见 [布局与对齐](../foundations/layout.md)。
 
 ## 字体
 
@@ -67,7 +68,7 @@ Web 上按钮“上下特别宽”几乎都是同一个原因：用内边距和�
 
 ## 控件
 
-- 用原生元素：`<button>`、`<a>`、`<input>`、`<select>`、`<dialog>`、`<details>`。只有图标的按钮加 `aria-label`。
+- 用原生元素：`<button>`、`<a>`、`<input>`、`<select>`、`<dialog>`、`<details>`。只有图标的按钮加 `aria-label`，并用 [tooltip](../components/tooltip.md) 显示名称，不用 `title` 属性。
 - 焦点环：`outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset);`，只在 `:focus-visible` 时显示。
 - 细线：`border: var(--stroke-line) solid var(--line);`。
 - 分段控件、开关这类有状态的控件，用 `aria-pressed`、`role="switch"` 或 `role="tab"` 标出当前状态。

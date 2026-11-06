@@ -8,7 +8,7 @@
 skills/deernova-style/          skill 本体，规范的唯一来源
   SKILL.md                      入口：先确定场景、场景速查（生成）、核心规则、读什么、工作流程
   references/
-    foundations/                跨平台的“为什么”，每个主题一份：颜色、字体、间距与布局、圆角、线条、层级与阴影、玻璃、动效、图标、文案、无障碍
+    foundations/                跨平台的“为什么”，每个主题一份：颜色、字体、间距、布局与对齐、圆角、线条、层级与阴影、玻璃、动效、图标、文案、无障碍
     components/                 每个组件一份：用途、尺寸表（生成）、状态、Web 参考 CSS 和示例 HTML、SwiftUI 写法、不要
     scenes/                     各场景的落地：Web 应用、官网与文档、macOS、iOS、iPadOS，以及 SwiftUI 共用
     tokens.md                   全部设计变量表（由 tokens.json 生成）

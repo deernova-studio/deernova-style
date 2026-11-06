@@ -168,12 +168,20 @@ public enum Deernova {
     public static let opacitySolidHover: Double = 0.88
     /// 对话栏和长文阅读栏的最大宽度。
     public static let contentMax: CGFloat = 680
+    /// 表单页、设置页内容栏的最大宽度。
+    public static let formMax: CGFloat = 560
+    /// 表格、看板和官网内容的最大宽度。
+    public static let wideMax: CGFloat = 1120
     /// 菜单最大宽度；放不下的文字用省略号。
     public static let menuMaxWidth: CGFloat = 320
     /// 底部弹窗顶部拖拽条的宽度。
     public static let sheetGrabberWidth: CGFloat = 36
     /// 拖拽条的高度。
     public static let sheetGrabberHeight: CGFloat = 5
+    /// tooltip 和触发它的控件之间的距离。
+    public static let tooltipOffset: CGFloat = 8
+    /// tooltip 最大宽度，超过时折行，最多两行。
+    public static let tooltipMaxWidth: CGFloat = 240
 
     // 按密度取值的尺寸：macOS 是 desktop（只用于自己画的内容区），iOS 和 iPadOS 是 touch。
     #if os(macOS)
@@ -183,7 +191,11 @@ public enum Deernova {
     public static let pageMargin: CGFloat = 32
     public static let hitMin: CGFloat = 24
     public static let sidebarWidth: CGFloat = 288
+    public static let sidebarWidthMin: CGFloat = 200
+    public static let sidebarWidthMax: CGFloat = 400
+    public static let paneWidth: CGFloat = 320
     public static let toolbarHeight: CGFloat = 44
+    public static let gridGutter: CGFloat = 24
     public static let buttonHeightSm: CGFloat = 24
     public static let buttonHeightMd: CGFloat = 28
     public static let buttonHeightLg: CGFloat = 32
@@ -246,6 +258,10 @@ public enum Deernova {
     public static let sheetMargin: CGFloat = 32
     public static let sheetRadius: CGFloat = 12
     public static let popoverPadding: CGFloat = 12
+    public static let tooltipHeight: CGFloat = 24
+    public static let tooltipPaddingX: CGFloat = 8
+    public static let tooltipFontSize: CGFloat = 12
+    public static let tooltipRadius: CGFloat = 6
     public static let messageFontSize: CGFloat = 15
     public static let messageActionSize: CGFloat = 24
     public static let iconSizeSm: CGFloat = 14
@@ -258,7 +274,11 @@ public enum Deernova {
     public static let pageMargin: CGFloat = 16
     public static let hitMin: CGFloat = 44
     public static let sidebarWidth: CGFloat = 320
+    public static let sidebarWidthMin: CGFloat = 260
+    public static let sidebarWidthMax: CGFloat = 400
+    public static let paneWidth: CGFloat = 360
     public static let toolbarHeight: CGFloat = 44
+    public static let gridGutter: CGFloat = 16
     public static let buttonHeightSm: CGFloat = 30
     public static let buttonHeightMd: CGFloat = 36
     public static let buttonHeightLg: CGFloat = 46
@@ -321,6 +341,10 @@ public enum Deernova {
     public static let sheetMargin: CGFloat = 8
     public static let sheetRadius: CGFloat = 24
     public static let popoverPadding: CGFloat = 16
+    public static let tooltipHeight: CGFloat = 28
+    public static let tooltipPaddingX: CGFloat = 10
+    public static let tooltipFontSize: CGFloat = 13
+    public static let tooltipRadius: CGFloat = 8
     public static let messageFontSize: CGFloat = 15
     public static let messageActionSize: CGFloat = 32
     public static let iconSizeSm: CGFloat = 17

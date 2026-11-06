@@ -19,7 +19,7 @@ SwiftUI 的通用写法见 [SwiftUI 共用](swiftui.md)。
 ```swift
 NavigationSplitView {
     SidebarView()
-        .navigationSplitViewColumnWidth(min: 180, ideal: Deernova.sidebarWidth, max: 300)
+        .navigationSplitViewColumnWidth(min: Deernova.sidebarWidthMin, ideal: Deernova.sidebarWidth, max: Deernova.sidebarWidthMax)
 } detail: {
     ScrollView { ThreadView().frame(maxWidth: Deernova.contentMax) }
         .safeAreaInset(edge: .bottom) { Composer().padding(Deernova.pageMargin) }

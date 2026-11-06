@@ -2,6 +2,20 @@
 
 更新于 2026-11-05。
 
+## 弹窗与 popover 规范（2026-11-06）
+
+- 原来的弹窗说明只写了外观、标题字体和按钮排法。现在 `sheet.md` 改名为「弹窗、底部弹窗与 popover」，新增：先选对控件（轻提示、横幅、确认弹窗、弹窗、popover、菜单、新页面）；三档宽度和结构（标题区、内容区、按钮区，长内容只滚动中间并加分隔线）；关闭按钮的使用条件；危险确认（问句标题、写后果、实色危险按钮、默认聚焦「取消」）；打开与关闭（初始焦点、背景不能操作也不滚动、哪些情况点遮罩可以关闭、「放弃修改？」、回车提交、焦点回到原处）；动效；触控端底部弹窗（安全区、档位、键盘）；popover 的外观和 `popover` 属性；SwiftUI 的 `.sheet`、`.confirmationDialog`、`.alert`、`.popover`、`.fullScreenCover`。
+- `tokens.json` 的弹窗组新增 `sheet-width-sm/md/lg`（360/480/720，触控 360/540/720，舒展 400/560/800）、`sheet-padding`、`sheet-margin`、`sheet-grabber-width/height`、`popover-padding`。按钮新增实色危险样式 `is-primary is-danger`（`danger` 底、`on-accent` 字，浅色 6.5:1，深色 6.7:1），对比度测试加了这一组。
+- 修正两处旧写法：触控端按钮原来用 `column`，会把「暂不需要」排在主按钮上面，改成 `column-reverse`；`<dialog>` 的浏览器默认 `max-width` 会把手机上的底部弹窗压窄（实测 339 而不是 359），参考 CSS 补了 `max-width: none`。
+- 实测：规范页三个示例渲染正常（480、360 和 popover）。用参考 CSS 打开真实的 `<dialog>`：舒展密度下宽 560，上下各离窗口 32，页面停止滚动，焦点在 `autofocus` 的输入框；内容超长时只有中间滚动，按钮区上方出现分隔线；按 Esc 关闭后焦点回到打开按钮，页面恢复滚动。375 宽触屏模拟下，危险确认贴底悬浮，左右和底部各留 8，宽 359，圆角 24，删除在上、取消在下，焦点在取消。`npm test` 63 项通过。
+
+## 菜单与下拉规范（2026-11-06）
+
+- skill 原来没有菜单组件说明，只在分段控件、弹窗、Web 场景里零散提到。新增 `references/components/menu.md`：先按用途选控件（分段控件、原生下拉选择、命令菜单、链接列表、可搜索下拉或弹窗），再规定面板、菜单项、勾选、禁用、危险操作、分隔线、子菜单、开合位置、动效、键盘和三种 Web 语义（disclosure、`role="menu"`、原生 `select` 或 listbox），以及 SwiftUI 的 `Menu`、`Picker`、`.contextMenu`。
+- `tokens.json` 新增「菜单与下拉」组：`menu-item-height`（28/44/36）、`menu-item-padding-x`、`menu-font-size`、`menu-padding`、`menu-offset`、`menu-min-width`、`menu-max-width`，`menu-radius` 从弹窗组移过来。SKILL.md、规范页目录、文本框、分段控件、弹窗、Web 场景和审查清单都链到它。
+- 首页产品下拉按规范重做：官网场景用舒展密度，触屏换成 touch；行高、内边距、圆角、偏移、图标尺寸都取 token，悬停放进 `(hover: hover)`，键盘聚焦加内描边焦点环，打开时淡入加 0.98→1 放大，减弱动态效果时只淡入；补上焦点跟随指针和按字母跳转。宽度仍是页眉的一半（用户要求），写进了规范的例外。
+- 实测：规范页示例桌面档菜单项 28px、面板内边距 4、圆角 8/4；首页桌面菜单项 36px、与页眉间距 8px、圆角 12/6；375 宽触屏模拟下菜单项 44px、宽 220、字号 17，没有横向滚动。键盘 ↓ 打开并聚焦、字母跳转、Esc 关闭并回到触发器都通过；浅色和深色都看过，控制台无错误。`npm test` 63 项通过。
+
 ## 安装命令分项目和全局（2026-11-06）
 
 - 规范页「文件与安装」、README 和 npm 包说明都列出两组命令：装进项目（`.agents` 或 `.claude`），以及装到全局（`--global --agent claude` 写到 `~/.claude/skills`，`--global` 写到 Codex 的 `$CODEX_HOME/skills`），全局的更新和检查带上同样的参数。

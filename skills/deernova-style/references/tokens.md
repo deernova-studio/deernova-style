@@ -408,14 +408,42 @@
 | `toast-height` | 36 | 40 | 40 | 轻提示胶囊的高度。 |
 | `banner-radius` | 10 | 12 | 12 | 横幅和贴在输入区上方的提示条的圆角。 |
 
-### 弹窗与底部弹窗
+### 菜单与下拉
+
+见 [components/menu.md](components/menu.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `menu-item-height` | 28 | 44 | 36 | 菜单项和下拉选项的高度。 |
+| `menu-item-padding-x` | 8 | 10 | 10 | 菜单项左右内边距。 |
+| `menu-font-size` | 14 | 17 | 15 | 菜单项字号。 |
+| `menu-padding` | 4 | 6 | 6 | 菜单面板的内边距，也是分隔线上下的间距。 |
+| `menu-radius` | 8 | 12 | 12 | 菜单和 popover 的圆角；菜单项的圆角 = 它减去 menu-padding。 |
+| `menu-offset` | 4 | 8 | 8 | 菜单和触发它的控件之间的距离。 |
+| `menu-min-width` | 160 | 220 | 200 | 菜单最小宽度；同时不窄于触发器。 |
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `menu-max-width` | `320px` | 菜单最大宽度；放不下的文字用省略号。 |
+
+### 弹窗、底部弹窗与 popover
 
 见 [components/sheet.md](components/sheet.md)。
 
 | Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
 | --- | --- | --- | --- | --- |
+| `sheet-width-sm` | 360 | 360 | 400 | 确认弹窗、只有一两句话的提示。 |
+| `sheet-width-md` | 480 | 540 | 560 | 默认宽度：短表单、选择分享方式这类短任务。 |
+| `sheet-width-lg` | 720 | 720 | 800 | 预览、较长的设置，或分两栏的内容。 |
+| `sheet-padding` | 20 | 20 | 24 | 弹窗内边距；标题、内容和按钮区都和它对齐。 |
+| `sheet-margin` | 32 | 8 | 32 | 弹窗离窗口边缘的最小距离；触控端底部弹窗悬浮时离屏幕边缘的距离。 |
 | `sheet-radius` | 12 | 24 | 16 | 弹窗和底部弹窗的圆角。 |
-| `menu-radius` | 8 | 12 | 12 | 弹出菜单、popover 的圆角。 |
+| `popover-padding` | 12 | 16 | 16 | popover 的内边距；圆角用 menu-radius，宽度不超过 sheet-width-sm。 |
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `sheet-grabber-width` | `36px` | 底部弹窗顶部拖拽条的宽度。 |
+| `sheet-grabber-height` | `5px` | 拖拽条的高度。 |
 
 ### 消息
 

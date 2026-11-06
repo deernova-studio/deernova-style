@@ -20,7 +20,7 @@
 - 出错时边框变 `danger`，说明文字换成错误信息，同样用 `danger` 色。错误信息要说清楚怎么改。
 - 标签在输入框上方，`callout` 字号、中粗、`ink-secondary`；说明在下方，`caption` 字号、常规字重、`ink-tertiary`。标签、输入框、说明之间 `space-1`。
 - 触控端输入文字不小于 16px，避免浏览器在聚焦时放大页面（`field-font-size` 已经保证）。
-- 下拉选择（`select`）和输入框同高、同边框。
+- 下拉选择（`select`）和输入框同高、同边框，写法见 [菜单与下拉](menu.md)。
 
 ## Web
 

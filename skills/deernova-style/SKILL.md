@@ -1,6 +1,6 @@
 ---
 name: deernova-style
-description: Deernova 的界面设计语言：只用黑白灰，内容放在不透明纸面上，原生端的操作层用系统 Liquid Glass，Web 应用用不透明平面加 1px 线；界面和 AI 回答用无衬线，衬线只给大标题和长文；按场景（Web 应用、macOS、iOS、iPadOS、官网与文档）切换密度。在 Deernova 的应用或网站里新建、修改或审查界面时使用，包括颜色、字体、间距、圆角、线条、阴影、按钮、输入框、侧边栏、顶栏、列表、卡片、弹窗、空状态、AI 对话和任务清单，以及对应的 CSS、Tailwind 或 SwiftUI 实现。
+description: Deernova 的界面设计语言：只用黑白灰，内容放在不透明纸面上，原生端的操作层用系统 Liquid Glass，Web 应用用不透明平面加 1px 线；界面和 AI 回答用无衬线，衬线只给大标题和长文；按场景（Web 应用、macOS、iOS、iPadOS、官网与文档）切换密度。在 Deernova 的应用或网站里新建、修改或审查界面时使用，包括颜色、字体、间距、圆角、线条、阴影、按钮、输入框、菜单与下拉选择、侧边栏、顶栏、列表、卡片、弹窗、空状态、AI 对话和任务清单，以及对应的 CSS、Tailwind 或 SwiftUI 实现。
 ---
 
 # Deernova 设计语言
@@ -76,7 +76,7 @@ description: Deernova 的界面设计语言：只用黑白灰，内容放在不�
 
 ### 组件
 
-[按钮](references/components/button.md) · [顶栏与侧面板](references/components/toolbar.md) · [玻璃操作层](references/components/glass-controls.md) · [分段控件](references/components/segmented.md) · [文本框](references/components/text-field.md) · [Composer](references/components/composer.md) · [侧边栏](references/components/sidebar.md) · [分组列表](references/components/list.md) · [卡片](references/components/card.md) · [标签](references/components/tag.md) · [代码块](references/components/code-block.md) · [任务清单](references/components/task-list.md) · [空状态](references/components/empty-state.md) · [横幅与轻提示](references/components/banner.md) · [弹窗](references/components/sheet.md) · [消息](references/components/message.md) · [工具调用与执行步骤](references/components/step-row.md)
+[按钮](references/components/button.md) · [顶栏与侧面板](references/components/toolbar.md) · [玻璃操作层](references/components/glass-controls.md) · [分段控件](references/components/segmented.md) · [文本框](references/components/text-field.md) · [菜单与下拉](references/components/menu.md) · [Composer](references/components/composer.md) · [侧边栏](references/components/sidebar.md) · [分组列表](references/components/list.md) · [卡片](references/components/card.md) · [标签](references/components/tag.md) · [代码块](references/components/code-block.md) · [任务清单](references/components/task-list.md) · [空状态](references/components/empty-state.md) · [横幅与轻提示](references/components/banner.md) · [弹窗与 popover](references/components/sheet.md) · [消息](references/components/message.md) · [工具调用与执行步骤](references/components/step-row.md)
 
 ### 场景
 

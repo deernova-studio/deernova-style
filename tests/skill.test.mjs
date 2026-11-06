@@ -114,5 +114,6 @@ test('text and control colors keep their contrast in both themes', async () => {
       assert.ok(ratio(color(status, theme), color('surface', theme)) >= 4.5, `${theme} ${status} on surface`);
     }
     assert.ok(ratio(color('on-accent', theme), color('accent', theme)) >= 4.5, `${theme} on-accent on accent`);
+    assert.ok(ratio(color('on-accent', theme), color('danger', theme)) >= 4.5, `${theme} on-accent on danger (solid danger button)`);
   }
 });

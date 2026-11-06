@@ -9,7 +9,7 @@
 - **主按钮** `is-primary`：`accent` 底、`on-accent` 字。保存、发送、购买这类关键动作，一屏最多一个。
 - **次按钮**（默认）：`fill-selected` 灰底、无描边、无阴影、`ink` 字。半透明的灰底放在任何纸面上都成立。
 - **文字按钮** `is-plain`：无底，`ink-secondary` 字，悬停时出现 `fill-hover`。工具栏和卡片里的次要操作。
-- **危险按钮** `is-danger`：`danger-soft` 底、`danger` 字。只有在最终确认弹窗里，才用实色的危险样式（SwiftUI 的 `role: .destructive`）。
+- **危险按钮** `is-danger`：`danger-soft` 底、`danger` 字。只有在最终的[危险确认弹窗](sheet.md)里，才用实色的危险样式 `is-primary is-danger`：`danger` 底、`on-accent` 字（SwiftUI 的 `role: .destructive`）。
 - **图标按钮** `dn-icon-button`：只有图标，无底，`ink-secondary`，必须有无障碍标签。
 
 ## 尺寸
@@ -82,6 +82,7 @@
 .dn-button.is-plain { background: transparent; color: var(--ink-secondary); }
 .dn-button.is-plain:hover:not(:disabled) { background: var(--fill-hover); color: var(--ink); }
 .dn-button.is-danger { background: var(--danger-soft); color: var(--danger); }
+.dn-button.is-primary.is-danger { background: var(--danger); color: var(--on-accent); }
 
 .dn-button.is-sm { height: var(--button-height-sm); padding: 0 var(--button-padding-x-sm); border-radius: var(--button-radius-sm); font-size: var(--button-font-size-sm); }
 .dn-button.is-lg { height: var(--button-height-lg); padding: 0 var(--button-padding-x-lg); font-size: var(--button-font-size-lg); }

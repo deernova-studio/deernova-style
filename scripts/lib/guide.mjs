@@ -11,7 +11,7 @@ export const SECTIONS = [
   { id: 'foundations', title: '基础', dir: 'references/foundations',
     docs: ['color', 'typography', 'spacing', 'radius', 'stroke', 'elevation', 'glass', 'motion', 'iconography', 'writing', 'accessibility'] },
   { id: 'components', title: '组件', dir: 'references/components',
-    docs: ['button', 'toolbar', 'sidebar', 'composer', 'message', 'step-row', 'task-list', 'glass-controls', 'segmented', 'text-field', 'list', 'card', 'tag', 'code-block', 'empty-state', 'banner', 'sheet'] },
+    docs: ['button', 'toolbar', 'sidebar', 'composer', 'message', 'step-row', 'task-list', 'glass-controls', 'segmented', 'text-field', 'menu', 'list', 'card', 'tag', 'code-block', 'empty-state', 'banner', 'sheet'] },
   { id: 'scenes', title: '场景', dir: 'references/scenes',
     docs: ['web', 'web-marketing', 'macos', 'ios', 'ipados', 'swiftui'] }
 ];

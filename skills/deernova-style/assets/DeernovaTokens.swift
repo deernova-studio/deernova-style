@@ -168,6 +168,12 @@ public enum Deernova {
     public static let opacitySolidHover: Double = 0.88
     /// 对话栏和长文阅读栏的最大宽度。
     public static let contentMax: CGFloat = 680
+    /// 菜单最大宽度；放不下的文字用省略号。
+    public static let menuMaxWidth: CGFloat = 320
+    /// 底部弹窗顶部拖拽条的宽度。
+    public static let sheetGrabberWidth: CGFloat = 36
+    /// 拖拽条的高度。
+    public static let sheetGrabberHeight: CGFloat = 5
 
     // 按密度取值的尺寸：macOS 是 desktop（只用于自己画的内容区），iOS 和 iPadOS 是 touch。
     #if os(macOS)
@@ -226,8 +232,20 @@ public enum Deernova {
     public static let emptyIconSize: CGFloat = 32
     public static let toastHeight: CGFloat = 36
     public static let bannerRadius: CGFloat = 10
-    public static let sheetRadius: CGFloat = 12
+    public static let menuItemHeight: CGFloat = 28
+    public static let menuItemPaddingX: CGFloat = 8
+    public static let menuFontSize: CGFloat = 14
+    public static let menuPadding: CGFloat = 4
     public static let menuRadius: CGFloat = 8
+    public static let menuOffset: CGFloat = 4
+    public static let menuMinWidth: CGFloat = 160
+    public static let sheetWidthSm: CGFloat = 360
+    public static let sheetWidthMd: CGFloat = 480
+    public static let sheetWidthLg: CGFloat = 720
+    public static let sheetPadding: CGFloat = 20
+    public static let sheetMargin: CGFloat = 32
+    public static let sheetRadius: CGFloat = 12
+    public static let popoverPadding: CGFloat = 12
     public static let messageFontSize: CGFloat = 15
     public static let messageActionSize: CGFloat = 24
     public static let iconSizeSm: CGFloat = 14
@@ -289,8 +307,20 @@ public enum Deernova {
     public static let emptyIconSize: CGFloat = 36
     public static let toastHeight: CGFloat = 40
     public static let bannerRadius: CGFloat = 12
-    public static let sheetRadius: CGFloat = 24
+    public static let menuItemHeight: CGFloat = 44
+    public static let menuItemPaddingX: CGFloat = 10
+    public static let menuFontSize: CGFloat = 17
+    public static let menuPadding: CGFloat = 6
     public static let menuRadius: CGFloat = 12
+    public static let menuOffset: CGFloat = 8
+    public static let menuMinWidth: CGFloat = 220
+    public static let sheetWidthSm: CGFloat = 360
+    public static let sheetWidthMd: CGFloat = 540
+    public static let sheetWidthLg: CGFloat = 720
+    public static let sheetPadding: CGFloat = 20
+    public static let sheetMargin: CGFloat = 8
+    public static let sheetRadius: CGFloat = 24
+    public static let popoverPadding: CGFloat = 16
     public static let messageFontSize: CGFloat = 15
     public static let messageActionSize: CGFloat = 32
     public static let iconSizeSm: CGFloat = 17

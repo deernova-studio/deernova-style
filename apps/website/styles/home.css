@@ -56,8 +56,8 @@
 }
 .masthead-float::before, .product-panel {
   background: var(--glass-fill);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4);
-  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
 }
 .masthead-trigger {
   position: absolute;
@@ -76,33 +76,50 @@
 }
 .masthead-trigger:hover { color: var(--ink-secondary); }
 .masthead-trigger:focus-visible { border-radius: inherit; }
-.product-panel svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+/* The product list follows references/components/menu.md: a disclosure of links in the header's glass.
+   It carries the comfortable density of the marketing scene, or touch on a touch screen (product-menu.js). */
+.product-panel svg { flex: none; fill: none; stroke: currentColor; stroke-width: var(--icon-stroke); stroke-linecap: round; stroke-linejoin: round; }
 .product-panel {
   position: absolute;
-  top: calc(100% + var(--space-2));
-  left: 0;
-  /* Half the header, from its left edge; never too narrow for a product name on a phone. */
-  width: min(100%, max(50%, 15rem));
-  max-height: min(20rem, calc(100dvh - 128px));
+  /* Measured from the header's outer edge, past its 1px border. */
+  top: calc(100% + var(--stroke-line) + var(--menu-offset));
+  left: calc(var(--stroke-line) * -1);
+  z-index: var(--z-dropdown);
+  /* The whole header is the trigger, so the menu takes half of it from the left edge. */
+  width: min(100%, max(50%, var(--menu-min-width)));
+  max-height: min(24rem, calc(100dvh - 128px));
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: var(--space-1);
+  padding: var(--menu-padding);
   border: var(--stroke-line) solid var(--glass-stroke);
-  border-radius: var(--radius-md);
+  border-radius: var(--menu-radius);
   color: var(--ink);
   box-shadow: var(--shadow-float);
+  transform-origin: top left;
+  transition: opacity var(--duration-instant) var(--ease-standard), transform var(--duration-instant) var(--ease-standard);
 }
+.product-panel[hidden] { display: none; }
+@starting-style { .product-panel { opacity: 0; transform: scale(0.98); } }
 .product-options { margin: 0; padding: 0; list-style: none; }
-.product-option { display: flex; align-items: center; gap: var(--space-2); min-height: 32px; padding: var(--space-1) var(--space-2); border-radius: var(--radius-xs); text-decoration: none; }
-.product-option:hover, .product-option:focus-visible { background: var(--fill-hover); }
-.product-panel .product-symbol {
-  flex: 0 0 20px;
-  width: 20px;
-  height: 20px;
-  fill: currentColor;
-  stroke: none;
+.product-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--menu-item-height);
+  padding: 0 var(--menu-item-padding-x);
+  border-radius: calc(var(--menu-radius) - var(--menu-padding));
+  font: var(--weight-regular) var(--menu-font-size)/1 var(--font-sans);
+  text-decoration: none;
+  white-space: nowrap;
 }
-.product-panel .product-arrow { width: 14px; height: 14px; margin-left: auto; color: var(--ink-tertiary); }
+.product-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+@media (hover: hover) { .product-option:hover { background: var(--fill-hover); } }
+.product-option:focus { outline: none; }
+.product-option:focus-visible { background: var(--fill-hover); outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: calc(var(--stroke-focus) * -1); }
+/* Product symbols are pictures, so they take the large icon size. */
+.product-panel .product-symbol { width: var(--icon-size-lg); height: var(--icon-size-lg); fill: currentColor; stroke: none; }
+.product-panel .product-arrow { width: var(--icon-size-sm); height: var(--icon-size-sm); color: var(--ink-tertiary); }
+@media (prefers-reduced-motion: reduce) { .product-panel { transition-property: opacity; } }
 
 @media (prefers-reduced-transparency: reduce) {
   .masthead-float::before, .product-panel { background: var(--surface-raised); -webkit-backdrop-filter: none; backdrop-filter: none; }
@@ -119,10 +136,7 @@
   .masthead-float .wordmark { font-size: 20px; }
 }
 
-/* Match the repository's desktop density, while keeping touch rows easy to hit. */
+/* Keep the retry button easy to hit on a touch screen. */
 @media (pointer: coarse) {
   .animation-status button { min-height: var(--hit-min); }
-  .product-option { min-height: var(--hit-min); }
-  .product-panel .product-symbol { flex-basis: 24px; width: 24px; height: 24px; }
-  .product-panel .product-arrow { width: 16px; height: 16px; }
 }

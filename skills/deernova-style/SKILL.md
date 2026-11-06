@@ -78,7 +78,7 @@ description: Deernova 的界面设计语言：只用黑白灰，内容放在不�
 
 ### 组件
 
-[按钮](references/components/button.md) · [顶栏与侧面板](references/components/toolbar.md) · [玻璃操作层](references/components/glass-controls.md) · [分段控件](references/components/segmented.md) · [文本框](references/components/text-field.md) · [菜单与下拉](references/components/menu.md) · [Composer](references/components/composer.md) · [侧边栏](references/components/sidebar.md) · [分组列表](references/components/list.md) · [卡片](references/components/card.md) · [标签](references/components/tag.md) · [代码块](references/components/code-block.md) · [任务清单](references/components/task-list.md) · [空状态](references/components/empty-state.md) · [横幅与轻提示](references/components/banner.md) · [弹窗与 popover](references/components/sheet.md) · [Tooltip 与悬停浮层](references/components/tooltip.md) · [消息](references/components/message.md) · [工具调用与执行步骤](references/components/step-row.md)
+[按钮](references/components/button.md) · [顶栏与侧面板](references/components/toolbar.md) · [玻璃操作层](references/components/glass-controls.md) · [分段控件](references/components/segmented.md) · [文本框](references/components/text-field.md) · [菜单与下拉](references/components/menu.md) · [Composer](references/components/composer.md) · [侧边栏](references/components/sidebar.md) · [分组列表](references/components/list.md) · [卡片](references/components/card.md) · [标签](references/components/tag.md) · [代码块](references/components/code-block.md) · [任务清单](references/components/task-list.md) · [空状态](references/components/empty-state.md) · [横幅与轻提示](references/components/banner.md) · [弹窗、抽屉与 popover](references/components/sheet.md) · [Tooltip 与悬停浮层](references/components/tooltip.md) · [消息](references/components/message.md) · [工具调用与执行步骤](references/components/step-row.md)
 
 ### 场景
 
@@ -98,6 +98,7 @@ description: Deernova 的界面设计语言：只用黑白灰，内容放在不�
 - 在 SwiftUI 端给系统工具栏、侧边栏加实色背景盖掉玻璃；在 Web 应用里用模糊效果模仿玻璃。
 - 给卡片加阴影；在玻璃上放正文或列表。
 - 给界面文字、AI 回答或按钮用衬线；到处用粗体。
+- 浮层只有出现动画、关闭时一下子消失；用 `@keyframes` 做开合。
 - 用上下内边距撑出按钮高度；为了凑 44 点击区域把可见的按钮做大；用 `padding-top`、`top: 1px` 或等高的 `line-height` 凑垂直居中。
 - 把官网的大按钮、大字号搬进应用界面；把桌面端的尺寸直接搬到触屏上。
 - 一屏出现两个主按钮；用「确定」「OK」当按钮文字。

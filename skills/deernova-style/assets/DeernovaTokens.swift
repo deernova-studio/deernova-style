@@ -156,11 +156,11 @@ public enum Deernova {
     public static let strokeFocus: CGFloat = 2
     /// 焦点环和控件边缘之间的距离。
     public static let focusOffset: CGFloat = 2
-    /// 悬停、按压、选中这类即时反馈。
+    /// 悬停、按压、选中这类即时反馈；tooltip 的进出；菜单、popover 的退出。
     public static let durationInstant: Double = 0.12
-    /// 展开、收起、切换、开关。
+    /// 菜单、popover、轻提示的进入；展开收起；弹窗和抽屉的退出。
     public static let durationBase: Double = 0.2
-    /// 面板滑入、页面级转场。
+    /// 弹窗、底部弹窗、侧边抽屉的进入，页面级转场。
     public static let durationSlow: Double = 0.32
     /// 禁用的控件。禁用时保持原位，不隐藏。
     public static let opacityDisabled: Double = 0.35

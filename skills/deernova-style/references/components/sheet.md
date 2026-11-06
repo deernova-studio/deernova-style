@@ -1,6 +1,6 @@
-# 弹窗、底部弹窗与 popover
+# 弹窗、抽屉与 popover
 
-弹窗用于一个短小、独立的任务：确认删除、编辑一个字段、选择分享方式。它会打断当前页面，背景压暗，完成或取消之后回到原处。指针端在窗口中央弹出，触控端从底部弹出。popover 附着在一个控件上，放少量说明或短表单，不打断页面。
+弹窗用于一个短小、独立的任务：确认删除、编辑一个字段、选择分享方式。它会打断当前页面，背景压暗，完成或取消之后回到原处。指针端在窗口中央弹出，触控端从底部弹出。侧边抽屉从屏幕左右边缘滑入，窄屏时用来放收起的侧边栏和侧面板。popover 附着在一个控件上，放少量说明或短表单，不打断页面。
 
 **需要提供**：标题、一两句说明、内容（短表单或选项）、主操作和取消操作；底部弹窗还要提供支持的高度档位。危险操作要写清后果。
 
@@ -14,6 +14,7 @@
 | 必须马上知道的错误 | 确认弹窗；SwiftUI 用 `.alert` |
 | 一个短小、独立的任务 | 弹窗；触控端是底部弹窗 |
 | 附着在某个控件上的少量说明、设置或短表单 | popover；手机上改成底部弹窗 |
+| 窄屏时收起的侧边栏、侧面板 | 侧边抽屉 |
 | 一列命令或选项 | [菜单](menu.md) |
 | 长内容、多步流程、需要长时间阅读 | 推入新页面，或者全高弹窗 |
 
@@ -58,7 +59,7 @@
 - 有未保存的输入时，Esc、取消、下拉关闭都先问「放弃修改？」，按钮是「继续编辑」和「放弃」。这是唯一可以叠在弹窗上的确认。
 - 关闭后焦点回到打开它的控件。
 - 表单弹窗里，回车执行主操作；危险确认除外。
-- 动效：居中的弹窗淡入，同时从 0.96 放大到 1，用时 `duration-base`；底部弹窗从下方滑入，用时 `duration-slow`；遮罩同时淡入，缓动都是 `ease-standard`。关闭时直接消失。开启「减弱动态效果」后只保留淡入。popover 的开合和菜单相同。
+- 动效：居中的弹窗淡入并从 0.96 放大到 1，用时 `duration-slow`、缓动 `ease-enter`；关闭时淡出并缩回 0.96，用时 `duration-base`、缓动 `ease-exit`。底部弹窗和侧边抽屉整块滑入滑出，进入 `duration-slow`、退出 `duration-base`，都用 `ease-drawer`。遮罩和面板同步淡入淡出。popover 的开合和菜单相同。开启「减弱动态效果」后只保留淡入淡出。见 [动效](../foundations/motion.md)。
 
 ## 触控端
 
@@ -66,6 +67,13 @@
 - 高度档位：中等（跟随内容，最多半屏左右）和全高。可以支持向下拖动关闭，但仍要保留取消按钮。
 - 输入框聚焦、键盘弹起时，输入框要留在可见区域，不能被键盘挡住。
 - 手机上不用 popover，改成底部弹窗；iPad 和平板的大屏上不要弹出撑满全屏的底部弹窗。
+
+## 侧边抽屉
+
+- 从面板平时所在的那一边滑入：侧边栏从左边，侧面板从右边。宽度分别是 `sidebar-width` 和 `sheet-width-md`，右侧或左侧至少露出 48px 的页面，让人知道点那里能关掉。
+- `surface` 底，靠页面一侧一条 1px `line`，阴影 `shadow-float`，背后用 `scrim` 压暗；打开时页面不能滚动。
+- 关闭方式：点遮罩、Esc、抽屉里的关闭按钮、选中一个导航项后自动关闭。打开后焦点移进抽屉，关闭后回到打开它的按钮。
+- 触屏上可以跟手拖动关闭：拖动时去掉过渡，让抽屉跟着手指走；松手时拖过宽度的三分之一，或者向外甩得够快，就滑出关闭，否则用 `ease-drawer` 弹回原位。
 
 ## Web
 
@@ -89,17 +97,48 @@
   background: var(--surface-raised);
   color: var(--ink);
   box-shadow: var(--shadow-float);
-  transition: opacity var(--duration-base) var(--ease-standard), transform var(--duration-base) var(--ease-standard);
+  transition: opacity var(--duration-slow) var(--ease-enter), transform var(--duration-slow) var(--ease-enter), overlay var(--duration-slow) allow-discrete, display var(--duration-slow) allow-discrete;
 }
-dialog.dn-sheet:not([open]) { display: none; }
+dialog.dn-sheet:not([open]) { display: none; opacity: 0; transform: scale(0.96); transition-duration: var(--duration-base); transition-timing-function: var(--ease-exit); }
 .dn-sheet.is-sm { width: min(100% - 2 * var(--sheet-margin), var(--sheet-width-sm)); }
 .dn-sheet.is-lg { width: min(100% - 2 * var(--sheet-margin), var(--sheet-width-lg)); }
-.dn-sheet::backdrop { background: var(--scrim); transition: opacity var(--duration-base) var(--ease-standard); }
+.dn-sheet::backdrop { background: var(--scrim); transition: opacity var(--duration-slow) var(--ease-enter), overlay var(--duration-slow) allow-discrete, display var(--duration-slow) allow-discrete; }
+dialog.dn-sheet:not([open])::backdrop { opacity: 0; transition-duration: var(--duration-base); transition-timing-function: var(--ease-exit); }
 @starting-style {
   .dn-sheet[open] { opacity: 0; transform: scale(0.96); }
   .dn-sheet[open]::backdrop { opacity: 0; }
 }
-:root:has(.dn-sheet:modal) { overflow: hidden; }
+:root:has(:is(.dn-sheet, .dn-drawer):modal) { overflow: hidden; }
+.dn-drawer {
+  box-sizing: border-box;
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: min(var(--sidebar-width), 100vw - var(--space-12));
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 0;
+  border-right: var(--stroke-line) solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-float);
+  transition: transform var(--duration-slow) var(--ease-drawer), opacity var(--duration-slow) var(--ease-drawer), overlay var(--duration-slow) allow-discrete, display var(--duration-slow) allow-discrete;
+}
+.dn-drawer.is-end { inset: 0 0 0 auto; width: min(var(--sheet-width-md), 100vw - var(--space-12)); border-right: 0; border-left: var(--stroke-line) solid var(--line); }
+dialog.dn-drawer:not([open]) { display: none; transform: translateX(-100%); transition-duration: var(--duration-base); }
+dialog.dn-drawer.is-end:not([open]) { transform: translateX(100%); }
+.dn-drawer::backdrop { background: var(--scrim); transition: opacity var(--duration-slow) var(--ease-drawer), overlay var(--duration-slow) allow-discrete, display var(--duration-slow) allow-discrete; }
+dialog.dn-drawer:not([open])::backdrop { opacity: 0; transition-duration: var(--duration-base); }
+@starting-style {
+  .dn-drawer[open] { transform: translateX(-100%); }
+  .dn-drawer.is-end[open] { transform: translateX(100%); }
+  .dn-drawer[open]::backdrop { opacity: 0; }
+}
+.dn-drawer.is-dragging { transition: none; }
 .dn-sheet-grabber { flex: none; width: var(--sheet-grabber-width); height: var(--sheet-grabber-height); margin: var(--space-2) auto 0; border-radius: var(--radius-full); background: var(--line-control); }
 .dn-sheet-head { flex: none; display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--sheet-padding) var(--sheet-padding) 0; }
 .dn-sheet-heading { flex: 1; min-width: 0; }
@@ -121,23 +160,33 @@ dialog.dn-sheet:not([open]) { display: none; }
   background: var(--surface-raised);
   color: var(--ink);
   box-shadow: var(--shadow-float);
-  transition: opacity var(--duration-instant) var(--ease-standard), transform var(--duration-instant) var(--ease-standard);
+  transform-origin: top left;
+  transition: opacity var(--duration-base) var(--ease-enter), transform var(--duration-base) var(--ease-enter), overlay var(--duration-base) allow-discrete, display var(--duration-base) allow-discrete;
 }
 .dn-popover[popover] { inset: auto; margin: 0; }
-@starting-style { .dn-popover:popover-open { opacity: 0; transform: scale(0.98); } }
+.dn-popover[popover]:not(:popover-open) { opacity: 0; transform: scale(0.96); transition-duration: var(--duration-instant); transition-timing-function: var(--ease-exit); }
+@starting-style { .dn-popover:popover-open { opacity: 0; transform: scale(0.96); } }
 .dn-popover-title { margin: 0 0 var(--space-1); font: var(--type-headline); }
 .dn-popover-text { margin: 0 0 var(--space-3); color: var(--ink-secondary); font: var(--type-callout); }
 .dn-popover-row { display: flex; gap: var(--gap-inline); }
 .dn-popover-row > .dn-button { flex: none; }
 @media (pointer: coarse) {
-  .dn-sheet { transition-duration: var(--duration-slow); }
+  .dn-sheet { transition-timing-function: var(--ease-drawer); }
   .dn-sheet[open] { margin: auto auto calc(var(--sheet-margin) + env(safe-area-inset-bottom)); }
-  @starting-style { .dn-sheet[open] { opacity: 0; transform: translateY(100%); } }
+  dialog.dn-sheet:not([open]) { opacity: 1; transform: translateY(calc(100% + var(--sheet-margin) + env(safe-area-inset-bottom))); transition-timing-function: var(--ease-drawer); }
+  @starting-style { .dn-sheet[open] { opacity: 1; transform: translateY(calc(100% + var(--sheet-margin) + env(safe-area-inset-bottom))); } }
   .dn-sheet-actions { flex-direction: column-reverse; gap: var(--space-1); }
   .dn-sheet-actions .dn-button { width: 100%; height: var(--button-height-lg); }
 }
 @media (pointer: fine) { .dn-sheet-grabber { display: none; } }
-@media (prefers-reduced-motion: reduce) { .dn-sheet, .dn-popover { transition-property: opacity; } }
+@media (prefers-reduced-motion: reduce) {
+  dialog.dn-sheet:not([open]), dialog.dn-drawer:not([open]) { opacity: 0; transform: none; }
+  .dn-popover[popover]:not(:popover-open) { transform: none; }
+  @starting-style {
+    .dn-sheet[open], .dn-drawer[open] { opacity: 0; transform: none; }
+    .dn-popover:popover-open { transform: none; }
+  }
+}
 ```
 
 ```html
@@ -196,6 +245,8 @@ popover 附着在打开它的按钮下方：
 ```
 
 真实页面里，popover 用 `<div class="dn-popover" popover id="share">`，打开它的按钮加 `popovertarget="share"`。
+
+侧边抽屉用 `<dialog class="dn-drawer">`（侧面板加 `is-end`），打开时调用 `showModal()`。跟手拖动时给它加 `is-dragging`，用 `transform` 跟随手指，松手后去掉 `is-dragging`，再决定 `close()` 还是弹回。
 
 ## SwiftUI
 

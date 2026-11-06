@@ -2,6 +2,13 @@
 
 更新于 2026-11-05。
 
+## 动效规范：进入、退出和抽屉（2026-11-06）
+
+- 原来只有出现动画：菜单、弹窗、popover、tooltip 关闭时直接消失；侧边抽屉没有规范；展开收起只有箭头在转。`foundations/motion.md` 重写：新增 `ease-enter`（0.16, 1, 0.3, 1）、`ease-exit`（0.4, 0, 0.2, 1）、`ease-drawer`（0.32, 0.72, 0, 1）；一张进入和退出的总表（tooltip、菜单和 popover、轻提示、居中弹窗、底部弹窗、侧边抽屉、展开收起、悬停）；原则（一开一关都有过程、退出快一档、距离短、遮罩和面板同步、可以中途反向、只动 transform 和 opacity）；Web 写法（transition 不用 keyframes，关闭状态的选择器里换退出时长和曲线，`@starting-style`，给 `display` 和 `overlay` 加 `allow-discrete`，`::details-content` 加 `interpolate-size` 做高度过渡）；减弱动态效果；SwiftUI 的 `transition` 和 `.smooth`、`.snappy`。规范页有可以点开的展开收起示例。
+- 组件：菜单、popover 改成进入 `duration-base` · `ease-enter`、退出 `duration-instant` · `ease-exit`，缩放 0.96；弹窗进入 `duration-slow`、退出 `duration-base`，遮罩同步；底部弹窗用 `ease-drawer` 整块滑入滑出；tooltip 和轻提示补上退出；侧边栏分组、执行步骤补上高度过渡。弹窗文档改名「弹窗、抽屉与 popover」，新增侧边抽屉的规则和 `.dn-drawer` 写法（左右两侧、遮罩、关闭方式、焦点、跟手拖动关闭）。
+- 网站：首页产品菜单补上退出动画；tooltip 淡出；规范页的目录和代码示例展开收起有高度过渡（完整变量表太长，不做）。
+- 实测（浏览器读出正在运行的 transition 的属性、时长和曲线）：首页菜单打开 200ms `ease-enter`（透明度、缩放），关闭 120ms `ease-exit`，关闭期间仍然显示、结束后 `display: none`；打开 60ms 后立即关闭，透明度逐帧 0.83 → 0.76 → 0.46 → 0.18 → 0、缩放 0.993 → 0.96，没有跳变。弹窗打开 320ms `ease-enter`（面板和遮罩），关闭 200ms `ease-exit`（面板和遮罩），关闭期间仍在顶层。抽屉打开 320ms `ease-drawer`，左右两侧都对，停靠在左边缘、宽 260、全高、页面锁定滚动；关闭 200ms `ease-drawer`，遮罩同步。tooltip 进入 120ms `ease-enter`、退出 120ms `ease-exit`，退出期间仍然显示。展开收起示例收起时高度 96 → 60ms 时 13.6 → 0；展开最终到 96，但这个浏览器面板处于隐藏状态，不出新帧，展开过程没能逐帧取样。规范页静态示例（菜单、popover、弹窗、轻提示）显示和尺寸不变，侧边栏分组的行间距仍是 2。`npm test` 63 项通过。
+
 ## 细滚动条与交互状态规范（2026-11-06）
 
 - 滚动条按用户意见改成统一的细滚动条：网页所有滚动区域（包括页面本身）占 `scrollbar-size`（10px），中间 `scrollbar-thumb-size`（6px）的胶囊滑块，`line-control` 色，悬停和拖动时 `ink-tertiary`，轨道透明、没有箭头。全局写一次：Chrome、Edge、Safari 用 `::-webkit-scrollbar`，Firefox 用 `scrollbar-width: thin` 加 `scrollbar-color`。因为 Chrome 里设置了这两个属性的元素会忽略 `::-webkit-scrollbar`，上一版加在菜单、弹窗、代码块、侧面板和网站上的 `scrollbar-width: thin` 都已去掉。SwiftUI 仍用系统滚动条。网站 `base.css` 加了同一段全局样式。

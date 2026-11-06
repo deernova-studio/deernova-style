@@ -17,7 +17,7 @@
 - 圆角 `banner-radius`，内边距上下 `space-2`、左右 `space-3`，图标 `icon-size-md`；标题 `type-body` 半粗，正文 `callout`。状态图标见 [图标](../foundations/iconography.md)。
 - 动作按钮用小号次按钮，放在右侧，一个横幅最多一个。
 - 和输入区有关的提示（额度将用完、网络断开）贴在 Composer 正上方，宽度和 Composer 一致，见 [Composer](composer.md)。
-- 轻提示：底部居中的玻璃胶囊，高 `toast-height`，2 秒后自动消失，只用来确认刚刚完成的操作（「已复制」「已保存」），文字用完成态，不放按钮。读屏用 `role="status"`。
+- 轻提示：底部居中的玻璃胶囊，高 `toast-height`，2 秒后自动消失（出现时淡入并上移 8px，消失时淡出，见 [动效](../foundations/motion.md)），只用来确认刚刚完成的操作（「已复制」「已保存」），文字用完成态，不放按钮。读屏用 `role="status"`。
 
 ## Web
 
@@ -44,6 +44,13 @@
 .dn-banner.is-danger > .dn-icon { color: var(--danger); }
 
 .dn-toast { display: inline-flex; align-items: center; gap: var(--space-2); height: var(--toast-height); padding: 0 var(--space-4) 0 var(--space-3); color: var(--ink); font: var(--weight-medium) var(--type-body-size)/1 var(--font-sans); }
+.dn-toast { transition: opacity var(--duration-base) var(--ease-enter), transform var(--duration-base) var(--ease-enter), display var(--duration-base) allow-discrete; }
+.dn-toast[hidden] { display: none; opacity: 0; transform: translateY(8px); transition-duration: var(--duration-instant); transition-timing-function: var(--ease-exit); }
+@starting-style { .dn-toast:not([hidden]) { opacity: 0; transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) {
+  .dn-toast[hidden] { transform: none; }
+  @starting-style { .dn-toast:not([hidden]) { transform: none; } }
+}
 .dn-toast .dn-icon { width: var(--icon-size-md); height: var(--icon-size-md); color: var(--success); }
 ```
 

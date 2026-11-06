@@ -51,7 +51,7 @@
 - **键盘**：控件获得键盘焦点（`:focus-visible`）时立即显示，失去焦点时关闭。
 - **关闭**：指针离开控件和 tooltip、按 Esc、按下或点击控件、页面滚动时关闭。指针可以从控件移到 tooltip 上而不关闭（离开后留 100ms 的余地），方便放大镜用户阅读。
 - 同一时间最多显示一个 tooltip。
-- 动效：淡入，用时 `duration-instant`；关闭时直接消失。不位移、不缩放。
+- 动效：淡入淡出，都用 `duration-instant`（进入 `ease-enter`，退出 `ease-exit`），不位移、不缩放。
 - 悬停卡片：同样停留 `tooltip-delay` 后显示；指针移到卡片上不关闭，离开控件和卡片 300ms 后关闭。卡片里的内容只是预览，点击链接本身就能看到全部，所以键盘和触屏用户不会因为看不到卡片而缺少信息。
 
 ## 触控端
@@ -91,9 +91,10 @@
   box-shadow: var(--shadow-float);
   font: var(--weight-regular) var(--tooltip-font-size)/var(--type-caption-line) var(--font-sans);
   overflow-wrap: anywhere;
-  transition: opacity var(--duration-instant) var(--ease-standard);
+  transition: opacity var(--duration-instant) var(--ease-enter), overlay var(--duration-instant) allow-discrete, display var(--duration-instant) allow-discrete;
 }
 .dn-tooltip[popover] { position: fixed; inset: auto; }
+.dn-tooltip[popover]:not(:popover-open) { display: none; opacity: 0; transition-timing-function: var(--ease-exit); }
 @starting-style { .dn-tooltip:popover-open { opacity: 0; } }
 .dn-tooltip-shortcut { margin-inline-start: var(--space-2); color: color-mix(in srgb, var(--on-accent) 70%, transparent); font-variant-numeric: tabular-nums; }
 .dn-tooltip-anchor { position: relative; display: inline-flex; }

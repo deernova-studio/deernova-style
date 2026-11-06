@@ -97,10 +97,11 @@
   color: var(--ink);
   box-shadow: var(--shadow-float);
   transform-origin: top left;
-  transition: opacity var(--duration-instant) var(--ease-standard), transform var(--duration-instant) var(--ease-standard);
+  transition: opacity var(--duration-base) var(--ease-enter), transform var(--duration-base) var(--ease-enter), display var(--duration-base) allow-discrete;
 }
-.product-panel[hidden] { display: none; }
-@starting-style { .product-panel { opacity: 0; transform: scale(0.98); } }
+/* Closing fades and shrinks back toward the header, a step faster than opening (skill: foundations/motion.md). */
+.product-panel[hidden] { display: none; opacity: 0; transform: scale(0.96); transition-duration: var(--duration-instant); transition-timing-function: var(--ease-exit); }
+@starting-style { .product-panel:not([hidden]) { opacity: 0; transform: scale(0.96); } }
 .product-options { margin: 0; padding: 0; list-style: none; }
 .product-option {
   display: flex;
@@ -120,7 +121,10 @@
 /* Product symbols are pictures, so they take the large icon size. */
 .product-panel .product-symbol { width: var(--icon-size-lg); height: var(--icon-size-lg); fill: currentColor; stroke: none; }
 .product-panel .product-arrow { width: var(--icon-size-sm); height: var(--icon-size-sm); color: var(--ink-tertiary); }
-@media (prefers-reduced-motion: reduce) { .product-panel { transition-property: opacity; } }
+@media (prefers-reduced-motion: reduce) {
+  .product-panel[hidden] { transform: none; }
+  @starting-style { .product-panel:not([hidden]) { transform: none; } }
+}
 
 @media (prefers-reduced-transparency: reduce) {
   .masthead-float::before, .product-panel { background: var(--surface-raised); -webkit-backdrop-filter: none; backdrop-filter: none; }

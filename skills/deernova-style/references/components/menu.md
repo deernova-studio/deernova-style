@@ -54,7 +54,7 @@
 - 默认在触发器下方 `menu-offset` 处展开，左边对齐；从靠右的按钮弹出时，改成右边对齐。下方放不下就翻到上方；上下都放不下时限制最大高度，在面板内部滚动，并用 `overscroll-behavior: contain` 防止带动页面滚动。面板离窗口边缘至少留 `space-2`。
 - 点击触发器打开，再点一次关闭；不要在悬停时打开。选中一项、按 Esc、点击菜单外面、焦点移出菜单，都会关闭菜单。按 Esc 关闭或选中一项后，焦点回到触发器。
 - 右键菜单在指针位置展开，其他规则相同。
-- 打开时淡入，同时从 0.98 放大到 1，用时 `duration-instant`、缓动 `ease-standard`，从触发器那一侧展开；关闭时直接消失。开启「减弱动态效果」后只保留淡入。
+- 打开时淡入并从 0.96 放大到 1，用时 `duration-base`、缓动 `ease-enter`，从触发器那一侧展开；关闭时淡出并缩回 0.96，用时 `duration-instant`、缓动 `ease-exit`。中途反向（刚打开就关闭）时从当前位置退回。开启「减弱动态效果」后只保留淡入淡出。见 [动效](../foundations/motion.md)。
 
 ## 键盘
 
@@ -91,10 +91,10 @@
   color: var(--ink);
   box-shadow: var(--shadow-float);
   transform-origin: top left;
-  transition: opacity var(--duration-instant) var(--ease-standard), transform var(--duration-instant) var(--ease-standard);
+  transition: opacity var(--duration-base) var(--ease-enter), transform var(--duration-base) var(--ease-enter), display var(--duration-base) allow-discrete;
 }
-.dn-menu[hidden] { display: none; }
-@starting-style { .dn-menu { opacity: 0; transform: scale(0.98); } }
+.dn-menu[hidden] { display: none; opacity: 0; transform: scale(0.96); transition-duration: var(--duration-instant); transition-timing-function: var(--ease-exit); }
+@starting-style { .dn-menu:not([hidden]) { opacity: 0; transform: scale(0.96); } }
 .dn-menu.is-glass { border-color: var(--glass-stroke); background: var(--glass-fill); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)); backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)); }
 .dn-menu-item {
   box-sizing: border-box;
@@ -146,7 +146,10 @@
 }
 .dn-select > :is(select, button):focus-visible { outline: none; border-color: var(--focus-ring); box-shadow: 0 0 0 3px var(--accent-soft); }
 .dn-select > .dn-select-chevron { position: absolute; top: 50%; right: var(--field-padding-x); width: var(--icon-size-sm); height: var(--icon-size-sm); color: var(--ink-tertiary); translate: 0 -50%; pointer-events: none; }
-@media (prefers-reduced-motion: reduce) { .dn-menu { transition-property: opacity; } }
+@media (prefers-reduced-motion: reduce) {
+  .dn-menu[hidden] { transform: none; }
+  @starting-style { .dn-menu:not([hidden]) { transform: none; } }
+}
 @media (prefers-reduced-transparency: reduce) { .dn-menu.is-glass { background: var(--surface-raised); -webkit-backdrop-filter: none; backdrop-filter: none; } }
 ```
 

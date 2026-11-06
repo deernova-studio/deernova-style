@@ -215,14 +215,17 @@
 
 ## 动效
 
-动效时长和缓动。SwiftUI 里默认用 .spring(response: 0.35, dampingFraction: 0.85)。
+动效时长和缓动。进入用 ease-enter，退出用 ease-exit 并降一档时长，从屏幕边缘滑入的面板用 ease-drawer。SwiftUI 里默认用 .smooth（等同 .spring(response: 0.35, dampingFraction: 0.85) 的手感）。
 
 | Token | 值 | 用途 |
 | --- | --- | --- |
-| `duration-instant` | `120ms` | 悬停、按压、选中这类即时反馈。 |
-| `duration-base` | `200ms` | 展开、收起、切换、开关。 |
-| `duration-slow` | `320ms` | 面板滑入、页面级转场。 |
-| `ease-standard` | `cubic-bezier(0.2, 0.8, 0.2, 1)` | 默认缓动：快进、缓停。 |
+| `duration-instant` | `120ms` | 悬停、按压、选中这类即时反馈；tooltip 的进出；菜单、popover 的退出。 |
+| `duration-base` | `200ms` | 菜单、popover、轻提示的进入；展开收起；弹窗和抽屉的退出。 |
+| `duration-slow` | `320ms` | 弹窗、底部弹窗、侧边抽屉的进入，页面级转场。 |
+| `ease-standard` | `cubic-bezier(0.2, 0.8, 0.2, 1)` | 状态变化和展开收起：颜色、高度、箭头旋转。快进、缓停。 |
+| `ease-enter` | `cubic-bezier(0.16, 1, 0.3, 1)` | 出现：菜单、popover、弹窗、轻提示。起步快、停得很柔，前一半时间就完成大部分位移。 |
+| `ease-exit` | `cubic-bezier(0.4, 0, 0.2, 1)` | 消失：配比进入低一档的时长，不拖泥带水。 |
+| `ease-drawer` | `cubic-bezier(0.32, 0.72, 0, 1)` | 从屏幕边缘滑入滑出的面板：侧边抽屉、底部弹窗，进出都用它。 |
 
 ## 不透明度
 
@@ -435,7 +438,7 @@
 | --- | --- | --- |
 | `menu-max-width` | `320px` | 菜单最大宽度；放不下的文字用省略号。 |
 
-### 弹窗、底部弹窗与 popover
+### 弹窗、抽屉与 popover
 
 见 [components/sheet.md](components/sheet.md)。
 

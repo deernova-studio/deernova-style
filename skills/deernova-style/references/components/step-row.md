@@ -15,10 +15,13 @@ AI 在对话里做了什么。分两层：平时只显示一行灰色的**摘要
 
 ## Web
 
-用 `<details>` 和 `<summary>` 实现展开，键盘和读屏都能用。
+用 `<details>` 和 `<summary>` 实现展开，键盘和读屏都能用；内容高度和箭头一起用 `duration-base` 过渡，见 [动效](../foundations/motion.md)。
 
 ```css
-.dn-activity { min-width: 0; }
+.dn-activity { min-width: 0; interpolate-size: allow-keywords; }
+.dn-activity::details-content { block-size: 0; overflow: clip; transition: block-size var(--duration-base) var(--ease-standard), content-visibility var(--duration-base) allow-discrete; }
+.dn-activity[open]::details-content { block-size: auto; }
+@media (prefers-reduced-motion: reduce) { .dn-activity::details-content { transition: none; } }
 .dn-activity > summary {
   display: flex;
   align-items: center;

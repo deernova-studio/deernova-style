@@ -243,7 +243,7 @@ const screens = name => (SCREENS[name] || []).map(([file, alt]) => `<figure clas
 
 // Reference CSS from the component docs, applied to the live specimens on the page.
 export async function referenceCss(root) {
-  const files = [...SECTIONS[1].docs.map(name => docPath(SECTIONS[1], name)), 'references/foundations/states.md', 'references/foundations/layout.md', 'references/foundations/iconography.md'];
+  const files = [...SECTIONS[1].docs.map(name => docPath(SECTIONS[1], name)), 'references/foundations/states.md', 'references/foundations/layout.md', 'references/foundations/motion.md', 'references/foundations/iconography.md'];
   const out = [];
   for (const file of files) {
     const markdown = await read(join(root, SKILL_DIR, file));
@@ -312,7 +312,7 @@ export async function renderGuide(root) {
   const tokensMarkdown = renderTokensMarkdown(tokens);
   docs.push(`<section class="doc" id="tokens" aria-labelledby="tokens-title">
 <header class="doc-head"><h2 id="tokens-title">全部变量</h2><code class="doc-path">references/tokens.md</code></header>
-<div class="doc-body"><p>由 <code>tokens.json</code> 生成的完整变量表，和 agent 读到的一致。</p><details class="sample"><summary>展开全部变量表</summary><div class="sample-body">${renderMarkdown('references/tokens.md', tokensMarkdown, tokens)}</div></details></div>
+<div class="doc-body"><p>由 <code>tokens.json</code> 生成的完整变量表，和 agent 读到的一致。</p><details class="sample is-long"><summary>展开全部变量表</summary><div class="sample-body">${renderMarkdown('references/tokens.md', tokensMarkdown, tokens)}</div></details></div>
 </section>`);
 
   return { nav: nav.join('\n'), docs: docs.join('\n'), referenceCss: await referenceCss(root) };

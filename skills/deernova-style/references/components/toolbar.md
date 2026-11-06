@@ -16,7 +16,7 @@ Web 应用的页面骨架：左边是[侧边栏](sidebar.md)，中间是内容�
 - **顶栏**：高 `toolbar-height`，`canvas` 底，不透明，底部一条 1px `line`，吸顶（`z-sticky`）。左边是标题（`toolbar-title-size`、常规字重、`ink`，后面一个小箭头，点开是菜单）；右边是一排[图标按钮](button.md)，间隔 2，打开状态的按钮用 `fill-selected` 底。
 - **内容区**：对话栏宽度不超过 `content-max`，左右至少留 `page-margin` + `space-3`；Composer 左右留 `page-margin`。
 - **侧面板**：左边一条 1px `line`，`canvas` 底，默认占内容区的 40%，可以拖动。顶部是标签头，和顶栏同高、底部同样一条线；标签高 `panel-tab-height`，当前标签 `fill-selected` 底、`ink` 字，其他 `ink-secondary`；最右边是关闭、放大按钮。
-- 窄于 `breakpoint-md`（960）时侧面板改成覆盖在内容上的抽屉；窄于 `breakpoint-sm`（760）时侧边栏也收起。
+- 窄于 `breakpoint-md`（960）时侧面板改成覆盖在内容上的[抽屉](sheet.md)；窄于 `breakpoint-sm`（760）时侧边栏也收起成抽屉。
 
 ## Web
 

@@ -50,10 +50,10 @@ p { margin: 0; }
   box-shadow: var(--shadow-float);
   font: var(--weight-regular) var(--tooltip-font-size)/var(--type-caption-line) var(--font-sans);
   overflow: visible;
-  transition: opacity var(--duration-instant) var(--ease-standard);
+  transition: opacity var(--duration-instant) var(--ease-enter), overlay var(--duration-instant) allow-discrete, display var(--duration-instant) allow-discrete;
 }
-.tooltip[hidden] { display: none; }
-.tooltip[popover]:not(:popover-open) { display: none; }
+.tooltip[hidden] { display: none; opacity: 0; transition-timing-function: var(--ease-exit); }
+.tooltip[popover]:not(:popover-open) { display: none; opacity: 0; transition-timing-function: var(--ease-exit); }
 @starting-style { .tooltip { opacity: 0; } }
 
 /* The page is one sheet of paper with ruled edges, sitting on the canvas. */

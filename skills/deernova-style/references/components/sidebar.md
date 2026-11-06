@@ -39,6 +39,10 @@
   background: var(--surface);
 }
 .dn-sidebar-section, .dn-sidebar-group { display: flex; flex-direction: column; gap: var(--row-gap); }
+.dn-sidebar-group { interpolate-size: allow-keywords; }
+.dn-sidebar-group::details-content { display: flex; flex-direction: column; gap: var(--row-gap); block-size: 0; overflow: clip; transition: block-size var(--duration-base) var(--ease-standard), content-visibility var(--duration-base) allow-discrete; }
+.dn-sidebar-group[open]::details-content { block-size: auto; }
+@media (prefers-reduced-motion: reduce) { .dn-sidebar-group::details-content { transition: none; } }
 .dn-sidebar-heading {
   display: flex;
   align-items: center;

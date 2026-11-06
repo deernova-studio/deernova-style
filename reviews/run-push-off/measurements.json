@@ -1,0 +1,34 @@
+{
+  "bodyMotionIdentical": true,
+  "upperBodyFramesCompared": 160,
+  "changedProtectedPixels": 0,
+  "before": {
+    "hindHoofBehindHip": [
+      38,
+      43
+    ],
+    "stride": 76,
+    "speed": 1.6889,
+    "landings": [
+      0.3,
+      0.4,
+      0.0,
+      0.1
+    ]
+  },
+  "after": {
+    "hindHoofBehindHip": [
+      73.1,
+      78
+    ],
+    "stride": 94,
+    "speed": 2.0889,
+    "landings": [
+      0.26,
+      0.4,
+      0.0,
+      0.13
+    ]
+  },
+  "units": "distances in working pixels; ground speed in scene units/second"
+}

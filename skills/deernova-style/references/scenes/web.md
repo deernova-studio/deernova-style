@@ -57,7 +57,7 @@ Web 上按钮“上下特别宽”几乎都是同一个原因：用内边距和�
 - **侧边栏**：宽 `sidebar-width`（288），`surface` 底，比内容区亮一层，右边一条 1px 线。结构见 [侧边栏](../components/sidebar.md)。
 - **顶栏**：高 `toolbar-height`（44），`canvas` 底，不透明，底部一条 1px 线；左边是标题，右边是一排 28 的图标按钮。
 - **内容区**：`canvas` 底；对话栏宽度不超过 `content-max`，在内容区居中；段落、工具调用行、卡片、任务清单之间 `space-4`。AI 回答用 `type-body`，不用衬线。
-- **底部**：[Composer](../components/composer.md) 悬浮在内容之上，上面可以贴一条提示，下面是模型和权限的信息行；内容区底部留出它的高度。
+- **底部**：[Composer](../components/composer.md) 悬浮在内容之上，上面可以贴一条提示，右下方是模型、权限和上下文用量的信息行；内容区底部留出它的高度。
 - **侧面板**：右边可以并排打开终端、预览等面板，标签头和顶栏同高。
 - 窄于 `breakpoint-md`（960）时侧面板变成[抽屉](../components/sheet.md)；窄于 `breakpoint-sm`（760）时侧边栏也收起成抽屉，顶栏左侧放菜单按钮。不能出现横向滚动。
 - 页面本身不滚动，侧边栏、内容区、侧面板各自滚动。其他页面类型（列表加详情、设置页、表格）的宽度，以及对齐规则，见 [布局与对齐](../foundations/layout.md)。
@@ -69,7 +69,7 @@ Web 上按钮“上下特别宽”几乎都是同一个原因：用内边距和�
 ## 控件
 
 - 用原生元素：`<button>`、`<a>`、`<input>`、`<select>`、`<dialog>`、`<details>`。只有图标的按钮加 `aria-label`，并用 [tooltip](../components/tooltip.md) 显示名称，不用 `title` 属性。
-- 焦点环：`outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset);`，只在 `:focus-visible` 时显示。
+- 焦点：不用 outline 或组件库 ring 套框。输入框和下拉选择无描边，聚焦前后底色一致，不添加阴影；输入框只出现光标。按钮的键盘定位用底色，链接、菜单和下拉框用文字下划线。Composer 沿用原有层级，不重复添加效果。完整规则见 [交互状态](../foundations/states.md)。
 - 细线：`border: var(--stroke-line) solid var(--line);`。
 - 分段控件、开关这类有状态的控件，用 `aria-pressed`、`role="switch"` 或 `role="tab"` 标出当前状态。
 - 弹窗用 `<dialog>` 的 `showModal()`，自带焦点管理和 Esc 关闭；popover 用 `popover` 属性。打开、关闭和焦点规则见 [弹窗、抽屉与 popover](../components/sheet.md)。
@@ -80,6 +80,6 @@ Web 上按钮“上下特别宽”几乎都是同一个原因：用内边距和�
 
 - 375px 和桌面两种宽度，浅色和深色两套主题；用开发者工具切到触屏模拟一次，确认密度换成 `touch`。
 - 量一下默认按钮、输入框、列表行的实际高度，应该等于对应 token。
-- 只用键盘走一遍：Tab 顺序合理，焦点环清楚，Esc 能关闭弹层。
+- 只用键盘走一遍：Tab 顺序合理，输入光标和非输入控件的当前位置可见，Esc 能关闭弹层；没有残留的黑灰外圈或新增聚焦阴影。
 - 浏览器缩放到 200%，长中文、长英文和空数据都不溢出、不重叠。
 - 打开「减弱动态效果」和「降低透明度」各看一次。

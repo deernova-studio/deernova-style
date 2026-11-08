@@ -9,7 +9,7 @@
   :root:not([data-theme="light"]) .meadow { --print-paper: #101010; --print-ink: #e6e6e6; --print-mode: light; }
 }
 .meadow canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.meadow canvas:focus-visible { outline: 2px solid var(--ink); outline-offset: -6px; }
+.meadow canvas:focus-visible { outline: none; box-shadow: none; opacity: 0.9; }
 .animation-status {
   position: absolute;
   bottom: max(var(--space-6), env(safe-area-inset-bottom));
@@ -117,7 +117,7 @@
 .product-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 @media (hover: hover) { .product-option:hover { background: var(--fill-hover); } }
 .product-option:focus { outline: none; }
-.product-option:focus-visible { background: var(--fill-hover); outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: calc(var(--stroke-focus) * -1); }
+.product-option:focus-visible { background: var(--fill-selected); outline: none; box-shadow: none; text-decoration: underline; text-underline-offset: 3px; }
 /* Product symbols are pictures, so they take the large icon size. */
 .product-panel .product-symbol { width: var(--icon-size-lg); height: var(--icon-size-lg); fill: currentColor; stroke: none; }
 .product-panel .product-arrow { width: var(--icon-size-sm); height: var(--icon-size-sm); color: var(--ink-tertiary); }

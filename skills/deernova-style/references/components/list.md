@@ -84,7 +84,7 @@
 }
 .dn-switch:checked { background: var(--success); }
 .dn-switch:checked::after { transform: translateX(calc(var(--switch-width) - var(--switch-height))); }
-.dn-switch:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
+.dn-switch:focus-visible { outline: none; filter: brightness(0.85); }
 ```
 
 ```html

@@ -51,14 +51,15 @@ public enum DeernovaColor {
     public static let inkTertiary = Color(deernovaLight: 0x666666, 1, dark: 0x8C8C8C, 1)
     /// 分隔线、卡片描边、按钮描边。装饰性，不承载信息。
     public static let line = Color(deernovaLight: 0xE3E3E3, 1, dark: 0x2F2F2F, 1)
-    /// 输入框边框、拖拽条、链接下划线。在 canvas、surface、surface-raised 上不低于 3:1。
+    /// 需要明确边界的自绘控件、拖拽条、链接下划线。在 canvas、surface、surface-raised 上不低于 3:1；普通输入框用底色区分，不用它描边。
     public static let lineControl = Color(deernovaLight: 0x8A8A8A, 1, dark: 0x737373, 1)
     public static let brandAccent = ink
-    /// 强调的浅底：列表图标底、输入框聚焦光晕。上面的文字用 ink。
+    /// 强调的浅底：列表图标底。上面的文字用 ink；不用作输入框的聚焦外圈。
     public static let accentSoft = Color(deernovaLight: 0xE8E8E8, 1, dark: 0x2F2F2F, 1)
     /// accent 填充上的文字和图标：浅色主题白字，深色主题黑字。
     public static let onAccent = Color(deernovaLight: 0xFFFFFF, 1, dark: 0x171717, 1)
-    public static let focusRing = brandAccent
+    /// 仅兼容旧版焦点环。新界面不用这个 token 描边；输入框聚焦不变，键盘导航用底色或文字提示。
+    public static let focusRing = Color(deernovaLight: 0x737373, 1, dark: 0xA3A3A3, 1)
     /// 成功、已完成、已同步、开关打开。作为文字用在纸面和 success-soft 上。
     public static let success = Color(deernovaLight: 0x1F6B66, 1, dark: 0x6CC3B4, 1)
     /// 成功状态的浅底（标签、横幅）。
@@ -150,11 +151,11 @@ public enum Deernova {
     public static let radiusFull: CGFloat = 999
     /// 分隔线、卡片、输入区、侧边栏和顶栏的边线。SwiftUI 里自己画的边框用 1pt，系统自带的分隔线保持系统样式。
     public static let strokeLine: CGFloat = 1
-    /// 输入框边框、选中卡片的描边（配 line-control 或 ink 色）。
+    /// 确实需要边界的控件描边；普通输入框、下拉框和激活态不画深色边框。
     public static let strokeControl: CGFloat = 1
-    /// 键盘焦点环。
+    /// 仅兼容旧版焦点环宽度，新界面不使用环形描边。
     public static let strokeFocus: CGFloat = 2
-    /// 焦点环和控件边缘之间的距离。
+    /// 仅兼容旧版焦点环偏移，新界面不使用环形描边。
     public static let focusOffset: CGFloat = 2
     /// 悬停、按压、选中这类即时反馈；tooltip 的进出；菜单、popover 的退出。
     public static let durationInstant: Double = 0.12
@@ -172,6 +173,8 @@ public enum Deernova {
     public static let formMax: CGFloat = 560
     /// 表格、看板和官网内容的最大宽度。
     public static let wideMax: CGFloat = 1120
+    /// 文件附件条的最大宽度，文件名放不下时中间省略。
+    public static let composerAttachmentMaxWidth: CGFloat = 240
     /// 菜单最大宽度；放不下的文字用省略号。
     public static let menuMaxWidth: CGFloat = 320
     /// 底部弹窗顶部拖拽条的宽度。
@@ -220,8 +223,10 @@ public enum Deernova {
     public static let fieldPaddingX: CGFloat = 10
     public static let fieldFontSize: CGFloat = 14
     public static let fieldRadius: CGFloat = 6
+    public static let fieldActionSize: CGFloat = 20
     public static let composerRadius: CGFloat = 14
     public static let composerMinHeight: CGFloat = 44
+    public static let composerThumbSize: CGFloat = 48
     public static let rowHeight: CGFloat = 32
     public static let rowPaddingX: CGFloat = 10
     public static let rowRadius: CGFloat = 8
@@ -303,8 +308,10 @@ public enum Deernova {
     public static let fieldPaddingX: CGFloat = 12
     public static let fieldFontSize: CGFloat = 17
     public static let fieldRadius: CGFloat = 8
+    public static let fieldActionSize: CGFloat = 32
     public static let composerRadius: CGFloat = 24
     public static let composerMinHeight: CGFloat = 44
+    public static let composerThumbSize: CGFloat = 56
     public static let rowHeight: CGFloat = 44
     public static let rowPaddingX: CGFloat = 16
     public static let rowRadius: CGFloat = 10
@@ -395,7 +402,7 @@ public extension Font {
         .system(.body, design: .serif)
         #endif
     }
-    /// 说明文字、弹窗正文、输入区下方的模型和权限信息。
+    /// 说明文字、弹窗正文、AI 输入框右下方的模型、权限和上下文用量。
     static var deernovaCallout: Font {
         #if os(macOS)
         .system(size: 14)

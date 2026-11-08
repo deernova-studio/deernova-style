@@ -47,7 +47,8 @@
 ## 状态
 
 - 悬停：次按钮在灰底上再叠一层 `fill-hover`，文字按钮出现 `fill-hover`，主按钮不透明度降到 `opacity-solid-hover`。
-- 焦点：`stroke-focus` 宽的 `focus-ring`，外偏移 `focus-offset`，只在键盘操作（`:focus-visible`）时显示。
+- 按下：次按钮灰底加深，文字按钮用 `fill-selected`，主按钮用 `opacity-solid-hover`；不添加描边或外圈。
+- 焦点：需要显示键盘位置（`:focus-visible`）时，只用底色反馈；主按钮稍降低不透明度。不额外添加描边、外圈或阴影，不改变按钮圆角。
 - 禁用：`opacity-disabled`，保持原位，不隐藏。
 - 加载：按钮宽度不变，把标签换成转圈，`aria-busy="true"`。
 
@@ -74,14 +75,17 @@
 }
 @media (hover: hover) { .dn-button:hover:not(:disabled) { background-image: linear-gradient(var(--fill-hover), var(--fill-hover)); } }
 .dn-button:active:not(:disabled) { background-image: linear-gradient(var(--fill-selected), var(--fill-selected)); }
-.dn-button:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
+.dn-button:focus-visible { outline: none; background-image: linear-gradient(var(--fill-selected), var(--fill-selected)); }
 .dn-button:disabled { opacity: var(--opacity-disabled); cursor: default; }
 
 .dn-button.is-primary { background: var(--accent); color: var(--on-accent); }
 @media (hover: hover) { .dn-button.is-primary:hover:not(:disabled) { background-image: none; opacity: var(--opacity-solid-hover); } }
 .dn-button.is-primary:active:not(:disabled) { background-image: none; opacity: var(--opacity-solid-hover); }
+.dn-button.is-primary:focus-visible { background-image: none; opacity: var(--opacity-solid-hover); }
 .dn-button.is-plain { background: transparent; color: var(--ink-secondary); }
 @media (hover: hover) { .dn-button.is-plain:hover:not(:disabled) { background: var(--fill-hover); color: var(--ink); } }
+.dn-button.is-plain:active:not(:disabled) { background: var(--fill-selected); color: var(--ink); }
+.dn-button.is-plain:focus-visible { background: var(--fill-selected); color: var(--ink); }
 .dn-button.is-danger { background: var(--danger-soft); color: var(--danger); }
 .dn-button.is-primary.is-danger { background: var(--danger); color: var(--on-accent); }
 
@@ -107,7 +111,7 @@
 }
 @media (hover: hover) { .dn-icon-button:hover { background: var(--fill-hover); color: var(--ink); } }
 .dn-icon-button:active { background: var(--fill-selected); color: var(--ink); }
-.dn-icon-button:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
+.dn-icon-button:focus-visible { outline: none; background: var(--fill-selected); color: var(--ink); }
 
 /* 点击区域：可见尺寸不变，用透明的伪元素把可点范围撑到 hit-min。
    不要用 padding 补：padding 在背景里面，会把可见的按钮一起撑大。 */

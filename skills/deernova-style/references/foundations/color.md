@@ -12,7 +12,7 @@
 
 ## 纸面
 
-从下到上：窗口底色和 Web 应用的内容区 `canvas` → 侧边栏和卡片 `surface` → 输入框、Composer、用户消息气泡、弹出层 `surface-raised`。代码块和展开的详情用 `surface-sunken`，表示“凹下去”。
+从下到上：窗口底色和 Web 应用的内容区 `canvas` → 侧边栏和卡片 `surface` → Composer、用户消息气泡、弹出层 `surface-raised`。普通输入框、代码块和展开的详情用 `surface-sunken`，表示“凹下去”；输入框聚焦不改变底色。
 
 - 侧边栏比内容区亮一层（`surface` 在 `canvas` 上），两者之间一条 `stroke-line`。
 - 用户消息气泡比内容区亮一层（`surface-raised`），AI 回答直接排在内容区上，不加底色。
@@ -26,13 +26,13 @@
 
 ## 线条
 
-分隔线和卡片描边用 `line`，属于装饰。输入框边框用 `line-control`，不低于 3:1，让人一眼看出这里可以输入。
+分隔线和卡片描边用 `line`，属于装饰。需要明确边界的控件、拖拽条和链接下划线用 `line-control`，不低于 3:1。输入框靠标签与底色表示可输入区域，不用深色边线围起来。
 
 ## 强调
 
-- `accent` 等于 `ink`，用于主按钮填充、选中指示、焦点环。主按钮上的文字用 `on-accent`：深色主题下它是黑色，不要写死白色。
+- `accent` 等于 `ink`，用于主按钮填充和选中指示。主按钮上的文字用 `on-accent`：深色主题下它是黑色，不要写死白色。
 - 浅灰的强调底用 `accent-soft`，上面的文字用 `ink`。
-- `focus-ring` 等于 `accent`，宽 `stroke-focus`，外偏移 `focus-offset`。
+- 输入框聚焦不改变颜色或加阴影，只出现光标。非输入控件的键盘位置用底色或文字下划线表示，不画环形描边。`focus-ring`、`stroke-focus` 和 `focus-offset` 只保留给旧项目兼容，新界面不使用。
 
 ## 状态色
 

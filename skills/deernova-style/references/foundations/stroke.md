@@ -7,20 +7,21 @@
 | Token | 值 | 用途 |
 | --- | --- | --- |
 | `stroke-line` | 1px | 分隔线、卡片、输入区、侧边栏和顶栏的边线 |
-| `stroke-control` | 1px | 输入框边框、选中卡片的描边 |
-| `stroke-focus` | 2px | 键盘焦点环 |
-| `focus-offset` | 2px | 焦点环和控件边缘之间的距离 |
+| `stroke-control` | 1px | 确实需要边界的自绘控件，不用于普通输入框或激活态 |
+| `stroke-focus` | 2px | 仅兼容旧版；新界面不画焦点环 |
+| `focus-offset` | 2px | 仅兼容旧版；新界面不画焦点环 |
 | `icon-stroke` | 1.75 | 线性图标在 24×24 viewBox 里的描边（仅网页） |
 
 - 线统一是 1px（高分屏上 2 个物理像素），清楚、不发虚。
-- 有意义的控件边界（输入框）用 `stroke-control` 加 `line-control` 色，保证 3:1；装饰性的线用 `stroke-line` 加 `line` 色。
+- 确实需要边界的控件用 `stroke-control` 加 `line-control` 色；装饰性的线用 `stroke-line` 加 `line` 色。
+- 普通输入框和下拉框用底色区分区域，不画深色边线；聚焦不添加边框、灰色外圈或阴影。
 - SwiftUI 里自己画的边框（卡片、Composer、任务清单）用 1pt；系统自带的分隔线（`Divider()`、`List` 的行分隔）保持系统样式，不去改。
 
 ## 线形
 
 | Token | 值 | 用途 |
 | --- | --- | --- |
-| `line-style-divider` | solid | 分隔线、卡片和输入框的边框。界面里的线默认都是实线 |
+| `line-style-divider` | solid | 分隔线、卡片等必要的边线。普通输入框不描边 |
 | `line-style-dropzone` | dashed | 拖放区、待添加的占位块 |
 | `line-dash` | 4 4 | SVG 虚线的 `stroke-dasharray`（仅网页） |
 | `line-cap` / `line-join` | round | 图标和自绘线条的端点和拐角 |
@@ -32,4 +33,4 @@
 
 - 侧边栏和内容区之间、顶栏和内容之间各一条线；列表分隔线从文字起点开始，不贯穿到左边缘。
 - 区块之间一条线就够，不要用双线或粗线强调。
-- 卡片用线描边，不加阴影；悬停时描边加深为 `line-control`，选中时变成 `ink`。
+- 卡片用线描边，不加阴影；选中用底色区分，边线保持 `line`，不改成黑色。

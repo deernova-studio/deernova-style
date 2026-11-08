@@ -17,7 +17,7 @@
 
 - `surface` 底、1px（`stroke-line`）`line` 描边，不加阴影，圆角 `card-radius`。
 - 标题用 `type-headline`（无衬线、半粗）；摘要用 `footnote`、`ink-secondary`，最多 3 行；元信息用 `caption`、`ink-tertiary`。内部间距 `space-1`。
-- 悬停时描边加深为 `line-control`。选中时描边变成 `stroke-control` 宽的 `ink`。
+- 悬停时描边加深为 `line-control`。选中时用 `fill-selected` 底色，保持原有 `line` 边线；键盘定位用底色和标题下划线，不加黑色外框。
 - 网格间距 `card-gap`；每张卡片高度由内容决定，同一行顶部对齐。
 
 ## Web
@@ -40,8 +40,9 @@
   transition: border-color var(--duration-instant) var(--ease-standard);
 }
 @media (hover: hover) { a.dn-card:hover, button.dn-card:hover { border-color: var(--line-control); } }
-.dn-card:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
-.dn-card[aria-current="true"], .dn-card.is-selected { border-color: var(--ink); }
+.dn-card:focus-visible { outline: none; box-shadow: none; background-image: linear-gradient(var(--fill-selected), var(--fill-selected)); }
+.dn-card:focus-visible .dn-card-title { text-decoration: underline; text-underline-offset: 3px; }
+.dn-card[aria-current="true"], .dn-card.is-selected { border-color: var(--line); background-image: linear-gradient(var(--fill-selected), var(--fill-selected)); }
 .dn-card-title { margin: 0; font: var(--type-headline); }
 .dn-card-summary {
   display: -webkit-box;
@@ -75,10 +76,10 @@ VStack(alignment: .leading, spacing: Deernova.space1) {
 .padding(.horizontal, Deernova.cardPaddingX)
 .padding(.vertical, Deernova.cardPaddingY)
 .frame(maxWidth: .infinity, alignment: .leading)
-.background(.surface, in: .rect(cornerRadius: Deernova.cardRadius))
+.background(isSelected ? Color.fillSelected : Color.surface, in: .rect(cornerRadius: Deernova.cardRadius))
 .overlay(
     RoundedRectangle(cornerRadius: Deernova.cardRadius)
-        .strokeBorder(isSelected ? .ink : .line, lineWidth: Deernova.strokeLine)
+        .strokeBorder(.line, lineWidth: Deernova.strokeLine)
 )
 ```
 

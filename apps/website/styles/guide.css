@@ -149,7 +149,7 @@ body.guide-page { background: var(--surface); font: var(--type-body); }
 .stroke-sample { display: grid; place-items: center; height: 52px; border-radius: var(--radius-sm); background: var(--surface-raised); font-size: 12px; color: var(--ink-tertiary); }
 .stroke-sample.is-line { border: var(--stroke-line) var(--line-style-divider) var(--line); }
 .stroke-sample.is-control { border: var(--stroke-control) var(--line-style-divider) var(--line-control); }
-.stroke-sample.is-focus { border: var(--stroke-control) solid var(--line-control); outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
+.stroke-sample.is-focus { border: 0; background: var(--surface-sunken); }
 .stroke-sample.is-dropzone { border: var(--stroke-control) var(--line-style-dropzone) var(--line-control); background: transparent; }
 .elevation-panel { background: var(--canvas); }
 .elevation-card { display: grid; place-items: center; height: 72px; border: var(--stroke-line) solid var(--line); border-radius: var(--radius-md); background: var(--surface); font-size: 12px; color: var(--ink-secondary); }

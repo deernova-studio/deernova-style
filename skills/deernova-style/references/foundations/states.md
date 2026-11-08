@@ -11,11 +11,11 @@
 | 主按钮、实色危险按钮 | 不透明度 `opacity-solid-hover` | 同悬停 | — |
 | 浅底危险按钮 | 在 `danger-soft` 上叠一层 `fill-hover` | 叠一层 `fill-selected` | — |
 | 列表行、侧边栏项、菜单项、步骤行 | `fill-hover` 底 | `fill-selected` 底 | `fill-selected` 底，字重不变；选中项悬停时保持 `fill-selected`，不再叠加 |
-| 可点的卡片 | 描边从 `line` 变 `line-control`，底色不变 | 同悬停 | 描边 `ink`，宽 `stroke-control` |
+| 可点的卡片 | 描边从 `line` 变 `line-control`，底色不变 | 同悬停 | `fill-selected` 底，原有 `line` 边线不加深 |
 | 分段控件、标签页、折叠标题 | 文字从 `ink-secondary` 变 `ink`，不加底色 | — | 分段控件的选中块；标签页 `fill-selected` 底 |
 | 本身是 `ink` 的文字链接（字标、页眉的产品名） | 变 `ink-secondary` | — | — |
 | 正文里的链接 | 下划线从 `line-control` 变成文字颜色 | — | — |
-| 输入框 | 不变 | — | 聚焦：边框 `focus-ring`，外圈 3px `accent-soft` |
+| 输入框、下拉选择 | 不变 | — | 不用选中底色；聚焦见下文 |
 | 玻璃按钮 | 比命中区小一圈的 `fill-hover` | `fill-selected` | `fill-selected`，图标 `ink` |
 
 ## 规则
@@ -26,10 +26,23 @@
 - **底色的形状和元素一样。** 悬停底色和元素同样大、同样的圆角（`row-radius`、`button-radius`、`menu-radius` 减内边距）。列表行在容器里左右缩进，不铺满整栏；命中区比可见尺寸大时，底色只画在可见范围里。
 - **只在能悬停的设备上。** `:hover` 一律写在 `@media (hover: hover)` 里，触屏上不会停在悬停状态。触屏没有悬停，按下时（`:active`）立即给 `fill-selected` 反馈。
 - **过渡要快。** 底色、文字颜色、描边在 `duration-instant` 内变化，进入和离开一样快，不加延迟。
-- **焦点不靠悬停底色。** 键盘焦点用焦点环（`stroke-focus` 宽的 `focus-ring`，只在 `:focus-visible` 时出现）。列表和菜单里用方向键移动的高亮，用 `fill-hover` 加内描边焦点环，见 [菜单](../components/menu.md)。
+- **焦点独立于按下和选中。** 按钮按下只改变底色或不透明度。输入框聚焦前后外观不变，只出现光标；非输入控件的键盘位置用底色或文字下划线表示，不加外圈或阴影。具体区别见下文。
 - **禁用没有反馈。** 禁用的元素整体降到 `opacity-disabled`，没有悬停和按下的变化，光标恢复默认；不要隐藏，保持在原位。
 - **光标。** 可以点的元素（按钮、行、标签、卡片、链接）用 `cursor: pointer`；文字输入用 `text`；可以拖动的用 `grab`，拖动中用 `grabbing`。
 - **拖放。** 拖起来的元素用 `shadow-float` 浮起；可以放下的位置用 `fill-selected` 底，或者 `line-style-dropzone` 的虚线框。
+
+## 聚焦：一处提示就够
+
+| 控件 | 聚焦提示 |
+| --- | --- |
+| 按钮、图标按钮 | `:focus-visible` 时只用 `fill-selected` 底；主按钮稍降低不透明度。不加描边或阴影 |
+| 输入框、下拉选择 | 无描边、`surface-sunken` 底，聚焦前后外观一致；输入框只出现光标，下拉框的键盘位置用文字下划线提示 |
+| Composer | 无描边，输入前后沿用原有柔影；内部按钮聚焦时，只提示对应按钮 |
+| 链接、列表、菜单项 | 用下划线或底色加下划线表示键盘位置；不套框，不给整行加阴影。菜单当前值仍用对勾区分 |
+
+`:focus-visible` 由浏览器判断是否需要显示焦点，不能简单等同于“仅键盘”：输入框被鼠标点入时也可能匹配。组件规则要替换浏览器和组件库默认的 outline、ring；错误状态保留 `danger-soft` 底色和错误说明，不被普通聚焦底色覆盖。
+
+不添加聚焦阴影，也不通过切换底色或加描边强调输入框。按钮、链接和菜单的键盘位置仍需可见；系统原生控件继续遵循系统行为。
 
 ## Web
 
@@ -40,6 +53,7 @@
 @media (hover: hover) { .dn-state:hover { background-color: var(--fill-hover); color: var(--ink); } }
 .dn-state:active, .dn-state.is-active { background-color: var(--fill-selected); }
 .dn-state.is-hover { background-color: var(--fill-hover); color: var(--ink); }
+.dn-state:focus-visible { outline: none; box-shadow: none; background-color: var(--fill-selected); text-decoration: underline; text-underline-offset: 3px; }
 .dn-state:is([aria-selected="true"], [aria-current="page"], [aria-current="true"], [aria-pressed="true"]) { background-color: var(--fill-selected); color: var(--ink); }
 .dn-state:is(:disabled, [aria-disabled="true"]) { background-color: transparent; opacity: var(--opacity-disabled); cursor: default; }
 .dn-state-row { display: flex; align-items: center; height: var(--row-height); padding: 0 var(--row-padding-x); border-radius: var(--row-radius); color: var(--ink-secondary); font: var(--weight-regular) var(--type-callout-size)/1 var(--font-sans); }
@@ -95,4 +109,5 @@ macOS 上自己画的行需要悬停底色时，用 `.onHover` 记下状态，�
 - 悬停时加阴影、上浮、放大、加粗，或者改变尺寸让布局跳动。
 - 把 `:hover` 写在 `@media (hover: hover)` 外面，让触屏停在悬停状态。
 - 选中项悬停时再叠一层变得更深；一个元素同时出现两种底色。
-- 用悬停底色代替键盘焦点环；禁用的元素还有悬停效果。
+- 用悬停底色代替键盘焦点提示；禁用的元素还有悬停效果。
+- 用黑色或灰色外框表示按下、选中和聚焦；输入框同时出现 border、outline、ring 和阴影多层强调。

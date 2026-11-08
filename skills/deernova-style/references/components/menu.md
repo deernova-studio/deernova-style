@@ -44,7 +44,7 @@
 
 ## 状态
 
-- **高亮**：指针悬停或键盘移到的那一项铺 `fill-hover`。同一时间只高亮一项：指针移到哪一项，焦点就跟到哪一项。键盘操作时再加一圈内描边焦点环（`focus-ring`），只在 `:focus-visible` 时出现。
+- **高亮**：指针悬停铺 `fill-hover`，键盘定位（`:focus-visible`）用 `fill-selected` 底和文字下划线，不画内外描边。同一时间只高亮一项：指针移到哪一项，焦点就跟到哪一项。
 - **当前值**：下拉选项和可勾选的命令，在最左侧留一列 `icon-size-sm` 宽的对勾位，当前选中的项显示对勾，其余项留空，保证文字对齐。不要用 `fill-selected` 底色表示当前值。
 - **禁用**：整项降到 `opacity-disabled`，指针点不了，方向键会跳过它。暂时不能用的命令留在原处并禁用，不要隐藏，否则菜单的布局每次都会变。
 - **危险操作**：文字用 `danger` 色，放在最后，前面加一条分隔线；高亮时的底色不变红。执行前用 [弹窗](sheet.md) 确认，能撤销的操作除外。
@@ -122,7 +122,7 @@
 .dn-menu-item:active { background: var(--fill-selected); }
 .dn-menu-item:focus { outline: none; }
 .dn-menu-item:focus-visible, .dn-menu-item[aria-expanded="true"] { background: var(--fill-hover); }
-.dn-menu-item:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: calc(var(--stroke-focus) * -1); }
+.dn-menu-item:focus-visible { outline: none; box-shadow: none; background: var(--fill-selected); text-decoration: underline; text-underline-offset: 3px; }
 .dn-menu-item.is-danger { color: var(--danger); }
 .dn-menu-item[aria-disabled="true"] { opacity: var(--opacity-disabled); pointer-events: none; }
 .dn-menu-separator { height: var(--stroke-line); margin: var(--menu-padding) var(--menu-item-padding-x); border: 0; background: var(--line); }
@@ -133,9 +133,9 @@
   width: 100%;
   height: var(--field-height);
   padding: 0 calc(var(--field-padding-x) + var(--icon-size-sm) + var(--space-1)) 0 var(--field-padding-x);
-  border: var(--stroke-control) var(--line-style-divider) var(--line-control);
+  border: 0;
   border-radius: var(--field-radius);
-  background: var(--surface-raised);
+  background: var(--surface-sunken);
   color: var(--ink);
   font: var(--weight-regular) var(--field-font-size)/1.2 var(--font-sans);
   text-align: start;
@@ -144,7 +144,9 @@
   text-overflow: ellipsis;
   appearance: none;
 }
-.dn-select > :is(select, button):focus-visible { outline: none; border-color: var(--focus-ring); box-shadow: 0 0 0 3px var(--accent-soft); }
+/* 聚焦前后保持同一浅底，不加描边或阴影；键盘位置用文字提示。 */
+.dn-select > :is(select, button):focus { outline: none; box-shadow: none; }
+.dn-select > :is(select, button):focus-visible { text-decoration: underline; text-underline-offset: 3px; }
 .dn-select > .dn-select-chevron { position: absolute; top: 50%; right: var(--field-padding-x); width: var(--icon-size-sm); height: var(--icon-size-sm); color: var(--ink-tertiary); translate: 0 -50%; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) {
   .dn-menu[hidden] { transform: none; }

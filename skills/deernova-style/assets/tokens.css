@@ -21,7 +21,7 @@
   --accent: var(--ink);
   --accent-soft: #e8e8e8;
   --on-accent: #ffffff;
-  --focus-ring: var(--accent);
+  --focus-ring: #737373;
   --success: #1f6b66;
   --success-soft: #ddeeec;
   --warning: #8a5a0b;
@@ -56,7 +56,7 @@
     --accent: var(--ink);
     --accent-soft: #2f2f2f;
     --on-accent: #171717;
-    --focus-ring: var(--accent);
+    --focus-ring: #a3a3a3;
     --success: #6cc3b4;
     --success-soft: #183230;
     --warning: #e2b054;
@@ -91,7 +91,7 @@
   --accent: var(--ink);
   --accent-soft: #2f2f2f;
   --on-accent: #171717;
-  --focus-ring: var(--accent);
+  --focus-ring: #a3a3a3;
   --success: #6cc3b4;
   --success-soft: #183230;
   --warning: #e2b054;
@@ -165,6 +165,7 @@
   --wide-max: 1120px;
   --scrollbar-size: 10px;
   --scrollbar-thumb-size: 6px;
+  --composer-attachment-max-width: 240px;
   --menu-max-width: 320px;
   --sheet-grabber-width: 36px;
   --sheet-grabber-height: 5px;
@@ -239,8 +240,10 @@
   --field-padding-x: 10px;
   --field-font-size: 14px;
   --field-radius: 6px;
+  --field-action-size: 20px;
   --composer-radius: 14px;
   --composer-min-height: 44px;
+  --composer-thumb-size: 48px;
   --row-height: 32px;
   --row-padding-x: 10px;
   --row-radius: 8px;
@@ -352,8 +355,10 @@
     --field-padding-x: 12px;
     --field-font-size: 17px;
     --field-radius: 8px;
+    --field-action-size: 32px;
     --composer-radius: 24px;
     --composer-min-height: 44px;
+    --composer-thumb-size: 56px;
     --row-height: 44px;
     --row-padding-x: 16px;
     --row-radius: 10px;
@@ -465,8 +470,10 @@
   --field-padding-x: 12px;
   --field-font-size: 17px;
   --field-radius: 8px;
+  --field-action-size: 32px;
   --composer-radius: 24px;
   --composer-min-height: 44px;
+  --composer-thumb-size: 56px;
   --row-height: 44px;
   --row-padding-x: 16px;
   --row-radius: 10px;
@@ -577,8 +584,10 @@
   --field-padding-x: 14px;
   --field-font-size: 15px;
   --field-radius: 8px;
+  --field-action-size: 28px;
   --composer-radius: 16px;
   --composer-min-height: 48px;
+  --composer-thumb-size: 56px;
   --row-height: 40px;
   --row-padding-x: 12px;
   --row-radius: 8px;

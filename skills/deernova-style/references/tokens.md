@@ -77,11 +77,11 @@
 | `ink-secondary` | `gray-32` `#525252` | `gray-64` `#a3a3a3` | 次要文字、说明、列表的值、未选中的图标，在四种纸面上不低于 6:1。 |
 | `ink-tertiary` | `gray-40` `#666666` | `gray-55` `#8c8c8c` | 占位符、时间戳、计数、分组标题，在四种纸面上不低于 4.5:1。 |
 | `line` | `gray-89` `#e3e3e3` | `gray-18` `#2f2f2f` | 分隔线、卡片描边、按钮描边。装饰性，不承载信息。 |
-| `line-control` | `gray-54` `#8a8a8a` | `gray-45` `#737373` | 输入框边框、拖拽条、链接下划线。在 canvas、surface、surface-raised 上不低于 3:1。 |
-| `accent` | = `ink` | = `ink` | 强调：主按钮填充、选中指示、焦点环。就是墨色本身，浅色主题是黑，深色主题是白。 |
-| `accent-soft` | `gray-91` `#e8e8e8` | `gray-18` `#2f2f2f` | 强调的浅底：列表图标底、输入框聚焦光晕。上面的文字用 ink。 |
+| `line-control` | `gray-54` `#8a8a8a` | `gray-45` `#737373` | 需要明确边界的自绘控件、拖拽条、链接下划线。在 canvas、surface、surface-raised 上不低于 3:1；普通输入框用底色区分，不用它描边。 |
+| `accent` | = `ink` | = `ink` | 强调：主按钮填充、选中指示。就是墨色本身，浅色主题是黑，深色主题是白；不用来画激活或焦点外框。 |
+| `accent-soft` | `gray-91` `#e8e8e8` | `gray-18` `#2f2f2f` | 强调的浅底：列表图标底。上面的文字用 ink；不用作输入框的聚焦外圈。 |
 | `on-accent` | `gray-100` `#ffffff` | `gray-9` `#171717` | accent 填充上的文字和图标：浅色主题白字，深色主题黑字。 |
-| `focus-ring` | = `accent` | = `accent` | 键盘焦点环：stroke-focus 宽的实线，外偏移 focus-offset。 |
+| `focus-ring` | `gray-45` `#737373` | `gray-64` `#a3a3a3` | 仅兼容旧版焦点环。新界面不用这个 token 描边；输入框聚焦不变，键盘导航用底色或文字提示。 |
 | `success` | `teal-27` `#1f6b66` | `teal-59` `#6cc3b4` | 成功、已完成、已同步、开关打开。作为文字用在纸面和 success-soft 上。 |
 | `success-soft` | `teal-90` `#ddeeec` | `teal-15` `#183230` | 成功状态的浅底（标签、横幅）。 |
 | `warning` | `amber-29` `#8a5a0b` | `amber-61` `#e2b054` | 需要注意但不阻断：额度将用完、网络较慢。 |
@@ -126,7 +126,7 @@
 | `headline` | sans | 600 | 15 / 22 | 17 / 22 | 16 / 24 | `.system(size: 15, weight: .semibold)` · `.headline` | 区块标题、卡片标题、横幅标题、列表行标题。 |
 | `body` | sans | 400 | 15 / 24 | 17 / 23 | 15 / 24 | `.system(size: 15)` · `.body` | 界面正文、AI 回答、用户消息、列表、表单。 |
 | `prose` | serif | 400 | 16 / 26 | 17 / 26 | 17 / 28 | `.system(size: 16, design: .serif)` · `.system(.body, design: .serif)` | 文章、文档这类长文阅读（衬线）。AI 回答不用它。 |
-| `callout` | sans | 400 | 14 / 20 | 15 / 20 | 14 / 22 | `.system(size: 14)` · `.callout` | 说明文字、弹窗正文、输入区下方的模型和权限信息。 |
+| `callout` | sans | 400 | 14 / 20 | 15 / 20 | 14 / 22 | `.system(size: 14)` · `.callout` | 说明文字、弹窗正文、AI 输入框右下方的模型、权限和上下文用量。 |
 | `footnote` | sans | 400 | 13 / 18 | 13 / 17 | 13 / 20 | `.system(size: 13)` · `.footnote` | 侧边栏分组标题、分组列表的页头页脚、卡片摘要。 |
 | `caption` | sans | 400 | 12 / 16 | 12 / 15 | 12 / 16 | `.system(size: 12)` · `.caption` | 时间戳、计数、标签。界面里最小的字。 |
 | `code` | mono | 400 | 13 / 20 | 13 / 18 | 13 / 20 | `.system(size: 13, design: .monospaced)` · `.system(.footnote, design: .monospaced)` | 代码块、命令、文件路径、需要对齐的数据。 |
@@ -175,9 +175,9 @@
 | Token | 值 | 用途 |
 | --- | --- | --- |
 | `stroke-line` | `1px` | 分隔线、卡片、输入区、侧边栏和顶栏的边线。SwiftUI 里自己画的边框用 1pt，系统自带的分隔线保持系统样式。 |
-| `stroke-control` | `1px` | 输入框边框、选中卡片的描边（配 line-control 或 ink 色）。 |
-| `stroke-focus` | `2px` | 键盘焦点环。 |
-| `focus-offset` | `2px` | 焦点环和控件边缘之间的距离。 |
+| `stroke-control` | `1px` | 确实需要边界的控件描边；普通输入框、下拉框和激活态不画深色边框。 |
+| `stroke-focus` | `2px` | 仅兼容旧版焦点环宽度，新界面不使用环形描边。 |
+| `focus-offset` | `2px` | 仅兼容旧版焦点环偏移，新界面不使用环形描边。 |
 
 ## 线形
 
@@ -185,7 +185,7 @@
 
 | Token | 值 | 用途 |
 | --- | --- | --- |
-| `line-style-divider` | `solid` | 分隔线、卡片和输入框的边框。界面里的线默认都是实线。 |
+| `line-style-divider` | `solid` | 分隔线、卡片等必要的边线。普通输入框不描边；界面里的线默认都是实线。 |
 | `line-style-dropzone` | `dashed` | 拖放区、待添加的占位块。只有这类“还空着”的区域用虚线。 |
 | `line-dash` | `4 4` | SVG 虚线的 stroke-dasharray。（仅网页） |
 | `line-cap` | `round` | 图标和自绘线条的端点。 |
@@ -193,7 +193,7 @@
 
 ## 阴影
 
-阴影就是层级。卡片不加阴影，只有真正浮起来的东西才有。
+阴影表达层级，不用于激活装饰；输入框聚焦不添加阴影。
 
 | Token | 浅色 | 深色 | 用途 |
 | --- | --- | --- | --- |
@@ -332,15 +332,21 @@
 | `field-padding-x` | 10 | 12 | 14 | 输入框左右内边距。 |
 | `field-font-size` | 14 | 17 | 15 | 输入文字字号。触控端不小于 16，避免浏览器放大页面。 |
 | `field-radius` | 6 | 8 | 8 | 输入框圆角。 |
+| `field-action-size` | 20 | 32 | 28 | 输入框内部图标按钮（清除、显示密码）的可见尺寸，四周离边缘相等；命中区用 hit-min 补足。 |
 
-### Composer 输入区
+### Composer 输入区（AI 输入框）
 
 见 [components/composer.md](components/composer.md)。
 
 | Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
 | --- | --- | --- | --- | --- |
 | `composer-radius` | 14 | 24 | 16 | Composer 外框圆角。 |
-| `composer-min-height` | 44 | 44 | 48 | 单行时的高度：加号、输入、发送排在同一行，输入多行时向上长高。 |
+| `composer-min-height` | 44 | 44 | 48 | 单行布局的高度：加号、输入、发送排在同一行，输入多行时向上长高。 |
+| `composer-thumb-size` | 48 | 56 | 56 | 图片附件缩略图的边长。 |
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `composer-attachment-max-width` | `240px` | 文件附件条的最大宽度，文件名放不下时中间省略。 |
 
 ### 侧边栏与列表行
 

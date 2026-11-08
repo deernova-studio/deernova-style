@@ -1,6 +1,6 @@
 ---
 name: deernova-style
-description: Deernova 的界面设计语言：只用黑白灰，内容放在不透明纸面上，原生端的操作层用系统 Liquid Glass，Web 应用用不透明平面加 1px 线；界面和 AI 回答用无衬线，衬线只给大标题和长文；按场景（Web 应用、macOS、iOS、iPadOS、官网与文档）切换密度。在 Deernova 的应用或网站里新建、修改或审查界面时使用，包括颜色、字体、间距、圆角、线条、阴影、按钮、输入框、菜单与下拉选择、侧边栏、顶栏、列表、卡片、弹窗、tooltip、空状态、AI 对话和任务清单，以及对应的 CSS、Tailwind 或 SwiftUI 实现。
+description: Deernova 的界面设计语言：只用黑白灰，内容放在不透明纸面上，原生端的操作层用系统 Liquid Glass，Web 应用用不透明平面加 1px 线；界面和 AI 回答用无衬线，衬线只给大标题和长文；按场景（Web 应用、macOS、iOS、iPadOS、官网与文档）切换密度。在 Deernova 的应用或网站里新建、修改或审查界面时使用，包括颜色、字体、间距、圆角、线条、阴影、按钮、输入框、菜单与下拉选择、侧边栏、顶栏、列表、卡片、弹窗、tooltip、空状态、AI 对话与 AI 输入框（附件、工具、模型、发送）和任务清单，以及对应的 CSS、Tailwind 或 SwiftUI 实现。
 ---
 
 # Deernova 设计语言
@@ -51,9 +51,9 @@ description: Deernova 的界面设计语言：只用黑白灰，内容放在不�
 
 1. **纸面承载内容，玻璃交给系统。** 文字、列表、卡片、代码、消息、输入区是内容，放在不透明的纸面上：`canvas` → `surface` → `surface-raised`，代码块和展开的详情用 `surface-sunken`。操作层按平台处理：**SwiftUI 端**（macOS、iOS、iPadOS）的侧边栏、工具栏、标签栏、浮动按钮直接用系统 Liquid Glass，这是原生端的优势，不要盖掉；**Web 应用**不模拟玻璃，操作层是不透明平面加 1px 分隔线；只有官网与文档的页眉可以用轻玻璃。玻璃上不放段落，内容不做成玻璃，玻璃不叠玻璃。
 2. **黑白灰，强调靠对比。** `accent` 就是墨色 `ink`：主按钮在浅色主题是黑底白字，在深色主题是白底黑字，文字用 `on-accent`，不要写死白色。唯一的彩色是状态色 `success`、`warning`、`danger`、`info`，只用来表达状态，而且必须同时带图标或文字。
-3. **线条代替阴影。** 区块之间用 `line` 色的 1px 线分隔（`stroke-line`）。卡片不加阴影；只有菜单、弹窗、浮动面板和 Composer 这类真正浮起来的东西才用 `shadow-float`。
+3. **细线分区，阴影表达层级。** 区块之间用 `line` 色的 1px 线分隔（`stroke-line`），卡片不加阴影。菜单、弹窗、浮动面板和 Composer 用 `shadow-float`；不因激活或聚焦额外添加阴影。
 4. **无衬线做界面，衬线点题。** 界面文字、AI 回答、用户消息、标题栏都用系统无衬线（SF Pro）；代码和需要对齐的数字用等宽（SF Mono）。衬线（New York）只用在页面大标题和空状态标题（`display`、`title`）、官网与文档，以及文章类的长文阅读（`prose`）。中文统一落到苹方。
-5. **状态只有两种底色。** 悬停 `fill-hover`，按下和选中 `fill-selected`，都是半透明的，叠在任何纸面上都成立；选中项悬停时不再加深。悬停只改颜色，不加阴影、不位移，只写在 `@media (hover: hover)` 里，见 [交互状态](references/foundations/states.md)。
+5. **激活不加装饰。** 悬停 `fill-hover`，按下和选中 `fill-selected`，选中项悬停不再加深。按钮保留轻微底色反馈；输入框和下拉框无描边、保持原来的浅底，输入框聚焦只出现光标，不加外圈、阴影或底色变化。非输入控件的键盘位置用底色或文字下划线表示。悬停不位移，只写在 `@media (hover: hover)` 里，见 [交互状态](references/foundations/states.md)。
 6. **层次靠字号和灰度，少用粗体。** 600 只给真正的标题（`display`、`title`、`headline`）。分组标题、会话名、说明、时间戳用常规字重，靠 `ink-secondary`、`ink-tertiary` 和小一号的字区分层级。
 7. **控件高度由 token 决定，点击区域单独补。** 按钮、输入框、列表行的可见高度直接用 `button-height-*`、`field-height`、`row-height`，上下内边距为 0，不让页面行高把它撑高。可见尺寸小于 `hit-min` 时，用透明的命中区补足，不加大可见的控件。
 8. **间距成组。** 间距走 4pt 网格。组内用 `gap-stack`，组与组之间用 `gap-group`（至少 2 倍）；内容区里段落、工具调用、卡片之间 `space-4`。用细线和少量留白分组，不靠大块空白和外框。
@@ -78,7 +78,7 @@ description: Deernova 的界面设计语言：只用黑白灰，内容放在不�
 
 ### 组件
 
-[按钮](references/components/button.md) · [顶栏与侧面板](references/components/toolbar.md) · [玻璃操作层](references/components/glass-controls.md) · [分段控件](references/components/segmented.md) · [文本框](references/components/text-field.md) · [菜单与下拉](references/components/menu.md) · [Composer](references/components/composer.md) · [侧边栏](references/components/sidebar.md) · [分组列表](references/components/list.md) · [卡片](references/components/card.md) · [标签](references/components/tag.md) · [代码块](references/components/code-block.md) · [任务清单](references/components/task-list.md) · [空状态](references/components/empty-state.md) · [横幅与轻提示](references/components/banner.md) · [弹窗、抽屉与 popover](references/components/sheet.md) · [Tooltip 与悬停浮层](references/components/tooltip.md) · [消息](references/components/message.md) · [工具调用与执行步骤](references/components/step-row.md)
+[按钮](references/components/button.md) · [顶栏与侧面板](references/components/toolbar.md) · [玻璃操作层](references/components/glass-controls.md) · [分段控件](references/components/segmented.md) · [文本框](references/components/text-field.md) · [菜单与下拉](references/components/menu.md) · [Composer（AI 输入框）](references/components/composer.md) · [侧边栏](references/components/sidebar.md) · [分组列表](references/components/list.md) · [卡片](references/components/card.md) · [标签](references/components/tag.md) · [代码块](references/components/code-block.md) · [任务清单](references/components/task-list.md) · [空状态](references/components/empty-state.md) · [横幅与轻提示](references/components/banner.md) · [弹窗、抽屉与 popover](references/components/sheet.md) · [Tooltip 与悬停浮层](references/components/tooltip.md) · [消息](references/components/message.md) · [工具调用与执行步骤](references/components/step-row.md)
 
 ### 场景
 

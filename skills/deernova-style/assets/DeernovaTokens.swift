@@ -175,6 +175,8 @@ public enum Deernova {
     public static let wideMax: CGFloat = 1120
     /// 文件附件条的最大宽度，文件名放不下时中间省略。
     public static let composerAttachmentMaxWidth: CGFloat = 240
+    /// @、/、# 建议浮层的宽度；窄屏时和 Composer 同宽。
+    public static let suggestWidth: CGFloat = 360
     /// 菜单最大宽度；放不下的文字用省略号。
     public static let menuMaxWidth: CGFloat = 320
     /// 底部弹窗顶部拖拽条的宽度。
@@ -185,6 +187,10 @@ public enum Deernova {
     public static let tooltipOffset: CGFloat = 8
     /// tooltip 最大宽度，超过时折行，最多两行。
     public static let tooltipMaxWidth: CGFloat = 240
+    /// 变更对比左侧行号栏的宽度。
+    public static let diffGutterWidth: CGFloat = 40
+    /// 确认卡里命令、参数块的最大高度，超出时内部滚动。
+    public static let approvalCodeMaxHeight: CGFloat = 160
 
     // 按密度取值的尺寸：macOS 是 desktop（只用于自己画的内容区），iOS 和 iPadOS 是 touch。
     #if os(macOS)
@@ -227,6 +233,9 @@ public enum Deernova {
     public static let composerRadius: CGFloat = 14
     public static let composerMinHeight: CGFloat = 44
     public static let composerThumbSize: CGFloat = 48
+    public static let mentionHeight: CGFloat = 20
+    public static let mentionPaddingX: CGFloat = 4
+    public static let mentionRadius: CGFloat = 4
     public static let rowHeight: CGFloat = 32
     public static let rowPaddingX: CGFloat = 10
     public static let rowRadius: CGFloat = 8
@@ -269,6 +278,8 @@ public enum Deernova {
     public static let tooltipRadius: CGFloat = 6
     public static let messageFontSize: CGFloat = 15
     public static let messageActionSize: CGFloat = 24
+    public static let citeHeight: CGFloat = 16
+    public static let diffLineHeight: CGFloat = 20
     public static let iconSizeSm: CGFloat = 14
     public static let iconSizeMd: CGFloat = 16
     public static let iconSizeLg: CGFloat = 20
@@ -312,6 +323,9 @@ public enum Deernova {
     public static let composerRadius: CGFloat = 24
     public static let composerMinHeight: CGFloat = 44
     public static let composerThumbSize: CGFloat = 56
+    public static let mentionHeight: CGFloat = 24
+    public static let mentionPaddingX: CGFloat = 6
+    public static let mentionRadius: CGFloat = 6
     public static let rowHeight: CGFloat = 44
     public static let rowPaddingX: CGFloat = 16
     public static let rowRadius: CGFloat = 10
@@ -354,6 +368,8 @@ public enum Deernova {
     public static let tooltipRadius: CGFloat = 8
     public static let messageFontSize: CGFloat = 15
     public static let messageActionSize: CGFloat = 32
+    public static let citeHeight: CGFloat = 18
+    public static let diffLineHeight: CGFloat = 22
     public static let iconSizeSm: CGFloat = 17
     public static let iconSizeMd: CGFloat = 20
     public static let iconSizeLg: CGFloat = 24

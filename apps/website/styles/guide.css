@@ -29,6 +29,12 @@ body.guide-page { background: var(--surface); font: var(--type-body); }
 .toc .toc-top { font-weight: 600; color: var(--ink); }
 .toc-group { margin: var(--space-4) 0 var(--space-1); padding: 0 var(--space-2); font: 600 11px/16px var(--font-sans); letter-spacing: 0.04em; color: var(--ink-tertiary); }
 .toc ol { margin: 0; padding: 0; list-style: none; }
+.toc-subgroup { margin: var(--space-3) 0 2px; padding: 0 var(--space-2); color: var(--ink-tertiary); font: 400 12px/16px var(--font-sans); }
+.toc-group + .toc-subgroup { margin-top: var(--space-1); }
+/* Component groups: a quiet divider in the page so the five kinds read as chapters. */
+.doc-group { display: grid; gap: var(--space-1); padding: var(--space-10) 0 var(--space-2); border-top: 1px solid var(--rule); scroll-margin-top: var(--masthead); }
+.doc-group h2 { font: var(--type-display); }
+.doc-group + .doc { border-top: 0; }
 
 .guide-main { min-width: 0; padding: 0 clamp(16px, 3.5vw, 48px) var(--space-8); }
 
@@ -205,7 +211,7 @@ body.guide-page { background: var(--surface); font: var(--type-body); }
   .toc { position: static; max-height: none; padding: var(--space-2) var(--space-4); border-right: 0; border-bottom: 1px solid var(--rule); }
   .toc-details > summary { display: block; padding: var(--space-1) 0; font-weight: 600; cursor: pointer; }
   .toc nav { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); column-gap: var(--space-2); padding-bottom: var(--space-3); }
-  .toc-group { grid-column: 1 / -1; }
+  .toc-group, .toc-subgroup { grid-column: 1 / -1; }
   .toc ol { display: contents; }
   .commands li { grid-template-columns: minmax(0, 1fr) auto; }
   .commands span { grid-column: 1; }

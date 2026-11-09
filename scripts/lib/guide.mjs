@@ -7,11 +7,20 @@ import {
 
 // The style guide page: specimens first, then the skill's own words. Everything comes from the skill folder,
 // so the page cannot drift from what agents read.
+// Components are grouped by the role they play on a page, so a reader can find one from what they are building.
+const COMPONENT_GROUPS = [
+  { id: 'structure', title: '页面结构', docs: ['toolbar', 'sidebar', 'glass-controls'] },
+  { id: 'controls', title: '基础控件', docs: ['button', 'text-field', 'segmented', 'menu'] },
+  { id: 'content', title: '内容展示', docs: ['card', 'list', 'tag', 'code-block', 'empty-state'] },
+  { id: 'overlays', title: '浮层与反馈', docs: ['sheet', 'tooltip', 'banner'] },
+  { id: 'ai', title: 'AI 组合', docs: ['composer', 'mention', 'message', 'step-row', 'approval', 'task-list'] }
+];
+
 export const SECTIONS = [
   { id: 'foundations', title: '基础', dir: 'references/foundations',
-    docs: ['color', 'states', 'typography', 'spacing', 'layout', 'radius', 'stroke', 'elevation', 'glass', 'motion', 'iconography', 'writing', 'accessibility'] },
+    docs: ['color', 'states', 'typography', 'spacing', 'layout', 'radius', 'stroke', 'elevation', 'glass', 'motion', 'ai', 'iconography', 'writing', 'accessibility'] },
   { id: 'components', title: '组件', dir: 'references/components',
-    docs: ['button', 'toolbar', 'sidebar', 'composer', 'message', 'step-row', 'task-list', 'glass-controls', 'segmented', 'text-field', 'menu', 'list', 'card', 'tag', 'code-block', 'empty-state', 'banner', 'sheet', 'tooltip'] },
+    groups: COMPONENT_GROUPS, docs: COMPONENT_GROUPS.flatMap(group => group.docs) },
   { id: 'scenes', title: '场景', dir: 'references/scenes',
     docs: ['web', 'web-marketing', 'macos', 'ios', 'ipados', 'swiftui'] }
 ];
@@ -271,16 +280,23 @@ export async function renderGuide(root) {
 </section>`);
 
   for (const group of SECTIONS) {
-    nav.push(`<p class="toc-group">${group.title}</p><ol>`);
-    for (const name of group.docs) {
-      const path = docPath(group, name);
-      const markdown = await read(join(root, SKILL_DIR, path));
-      nav.push(`<li><a href="#${docId(path)}">${escape(titleOf(markdown))}</a></li>`);
-      const extra = group.id === 'foundations' ? FOUNDATION_SPECIMENS[name]?.(tokens) ?? ''
-        : group.id === 'scenes' ? screens(name) : '';
-      docs.push(docSection(path, markdown, tokens, { extra, hoistSpecimen: group.id === 'components' }));
+    nav.push(`<p class="toc-group">${group.title}</p>`);
+    for (const part of group.groups ?? [{ docs: group.docs }]) {
+      if (part.title) {
+        nav.push(`<p class="toc-subgroup">${part.title}</p>`);
+        docs.push(`<header class="doc-group" id="${group.id}-${part.id}"><span class="eyebrow">${group.title}</span><h2>${part.title}</h2></header>`);
+      }
+      nav.push('<ol>');
+      for (const name of part.docs) {
+        const path = docPath(group, name);
+        const markdown = await read(join(root, SKILL_DIR, path));
+        nav.push(`<li><a href="#${docId(path)}">${escape(titleOf(markdown))}</a></li>`);
+        const extra = group.id === 'foundations' ? FOUNDATION_SPECIMENS[name]?.(tokens) ?? ''
+          : group.id === 'scenes' ? screens(name) : '';
+        docs.push(docSection(path, markdown, tokens, { extra, hoistSpecimen: group.id === 'components' }));
+      }
+      nav.push('</ol>');
     }
-    nav.push('</ol>');
   }
 
   nav.push('<p class="toc-group">资源</p><ol><li><a href="#resources">文件与安装</a></li><li><a href="#review">审查清单</a></li><li><a href="#tokens">全部变量</a></li></ol>');

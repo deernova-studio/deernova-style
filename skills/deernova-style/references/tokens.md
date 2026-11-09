@@ -348,6 +348,20 @@
 | --- | --- | --- |
 | `composer-attachment-max-width` | `240px` | 文件附件条的最大宽度，文件名放不下时中间省略。 |
 
+### 提及与命令
+
+见 [components/mention.md](components/mention.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `mention-height` | 20 | 24 | 22 | 文字里提及标签的高度，放进正文的一行里不撑高行距。 |
+| `mention-padding-x` | 4 | 6 | 6 | 提及标签左右内边距。 |
+| `mention-radius` | 4 | 6 | 6 | 提及标签圆角。 |
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `suggest-width` | `360px` | @、/、# 建议浮层的宽度；窄屏时和 Composer 同宽。 |
+
 ### 侧边栏与列表行
 
 见 [components/sidebar.md](components/sidebar.md)。
@@ -489,6 +503,20 @@
 | --- | --- | --- | --- | --- |
 | `message-font-size` | 15 | 15 | 15 | 用户消息气泡的字号。AI 回答用 type-body，和界面正文一致。 |
 | `message-action-size` | 24 | 32 | 28 | AI 消息下方操作按钮的可见尺寸。 |
+| `cite-height` | 16 | 18 | 18 | 正文里引用角标的高度。 |
+
+### 确认与审批
+
+见 [components/approval.md](components/approval.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `diff-line-height` | 20 | 22 | 22 | 变更对比里每一行的高度。 |
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `diff-gutter-width` | `40px` | 变更对比左侧行号栏的宽度。 |
+| `approval-code-max-height` | `160px` | 确认卡里命令、参数块的最大高度，超出时内部滚动。 |
 
 ### 图标
 

@@ -166,6 +166,7 @@
   --scrollbar-size: 10px;
   --scrollbar-thumb-size: 6px;
   --composer-attachment-max-width: 240px;
+  --suggest-width: 360px;
   --menu-max-width: 320px;
   --sheet-grabber-width: 36px;
   --sheet-grabber-height: 5px;
@@ -173,6 +174,8 @@
   --tooltip-max-width: 240px;
   --tooltip-delay: 500ms;
   --tooltip-skip-window: 300ms;
+  --diff-gutter-width: 40px;
+  --approval-code-max-height: 160px;
   --icon-stroke: 1.75px;
 }
 
@@ -244,6 +247,9 @@
   --composer-radius: 14px;
   --composer-min-height: 44px;
   --composer-thumb-size: 48px;
+  --mention-height: 20px;
+  --mention-padding-x: 4px;
+  --mention-radius: 4px;
   --row-height: 32px;
   --row-padding-x: 10px;
   --row-radius: 8px;
@@ -286,6 +292,8 @@
   --tooltip-radius: 6px;
   --message-font-size: 15px;
   --message-action-size: 24px;
+  --cite-height: 16px;
+  --diff-line-height: 20px;
   --icon-size-sm: 14px;
   --icon-size-md: 16px;
   --icon-size-lg: 20px;
@@ -359,6 +367,9 @@
     --composer-radius: 24px;
     --composer-min-height: 44px;
     --composer-thumb-size: 56px;
+    --mention-height: 24px;
+    --mention-padding-x: 6px;
+    --mention-radius: 6px;
     --row-height: 44px;
     --row-padding-x: 16px;
     --row-radius: 10px;
@@ -401,6 +412,8 @@
     --tooltip-radius: 8px;
     --message-font-size: 15px;
     --message-action-size: 32px;
+    --cite-height: 18px;
+    --diff-line-height: 22px;
     --icon-size-sm: 17px;
     --icon-size-md: 20px;
     --icon-size-lg: 24px;
@@ -474,6 +487,9 @@
   --composer-radius: 24px;
   --composer-min-height: 44px;
   --composer-thumb-size: 56px;
+  --mention-height: 24px;
+  --mention-padding-x: 6px;
+  --mention-radius: 6px;
   --row-height: 44px;
   --row-padding-x: 16px;
   --row-radius: 10px;
@@ -516,6 +532,8 @@
   --tooltip-radius: 8px;
   --message-font-size: 15px;
   --message-action-size: 32px;
+  --cite-height: 18px;
+  --diff-line-height: 22px;
   --icon-size-sm: 17px;
   --icon-size-md: 20px;
   --icon-size-lg: 24px;
@@ -588,6 +606,9 @@
   --composer-radius: 16px;
   --composer-min-height: 48px;
   --composer-thumb-size: 56px;
+  --mention-height: 22px;
+  --mention-padding-x: 6px;
+  --mention-radius: 6px;
   --row-height: 40px;
   --row-padding-x: 12px;
   --row-radius: 8px;
@@ -630,6 +651,8 @@
   --tooltip-radius: 8px;
   --message-font-size: 15px;
   --message-action-size: 28px;
+  --cite-height: 18px;
+  --diff-line-height: 22px;
   --icon-size-sm: 16px;
   --icon-size-md: 18px;
   --icon-size-lg: 24px;

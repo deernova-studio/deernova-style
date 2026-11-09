@@ -69,7 +69,7 @@ Web 上按钮“上下特别宽”几乎都是同一个原因：用内边距和�
 ## 控件
 
 - 用原生元素：`<button>`、`<a>`、`<input>`、`<select>`、`<dialog>`、`<details>`。只有图标的按钮加 `aria-label`，并用 [tooltip](../components/tooltip.md) 显示名称，不用 `title` 属性。
-- 焦点：不用 outline 或组件库 ring 套框。输入框和下拉选择无描边，聚焦前后底色一致，不添加阴影；输入框只出现光标。按钮的键盘定位用底色，链接、菜单和下拉框用文字下划线。Composer 沿用原有层级，不重复添加效果。完整规则见 [交互状态](../foundations/states.md)。
+- 焦点：不用 outline 或组件库 ring 套框。输入框和下拉选择无描边，聚焦时浅灰底换成白底并加 `shadow-control`。按钮的键盘定位用底色，链接、菜单和下拉框用文字下划线。Composer 沿用原有层级，不重复添加效果。完整规则见 [交互状态](../foundations/states.md)。
 - 细线：`border: var(--stroke-line) solid var(--line);`。
 - 分段控件、开关这类有状态的控件，用 `aria-pressed`、`role="switch"` 或 `role="tab"` 标出当前状态。
 - 弹窗用 `<dialog>` 的 `showModal()`，自带焦点管理和 Esc 关闭；popover 用 `popover` 属性。打开、关闭和焦点规则见 [弹窗、抽屉与 popover](../components/sheet.md)。

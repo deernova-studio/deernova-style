@@ -144,9 +144,9 @@
   text-overflow: ellipsis;
   appearance: none;
 }
-/* 聚焦前后保持同一浅底，不加描边或阴影；键盘位置用文字提示。 */
-.dn-select > :is(select, button):focus { outline: none; box-shadow: none; }
-.dn-select > :is(select, button):focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+/* 聚焦和输入框一样：浅灰底换成白底，加一层柔和的控件阴影；不加描边或焦点环。 */
+.dn-select > :is(select, button) { transition: background-color var(--duration-instant) var(--ease-standard), box-shadow var(--duration-instant) var(--ease-standard); }
+.dn-select > :is(select, button):focus, .dn-select > button[aria-expanded="true"] { outline: none; background: var(--surface-raised); box-shadow: var(--shadow-control); }
 .dn-select > .dn-select-chevron { position: absolute; top: 50%; right: var(--field-padding-x); width: var(--icon-size-sm); height: var(--icon-size-sm); color: var(--ink-tertiary); translate: 0 -50%; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) {
   .dn-menu[hidden] { transform: none; }

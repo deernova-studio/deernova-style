@@ -191,6 +191,18 @@ public enum Deernova {
     public static let diffGutterWidth: CGFloat = 40
     /// 确认卡里命令、参数块的最大高度，超出时内部滚动。
     public static let approvalCodeMaxHeight: CGFloat = 160
+    /// 工具详情（预览或 JSON）的最大高度，超出时在块内滚动。
+    public static let toolDetailMaxHeight: CGFloat = 320
+    /// 滑块轨道的高度。
+    public static let sliderTrackHeight: CGFloat = 4
+    /// 标签在左的表单里标签栏的宽度。
+    public static let formLabelWidth: CGFloat = 160
+    /// 命令面板的宽度。
+    public static let commandWidth: CGFloat = 560
+    /// 进度条的高度。
+    public static let progressHeight: CGFloat = 4
+    /// 起始建议按钮的最大宽度。
+    public static let suggestionMaxWidth: CGFloat = 260
 
     // 按密度取值的尺寸：macOS 是 desktop（只用于自己画的内容区），iOS 和 iPadOS 是 touch。
     #if os(macOS)
@@ -280,6 +292,15 @@ public enum Deernova {
     public static let messageActionSize: CGFloat = 24
     public static let citeHeight: CGFloat = 16
     public static let diffLineHeight: CGFloat = 20
+    public static let toolKeyWidth: CGFloat = 88
+    public static let checkSize: CGFloat = 16
+    public static let sliderThumbSize: CGFloat = 16
+    public static let tableRowHeight: CGFloat = 36
+    public static let tableCellPaddingX: CGFloat = 12
+    public static let commandInputHeight: CGFloat = 48
+    public static let skeletonLineHeight: CGFloat = 12
+    public static let artifactCardHeight: CGFloat = 56
+    public static let artifactIconSize: CGFloat = 36
     public static let iconSizeSm: CGFloat = 14
     public static let iconSizeMd: CGFloat = 16
     public static let iconSizeLg: CGFloat = 20
@@ -370,6 +391,15 @@ public enum Deernova {
     public static let messageActionSize: CGFloat = 32
     public static let citeHeight: CGFloat = 18
     public static let diffLineHeight: CGFloat = 22
+    public static let toolKeyWidth: CGFloat = 96
+    public static let checkSize: CGFloat = 22
+    public static let sliderThumbSize: CGFloat = 24
+    public static let tableRowHeight: CGFloat = 44
+    public static let tableCellPaddingX: CGFloat = 16
+    public static let commandInputHeight: CGFloat = 52
+    public static let skeletonLineHeight: CGFloat = 14
+    public static let artifactCardHeight: CGFloat = 64
+    public static let artifactIconSize: CGFloat = 40
     public static let iconSizeSm: CGFloat = 17
     public static let iconSizeMd: CGFloat = 20
     public static let iconSizeLg: CGFloat = 24

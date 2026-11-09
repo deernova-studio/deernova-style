@@ -1,6 +1,6 @@
 ---
 name: deernova-style
-description: Deernova 的界面设计语言：只用黑白灰，内容放在不透明纸面上，原生端的操作层用系统 Liquid Glass，Web 应用用不透明平面加 1px 线；界面和 AI 回答用无衬线，衬线只给大标题和长文；按场景（Web 应用、macOS、iOS、iPadOS、官网与文档）切换密度。在 Deernova 的应用或网站里新建、修改或审查界面时使用，包括颜色、字体、间距、圆角、线条、阴影、按钮、输入框、菜单与下拉选择、侧边栏、顶栏、列表、卡片、弹窗、tooltip、空状态、AI 对话、AI 输入框（附件、@ 提及、/ 命令、模型、发送）、思考与工具调用、权限确认与变更审批和任务清单，以及对应的 CSS、Tailwind 或 SwiftUI 实现。
+description: Deernova 的界面设计语言：只用黑白灰，内容放在不透明纸面上，原生端的操作层用系统 Liquid Glass，Web 应用用不透明平面加 1px 线；界面和 AI 回答用无衬线，衬线只给大标题和长文；按场景（Web 应用、macOS、iOS、iPadOS、官网与文档）切换密度。在 Deernova 的应用或网站里新建、修改或审查界面时使用，包括颜色、字体、间距、圆角、线条、阴影、按钮、输入框、复选框单选滑块、表单、表格、菜单与下拉选择、命令面板、侧边栏、顶栏、列表、卡片、弹窗、tooltip、加载与骨架、空状态、AI 对话、AI 输入框（附件、@ 提及、/ 命令、模型、发送）、思考与工具调用、权限确认与变更审批、建议提示、产物预览和任务清单，以及对应的 CSS、Tailwind 或 SwiftUI 实现。
 ---
 
 # Deernova 设计语言
@@ -53,7 +53,7 @@ description: Deernova 的界面设计语言：只用黑白灰，内容放在不�
 2. **黑白灰，强调靠对比。** `accent` 就是墨色 `ink`：主按钮在浅色主题是黑底白字，在深色主题是白底黑字，文字用 `on-accent`，不要写死白色。唯一的彩色是状态色 `success`、`warning`、`danger`、`info`，只用来表达状态，而且必须同时带图标或文字。
 3. **细线分区，阴影表达层级。** 区块之间用 `line` 色的 1px 线分隔（`stroke-line`），卡片不加阴影。菜单、弹窗、浮动面板和 Composer 用 `shadow-float`；不因激活或聚焦额外添加阴影。
 4. **无衬线做界面，衬线点题。** 界面文字、AI 回答、用户消息、标题栏都用系统无衬线（SF Pro）；代码和需要对齐的数字用等宽（SF Mono）。衬线（New York）只用在页面大标题和空状态标题（`display`、`title`）、官网与文档，以及文章类的长文阅读（`prose`）。中文统一落到苹方。
-5. **激活不加装饰。** 悬停 `fill-hover`，按下和选中 `fill-selected`，选中项悬停不再加深。按钮保留轻微底色反馈；输入框和下拉框无描边、保持原来的浅底，输入框聚焦只出现光标，不加外圈、阴影或底色变化。非输入控件的键盘位置用底色或文字下划线表示。悬停不位移，只写在 `@media (hover: hover)` 里，见 [交互状态](references/foundations/states.md)。
+5. **激活不加装饰。** 悬停 `fill-hover`，按下和选中 `fill-selected`，选中项悬停不再加深。按钮保留轻微底色反馈；输入框和下拉框无描边，聚焦时浅灰底换成白底并加一层柔和的控件阴影，不加外圈。非输入控件的键盘位置用底色或文字下划线表示。悬停不位移，只写在 `@media (hover: hover)` 里，见 [交互状态](references/foundations/states.md)。
 6. **层次靠字号和灰度，少用粗体。** 600 只给真正的标题（`display`、`title`、`headline`）。分组标题、会话名、说明、时间戳用常规字重，靠 `ink-secondary`、`ink-tertiary` 和小一号的字区分层级。
 7. **控件高度由 token 决定，点击区域单独补。** 按钮、输入框、列表行的可见高度直接用 `button-height-*`、`field-height`、`row-height`，上下内边距为 0，不让页面行高把它撑高。可见尺寸小于 `hit-min` 时，用透明的命中区补足，不加大可见的控件。
 8. **间距成组。** 间距走 4pt 网格。组内用 `gap-stack`，组与组之间用 `gap-group`（至少 2 倍）；内容区里段落、工具调用、卡片之间 `space-4`。用细线和少量留白分组，不靠大块空白和外框。
@@ -82,10 +82,10 @@ description: Deernova 的界面设计语言：只用黑白灰，内容放在不�
 按它在页面里扮演的角色分成五组。
 
 - **页面结构**：[顶栏与侧面板](references/components/toolbar.md) · [侧边栏](references/components/sidebar.md) · [玻璃操作层](references/components/glass-controls.md)
-- **基础控件**：[按钮](references/components/button.md) · [文本框](references/components/text-field.md) · [分段控件](references/components/segmented.md) · [菜单与下拉](references/components/menu.md)
-- **内容展示**：[卡片](references/components/card.md) · [分组列表](references/components/list.md) · [标签](references/components/tag.md) · [代码块](references/components/code-block.md) · [空状态](references/components/empty-state.md)
-- **浮层与反馈**：[弹窗、抽屉与 popover](references/components/sheet.md) · [Tooltip 与悬停浮层](references/components/tooltip.md) · [横幅与轻提示](references/components/banner.md)
-- **AI 组合**：[Composer（AI 输入框）](references/components/composer.md) · [提及与命令](references/components/mention.md) · [消息](references/components/message.md) · [思考、工具调用与执行步骤](references/components/step-row.md) · [确认与审批](references/components/approval.md) · [任务清单](references/components/task-list.md)（先读总纲 [AI 交互](references/foundations/ai.md)）
+- **基础控件**：[按钮](references/components/button.md) · [文本框](references/components/text-field.md) · [选择控件](references/components/choice.md) · [分段控件](references/components/segmented.md) · [菜单与下拉](references/components/menu.md) · [表单](references/components/form.md)
+- **内容展示**：[卡片](references/components/card.md) · [分组列表](references/components/list.md) · [表格](references/components/table.md) · [标签](references/components/tag.md) · [代码块](references/components/code-block.md) · [空状态](references/components/empty-state.md)
+- **浮层与反馈**：[弹窗、抽屉与 popover](references/components/sheet.md) · [命令面板](references/components/command.md) · [Tooltip 与悬停浮层](references/components/tooltip.md) · [横幅与轻提示](references/components/banner.md) · [加载状态](references/components/skeleton.md)
+- **AI 组合**：[建议与新对话](references/components/suggestion.md) · [Composer（AI 输入框）](references/components/composer.md) · [提及与命令](references/components/mention.md) · [消息](references/components/message.md) · [思考、工具调用与执行步骤](references/components/step-row.md) · [确认与审批](references/components/approval.md) · [任务清单](references/components/task-list.md) · [产物与预览](references/components/artifact.md)（先读总纲 [AI 交互](references/foundations/ai.md)）
 
 ### 场景
 

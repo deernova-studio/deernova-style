@@ -176,6 +176,13 @@
   --tooltip-skip-window: 300ms;
   --diff-gutter-width: 40px;
   --approval-code-max-height: 160px;
+  --tool-detail-max-height: 320px;
+  --slider-track-height: 4px;
+  --form-label-width: 160px;
+  --command-width: 560px;
+  --progress-height: 4px;
+  --shimmer-duration: 1600ms;
+  --suggestion-max-width: 260px;
   --icon-stroke: 1.75px;
 }
 
@@ -294,6 +301,15 @@
   --message-action-size: 24px;
   --cite-height: 16px;
   --diff-line-height: 20px;
+  --tool-key-width: 88px;
+  --check-size: 16px;
+  --slider-thumb-size: 16px;
+  --table-row-height: 36px;
+  --table-cell-padding-x: 12px;
+  --command-input-height: 48px;
+  --skeleton-line-height: 12px;
+  --artifact-card-height: 56px;
+  --artifact-icon-size: 36px;
   --icon-size-sm: 14px;
   --icon-size-md: 16px;
   --icon-size-lg: 20px;
@@ -414,6 +430,15 @@
     --message-action-size: 32px;
     --cite-height: 18px;
     --diff-line-height: 22px;
+    --tool-key-width: 96px;
+    --check-size: 22px;
+    --slider-thumb-size: 24px;
+    --table-row-height: 44px;
+    --table-cell-padding-x: 16px;
+    --command-input-height: 52px;
+    --skeleton-line-height: 14px;
+    --artifact-card-height: 64px;
+    --artifact-icon-size: 40px;
     --icon-size-sm: 17px;
     --icon-size-md: 20px;
     --icon-size-lg: 24px;
@@ -534,6 +559,15 @@
   --message-action-size: 32px;
   --cite-height: 18px;
   --diff-line-height: 22px;
+  --tool-key-width: 96px;
+  --check-size: 22px;
+  --slider-thumb-size: 24px;
+  --table-row-height: 44px;
+  --table-cell-padding-x: 16px;
+  --command-input-height: 52px;
+  --skeleton-line-height: 14px;
+  --artifact-card-height: 64px;
+  --artifact-icon-size: 40px;
   --icon-size-sm: 17px;
   --icon-size-md: 20px;
   --icon-size-lg: 24px;
@@ -653,6 +687,15 @@
   --message-action-size: 28px;
   --cite-height: 18px;
   --diff-line-height: 22px;
+  --tool-key-width: 96px;
+  --check-size: 18px;
+  --slider-thumb-size: 20px;
+  --table-row-height: 40px;
+  --table-cell-padding-x: 12px;
+  --command-input-height: 52px;
+  --skeleton-line-height: 12px;
+  --artifact-card-height: 60px;
+  --artifact-icon-size: 40px;
   --icon-size-sm: 16px;
   --icon-size-md: 18px;
   --icon-size-lg: 24px;

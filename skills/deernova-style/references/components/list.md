@@ -25,7 +25,7 @@
 
 ## Web
 
-开关用原生的 `<input type="checkbox" role="switch">`，保留键盘和读屏支持。
+什么时候用开关、复选框还是单选，见[选择控件](choice.md)。开关用原生的 `<input type="checkbox" role="switch">`，保留键盘和读屏支持。
 
 ```css
 .dn-list-section { display: grid; gap: 6px; }

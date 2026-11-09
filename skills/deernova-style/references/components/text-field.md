@@ -17,11 +17,13 @@
 <!-- /tokens -->
 
 - 默认用 `surface-sunken` 浅底表示可输入区域，`border: 0`，不画深色边线。
-- 聚焦前后外观保持一致，只出现输入光标；不换底色，不加描边、外圈、阴影或动画。鼠标点入和键盘进入使用同样的规则。
-- 出错时用 `danger-soft` 底色，说明文字换成 `danger` 色的错误信息。聚焦仍保留错误底色；错误信息要说清楚怎么改，不依赖一圈红边。
+- 聚焦时底色从 `surface-sunken` 换成 `surface-raised`（浅色主题从浅灰变白，深色主题亮一档），再加一层 `shadow-control`，让它放在白色的弹窗、卡片里也有边界；用时 `duration-instant`。不加描边、外圈或焦点环。鼠标点入和键盘进入用同样的规则，表单里一眼能看出光标在哪个输入框。
+- 出错时用 `danger-soft` 底色，说明文字换成 `danger` 色的错误信息。出错的输入框聚焦时仍保留错误底色，只加 `shadow-control`；错误信息要说清楚怎么改，不依赖一圈红边。
 - 标签在输入框上方，`callout` 字号、中粗、`ink-secondary`；说明在下方，`caption` 字号、常规字重、`ink-tertiary`。标签、输入框、说明之间 `space-1`。
 - 触控端输入文字不小于 16px，避免浏览器在聚焦时放大页面（`field-font-size` 已经保证）。
 - 下拉选择（`select`）和输入框同高，共用浅底，聚焦不额外加装饰，写法见 [菜单与下拉](menu.md)。
+
+整张表单怎么分组、校验和提交，见[表单](form.md)。
 
 ## 占位符
 
@@ -72,10 +74,12 @@
   background: var(--surface-sunken);
   color: var(--ink);
   font: var(--weight-regular) var(--field-font-size)/1.2 var(--font-sans);
+  transition: background-color var(--duration-instant) var(--ease-standard), box-shadow var(--duration-instant) var(--ease-standard);
 }
 .dn-input::placeholder { color: var(--ink-tertiary); }
-.dn-input:focus { outline: none; box-shadow: none; }
+.dn-input:focus { outline: none; background: var(--surface-raised); box-shadow: var(--shadow-control); }
 .dn-input[aria-invalid="true"] { background: var(--danger-soft); }
+.dn-input[aria-invalid="true"]:focus { background: var(--danger-soft); }
 .dn-input:disabled { opacity: var(--opacity-disabled); }
 .dn-field-help { color: var(--ink-tertiary); font: var(--weight-regular) var(--type-caption-size)/var(--type-caption-line) var(--font-sans); }
 .dn-field-help.is-error { color: var(--danger); }
@@ -99,6 +103,8 @@
 .dn-input-group > input { flex: 1; min-width: 0; height: 100%; padding: 0; border: 0; outline: none; background: transparent; color: var(--ink); font: var(--weight-regular) var(--field-font-size)/1.2 var(--font-sans); }
 .dn-input-group > input::placeholder { color: var(--ink-tertiary); }
 .dn-input-group > input:focus { outline: none; box-shadow: none; }
+.dn-input-group { transition: background-color var(--duration-instant) var(--ease-standard), box-shadow var(--duration-instant) var(--ease-standard); }
+.dn-input-group:focus-within { background: var(--surface-raised); box-shadow: var(--shadow-control); }
 .dn-input-group > .dn-icon { flex: none; width: var(--icon-size-md); height: var(--icon-size-md); }
 .dn-input-affix { flex: none; font: var(--weight-regular) var(--field-font-size)/1.2 var(--font-sans); white-space: nowrap; }
 .dn-input-kbd { flex: none; font: var(--weight-regular) var(--type-caption-size)/1 var(--font-sans); }
@@ -122,7 +128,7 @@
 @media (hover: hover) { .dn-input-action:hover { background: var(--fill-hover); color: var(--ink); } }
 .dn-input-action:active, .dn-input-action:focus-visible { outline: none; background: var(--fill-selected); color: var(--ink); }
 .dn-input-group > input:placeholder-shown ~ .dn-input-action.is-clear { visibility: hidden; }
-.dn-input-group:has(> input[aria-invalid="true"]) { background: var(--danger-soft); }
+.dn-input-group:has(> input[aria-invalid="true"]), .dn-input-group:has(> input[aria-invalid="true"]):focus-within { background: var(--danger-soft); }
 .dn-input-group:has(> input:disabled) { opacity: var(--opacity-disabled); cursor: default; }
 .dn-input-group > input.is-number, .dn-input.is-number { text-align: end; font-variant-numeric: tabular-nums; }
 textarea.dn-input {
@@ -209,5 +215,6 @@ iOS 设置页这类表单，直接在 `Form` 里用 `TextField`，交给系统�
 - 只用占位符代替标签；把格式、长度这类要求只写在占位符里；占位符写「请输入……」。
 - 用上下内边距撑高输入框；让清除按钮出现时把文字挤动；数字左对齐导致小数点对不齐。
 - 出错时只把边框变红、不给说明。
-- 给激活态套黑色或灰色外框，或用零模糊的 box-shadow 冒充阴影；全局 outline、ring 不得叠到输入框上。
+- 给激活态套黑色或灰色外框，或用零模糊的 box-shadow 冒充描边；全局 outline、ring 不得叠到输入框上。
+- 聚焦前后完全没有变化，键盘用户看不出焦点在哪个输入框。
 - 把多行输入塞进单行框（多行用 `textarea`、`TextField(axis: .vertical)` 或 [Composer](composer.md)）。

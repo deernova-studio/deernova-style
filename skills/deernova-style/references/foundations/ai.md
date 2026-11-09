@@ -18,7 +18,9 @@ AI 工具里反复出现的那组界面：用户怎么把意图和上下文交�
 
 思考、工具调用、确认可以交替出现多次（想一下、调用、再想、再调用），按发生的先后排列。正文只有一段，在最后。
 
-输入一侧：[Composer](../components/composer.md) 承载文字、附件和设置；在里面输入 `@`、`/`、`#` 会弹出[提及与命令](../components/mention.md)的浮层。
+回答里做出来的文档、网页、图片放在[产物与预览](../components/artifact.md)里；等待时的样子见[加载状态](../components/skeleton.md)。
+
+输入一侧：新对话首页和建议见[建议与新对话](../components/suggestion.md)；[Composer](../components/composer.md) 承载文字、附件和设置；在里面输入 `@`、`/`、`#` 会弹出[提及与命令](../components/mention.md)的浮层。
 
 ## 原则
 

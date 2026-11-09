@@ -10,10 +10,10 @@ import {
 // Components are grouped by the role they play on a page, so a reader can find one from what they are building.
 const COMPONENT_GROUPS = [
   { id: 'structure', title: '页面结构', docs: ['toolbar', 'sidebar', 'glass-controls'] },
-  { id: 'controls', title: '基础控件', docs: ['button', 'text-field', 'segmented', 'menu'] },
-  { id: 'content', title: '内容展示', docs: ['card', 'list', 'tag', 'code-block', 'empty-state'] },
-  { id: 'overlays', title: '浮层与反馈', docs: ['sheet', 'tooltip', 'banner'] },
-  { id: 'ai', title: 'AI 组合', docs: ['composer', 'mention', 'message', 'step-row', 'approval', 'task-list'] }
+  { id: 'controls', title: '基础控件', docs: ['button', 'text-field', 'choice', 'segmented', 'menu', 'form'] },
+  { id: 'content', title: '内容展示', docs: ['card', 'list', 'table', 'tag', 'code-block', 'empty-state'] },
+  { id: 'overlays', title: '浮层与反馈', docs: ['sheet', 'command', 'tooltip', 'banner', 'skeleton'] },
+  { id: 'ai', title: 'AI 组合', docs: ['suggestion', 'composer', 'mention', 'message', 'step-row', 'approval', 'task-list', 'artifact'] }
 ];
 
 export const SECTIONS = [

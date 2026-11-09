@@ -6,14 +6,66 @@ AI 在对话里想了什么、做了什么。思考和工具调用都是「过�
 
 ## 尺寸
 
-没有自己的 token：行高用 `button-height-md`，图标用 `icon-size-md`。
+行高用 `button-height-md`，图标用 `icon-size-md`；工具详情另有两个：
+
+<!-- tokens:step-row -->
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `tool-key-width` | 88 | 96 | 96 | 工具详情预览里参数名一栏的宽度，超长时截断。 |
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `tool-detail-max-height` | `320px` | 工具详情（预览或 JSON）的最大高度，超出时在块内滚动。 |
+<!-- /tokens -->
 
 - **摘要行**：`type-body` 字号、`ink-secondary`，末尾一个小箭头，点开后箭头转向下；悬停时文字变 `ink`。没有底色、没有边框，和正文段落之间 `space-4`。
 - **执行步骤**：在摘要下方缩进，左边一条 1px `line`。每步高 `button-height-md`，`radius-sm`，悬停 `fill-hover`。状态图标：进行中是 `ink` 色的转圈，成功 `success`，失败 `danger`（失败时摘要写清楚原因）。动作名 `callout` 半粗 `ink`；对象摘要 `caption` 等宽、单行截断；耗时 `caption`、`ink-tertiary`、等宽数字。
-- **步骤详情**：再点开一步，缩进到和文字对齐，`surface-sunken` 底，`radius-sm`，等宽。
+- **步骤详情**：再点开一步，缩进到和文字对齐，`surface-sunken` 底，`radius-sm`。默认显示可读的**预览**，原始数据放在 **JSON** 视图里，见下面的[工具详情](#工具详情)。
 - **运行中**：三个依次闪烁的圆点（`ink-secondary`）+ 动作名 + 已用时间（`ink-tertiary`），`type-body` 字号。减弱动态效果时圆点不闪。等待用户确认时改成「等待你确认」，圆点停止闪烁，见 [确认与审批](approval.md)。
 - **更多状态**：等待确认是 `ink` 色的暂停图标；被拒绝、被跳过是 `ink-tertiary` 的斜线圆，动作名后写「已拒绝」；运行被停止时，还没完成的步骤显示 `ink-tertiary` 的方块和「已停止」。这些状态的步骤也留在原处，不删掉。
-- **步骤详情的结构**：工具调用的详情分「输入」和「输出」两段，各有一个 `caption`、`ink-tertiary` 的小标题；输出很长时只显示前 20 行，末尾「显示全部 320 行」。
+
+## 步骤行怎么写
+
+步骤行给人看，不是给开发者看。工具的原始名字和参数 JSON 都不出现在这一行。
+
+- **动作名**：把工具翻译成 2–4 个字的动词：读取、修改、搜索、运行、委派、查询。认识的工具用固定的译名；不认识的 MCP 工具，用它自己声明的标题（`title`），没有就把名字拆成词（`delegate_task` →「delegate task」），不要显示 `mcp.herd.delegate_task` 这种全名。
+- **对象摘要**：只放最能说明这一步的那一个参数：文件路径、搜索词、命令、委派任务的第一句、接收方的名字。写成「DSH · 第 20 轮成语接龙」，不要写成 `{"server":"herd","tool":…`。
+- 工具的原名（`herd · delegate_task`）放进详情的左上角，需要的人点开能看到。
+
+## 工具详情
+
+点开一步后的内容分两种视图，右上角用一个小的「预览 / JSON」切换，旁边是复制按钮。
+
+### 预览（默认）
+
+- **结构**：上面是参数，一条 `line` 细线，下面是结果。每一项排成两列：左边参数名，`caption`、`ink-tertiary`，栏宽 `tool-key-width`，超长截断；右边是值，`callout`、`ink`，按正文排，不用等宽。两列首行对齐。
+- **值怎么显示**：
+  - 普通文字照常换行；超过两行时只显示两行，下面是「展开全部 · 312 字」文字按钮。
+  - ID、路径、命令、哈希这类机器值用等宽 `caption`、`ink-secondary`；很长的 ID 截成前 8 位和后 4 位（`afa13cc4…442a`），完整值在 JSON 里。
+  - 嵌套的对象和数组不在预览里展开，写成「3 项」，要看去 JSON。
+  - 布尔值写成人话（「已接受」「否」），空值不显示这一项。
+- **结果**：先写最重要的一句，用 `ink`；状态和用时写在下一项，`ink-secondary`。工具返回的外层包装（MCP 的 `content: [{ type: "text", text: … }]`）不显示，直接显示里面的内容；里面如果又是 JSON 字符串，先解析再按上面的规则显示。
+- **常见工具的专门预览**（其他工具都用上面的通用两列）：
+
+| 工具 | 参数 | 结果 |
+| --- | --- | --- |
+| 委派给另一个代理 | 接收方、任务（两行截断） | 对方的回复，按正文排；状态（已接受、已拒绝） |
+| 运行命令 | 命令（等宽） | 输出的**最后** 20 行（出错信息通常在末尾），等宽；退出码不为 0 时写在第一行 |
+| 读取文件 | 路径和行号范围 | 前 8 行内容，带行号，样式同[代码块](code-block.md) |
+| 修改文件 | 路径 | 变更对比，样式同[确认与审批](approval.md)里的 `.dn-diff`，最多 20 行 |
+| 搜索 | 搜索词 | 结果列表：每条一行标题加 `caption` 的来源，最多 5 条，末尾「还有 12 条」 |
+
+- **失败**：结果区第一项是「错误」，名字用 `danger`，内容是报错的第一句（去掉堆栈）；完整报错在 JSON 里。
+- **太长**：整个详情块最高 `tool-detail-max-height`，超出时在块内滚动，不把对话撑长。
+
+### JSON
+
+- 显示完整的输入和输出，分「输入」「输出」两段，小标题同预览里的参数名。
+- **格式化**：两个空格缩进，每个键一行；字符串里的 JSON 先解析再缩进显示，不露出 `\"` 这样的转义；MCP 的外层包装也展开成结构。
+- **只用灰度区分**：键 `ink-secondary`，值 `ink`，括号、冒号、逗号 `ink-tertiary`；不用彩色语法高亮。等宽 `caption`，行高 1.6。
+- **长字符串**：超过 200 字只显示前面一段，后面跟「展开 312 字」；长单词和 ID 可以在任意位置折行，不横向滚动。
+- **复制**：复制的是工具收发的原始数据（没有解析、没有截断），点击后显示「已复制」1.5 秒。
+- **记住选择**：用户切到 JSON 后，之后点开的其他步骤也直接显示 JSON；这个选择按用户保存。
 
 ## 思考
 
@@ -86,6 +138,39 @@ details > .dn-step { cursor: pointer; }
   font: var(--weight-regular) var(--type-caption-size)/1.45 var(--font-mono);
   white-space: pre-wrap;
 }
+.dn-tool {
+  min-width: 0;
+  max-height: var(--tool-detail-max-height);
+  margin: 2px 0 6px calc(6px + var(--icon-size-md) + var(--space-2));
+  overflow: auto;
+  padding: var(--space-1) var(--space-3) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+}
+.dn-tool-head { display: flex; align-items: center; gap: var(--space-2); min-height: var(--button-height-md); }
+.dn-tool-name { min-width: 0; margin-right: auto; overflow: hidden; color: var(--ink-tertiary); font: var(--weight-regular) var(--type-caption-size)/1 var(--font-mono); text-overflow: ellipsis; white-space: nowrap; }
+.dn-tool-view { display: inline-flex; flex: none; gap: 2px; }
+.dn-tool-view > button { height: calc(var(--button-height-md) - 8px); padding: 0 var(--space-2); border: 0; border-radius: var(--radius-xs); background: transparent; color: var(--ink-tertiary); font: var(--weight-regular) var(--type-caption-size)/1 var(--font-sans); cursor: pointer; }
+@media (hover: hover) { .dn-tool-view > button:hover { color: var(--ink); } }
+.dn-tool-view > button[aria-pressed="true"] { background: var(--surface-raised); box-shadow: var(--shadow-control); color: var(--ink); }
+.dn-tool-fields { display: grid; grid-template-columns: var(--tool-key-width) minmax(0, 1fr); gap: var(--space-1) var(--space-3); margin: 0; color: var(--ink); font: var(--type-callout); }
+.dn-tool-fields + .dn-tool-fields { margin-top: var(--space-2); padding-top: var(--space-2); border-top: var(--stroke-line) solid var(--line); }
+.dn-tool-fields > dt { overflow: hidden; color: var(--ink-tertiary); font: var(--weight-regular) var(--type-caption-size)/var(--type-callout-line) var(--font-sans); text-overflow: ellipsis; white-space: nowrap; }
+.dn-tool-fields > dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+.dn-tool-fields > dd.is-code { color: var(--ink-secondary); font: var(--weight-regular) var(--type-caption-size)/var(--type-callout-line) var(--font-mono); white-space: pre-wrap; }
+.dn-tool-fields > dd.is-muted { color: var(--ink-secondary); }
+.dn-tool-fields > dt.is-error { color: var(--danger); }
+.dn-tool-clamp { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.dn-tool-more { display: block; margin-top: 2px; padding: 0; border: 0; background: none; color: var(--ink-secondary); font: var(--weight-regular) var(--type-caption-size)/var(--type-caption-line) var(--font-sans); cursor: pointer; }
+@media (hover: hover) { .dn-tool-more:hover { color: var(--ink); } }
+.dn-tool-label { display: block; margin: var(--space-2) 0 2px; color: var(--ink-tertiary); font: var(--weight-regular) var(--type-caption-size)/var(--type-caption-line) var(--font-sans); }
+.dn-tool-head + .dn-tool-label { margin-top: 0; }
+.dn-json { margin: 0; color: var(--ink); font: var(--weight-regular) var(--type-caption-size)/1.6 var(--font-mono); white-space: pre-wrap; overflow-wrap: anywhere; tab-size: 2; }
+.dn-json-key { color: var(--ink-secondary); }
+.dn-json-punct { color: var(--ink-tertiary); }
+.dn-json .dn-tool-more { display: inline; margin: 0 0 0 var(--space-1); }
+.dn-tool-head .dn-icon-button { flex: none; width: calc(var(--button-height-md) - 8px); height: calc(var(--button-height-md) - 8px); color: var(--ink-tertiary); }
+.dn-tool-head .dn-icon-button .dn-icon { width: var(--icon-size-sm); height: var(--icon-size-sm); }
 .dn-spinner { flex: none; width: var(--icon-size-sm); height: var(--icon-size-sm); border: 2px solid var(--line); border-top-color: var(--ink); border-radius: var(--radius-full); animation: dn-spin 0.9s linear infinite; }
 @keyframes dn-spin { to { transform: rotate(360deg); } }
 
@@ -127,7 +212,73 @@ details > .dn-step { cursor: pointer; }
 </div>
 ```
 
+### 工具详情示例
+
+预览视图：上面是一次委派（MCP 工具 `herd · delegate_task`），下面是一条失败的命令。
+
+```html
+<div class="dn-steps">
+  <details open>
+    <summary class="dn-step is-success"><svg class="dn-icon dn-step-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg><span class="dn-step-name">委派</span><span class="dn-step-summary">DSH · 第 20 轮成语接龙，接「化」开头的成语</span><span class="dn-step-meta">6 秒</span></summary>
+    <div class="dn-tool">
+      <div class="dn-tool-head"><span class="dn-tool-name">herd · delegate_task</span><div class="dn-tool-view" role="group" aria-label="显示方式"><button type="button" aria-pressed="true">预览</button><button type="button" aria-pressed="false">JSON</button></div><button class="dn-icon-button" type="button" aria-label="复制原始数据"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button></div>
+      <dl class="dn-tool-fields">
+        <dt>接收方</dt><dd>DSH <span class="dn-step-summary">afa13cc4…442a</span></dd>
+        <dt>任务</dt><dd><div class="dn-tool-clamp">完成追加 10 轮成语接龙（第 11–20 轮）的最后一轮。每轮 Codex 和 DSH 各一个，严格尾字接首字，同字不谐音，全局不重复。已用成语依次为：一心一意、意气风发、发扬光大、大器晚成……</div><button class="dn-tool-more" type="button">展开全部 · 312 字</button></dd>
+      </dl>
+      <dl class="dn-tool-fields">
+        <dt>回复</dt><dd>第 20 轮 DSH：化险为夷</dd>
+        <dt>状态</dt><dd class="is-muted">已接受</dd>
+      </dl>
+    </div>
+  </details>
+  <details open>
+    <summary class="dn-step is-failed"><svg class="dn-icon dn-step-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span class="dn-step-name">运行</span><span class="dn-step-summary">npm run build</span><span class="dn-step-meta">3.1 秒</span></summary>
+    <div class="dn-tool">
+      <div class="dn-tool-head"><span class="dn-tool-name">bash</span><div class="dn-tool-view" role="group" aria-label="显示方式"><button type="button" aria-pressed="true">预览</button><button type="button" aria-pressed="false">JSON</button></div><button class="dn-icon-button" type="button" aria-label="复制原始数据"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button></div>
+      <dl class="dn-tool-fields">
+        <dt>命令</dt><dd class="is-code">npm run build</dd>
+      </dl>
+      <dl class="dn-tool-fields">
+        <dt class="is-error">错误</dt><dd>找不到模块 ./tokens.css（退出码 1）</dd>
+        <dt>输出</dt><dd class="is-code">vite v6.0.7 building for production…
+✗ Build failed in 412ms
+error: Could not resolve "./tokens.css" from "src/main.ts"</dd>
+      </dl>
+    </div>
+  </details>
+</div>
+```
+
+切到 JSON 后：格式化、只用灰度、字符串里的 JSON 已经解析，长字符串截断。
+
+```html
+<div class="dn-steps">
+  <details open>
+    <summary class="dn-step is-success"><svg class="dn-icon dn-step-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg><span class="dn-step-name">委派</span><span class="dn-step-summary">DSH · 第 20 轮成语接龙，接「化」开头的成语</span><span class="dn-step-meta">6 秒</span></summary>
+    <div class="dn-tool">
+      <div class="dn-tool-head"><span class="dn-tool-name">herd · delegate_task</span><div class="dn-tool-view" role="group" aria-label="显示方式"><button type="button" aria-pressed="false">预览</button><button type="button" aria-pressed="true">JSON</button></div><button class="dn-icon-button" type="button" aria-label="复制原始数据"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button></div>
+      <span class="dn-tool-label">输入</span>
+<pre class="dn-json"><span class="dn-json-punct">{</span>
+  <span class="dn-json-key">"agentId"</span><span class="dn-json-punct">:</span> "afa13cc4-e519-4cec-9ef3-72c0081a442a"<span class="dn-json-punct">,</span>
+  <span class="dn-json-key">"task"</span><span class="dn-json-punct">:</span> "现在完成用户要求的追加10轮成语接龙（第11–20轮）的最后一轮。每轮 Codex 和 DSH 各一个…"<button class="dn-tool-more" type="button">展开 312 字</button>
+<span class="dn-json-punct">}</span></pre>
+      <span class="dn-tool-label">输出</span>
+<pre class="dn-json"><span class="dn-json-punct">{</span>
+  <span class="dn-json-key">"accepted"</span><span class="dn-json-punct">:</span> true<span class="dn-json-punct">,</span>
+  <span class="dn-json-key">"itemId"</span><span class="dn-json-punct">:</span> "b0e7b33a-a193-4d41-a0ac-5c2e8f1d9b07"<span class="dn-json-punct">,</span>
+  <span class="dn-json-key">"reply"</span><span class="dn-json-punct">:</span> "第20轮 DSH：化险为夷"
+<span class="dn-json-punct">}</span></pre>
+    </div>
+  </details>
+</div>
+```
+
+真实页面里，「预览 / JSON」由脚本切换 `aria-pressed` 和内容，并把选择存到用户设置里。
+
 ## SwiftUI
+
+工具详情的预览用 `Grid`（两列，参数名列宽 `toolKeyWidth`），长文本 `.lineLimit(2)` 加「展开全部」；JSON 视图用 `ScrollView` 里的等宽 `Text`，最高 `toolDetailMaxHeight`；「预览 / JSON」用小号 `Picker(.segmented)`，选择存进 `@AppStorage`。
 
 ```swift
 // 摘要行：点开后是逐条的执行步骤
@@ -161,4 +312,7 @@ struct StepRow: View {
 - 把每一步都做成卡片，或者默认把所有步骤展开铺在对话里。
 - 成功的步骤也用醒目的颜色。
 - 把原始日志直接铺在对话里（放进折叠详情）。
+- 步骤行显示工具全名和参数 JSON（`mcp.herd.delegate_task · {"server":…`）；详情默认就是原始 JSON。
+- 把转义过的字符串（`\"accepted\":true`）原样给人看；给 JSON 用彩色语法高亮。
+- 预览里截断了，复制出来的也是截断的。
 - 把思考过程默认展开，或者用和正文一样的黑色排版；把被拒绝、被停止的步骤从记录里删掉。

@@ -518,6 +518,96 @@
 | `diff-gutter-width` | `40px` | 变更对比左侧行号栏的宽度。 |
 | `approval-code-max-height` | `160px` | 确认卡里命令、参数块的最大高度，超出时内部滚动。 |
 
+### 思考、工具调用与执行步骤
+
+见 [components/step-row.md](components/step-row.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `tool-key-width` | 88 | 96 | 96 | 工具详情预览里参数名一栏的宽度，超长时截断。 |
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `tool-detail-max-height` | `320px` | 工具详情（预览或 JSON）的最大高度，超出时在块内滚动。 |
+
+### 选择控件
+
+见 [components/choice.md](components/choice.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `check-size` | 16 | 22 | 18 | 复选框和单选的边长。 |
+| `slider-thumb-size` | 16 | 24 | 20 | 滑块圆钮的直径。 |
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `slider-track-height` | `4px` | 滑块轨道的高度。 |
+
+### 表单
+
+见 [components/form.md](components/form.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `form-label-width` | `160px` | 标签在左的表单里标签栏的宽度。 |
+
+### 表格
+
+见 [components/table.md](components/table.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `table-row-height` | 36 | 44 | 40 | 表格每一行（包括表头）的高度。 |
+| `table-cell-padding-x` | 12 | 16 | 12 | 单元格左右内边距。 |
+
+### 命令面板
+
+见 [components/command.md](components/command.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `command-input-height` | 48 | 52 | 52 | 命令面板搜索框的高度。 |
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `command-width` | `560px` | 命令面板的宽度。 |
+
+### 加载状态
+
+见 [components/skeleton.md](components/skeleton.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `skeleton-line-height` | 12 | 14 | 12 | 骨架里每一行文字块的高度。 |
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `progress-height` | `4px` | 进度条的高度。 |
+| `shimmer-duration` | `1600ms` | 骨架微光和文字微光扫过一次的时间。（仅网页） |
+
+### 建议与新对话
+
+见 [components/suggestion.md](components/suggestion.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `suggestion-max-width` | `260px` | 起始建议按钮的最大宽度。 |
+
+### 产物与预览
+
+见 [components/artifact.md](components/artifact.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `artifact-card-height` | 56 | 64 | 60 | 回答里产物卡片的高度。 |
+| `artifact-icon-size` | 36 | 40 | 40 | 产物卡片左侧类型图标块的边长。 |
+
 ### 图标
 
 见 [foundations/iconography.md](foundations/iconography.md)。

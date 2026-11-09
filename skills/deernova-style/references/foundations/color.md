@@ -32,7 +32,7 @@
 
 - `accent` 等于 `ink`，用于主按钮填充和选中指示。主按钮上的文字用 `on-accent`：深色主题下它是黑色，不要写死白色。
 - 浅灰的强调底用 `accent-soft`，上面的文字用 `ink`。
-- 输入框聚焦不改变颜色或加阴影，只出现光标。非输入控件的键盘位置用底色或文字下划线表示，不画环形描边。`focus-ring`、`stroke-focus` 和 `focus-offset` 只保留给旧项目兼容，新界面不使用。
+- 输入框聚焦时底色从 `surface-sunken` 换成 `surface-raised`，加一层 `shadow-control`，不加描边。非输入控件的键盘位置用底色或文字下划线表示，不画环形描边。`focus-ring`、`stroke-focus` 和 `focus-offset` 只保留给旧项目兼容，新界面不使用。
 
 ## 状态色
 

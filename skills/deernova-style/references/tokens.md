@@ -530,6 +530,14 @@
 | --- | --- | --- |
 | `tool-detail-max-height` | `320px` | 工具详情（预览或 JSON）的最大高度，超出时在块内滚动。 |
 
+### AI 提问
+
+见 [components/question.md](components/question.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `question-option-height` | 36 | 48 | 40 | 提问卡里每个选项的最小高度（只有一行字时的高度）。 |
+
 ### 选择控件
 
 见 [components/choice.md](components/choice.md)。

@@ -293,6 +293,7 @@ public enum Deernova {
     public static let citeHeight: CGFloat = 16
     public static let diffLineHeight: CGFloat = 20
     public static let toolKeyWidth: CGFloat = 88
+    public static let questionOptionHeight: CGFloat = 36
     public static let checkSize: CGFloat = 16
     public static let sliderThumbSize: CGFloat = 16
     public static let tableRowHeight: CGFloat = 36
@@ -392,6 +393,7 @@ public enum Deernova {
     public static let citeHeight: CGFloat = 18
     public static let diffLineHeight: CGFloat = 22
     public static let toolKeyWidth: CGFloat = 96
+    public static let questionOptionHeight: CGFloat = 48
     public static let checkSize: CGFloat = 22
     public static let sliderThumbSize: CGFloat = 24
     public static let tableRowHeight: CGFloat = 44

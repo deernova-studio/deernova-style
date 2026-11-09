@@ -13,7 +13,7 @@ const COMPONENT_GROUPS = [
   { id: 'controls', title: '基础控件', docs: ['button', 'text-field', 'choice', 'segmented', 'menu', 'form'] },
   { id: 'content', title: '内容展示', docs: ['card', 'list', 'table', 'tag', 'code-block', 'empty-state'] },
   { id: 'overlays', title: '浮层与反馈', docs: ['sheet', 'command', 'tooltip', 'banner', 'skeleton'] },
-  { id: 'ai', title: 'AI 组合', docs: ['suggestion', 'composer', 'mention', 'message', 'step-row', 'approval', 'task-list', 'artifact'] }
+  { id: 'ai', title: 'AI 组合', docs: ['suggestion', 'composer', 'mention', 'message', 'step-row', 'approval', 'question', 'task-list', 'artifact'] }
 ];
 
 export const SECTIONS = [

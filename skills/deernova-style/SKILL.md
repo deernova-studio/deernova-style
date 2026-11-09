@@ -1,6 +1,6 @@
 ---
 name: deernova-style
-description: Deernova 的界面设计语言：只用黑白灰，内容放在不透明纸面上，原生端的操作层用系统 Liquid Glass，Web 应用用不透明平面加 1px 线；界面和 AI 回答用无衬线，衬线只给大标题和长文；按场景（Web 应用、macOS、iOS、iPadOS、官网与文档）切换密度。在 Deernova 的应用或网站里新建、修改或审查界面时使用，包括颜色、字体、间距、圆角、线条、阴影、按钮、输入框、复选框单选滑块、表单、表格、菜单与下拉选择、命令面板、侧边栏、顶栏、列表、卡片、弹窗、tooltip、加载与骨架、空状态、AI 对话、AI 输入框（附件、@ 提及、/ 命令、模型、发送）、思考与工具调用、权限确认与变更审批、建议提示、产物预览和任务清单，以及对应的 CSS、Tailwind 或 SwiftUI 实现。
+description: Deernova 的界面设计语言：只用黑白灰，内容放在不透明纸面上，原生端的操作层用系统 Liquid Glass，Web 应用用不透明平面加 1px 线；界面和 AI 回答用无衬线，衬线只给大标题和长文；按场景（Web 应用、macOS、iOS、iPadOS、官网与文档）切换密度。在 Deernova 的应用或网站里新建、修改或审查界面时使用，包括颜色、字体、间距、圆角、线条、阴影、按钮、输入框、复选框单选滑块、表单、表格、菜单与下拉选择、命令面板、侧边栏、顶栏、列表、卡片、弹窗、tooltip、加载与骨架、空状态、AI 对话、AI 输入框（附件、@ 提及、/ 命令、模型、发送）、思考与工具调用、权限确认与变更审批、AI 向用户提问（选项卡片）、建议提示、产物预览和任务清单，以及对应的 CSS、Tailwind 或 SwiftUI 实现。
 ---
 
 # Deernova 设计语言
@@ -65,7 +65,7 @@ description: Deernova 的界面设计语言：只用黑白灰，内容放在不�
 | 你在做 | 先读 |
 | --- | --- |
 | 任何界面 | 上面的核心规则，加上对应的场景说明 `references/scenes/` |
-| AI 功能：对话、输入框、工具调用、确认 | [AI 交互](references/foundations/ai.md)：一轮回答的顺序、状态和原则，再读里面列出的组件 |
+| AI 功能：对话、输入框、工具调用、确认、提问 | [AI 交互](references/foundations/ai.md)：一轮回答的顺序、状态和原则，再读里面列出的组件 |
 | 某个组件 | [组件](#组件)里对应的文件：用途、尺寸表、状态、Web 和 SwiftUI 写法 |
 | 需要具体数值 | [设计变量](references/tokens.md)；数据在 `assets/tokens.json` |
 | 接入变量 | CSS：`assets/tokens.css`；Tailwind v4：`assets/tailwind.css`；SwiftUI：`assets/DeernovaTokens.swift` |
@@ -85,7 +85,7 @@ description: Deernova 的界面设计语言：只用黑白灰，内容放在不�
 - **基础控件**：[按钮](references/components/button.md) · [文本框](references/components/text-field.md) · [选择控件](references/components/choice.md) · [分段控件](references/components/segmented.md) · [菜单与下拉](references/components/menu.md) · [表单](references/components/form.md)
 - **内容展示**：[卡片](references/components/card.md) · [分组列表](references/components/list.md) · [表格](references/components/table.md) · [标签](references/components/tag.md) · [代码块](references/components/code-block.md) · [空状态](references/components/empty-state.md)
 - **浮层与反馈**：[弹窗、抽屉与 popover](references/components/sheet.md) · [命令面板](references/components/command.md) · [Tooltip 与悬停浮层](references/components/tooltip.md) · [横幅与轻提示](references/components/banner.md) · [加载状态](references/components/skeleton.md)
-- **AI 组合**：[建议与新对话](references/components/suggestion.md) · [Composer（AI 输入框）](references/components/composer.md) · [提及与命令](references/components/mention.md) · [消息](references/components/message.md) · [思考、工具调用与执行步骤](references/components/step-row.md) · [确认与审批](references/components/approval.md) · [任务清单](references/components/task-list.md) · [产物与预览](references/components/artifact.md)（先读总纲 [AI 交互](references/foundations/ai.md)）
+- **AI 组合**：[建议与新对话](references/components/suggestion.md) · [Composer（AI 输入框）](references/components/composer.md) · [提及与命令](references/components/mention.md) · [消息](references/components/message.md) · [思考、工具调用与执行步骤](references/components/step-row.md) · [确认与审批](references/components/approval.md) · [AI 提问](references/components/question.md) · [任务清单](references/components/task-list.md) · [产物与预览](references/components/artifact.md)（先读总纲 [AI 交互](references/foundations/ai.md)）
 
 ### 场景
 

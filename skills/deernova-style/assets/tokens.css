@@ -302,6 +302,7 @@
   --cite-height: 16px;
   --diff-line-height: 20px;
   --tool-key-width: 88px;
+  --question-option-height: 36px;
   --check-size: 16px;
   --slider-thumb-size: 16px;
   --table-row-height: 36px;
@@ -431,6 +432,7 @@
     --cite-height: 18px;
     --diff-line-height: 22px;
     --tool-key-width: 96px;
+    --question-option-height: 48px;
     --check-size: 22px;
     --slider-thumb-size: 24px;
     --table-row-height: 44px;
@@ -560,6 +562,7 @@
   --cite-height: 18px;
   --diff-line-height: 22px;
   --tool-key-width: 96px;
+  --question-option-height: 48px;
   --check-size: 22px;
   --slider-thumb-size: 24px;
   --table-row-height: 44px;
@@ -688,6 +691,7 @@
   --cite-height: 18px;
   --diff-line-height: 22px;
   --tool-key-width: 96px;
+  --question-option-height: 40px;
   --check-size: 18px;
   --slider-thumb-size: 20px;
   --table-row-height: 40px;

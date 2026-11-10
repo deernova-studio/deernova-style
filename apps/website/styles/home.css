@@ -128,7 +128,7 @@
 }
 @media (hover: hover) { .masthead-trigger:hover { color: var(--ink-secondary); } }
 .masthead-trigger:focus-visible { border-radius: inherit; }
-/* The product list follows references/components/menu.md: a disclosure of links in the header's glass.
+/* The product list is a disclosure with descriptions on an opaque popover surface.
    It carries the comfortable density of the marketing scene, or touch on a touch screen (product-menu.js). */
 .product-panel svg { flex: none; fill: none; stroke: currentColor; stroke-width: var(--icon-stroke); stroke-linecap: round; stroke-linejoin: round; }
 .product-panel {
@@ -138,12 +138,15 @@
   left: calc(var(--stroke-line) * -1);
   z-index: var(--z-dropdown);
   /* The whole header is the trigger, so the menu takes half of it from the left edge. */
-  width: min(100%, max(50%, var(--menu-min-width)));
+  width: min(100%, max(50%, var(--menu-max-width)));
   max-height: min(24rem, calc(100dvh - 128px));
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: var(--menu-padding);
-  border: var(--stroke-line) solid var(--glass-stroke);
+  border: var(--stroke-line) solid var(--line);
+  background: var(--surface-raised);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
   border-radius: var(--menu-radius);
   color: var(--ink);
   box-shadow: var(--shadow-float);
@@ -158,14 +161,19 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  height: var(--menu-item-height);
-  padding: 0 var(--menu-item-padding-x);
+  min-height: var(--menu-item-height);
+  padding: var(--space-3) var(--menu-item-padding-x);
   border-radius: calc(var(--menu-radius) - var(--menu-padding));
   font: var(--weight-regular) var(--menu-font-size)/1 var(--font-sans);
   text-decoration: none;
-  white-space: nowrap;
+  white-space: normal;
 }
-.product-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.product-copy { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: var(--space-1); }
+.product-name { line-height: 1.4; }
+.product-description { color: var(--ink-secondary); font: var(--type-caption); }
+.product-destination { color: var(--ink-tertiary); font: var(--type-caption); }
+.product-options > li + li { border-top: var(--stroke-line) solid var(--line); }
+.product-app-icon { flex: none; object-fit: contain; }
 @media (hover: hover) { .product-option:hover { background: var(--fill-hover); } }
 .product-option:focus { outline: none; }
 .product-option:focus-visible { background: var(--fill-selected); outline: none; box-shadow: none; text-decoration: underline; text-underline-offset: 3px; }

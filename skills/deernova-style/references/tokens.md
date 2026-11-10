@@ -81,7 +81,7 @@
 | `accent` | = `ink` | = `ink` | 强调：主按钮填充、选中指示。就是墨色本身，浅色主题是黑，深色主题是白；不用来画激活或焦点外框。 |
 | `accent-soft` | `gray-91` `#e8e8e8` | `gray-18` `#2f2f2f` | 强调的浅底：列表图标底。上面的文字用 ink；不用作输入框的聚焦外圈。 |
 | `on-accent` | `gray-100` `#ffffff` | `gray-9` `#171717` | accent 填充上的文字和图标：浅色主题白字，深色主题黑字。 |
-| `focus-ring` | `gray-45` `#737373` | `gray-64` `#a3a3a3` | 仅兼容旧版焦点环。新界面不用这个 token 描边；输入框聚焦不变，键盘导航用底色或文字提示。 |
+| `focus-ring` | `gray-45` `#737373` | `gray-64` `#a3a3a3` | 仅兼容旧版焦点环。新界面不用这个 token 描边；输入框聚焦时换成 `surface-raised` 底加 `shadow-control`，键盘导航用底色或文字提示。 |
 | `success` | `teal-27` `#1f6b66` | `teal-59` `#6cc3b4` | 成功、已完成、已同步、开关打开。作为文字用在纸面和 success-soft 上。 |
 | `success-soft` | `teal-90` `#ddeeec` | `teal-15` `#183230` | 成功状态的浅底（标签、横幅）。 |
 | `warning` | `amber-29` `#8a5a0b` | `amber-61` `#e2b054` | 需要注意但不阻断：额度将用完、网络较慢。 |
@@ -193,7 +193,7 @@
 
 ## 阴影
 
-阴影表达层级，不用于激活装饰；输入框聚焦不添加阴影。
+阴影表达层级，不用于激活装饰；输入框聚焦时只加一层 `shadow-control`，表示它浮起来可以输入。
 
 | Token | 浅色 | 深色 | 用途 |
 | --- | --- | --- | --- |
@@ -440,6 +440,10 @@
 | `toast-height` | 36 | 40 | 40 | 轻提示胶囊的高度。 |
 | `banner-radius` | 10 | 12 | 12 | 横幅和贴在输入区上方的提示条的圆角。 |
 
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `toast-max-width` | `420px` | 轻提示的最大宽度，文字超出时截断。 |
+
 ### 菜单与下拉
 
 见 [components/menu.md](components/menu.md)。
@@ -537,6 +541,20 @@
 | Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
 | --- | --- | --- | --- | --- |
 | `question-option-height` | 36 | 48 | 40 | 提问卡里每个选项的最小高度（只有一行字时的高度）。 |
+
+### 通知
+
+见 [components/notification.md](components/notification.md)。
+
+| Token | 桌面<br>Web 应用 · macOS 内容区 | 触控<br>iOS · iPadOS · Web 触屏 | 舒展<br>官网与文档 | 用途 |
+| --- | --- | --- | --- | --- |
+| `badge-size` | 16 | 18 | 16 | 数字角标的高度和最小宽度。 |
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `badge-dot-size` | `8px` | 未读和状态小圆点的直径。 |
+| `notification-panel-width` | `360px` | 通知中心浮层的宽度。 |
+| `notification-panel-max-height` | `480px` | 通知中心浮层的最大高度，超出时列表内部滚动。 |
 
 ### 选择控件
 

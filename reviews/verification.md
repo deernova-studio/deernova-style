@@ -2,6 +2,12 @@
 
 更新于 2026-11-05。
 
+## 反馈、通知与错误页（2026-11-10）
+
+- 用户问提示、通知、错误有没有规范：只有横幅、只能确认的轻提示、字段和 AI 的局部报错。新增基础 [反馈与通知](../skills/deernova-style/references/foundations/feedback.md)（选哪种方式的对照表、一次一个、成功消失错误留下、时长表、错误怎么写、全局状态、无障碍）和组件 [通知](../skills/deernova-style/references/components/notification.md)（圆点和数字角标、通知中心浮层、系统通知的时机和写法）；[横幅与轻提示](../skills/deernova-style/references/components/banner.md) 补了带「撤销」和错误两种轻提示、位置、替换规则、可关闭横幅和全局状态写法；[空状态](../skills/deernova-style/references/components/empty-state.md) 补了错误页（404、无权限、离线、服务出错、崩溃）和错误编号。新增 token `toast-max-width`、`badge-size`、`badge-dot-size`、`notification-panel-width`、`notification-panel-max-height`。
+- 修了一处矛盾：Web 轻提示原来用玻璃（`dn-glass`），和「Web 应用不用玻璃」冲突，改成 `surface-raised` 底、1px `line`、`shadow-float`；层级表同步改了。顺带把 0.3.8 改输入框聚焦时漏掉的 6 处旧说法（颜色、层级、线条、文本框、tokens.json 两条说明）改成「聚焦换 `surface-raised` 加 `shadow-control`」。
+- 实测（1280 宽）：三种轻提示高 36、胶囊、白底 `#ffffff`、描边 `#e3e3e3`、`shadow-float`、无模糊；确认图标 `success`、错误图标 `danger`；「撤销」按钮 28 高贴右，错误轻提示的关闭按钮 28×28，右侧留 4px。可关闭横幅的关闭按钮 24×24。通知中心 360 宽，头部 36 高，图标位 20；未读标题 600、已读 400。圆点角标 8px，数字角标高 16，「99+」宽 32。未读圆点原来放在每条最左边，离图标只有 2px，改到标题行时间后面，和时间垂直居中（中线同为 404）。错误编号等宽。深色：轻提示和通知面板 `#252525`、描边 `#2f2f2f`，角标反成浅底深字，错误图标 `#f07a8a`。深色截图第一次停在主题过渡中间，主按钮看起来消失，重截后正常。
+
 ## AI 提问卡（2026-11-09）
 
 - 用户问 AI 向用户提问（ask user）有没有规范：没有。新增 [AI 提问](../skills/deernova-style/references/components/question.md)：和确认卡同一种卡片，问题作标题（可换行），状态写「等待你回答」或「1 / 3」；选项 2–4 个，左边单选圆或复选框，标签加一行说明，推荐的排第一并带「推荐」标签，右边数字快捷键（触控不显示），最后固定「其他」，选中后出现输入框；单选点了直接进入下一题，多选用主按钮；一次只显示一个问题，可以返回上一题；回答后收起成「已回答：…」或「已回答 3 个问题」，可展开。新增 token `question-option-height`（36/48/40）。SKILL.md、AI 交互的回答顺序和状态表、示例页 AI 组合分组都加上了。

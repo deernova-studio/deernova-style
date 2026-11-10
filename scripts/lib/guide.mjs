@@ -12,13 +12,13 @@ const COMPONENT_GROUPS = [
   { id: 'structure', title: '页面结构', docs: ['toolbar', 'sidebar', 'glass-controls'] },
   { id: 'controls', title: '基础控件', docs: ['button', 'text-field', 'choice', 'segmented', 'menu', 'form'] },
   { id: 'content', title: '内容展示', docs: ['card', 'list', 'table', 'tag', 'code-block', 'empty-state'] },
-  { id: 'overlays', title: '浮层与反馈', docs: ['sheet', 'command', 'tooltip', 'banner', 'skeleton'] },
+  { id: 'overlays', title: '浮层与反馈', docs: ['sheet', 'command', 'tooltip', 'banner', 'notification', 'skeleton'] },
   { id: 'ai', title: 'AI 组合', docs: ['suggestion', 'composer', 'mention', 'message', 'step-row', 'approval', 'question', 'task-list', 'artifact'] }
 ];
 
 export const SECTIONS = [
   { id: 'foundations', title: '基础', dir: 'references/foundations',
-    docs: ['color', 'states', 'typography', 'spacing', 'layout', 'radius', 'stroke', 'elevation', 'glass', 'motion', 'ai', 'iconography', 'writing', 'accessibility'] },
+    docs: ['color', 'states', 'typography', 'spacing', 'layout', 'radius', 'stroke', 'elevation', 'glass', 'motion', 'feedback', 'ai', 'iconography', 'writing', 'accessibility'] },
   { id: 'components', title: '组件', dir: 'references/components',
     groups: COMPONENT_GROUPS, docs: COMPONENT_GROUPS.flatMap(group => group.docs) },
   { id: 'scenes', title: '场景', dir: 'references/scenes',

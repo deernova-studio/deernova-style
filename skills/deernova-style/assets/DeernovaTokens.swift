@@ -58,7 +58,7 @@ public enum DeernovaColor {
     public static let accentSoft = Color(deernovaLight: 0xE8E8E8, 1, dark: 0x2F2F2F, 1)
     /// accent 填充上的文字和图标：浅色主题白字，深色主题黑字。
     public static let onAccent = Color(deernovaLight: 0xFFFFFF, 1, dark: 0x171717, 1)
-    /// 仅兼容旧版焦点环。新界面不用这个 token 描边；输入框聚焦不变，键盘导航用底色或文字提示。
+    /// 仅兼容旧版焦点环。新界面不用这个 token 描边；输入框聚焦时换成 `surface-raised` 底加 `shadow-control`，键盘导航用底色或文字提示。
     public static let focusRing = Color(deernovaLight: 0x737373, 1, dark: 0xA3A3A3, 1)
     /// 成功、已完成、已同步、开关打开。作为文字用在纸面和 success-soft 上。
     public static let success = Color(deernovaLight: 0x1F6B66, 1, dark: 0x6CC3B4, 1)
@@ -177,6 +177,8 @@ public enum Deernova {
     public static let composerAttachmentMaxWidth: CGFloat = 240
     /// @、/、# 建议浮层的宽度；窄屏时和 Composer 同宽。
     public static let suggestWidth: CGFloat = 360
+    /// 轻提示的最大宽度，文字超出时截断。
+    public static let toastMaxWidth: CGFloat = 420
     /// 菜单最大宽度；放不下的文字用省略号。
     public static let menuMaxWidth: CGFloat = 320
     /// 底部弹窗顶部拖拽条的宽度。
@@ -193,6 +195,12 @@ public enum Deernova {
     public static let approvalCodeMaxHeight: CGFloat = 160
     /// 工具详情（预览或 JSON）的最大高度，超出时在块内滚动。
     public static let toolDetailMaxHeight: CGFloat = 320
+    /// 未读和状态小圆点的直径。
+    public static let badgeDotSize: CGFloat = 8
+    /// 通知中心浮层的宽度。
+    public static let notificationPanelWidth: CGFloat = 360
+    /// 通知中心浮层的最大高度，超出时列表内部滚动。
+    public static let notificationPanelMaxHeight: CGFloat = 480
     /// 滑块轨道的高度。
     public static let sliderTrackHeight: CGFloat = 4
     /// 标签在左的表单里标签栏的宽度。
@@ -294,6 +302,7 @@ public enum Deernova {
     public static let diffLineHeight: CGFloat = 20
     public static let toolKeyWidth: CGFloat = 88
     public static let questionOptionHeight: CGFloat = 36
+    public static let badgeSize: CGFloat = 16
     public static let checkSize: CGFloat = 16
     public static let sliderThumbSize: CGFloat = 16
     public static let tableRowHeight: CGFloat = 36
@@ -394,6 +403,7 @@ public enum Deernova {
     public static let diffLineHeight: CGFloat = 22
     public static let toolKeyWidth: CGFloat = 96
     public static let questionOptionHeight: CGFloat = 48
+    public static let badgeSize: CGFloat = 18
     public static let checkSize: CGFloat = 22
     public static let sliderThumbSize: CGFloat = 24
     public static let tableRowHeight: CGFloat = 44

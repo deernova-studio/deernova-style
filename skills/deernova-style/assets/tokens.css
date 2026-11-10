@@ -167,6 +167,7 @@
   --scrollbar-thumb-size: 6px;
   --composer-attachment-max-width: 240px;
   --suggest-width: 360px;
+  --toast-max-width: 420px;
   --menu-max-width: 320px;
   --sheet-grabber-width: 36px;
   --sheet-grabber-height: 5px;
@@ -177,6 +178,9 @@
   --diff-gutter-width: 40px;
   --approval-code-max-height: 160px;
   --tool-detail-max-height: 320px;
+  --badge-dot-size: 8px;
+  --notification-panel-width: 360px;
+  --notification-panel-max-height: 480px;
   --slider-track-height: 4px;
   --form-label-width: 160px;
   --command-width: 560px;
@@ -303,6 +307,7 @@
   --diff-line-height: 20px;
   --tool-key-width: 88px;
   --question-option-height: 36px;
+  --badge-size: 16px;
   --check-size: 16px;
   --slider-thumb-size: 16px;
   --table-row-height: 36px;
@@ -433,6 +438,7 @@
     --diff-line-height: 22px;
     --tool-key-width: 96px;
     --question-option-height: 48px;
+    --badge-size: 18px;
     --check-size: 22px;
     --slider-thumb-size: 24px;
     --table-row-height: 44px;
@@ -563,6 +569,7 @@
   --diff-line-height: 22px;
   --tool-key-width: 96px;
   --question-option-height: 48px;
+  --badge-size: 18px;
   --check-size: 22px;
   --slider-thumb-size: 24px;
   --table-row-height: 44px;
@@ -692,6 +699,7 @@
   --diff-line-height: 22px;
   --tool-key-width: 96px;
   --question-option-height: 40px;
+  --badge-size: 16px;
   --check-size: 18px;
   --slider-thumb-size: 20px;
   --table-row-height: 40px;

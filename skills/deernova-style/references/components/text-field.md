@@ -21,7 +21,7 @@
 - 出错时用 `danger-soft` 底色，说明文字换成 `danger` 色的错误信息。出错的输入框聚焦时仍保留错误底色，只加 `shadow-control`；错误信息要说清楚怎么改，不依赖一圈红边。
 - 标签在输入框上方，`callout` 字号、中粗、`ink-secondary`；说明在下方，`caption` 字号、常规字重、`ink-tertiary`。标签、输入框、说明之间 `space-1`。
 - 触控端输入文字不小于 16px，避免浏览器在聚焦时放大页面（`field-font-size` 已经保证）。
-- 下拉选择（`select`）和输入框同高，共用浅底，聚焦不额外加装饰，写法见 [菜单与下拉](menu.md)。
+- 下拉选择（`select`）和输入框同高，共用浅底，聚焦和展开时和输入框一样换成 `surface-raised` 底加 `shadow-control`，写法见 [菜单与下拉](menu.md)。
 
 整张表单怎么分组、校验和提交，见[表单](form.md)。
 

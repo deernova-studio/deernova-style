@@ -12,7 +12,7 @@
 
 ## 纸面
 
-从下到上：窗口底色和 Web 应用的内容区 `canvas` → 侧边栏和卡片 `surface` → Composer、用户消息气泡、弹出层 `surface-raised`。普通输入框、代码块和展开的详情用 `surface-sunken`，表示“凹下去”；输入框聚焦不改变底色。
+从下到上：窗口底色和 Web 应用的内容区 `canvas` → 侧边栏和卡片 `surface` → Composer、用户消息气泡、弹出层 `surface-raised`。普通输入框、代码块和展开的详情用 `surface-sunken`，表示“凹下去”；输入框聚焦（和下拉展开）时换成 `surface-raised` 底加 `shadow-control`，见[文本框](../components/text-field.md)。
 
 - 侧边栏比内容区亮一层（`surface` 在 `canvas` 上），两者之间一条 `stroke-line`。
 - 用户消息气泡比内容区亮一层（`surface-raised`），AI 回答直接排在内容区上，不加底色。

@@ -106,7 +106,7 @@ AI 主动给出的下一步：新对话首页的**起始建议**，以及回答�
 
 ## SwiftUI
 
-首页：`VStack` 里放问候语（`.deernovaDisplay`）、Composer、`FlowLayout` 或 `ViewThatFits` 排的建议按钮（`.buttonStyle(.bordered)`、`.buttonBorderShape(.capsule)` 的触控端写法）。追问建议是 `Button` 加 `Label(title, systemImage: "arrow.right")`，`.buttonStyle(.plain)`、`.foregroundStyle(.inkSecondary)`。
+首页：`VStack` 里放问候语（`.deernovaDisplay`）、Composer、`FlowLayout` 或 `ViewThatFits` 排的建议按钮（`.buttonStyle(.bordered)`、`.buttonBorderShape(.capsule)` 的触屏写法）。追问建议是 `Button` 加 `Label(title, systemImage: "arrow.right")`，`.buttonStyle(.plain)`、`.foregroundStyle(.inkSecondary)`。
 
 ## 不要
 

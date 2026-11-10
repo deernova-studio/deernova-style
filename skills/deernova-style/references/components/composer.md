@@ -2,7 +2,7 @@
 
 发消息、写笔记、向 AI 提问的输入区，放在对话栏底部。它承载的是用户正在写的内容，所以是纸面，不是玻璃。
 
-由上到下三部分：可选的**提示条**（贴在输入框正上方）、**输入框**（附件、文字、添加、工具、语音、发送）、**信息行**（在输入框右下方：模型、思考强度、权限模式、上下文用量）。
+由上到下三部分：可选的**提示条**（贴在输入框正上方）、**输入框**（附件、文字、添加、工具、语音、发送）、**信息行**（在输入框右下方：模型、思考强度、权限模式、上下文用量；需要免责提示时放在同一行的左端）。
 
 **需要提供**：绑定的文本、占位符、发送动作、是否可以发送（内容为空或正在生成时禁用）。可选：附件列表、提示条、模型和权限的选择、上下文用量。
 
@@ -50,7 +50,7 @@
 
 - 放在输入框里、文字上方，单独一行，从左往右排，间距 `space-1`；放不下时这一行横向滚动（隐藏滚动条），不把输入框撑高。
 - **文件**：`button-height-sm` 高的文件条，`surface-sunken` 底、`radius-sm`。依次是类型图标（`icon-size-sm`、`ink-secondary`）、文件名（`ink`，放不下时省略，扩展名单独显示，不被省略掉）、大小或页数（`ink-tertiary`）、移除按钮。最宽 `composer-attachment-max-width`。
-- **图片**：`composer-thumb-size` 的方形缩略图，`radius-sm`，内侧一圈 1px `line`，让白底图片也有边界；移除按钮浮在右上角，指针端悬停或聚焦时出现，触屏上一直显示。
+- **图片**：`composer-thumb-size` 的方形缩略图，`radius-sm`，内侧一圈 1px `line`，让白底图片也有边界；移除按钮浮在右上角，用鼠标或触控板时悬停或键盘聚焦才出现，触屏上一直显示。
 - **上传中**：图标换成进度环，说明换成「上传中 42%」；有附件在上传时，发送按钮不可用。
 - **失败**：`danger-soft` 底，图标和说明用 `danger`（「上传失败」），末尾的按钮换成重试；失败的附件不会随消息发出。
 - 超出数量或大小限制时，用输入框上方的提示条说明，不弹窗。
@@ -71,7 +71,13 @@
 ## 键盘和输入法
 
 - 在文字里输入 `@`、`/`、`#` 弹出建议浮层，选中后变成行内标签，见[提及与命令](mention.md)。
-- 指针端 Return 发送、Shift-Return 换行；正在生成时 ⌘-Return 把这条消息加入队列；焦点在输入框里时，Esc 停止生成。触控端换行键就是换行，只能点按钮发送。
+- 接了实体键盘时 Return 发送、Shift-Return 换行；正在生成时 ⌘-Return 把这条消息加入队列。用触屏键盘时换行键就是换行，只能点按钮发送。
+- **Esc**：焦点在输入框里时，按一次 Esc 只做一件事，按下面的顺序取第一件适用的：
+  1. 有打开的浮层（`@`、`/` 建议浮层，或者添加、工具、模型菜单），关闭浮层；
+  2. 有等待确认的卡片、而且输入框是空的，拒绝这一项，见[权限确认](approval.md)；
+  3. 正在生成，停止生成。
+
+  Esc 不清空输入框。
 - **输入法**：中文、日文输入法选词时按 Return 只确认候选词，不能发送。监听按键时检查 `event.isComposing`（或 `keyCode === 229`）。
 - 发送后焦点留在输入框里，清空文字和附件；发送失败时把内容还给输入框，不让用户重打。
 
@@ -84,6 +90,7 @@
 
 - 提示条：宽度和输入框一致，`surface-raised` 底、`banner-radius`，单行高 `composer-min-height`，左边图标和一句话，右边关闭按钮；次要信息用 `ink-secondary`。和输入框之间 `space-2`。
 - 信息行：在输入框下方 `space-2`，靠右排列，右边缘和输入框对齐，`callout` 字号。从左到右是模型（含思考强度）、权限模式、上下文用量；当前值用 `ink`，说明用 `ink-secondary`；每一项都是可以点开选择的文字按钮，悬停出现 `fill-hover`。上下文用量用一个小圆环，悬停时显示具体数字。没有权限设置的应用就只放模型和上下文用量。
+- 免责提示：需要时放在信息行的最左端，文字和信息行按钮一样内缩 `space-2`，`caption`、`ink-tertiary`，不能点；设置项仍然靠右。单行布局的信息行左端已经有工具标签，或者一行放不下时，免责提示换到信息行下面单独一行，仍然靠左。整个界面只在这里出现一次。
 
 ## 无障碍
 
@@ -211,6 +218,11 @@
   transform: translate(-50%, -50%);
 }
 .dn-composer-meta { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 2px; }
+/* 有免责提示时：同一行放得下就左右排开，放不下（或信息行左端有工具标签）时免责提示换到下一行 */
+.dn-composer-footer { display: flex; flex-wrap: wrap-reverse; align-items: center; gap: var(--space-1) var(--space-3); }
+.dn-composer-footer > .dn-composer-meta { margin-left: auto; }
+.dn-composer-footer > .dn-composer-meta:has(.dn-tool-chip) { flex-basis: 100%; }
+.dn-composer-disclaimer { margin: 0; padding: 0 var(--space-2); color: var(--ink-tertiary); font: var(--type-caption); }
 .dn-meta-button {
   position: relative;
   display: inline-flex;
@@ -280,10 +292,13 @@
     <button class="dn-icon-button" type="button" aria-label="语音输入"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
     <button class="dn-send" type="button" aria-label="发送"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
   </div>
-  <div class="dn-composer-meta">
-    <button class="dn-meta-button" type="button" aria-haspopup="menu"><b>Opus 5.5</b>高<svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
-    <button class="dn-meta-button" type="button" aria-haspopup="menu"><b>询问权限</b><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
-    <span class="dn-context-ring" role="img" aria-label="上下文已用 30%"></span>
+  <div class="dn-composer-footer">
+    <p class="dn-composer-disclaimer">AI 可能会出错，请核对重要信息</p>
+    <div class="dn-composer-meta">
+      <button class="dn-meta-button" type="button" aria-haspopup="menu"><b>Opus 5.5</b>高<svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button class="dn-meta-button" type="button" aria-haspopup="menu"><b>询问权限</b><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <span class="dn-context-ring" role="img" aria-label="上下文已用 30%"></span>
+    </div>
   </div>
 </div>
 ```
@@ -367,7 +382,11 @@ VStack(alignment: .trailing, spacing: Deernova.space2) {
     .background(.surfaceRaised, in: .rect(cornerRadius: Deernova.composerRadius))
     .shadow(color: .black.opacity(0.08), radius: 10, y: 6)
 
-    HStack(spacing: Deernova.space2) {                        // 信息行：右下方
+    HStack(spacing: Deernova.space2) {                        // 信息行：左边免责提示，右边设置
+        Text("AI 可能会出错，请核对重要信息")
+            .font(.deernovaCaption).foregroundStyle(.inkTertiary)
+            .padding(.leading, Deernova.space2)
+            .frame(maxWidth: .infinity, alignment: .leading)
         Menu("Opus 5.5 · 高") { modelMenu }
         Menu("询问权限") { permissionMenu }
         ContextRing(used: contextUsed)
@@ -378,7 +397,7 @@ VStack(alignment: .trailing, spacing: Deernova.space2) {
 }
 ```
 
-放在页面底部时用 `.safeAreaInset(edge: .bottom)`，让内容可以滚到它的上方。双行布局把输入框里的 `HStack` 换成 `VStack`：上面是附件的横向 `ScrollView` 和 `TextField(axis: .vertical)`（`.lineLimit(2...8)`），下面一行是添加、工具的 `Menu`、已开启的工具标签、`Spacer()`、语音和发送；信息行不变。
+放在页面底部时用 `.safeAreaInset(edge: .bottom)`，让内容可以滚到它的上方。双行布局把输入框里的 `HStack` 换成 `VStack`：上面是附件的横向 `ScrollView` 和 `TextField(axis: .vertical)`（`.lineLimit(2...8)`），下面一行是添加、工具的 `Menu`、已开启的工具标签、`Spacer()`、语音和发送；信息行不变。一行放不下免责提示时，用 `ViewThatFits(in: .horizontal)` 在「同一行」和「设置一行、免责提示在下一行」之间切换。
 
 ## 不要
 

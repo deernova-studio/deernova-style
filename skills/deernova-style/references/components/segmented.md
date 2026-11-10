@@ -17,7 +17,7 @@
 <!-- /tokens -->
 
 - 底槽 `fill-selected`；选中块 `surface-raised` 加 `shadow-control`；未选中文字 `ink-secondary`，选中文字 `ink`。
-- 选中块的圆角 = `segmented-radius` − `segmented-padding`，两层同心。指针端是小圆角矩形，触控端是胶囊。
+- 选中块的圆角 = `segmented-radius` − `segmented-padding`，两层同心。桌面档是小圆角矩形，触控档是胶囊。
 - 选项等宽或按文字宽度排列都可以，同一个控件里保持一致。
 
 ## Web

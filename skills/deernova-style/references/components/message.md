@@ -17,9 +17,8 @@
 - 用户消息：靠右，最大宽度 80%，`surface-raised` 底，`radius-lg`，内边距上下 `space-3`、左右 `space-4`，字号 `message-font-size`、行高同 `type-body`。
 - AI 消息：靠左，不加气泡，正文用 `type-body`（桌面 15/24），栏宽不超过 `content-max`。段落之间 `space-3`；加粗用 600；列表缩进一级、项与项之间 4。代码见[代码块](code-block.md)，行内代码用等宽字加 `fill-selected` 底。
 - 消息、工具调用行、卡片之间统一 `space-4`。
-- 操作按钮放在 AI 消息下方，`message-action-size` 的图标按钮，`ink-tertiary` 色；指针端只在悬停时显示，触控端一直显示。
+- 操作按钮放在 AI 消息下方，`message-action-size` 的图标按钮，`ink-tertiary` 色；什么时候显示见下文「操作和分支」。
 - 链接用 `ink` 色，加 1px 的 `line-control` 色下划线，下偏移 3px。
-- 操作按钮悬停才出现时，键盘聚焦和触屏上仍然可见，规则见 [悬停才出现的操作](tooltip.md#悬停才出现的操作)。
 - 生成中：回答末尾显示「正在运行」状态（见 [思考、工具调用与执行步骤](step-row.md)），Composer 的发送按钮变成「停止」。
 
 ## 流式输出和滚动
@@ -37,7 +36,8 @@
 
 ## 操作和分支
 
-- AI 消息下方的操作行依次是：分支切换（有多个版本时）、复制、重新生成、赞、踩、更多（分享、朗读）。按钮是 `message-action-size` 的图标按钮，`ink-tertiary`；指针端悬停才出现，最后一条回答始终显示。
+- AI 消息下方的操作行依次是：分支切换（有多个版本时）、复制、重新生成、赞、踩、更多（分享、朗读）。按钮是 `message-action-size` 的图标按钮，`ink-tertiary`。
+- **什么时候显示操作行**：用鼠标或触控板时，每条回答都一样，平时不显示，鼠标移到这条回答上、或者用键盘 Tab 到这一行时才出现；最新一条也不例外，不要让某一条回答下面单独挂着一排按钮。触屏没有悬停，每条回答的操作行都一直显示。通用写法见 [悬停才出现的操作](tooltip.md#悬停才出现的操作)。
 - **分支切换**：「‹ 2 / 3 ›」，`caption` 等宽数字，两侧是小箭头按钮；重新生成或编辑用户消息都会产生新的分支，旧的版本不删除。
 - **编辑用户消息**：悬停用户气泡，在它左下方出现编辑按钮；点了之后气泡原地变成输入框，下面是「取消」和「发送」，发送后从这一条开始生成新的分支。
 - **反馈**：点赞或点踩后按钮保持选中（`ink` 色）；点踩后可以在小浮层里选原因（不准确、没有回答问题、太长），也可以直接关掉，不强迫填写。提交后用轻提示「已收到反馈」。
@@ -45,7 +45,7 @@
 
 ## 停止、失败和排队
 
-- **已停止**：保留已经生成的内容，末尾一行 `caption`、`ink-tertiary` 的「已停止」；操作行多一个「继续生成」。
+- **已停止**：保留已经生成的内容，末尾一行 `caption`、`ink-tertiary` 的「已停止」，后面紧跟一个小号文字按钮「继续生成」。它一直显示，不放进悬停才出现的操作行。
 - **失败**：在回答原位显示一行：`danger` 的图标、原因（`ink`，写清楚怎么回事和已保留的内容）、「重试」小按钮。不弹窗，不清空已经生成的部分。
 - **排队**：运行中发出的消息排在 Composer 正上方，每条一行：`ink-secondary` 的文字、「排队中」、删除按钮；轮到它时才进入对话。
 
@@ -75,7 +75,7 @@
 .dn-message-actions .dn-icon { width: var(--icon-size-sm); height: var(--icon-size-sm); }
 @media (hover: hover) and (pointer: fine) {
   .dn-message-actions { opacity: 0; transition: opacity var(--duration-instant) var(--ease-standard); }
-  .dn-message-assistant:hover .dn-message-actions, .dn-message-actions:focus-within, .dn-message-assistant.is-latest .dn-message-actions { opacity: 1; }
+  .dn-message-assistant:hover .dn-message-actions, .dn-message-actions:focus-within { opacity: 1; }
 }
 .dn-message-actions .dn-icon-button[aria-pressed="true"] { color: var(--ink); }
 .dn-branch { display: inline-flex; align-items: center; gap: 2px; margin-right: var(--space-1); color: var(--ink-tertiary); font: var(--weight-regular) var(--type-caption-size)/1 var(--font-sans); font-variant-numeric: tabular-nums; }

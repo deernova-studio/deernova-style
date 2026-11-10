@@ -10,7 +10,7 @@
 - **次按钮**（默认）：`fill-selected` 灰底、无描边、无阴影、`ink` 字。半透明的灰底放在任何纸面上都成立。
 - **文字按钮** `is-plain`：无底，`ink-secondary` 字，悬停时出现 `fill-hover`。工具栏和卡片里的次要操作。
 - **危险按钮** `is-danger`：`danger-soft` 底、`danger` 字。只有在最终的[危险确认弹窗](sheet.md)里，才用实色的危险样式 `is-primary is-danger`：`danger` 底、`on-accent` 字（SwiftUI 的 `role: .destructive`）。
-- **图标按钮** `dn-icon-button`：只有图标，无底，`ink-secondary`，必须有无障碍标签；指针端用 [tooltip](tooltip.md) 显示它的名称。
+- **图标按钮** `dn-icon-button`：只有图标，无底，`ink-secondary`，必须有无障碍标签；有鼠标或触控板时用 [tooltip](tooltip.md) 显示它的名称。
 
 ## 尺寸
 
@@ -19,7 +19,7 @@
 | --- | --- | --- | --- | --- |
 | `button-height-sm` | 24 | 30 | 32 | 小按钮的可见高度：列表行、卡片角落里的行内操作。 |
 | `button-height-md` | 28 | 36 | 36 | 默认按钮、图标按钮、发送按钮、步骤行的高度。 |
-| `button-height-lg` | 32 | 46 | 44 | 大按钮：空状态、引导页；触控端是整页唯一的通栏主按钮。 |
+| `button-height-lg` | 32 | 46 | 44 | 大按钮：空状态、引导页；触屏上用作整页唯一的通栏主按钮。 |
 | `button-padding-x-sm` | 8 | 12 | 14 | 小按钮左右内边距。上下内边距永远是 0。 |
 | `button-padding-x-md` | 12 | 16 | 18 | 默认按钮左右内边距。 |
 | `button-padding-x-lg` | 16 | 20 | 24 | 大按钮左右内边距。 |
@@ -27,22 +27,22 @@
 | `button-font-size-md` | 14 | 15 | 14 | 默认按钮字号。 |
 | `button-font-size-lg` | 14 | 16 | 15 | 大按钮字号。 |
 | `button-font-weight` | 500 | 600 | 500 | 按钮字重。 |
-| `button-radius` | 6 | 胶囊 | 胶囊 | 默认和大按钮的圆角：指针端是 radius-sm，触控端和官网是胶囊。 |
+| `button-radius` | 6 | 胶囊 | 胶囊 | 默认和大按钮的圆角：桌面档是 radius-sm，触控档和官网是胶囊。 |
 | `button-radius-sm` | 4 | 胶囊 | 胶囊 | 小按钮的圆角。 |
 <!-- /tokens -->
 
 高度只由 `button-height-*` 决定：**上下内边距为 0，文字行高为 1**。按钮里的文字不能继承页面的行高，否则按钮会跟着页面行高变高。
 
-可见高度小于 `hit-min` 时（触控端的 30 和 36），点击区域用透明的命中区补足到 44，可见的按钮不变大。
+可见高度小于 `hit-min` 时（触控档的 30 和 36），点击区域用透明的命中区补足到 44，可见的按钮不变大。
 
 **怎么选尺寸**：按按钮所在的位置定，不随意挑。
 
 - 列表行、卡片角落里的行内操作（获取、关注、打开）→ 小号 `is-sm`。
 - 页面和卡片里的普通按钮，包括并排的两个按钮（以后再说 / 开启）→ 默认。同一行里的按钮用同一个尺寸。
-- 空状态、引导页的操作 → 大号 `is-lg`。触控端整页唯一的底部主操作（登录、订阅、开始使用）用大号加 `is-block` 通栏，一屏最多一个。
+- 空状态、引导页的操作 → 大号 `is-lg`。触屏上整页唯一的底部主操作（登录、订阅、开始使用）用大号加 `is-block` 通栏，一屏最多一个。
 - 导航栏、标签栏、工具栏里的按钮 → 用系统控件或[玻璃操作层](glass-controls.md)，不自己设尺寸。
 
-触控端比指针端大是有意的：手指比鼠标指针粗。三种尺寸放在手机里的样子见 `assets/screens/iphone-button-sizes-light.png`。
+触控档比桌面档大是有意的：手指比鼠标指针粗。三种尺寸放在手机里的样子见 `assets/screens/iphone-button-sizes-light.png`。
 
 ## 状态
 

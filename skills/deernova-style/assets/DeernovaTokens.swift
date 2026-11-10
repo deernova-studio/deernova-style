@@ -139,15 +139,15 @@ public enum Deernova {
     public static let space16: CGFloat = 64
     /// 标签、复选框、小按钮。
     public static let radiusXs: CGFloat = 4
-    /// 桌面端的按钮、输入框、工具栏图标按钮。
+    /// 桌面档的按钮、输入框、工具栏图标按钮。
     public static let radiusSm: CGFloat = 6
     /// 侧边栏选中块、代码块、弹出菜单。
     public static let radiusMd: CGFloat = 8
     /// 卡片、用户消息气泡、分组列表、任务清单。
     public static let radiusLg: CGFloat = 12
-    /// 底部弹窗、触控端单行 Composer。
+    /// 底部弹窗、触控档的单行 Composer。
     public static let radiusXl: CGFloat = 24
-    /// 胶囊与圆形：触控端按钮、玻璃按钮、状态圆点。
+    /// 胶囊与圆形：触控档的按钮、玻璃按钮、状态圆点。
     public static let radiusFull: CGFloat = 999
     /// 分隔线、卡片、输入区、侧边栏和顶栏的边线。SwiftUI 里自己画的边框用 1pt，系统自带的分隔线保持系统样式。
     public static let strokeLine: CGFloat = 1

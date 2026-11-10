@@ -70,7 +70,7 @@ RoundedRectangle(cornerRadius: Deernova.cardRadius)
 - 导航栏、工具栏、标签栏、侧边栏、inspector：用标准的 `NavigationStack`、`NavigationSplitView`、`TabView`、`.toolbar`、`.inspector`，系统会自动渲染成玻璃，不要给它们加背景。玻璃是原生端的优势，Web 应用没有。
 - 浮动按钮：`.buttonStyle(.glass)`；主操作用 `.buttonStyle(.glassProminent)` 加 `.tint(.brandAccent)`，一屏最多一个。
 - 相邻的几个玻璃元素放进同一个 `GlassEffectContainer`，它们会互相融合，切换时也会跟着变形。
-- 完全自定义形状时用 `.glassEffect(.regular, in: .capsule)`；触控端可点击的玻璃加 `.interactive()`，按下时有形变反馈。
+- 完全自定义形状时用 `.glassEffect(.regular, in: .capsule)`；iOS 和 iPadOS 上可点击的玻璃加 `.interactive()`，按下时有形变反馈。
 - iOS 标签栏在向下滚动时收起：`.tabBarMinimizeBehavior(.onScrollDown)`；搜索用 `Tab(role: .search)`。
 - Mac 上侧边栏旁边的大图，用 `.backgroundExtensionEffect()` 延伸到侧边栏下方。
 - 嵌套的圆角用 `ConcentricRectangle()`，内层会自动和外层容器同心。

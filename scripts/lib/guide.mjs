@@ -165,7 +165,8 @@ function strokeSpecimen() {
   return `<div class="specimen-panel" ${APP}><div class="stroke-row">
 <figure><span class="stroke-sample is-line"></span><figcaption><code>stroke-line</code> 分隔线</figcaption></figure>
 <figure><span class="stroke-sample is-control"></span><figcaption><code>stroke-control</code> 必要的控件边界</figcaption></figure>
-<figure><span class="stroke-sample is-focus">输入内容</span><figcaption>输入框 · 聚焦不改变外观</figcaption></figure>
+<figure><span class="stroke-sample is-field">输入内容</span><figcaption>输入框 · 浅灰底加 1px 浅线</figcaption></figure>
+<figure><span class="stroke-sample is-focus">按钮</span><figcaption><code>stroke-focus</code> 键盘焦点环</figcaption></figure>
 <figure><span class="stroke-sample is-dropzone">拖入文件</span><figcaption><code>line-style-dropzone</code> 拖放区</figcaption></figure>
 </div></div>`;
 }

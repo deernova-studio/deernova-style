@@ -49,16 +49,16 @@ public enum DeernovaColor {
     public static let inkSecondary = Color(deernovaLight: 0x525252, 1, dark: 0xA3A3A3, 1)
     /// 占位符、时间戳、计数、分组标题，在四种纸面上不低于 4.5:1。
     public static let inkTertiary = Color(deernovaLight: 0x666666, 1, dark: 0x8C8C8C, 1)
-    /// 分隔线、卡片描边、按钮描边。装饰性，不承载信息。
+    /// 分隔线、卡片描边、输入框和 Composer 的浅线、按钮描边。
     public static let line = Color(deernovaLight: 0xE3E3E3, 1, dark: 0x2F2F2F, 1)
-    /// 需要明确边界的自绘控件、拖拽条、链接下划线。在 canvas、surface、surface-raised 上不低于 3:1；普通输入框用底色区分，不用它描边。
+    /// 需要明确边界的自绘控件、拖拽条、链接下划线。在 canvas、surface、surface-raised 上不低于 3:1；输入框用浅色的 line 描边，不用它。
     public static let lineControl = Color(deernovaLight: 0x8A8A8A, 1, dark: 0x737373, 1)
     public static let brandAccent = ink
     /// 强调的浅底：列表图标底。上面的文字用 ink；不用作输入框的聚焦外圈。
     public static let accentSoft = Color(deernovaLight: 0xE8E8E8, 1, dark: 0x2F2F2F, 1)
     /// accent 填充上的文字和图标：浅色主题白字，深色主题黑字。
     public static let onAccent = Color(deernovaLight: 0xFFFFFF, 1, dark: 0x171717, 1)
-    /// 仅兼容旧版焦点环。新界面不用这个 token 描边；输入框聚焦时换成 `surface-raised` 底加 `shadow-control`，键盘导航用底色或文字提示。
+    /// 键盘焦点环的颜色。只在 `:focus-visible` 时画在按钮、链接、卡片、开关这类非输入控件外面，在 canvas、surface、surface-raised 上不低于 3:1。输入框和菜单项不用它。
     public static let focusRing = Color(deernovaLight: 0x737373, 1, dark: 0xA3A3A3, 1)
     /// 成功、已完成、已同步、开关打开。作为文字用在纸面和 success-soft 上。
     public static let success = Color(deernovaLight: 0x1F6B66, 1, dark: 0x6CC3B4, 1)
@@ -149,13 +149,13 @@ public enum Deernova {
     public static let radiusXl: CGFloat = 24
     /// 胶囊与圆形：触控档的按钮、玻璃按钮、状态圆点。
     public static let radiusFull: CGFloat = 999
-    /// 分隔线、卡片、输入区、侧边栏和顶栏的边线。SwiftUI 里自己画的边框用 1pt，系统自带的分隔线保持系统样式。
+    /// 分隔线、卡片、输入框、Composer、侧边栏和顶栏的边线。SwiftUI 里自己画的边框用 1pt，系统自带的分隔线保持系统样式。
     public static let strokeLine: CGFloat = 1
-    /// 确实需要边界的控件描边；普通输入框、下拉框和激活态不画深色边框。
+    /// 确实需要明确边界的控件描边，配 line-control；输入框、下拉框用 stroke-line 加浅色 line，激活态不画深色边框。
     public static let strokeControl: CGFloat = 1
-    /// 仅兼容旧版焦点环宽度，新界面不使用环形描边。
+    /// 键盘焦点环的粗细。
     public static let strokeFocus: CGFloat = 2
-    /// 仅兼容旧版焦点环偏移，新界面不使用环形描边。
+    /// 焦点环和控件之间的空隙。侧边栏项、分段控件、选项行这类贴着容器的元素，环改为向内画（偏移取负的 stroke-focus）。
     public static let focusOffset: CGFloat = 2
     /// 悬停、按压、选中这类即时反馈；tooltip 的进出；菜单、popover 的退出。
     public static let durationInstant: Double = 0.12

@@ -25,7 +25,7 @@ body.guide-page { background: var(--surface); font: var(--type-body); }
 .toc a { display: flex; align-items: center; min-height: 24px; padding: 0 var(--space-2); border-radius: var(--radius-sm); color: var(--ink-secondary); font-size: 13px; line-height: 18px; text-decoration: none; transition: background-color 0.12s var(--ease), color 0.12s var(--ease); }
 @media (hover: hover) { .toc a:hover { background: var(--fill-hover); color: var(--ink); } }
 .toc a:active { background: var(--fill-selected); }
-.toc a[aria-current="true"] { background: var(--fill-selected); color: var(--ink); font-weight: 500; }
+.toc a[aria-current="page"] { background: var(--fill-selected); color: var(--ink); font-weight: 500; }
 .toc .toc-top { font-weight: 600; color: var(--ink); }
 .toc-group { margin: var(--space-4) 0 var(--space-1); padding: 0 var(--space-2); font: 600 11px/16px var(--font-sans); letter-spacing: 0.04em; color: var(--ink-tertiary); }
 .toc ol { margin: 0; padding: 0; list-style: none; }
@@ -41,6 +41,15 @@ body.guide-page { background: var(--surface); font: var(--type-body); }
 /* Sections */
 .doc { padding: var(--space-6) 0 var(--space-4); border-top: 1px solid var(--rule); }
 .doc:first-child { border-top: 0; }
+/* guide.js shows one document at a time */
+.guide-main > [hidden] { display: none; }
+.guide-main.is-single > .doc { border-top: 0; }
+.doc-pager { display: flex; gap: var(--space-3); margin: var(--space-6) 0 var(--space-8); padding-top: var(--space-4); border-top: 1px solid var(--rule); }
+.doc-pager a { display: grid; gap: 2px; min-width: 0; max-width: 50%; padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); color: var(--ink); font: 500 14px/20px var(--font-sans); text-decoration: none; }
+.doc-pager a span { color: var(--ink-tertiary); font: 400 12px/16px var(--font-sans); }
+.doc-pager .is-next { margin-left: auto; text-align: right; }
+@media (hover: hover) { .doc-pager a:hover { background: var(--fill-hover); } }
+.doc-pager a:active { background: var(--fill-selected); }
 .doc-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-3); margin-bottom: var(--space-3); }
 .doc-head h2 { font: var(--type-title); scroll-margin-top: calc(var(--masthead) + var(--space-4)); }
 .doc-path { font: 11px/16px var(--font-mono); color: var(--ink-tertiary); }
@@ -155,7 +164,8 @@ body.guide-page { background: var(--surface); font: var(--type-body); }
 .stroke-sample { display: grid; place-items: center; height: 52px; border-radius: var(--radius-sm); background: var(--surface-raised); font-size: 12px; color: var(--ink-tertiary); }
 .stroke-sample.is-line { border: var(--stroke-line) var(--line-style-divider) var(--line); }
 .stroke-sample.is-control { border: var(--stroke-control) var(--line-style-divider) var(--line-control); }
-.stroke-sample.is-focus { border: 0; background: var(--surface-sunken); }
+.stroke-sample.is-field { border: var(--stroke-line) var(--line-style-divider) var(--line); background: var(--surface-sunken); }
+.stroke-sample.is-focus { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
 .stroke-sample.is-dropzone { border: var(--stroke-control) var(--line-style-dropzone) var(--line-control); background: transparent; }
 .elevation-panel { background: var(--canvas); }
 .elevation-card { display: grid; place-items: center; height: 72px; border: var(--stroke-line) solid var(--line); border-radius: var(--radius-md); background: var(--surface); font-size: 12px; color: var(--ink-secondary); }

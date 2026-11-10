@@ -49,27 +49,6 @@ for (const button of document.querySelectorAll('[data-copy]')) {
   });
 }
 
-// Guide: mark the section being read in the table of contents.
-const tocLinks = [...document.querySelectorAll('.toc a[href^="#"]')];
-const targets = tocLinks.map(link => document.getElementById(link.hash.slice(1))).filter(Boolean);
-if (targets.length) {
-  let current = null;
-  const update = () => {
-    const line = innerHeight * 0.25;
-    let active = targets[0];
-    for (const target of targets) if (target.getBoundingClientRect().top <= line) active = target;
-    if (active === current) return;
-    current = active;
-    for (const link of tocLinks) {
-      if (link.hash === `#${active.id}`) link.setAttribute('aria-current', 'true');
-      else link.removeAttribute('aria-current');
-    }
-  };
-  addEventListener('scroll', update, { passive: true });
-  addEventListener('hashchange', update);
-  update();
-}
-
 // Tooltips for icon-only controls, built to the skill's references/components/tooltip.md:
 // shown after a pause on hover or at once on keyboard focus, one at a time, hoverable,
 // and closed by Esc, pressing the control or scrolling. Touch screens get none.

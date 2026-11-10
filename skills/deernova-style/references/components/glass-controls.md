@@ -53,7 +53,7 @@
 }
 .dn-glass-button .dn-icon { width: var(--icon-size-lg); height: var(--icon-size-lg); }
 .dn-glass-button.is-prominent { border-color: transparent; background: var(--accent); color: var(--on-accent); }
-.dn-glass-button:focus-visible { outline: none; background: var(--fill-selected); }
+.dn-glass-button:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
 .dn-glass-button::before {
   content: "";
   position: absolute;

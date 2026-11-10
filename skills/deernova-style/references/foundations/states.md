@@ -26,7 +26,7 @@
 - **底色的形状和元素一样。** 悬停底色和元素同样大、同样的圆角（`row-radius`、`button-radius`、`menu-radius` 减内边距）。列表行在容器里左右缩进，不铺满整栏；命中区比可见尺寸大时，底色只画在可见范围里。
 - **只在能悬停的设备上。** `:hover` 一律写在 `@media (hover: hover)` 里，触屏上不会停在悬停状态。触屏没有悬停，按下时（`:active`）立即给 `fill-selected` 反馈。
 - **过渡要快。** 底色、文字颜色、描边在 `duration-instant` 内变化，进入和离开一样快，不加延迟。
-- **焦点独立于按下和选中。** 按钮按下只改变底色或不透明度。输入框聚焦时浅灰底换成白底并加 `shadow-control`，不加外圈；非输入控件的键盘位置用底色或文字下划线表示，不加外圈或阴影。具体区别见下文。
+- **焦点独立于按下和选中。** 按下和选中只改底色或不透明度，聚焦不改底色。输入框聚焦时浅灰底换成白底并加 `shadow-control`；其他控件用键盘聚焦时画焦点环。具体区别见下文。
 - **禁用没有反馈。** 禁用的元素整体降到 `opacity-disabled`，没有悬停和按下的变化，光标恢复默认；不要隐藏，保持在原位。
 - **光标。** 可以点的元素（按钮、行、标签、卡片、链接）用 `cursor: pointer`；文字输入用 `text`；可以拖动的用 `grab`，拖动中用 `grabbing`。
 - **拖放。** 拖起来的元素用 `shadow-float` 浮起；可以放下的位置用 `fill-selected` 底，或者 `line-style-dropzone` 的虚线框。
@@ -35,25 +35,28 @@
 
 | 控件 | 聚焦提示 |
 | --- | --- |
-| 按钮、图标按钮 | `:focus-visible` 时只用 `fill-selected` 底；主按钮稍降低不透明度。不加描边或阴影 |
-| 输入框、下拉选择 | 无描边。平时 `surface-sunken` 底，聚焦（和下拉展开）时换成 `surface-raised` 底加 `shadow-control`；出错的保留 `danger-soft` 底，只加阴影 |
-| Composer | 无描边，输入前后沿用原有柔影；内部按钮聚焦时，只提示对应按钮 |
-| 链接、列表、菜单项 | 用下划线或底色加下划线表示键盘位置；不套框，不给整行加阴影。菜单当前值仍用对勾区分 |
+| 按钮、图标按钮、链接、卡片、开关、复选框、单选、滑块 | `:focus-visible` 时画焦点环：`stroke-focus`（2px）粗的 `focus-ring` 色，离控件 `focus-offset`（2px），形状跟着控件的圆角。底色、不透明度都不变 |
+| 侧边栏项、列表行、分段控件、选项行、输入框里的按钮 | 同样的焦点环，但向内画（偏移是负的 `stroke-focus`），不被滚动容器裁掉，也不压到相邻的元素 |
+| 菜单项、`@` 和 `/` 建议项、命令面板的结果 | 不画环。高亮底就是焦点位置：鼠标或方向键移到哪一项，高亮就跟到哪一项。菜单当前值仍用对勾区分 |
+| 输入框、下拉选择 | 平时 `surface-sunken` 底加 1px `line` 浅线；聚焦（和下拉展开）时换成 `surface-raised` 底加 `shadow-control`，浅线不变，不画焦点环。出错的保留 `danger-soft` 底，只加阴影 |
+| Composer | 有 1px `line` 浅线和 `shadow-float`，输入时外观不变，不画焦点环；内部按钮聚焦时，只给那个按钮画环 |
 
-`:focus-visible` 由浏览器判断是否需要显示焦点，不能简单等同于“仅键盘”：输入框被鼠标点入时也可能匹配。组件规则要替换浏览器和组件库默认的 outline、ring；错误状态保留 `danger-soft` 底色和错误说明，不被普通聚焦底色覆盖。
+`:focus-visible` 由浏览器判断要不要显示焦点：用鼠标点按钮不会出现焦点环；用 Tab、方向键进入，或者用键盘关掉菜单、焦点回到按钮上时才出现。输入框例外，鼠标点入也会匹配，所以输入框不用焦点环，用上表的换底色。组件规则要替换浏览器和组件库默认的 outline、ring；错误状态保留 `danger-soft` 底色和错误说明，不被聚焦样式覆盖。
 
-除了上表里输入框聚焦时的 `shadow-control`，任何控件聚焦都不加阴影、描边或外圈。按钮、链接和菜单的键盘位置仍需可见；系统原生控件继续遵循系统行为。
+焦点环是唯一的聚焦外圈：用 `outline` 画，不另加阴影，不改底色，不用零模糊的 box-shadow 冒充。SwiftUI 和系统原生控件用系统自己的焦点效果，不要用 `.focusEffectDisabled()` 关掉。
 
 ## Web
 
-下面的 `.dn-state` 是通用写法，适合行、文字按钮这类「透明底、悬停出底色」的元素。按钮、卡片、分段控件的写法见各自的组件说明。示例里的 `.is-hover`、`.is-active` 只用来在文档里把状态画出来。
+前两条放在全局样式里：所有可操作的元素默认有焦点环，输入类控件除外。下面的 `.dn-state` 是通用写法，适合行、文字按钮这类「透明底、悬停出底色」的元素。按钮、卡片、分段控件的写法见各自的组件说明。示例里的 `.is-hover`、`.is-active` 只用来在文档里把状态画出来。
 
 ```css
+:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
+:is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="button"], [type="submit"], [type="reset"]), textarea, select, [contenteditable]):focus-visible { outline: none; }
 .dn-state { cursor: pointer; transition: background-color var(--duration-instant) var(--ease-standard), color var(--duration-instant) var(--ease-standard); }
 @media (hover: hover) { .dn-state:hover { background-color: var(--fill-hover); color: var(--ink); } }
 .dn-state:active, .dn-state.is-active { background-color: var(--fill-selected); }
 .dn-state.is-hover { background-color: var(--fill-hover); color: var(--ink); }
-.dn-state:focus-visible { outline: none; box-shadow: none; background-color: var(--fill-selected); text-decoration: underline; text-underline-offset: 3px; }
+.dn-state:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: calc(-1 * var(--stroke-focus)); }
 .dn-state:is([aria-selected="true"], [aria-current="page"], [aria-current="true"], [aria-pressed="true"]) { background-color: var(--fill-selected); color: var(--ink); }
 .dn-state:is(:disabled, [aria-disabled="true"]) { background-color: transparent; opacity: var(--opacity-disabled); cursor: default; }
 .dn-state-row { display: flex; align-items: center; height: var(--row-height); padding: 0 var(--row-padding-x); border-radius: var(--row-radius); color: var(--ink-secondary); font: var(--weight-regular) var(--type-callout-size)/1 var(--font-sans); }
@@ -110,4 +113,4 @@ macOS 上自己画的行需要悬停底色时，用 `.onHover` 记下状态，�
 - 把 `:hover` 写在 `@media (hover: hover)` 外面，让触屏停在悬停状态。
 - 选中项悬停时再叠一层变得更深；一个元素同时出现两种底色。
 - 用悬停底色代替键盘焦点提示；禁用的元素还有悬停效果。
-- 用黑色或灰色外框表示按下、选中和聚焦；输入框同时出现 border、outline、ring 和阴影多层强调。
+- 用外框表示按下和选中；鼠标点一下就出现焦点环；聚焦时既改底色又画环；输入框聚焦时再叠一圈焦点环。

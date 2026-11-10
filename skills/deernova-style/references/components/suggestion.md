@@ -66,12 +66,14 @@ AI 主动给出的下一步：新对话首页的**起始建议**，以及回答�
 .dn-suggestion > span { overflow: hidden; text-overflow: ellipsis; }
 .dn-suggestion .dn-icon { flex: none; width: var(--icon-size-sm); height: var(--icon-size-sm); }
 @media (hover: hover) { .dn-suggestion:hover { background: var(--fill-hover); color: var(--ink); } }
-.dn-suggestion:active, .dn-suggestion:focus-visible { outline: none; background: var(--fill-selected); color: var(--ink); }
+.dn-suggestion:active { background: var(--fill-selected); color: var(--ink); }
+.dn-suggestion:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
 .dn-followups { display: grid; justify-items: start; gap: 2px; margin: var(--space-3) 0 0 calc(var(--space-2) * -1); padding: 0; list-style: none; }
 .dn-followup { display: inline-flex; align-items: center; gap: var(--space-2); height: var(--button-height-md); padding: 0 var(--space-2); border: 0; border-radius: var(--button-radius); background: transparent; color: var(--ink-secondary); font: var(--type-callout); cursor: pointer; }
 .dn-followup .dn-icon { width: var(--icon-size-sm); height: var(--icon-size-sm); color: var(--ink-tertiary); }
 @media (hover: hover) { .dn-followup:hover { background: var(--fill-hover); color: var(--ink); } }
-.dn-followup:active, .dn-followup:focus-visible { outline: none; background: var(--fill-selected); color: var(--ink); }
+.dn-followup:active { background: var(--fill-selected); color: var(--ink); }
+.dn-followup:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
 ```
 
 ```html

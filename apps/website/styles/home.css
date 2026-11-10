@@ -52,8 +52,7 @@
   .filing-badge:hover { color: var(--ink); }
   .filing-badge:hover::before { background: var(--fill-hover); }
 }
-.filing-badge:active::before, .filing-badge:focus-visible::before { background: var(--fill-selected); }
-.filing-badge:focus-visible { color: var(--ink); text-decoration: underline; text-underline-offset: var(--space-1); }
+.filing-badge:active::before { background: var(--fill-selected); }
 .meadow { --print-paper: #f5f5f5; --print-ink: #171717; --print-mode: ink;
   position: absolute; inset: 0; background: var(--print-paper); }
 :root[data-theme="dark"] .meadow { --print-paper: #101010; --print-ink: #e6e6e6; --print-mode: light; }

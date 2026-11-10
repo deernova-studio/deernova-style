@@ -47,7 +47,7 @@
 }
 @media (hover: hover) { .dn-segmented button:hover { color: var(--ink); } }
 .dn-segmented button[aria-pressed="true"], .dn-segmented button[aria-selected="true"] { background: var(--surface-raised); color: var(--ink); box-shadow: var(--shadow-control); }
-.dn-segmented button:focus-visible { outline: none; text-decoration: underline; text-underline-offset: 3px; }
+.dn-segmented button:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: calc(-1 * var(--stroke-focus)); }
 ```
 
 ```html

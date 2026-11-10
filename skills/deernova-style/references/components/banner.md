@@ -99,7 +99,8 @@
 .dn-toast:has(> .dn-toast-action, > .dn-icon-button) { padding-right: var(--space-1); }
 .dn-toast-action { flex: none; height: calc(var(--toast-height) - 8px); padding: 0 var(--space-2); border: 0; border-radius: var(--radius-full); background: transparent; color: var(--ink); font: var(--weight-semibold) var(--type-body-size)/1 var(--font-sans); cursor: pointer; }
 @media (hover: hover) { .dn-toast-action:hover { background: var(--fill-hover); } }
-.dn-toast-action:active, .dn-toast-action:focus-visible { outline: none; background: var(--fill-selected); }
+.dn-toast-action:active { background: var(--fill-selected); }
+.dn-toast-action:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: calc(-1 * var(--stroke-focus)); }
 .dn-toast > .dn-icon-button { width: calc(var(--toast-height) - 8px); height: calc(var(--toast-height) - 8px); border-radius: var(--radius-full); }
 .dn-toast > .dn-icon-button .dn-icon { width: var(--icon-size-sm); height: var(--icon-size-sm); }
 .dn-toast-action + .dn-icon-button { margin-left: calc(var(--space-2) * -1); }

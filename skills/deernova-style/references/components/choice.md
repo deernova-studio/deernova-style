@@ -44,7 +44,7 @@
 ## 状态
 
 - 悬停：未选中的框描边变 `ink-secondary`；已选中的不透明度降到 `opacity-solid-hover`。
-- 键盘：Tab 进入一组单选时停在当前选中项，方向键在组内移动并选中；复选框用空格切换。键盘位置用标签文字的下划线表示，和[交互状态](../foundations/states.md)一致。
+- 键盘：Tab 进入一组单选时停在当前选中项，方向键在组内移动并选中；复选框用空格切换。用键盘聚焦时，复选框、单选的方框外面和滑块外面画焦点环，见[交互状态](../foundations/states.md)。
 - 禁用：整行 `opacity-disabled`，旁边或说明里写清为什么不能选。
 - 出错（必选没选）：组下方的说明换成 `danger` 色的错误信息，不把每个框都描红。
 
@@ -77,8 +77,7 @@
   .dn-choice:hover .dn-choice-box > input:not(:checked, :indeterminate) { border-color: var(--ink-secondary); }
   .dn-choice:hover .dn-choice-box > input:is(:checked, :indeterminate) { opacity: var(--opacity-solid-hover); }
 }
-.dn-choice:has(input:focus-visible) .dn-choice-label { text-decoration: underline; text-underline-offset: 3px; }
-.dn-choice-box > input:focus-visible { outline: none; }
+.dn-choice-box > input:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
 .dn-choice:has(input:disabled) { opacity: var(--opacity-disabled); cursor: default; }
 .dn-choice-text { display: grid; gap: 2px; min-width: 0; }
 .dn-choice-help { color: var(--ink-tertiary); font: var(--weight-regular) var(--type-caption-size)/var(--type-caption-line) var(--font-sans); }
@@ -101,9 +100,7 @@
 .dn-slider::-moz-range-progress { height: var(--slider-track-height); border-radius: var(--radius-full); background: var(--accent); }
 .dn-slider::-webkit-slider-thumb { appearance: none; width: var(--slider-thumb-size); height: var(--slider-thumb-size); margin-top: calc((var(--slider-track-height) - var(--slider-thumb-size)) / 2); border: 0; border-radius: var(--radius-full); background: var(--surface-raised); box-shadow: var(--shadow-control), 0 0 0 var(--stroke-line) var(--line); }
 .dn-slider::-moz-range-thumb { width: var(--slider-thumb-size); height: var(--slider-thumb-size); border: 0; border-radius: var(--radius-full); background: var(--surface-raised); box-shadow: var(--shadow-control), 0 0 0 var(--stroke-line) var(--line); }
-.dn-slider:focus-visible { outline: none; }
-.dn-slider:focus-visible::-webkit-slider-thumb { background: var(--accent-soft); }
-.dn-slider:focus-visible::-moz-range-thumb { background: var(--accent-soft); }
+.dn-slider:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); border-radius: var(--radius-full); }
 ```
 
 ```html

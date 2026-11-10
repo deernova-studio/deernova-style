@@ -44,7 +44,7 @@
 
 ## 状态
 
-- **高亮**：指针悬停铺 `fill-hover`，键盘定位（`:focus-visible`）用 `fill-selected` 底和文字下划线，不画内外描边。同一时间只高亮一项：指针移到哪一项，焦点就跟到哪一项。
+- **高亮**：指针悬停铺 `fill-hover`，键盘定位（`:focus-visible`）用 `fill-selected` 底和文字下划线，不画焦点环：高亮本身就是焦点位置。同一时间只高亮一项：指针移到哪一项，焦点就跟到哪一项。
 - **当前值**：下拉选项和可勾选的命令，在最左侧留一列 `icon-size-sm` 宽的对勾位，当前选中的项显示对勾，其余项留空，保证文字对齐。不要用 `fill-selected` 底色表示当前值。
 - **禁用**：整项降到 `opacity-disabled`，指针点不了，方向键会跳过它。暂时不能用的命令留在原处并禁用，不要隐藏，否则菜单的布局每次都会变。
 - **危险操作**：文字用 `danger` 色，放在最后，前面加一条分隔线；高亮时的底色不变红。执行前用 [弹窗](sheet.md) 确认，能撤销的操作除外。
@@ -133,7 +133,7 @@
   width: 100%;
   height: var(--field-height);
   padding: 0 calc(var(--field-padding-x) + var(--icon-size-sm) + var(--space-1)) 0 var(--field-padding-x);
-  border: 0;
+  border: var(--stroke-line) solid var(--line);
   border-radius: var(--field-radius);
   background: var(--surface-sunken);
   color: var(--ink);
@@ -144,7 +144,7 @@
   text-overflow: ellipsis;
   appearance: none;
 }
-/* 聚焦和输入框一样：浅灰底换成白底，加一层柔和的控件阴影；不加描边或焦点环。 */
+/* 聚焦和输入框一样：浅灰底换成白底，加一层柔和的控件阴影；1px 浅线不变，不画焦点环。 */
 .dn-select > :is(select, button) { transition: background-color var(--duration-instant) var(--ease-standard), box-shadow var(--duration-instant) var(--ease-standard); }
 .dn-select > :is(select, button):focus, .dn-select > button[aria-expanded="true"] { outline: none; background: var(--surface-raised); box-shadow: var(--shadow-control); }
 .dn-select > .dn-select-chevron { position: absolute; top: 50%; right: var(--field-padding-x); width: var(--icon-size-sm); height: var(--icon-size-sm); color: var(--ink-tertiary); translate: 0 -50%; pointer-events: none; }

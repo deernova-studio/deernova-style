@@ -8,13 +8,14 @@
 | --- | --- | --- |
 | `stroke-line` | 1px | 分隔线、卡片、输入区、侧边栏和顶栏的边线 |
 | `stroke-control` | 1px | 确实需要边界的自绘控件，不用于普通输入框或激活态 |
-| `stroke-focus` | 2px | 仅兼容旧版；新界面不画焦点环 |
-| `focus-offset` | 2px | 仅兼容旧版；新界面不画焦点环 |
+| `stroke-focus` | 2px | 键盘焦点环的粗细 |
+| `focus-offset` | 2px | 焦点环和控件之间的空隙；贴着容器的元素向内画 |
 | `icon-stroke` | 1.75 | 线性图标在 24×24 viewBox 里的描边（仅网页） |
 
 - 线统一是 1px（高分屏上 2 个物理像素），清楚、不发虚。
 - 确实需要边界的控件用 `stroke-control` 加 `line-control` 色；装饰性的线用 `stroke-line` 加 `line` 色。
-- 普通输入框和下拉框用底色区分区域，不画深色边线；聚焦时不添加边框和灰色外圈，只换成 `surface-raised` 底加 `shadow-control`。
+- 输入框、下拉框和 Composer 用 `stroke-line` 加 `line` 浅线，不用深色边线；聚焦时浅线不变，换成 `surface-raised` 底加 `shadow-control`，不画焦点环。
+- 其他控件用键盘聚焦时画焦点环：`outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset);`，见 [交互状态](states.md)。
 - SwiftUI 里自己画的边框（卡片、Composer、任务清单）用 1pt；系统自带的分隔线（`Divider()`、`List` 的行分隔）保持系统样式，不去改。
 
 ## 线形

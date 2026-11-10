@@ -37,8 +37,8 @@
 
 ## 外框
 
-- `surface-raised` 底、无描边、`composer-radius`、`shadow-float`。双行布局四周内边距 `space-2`；单行布局高 `composer-min-height`（桌面 44），所有按钮垂直居中在同一行。输入多行时向上长高，最多 8 行，超出后内部滚动。
-- 输入时沿用原有柔影，不添加边框、外圈或额外阴影；焦点在内部按钮上时，只提示对应按钮。
+- `surface-raised` 底、1px（`stroke-line`）`line` 浅线、`composer-radius`、`shadow-float`。双行布局四周内边距 `space-2`；单行布局高 `composer-min-height`（桌面 44），所有按钮垂直居中在同一行。输入多行时向上长高，最多 8 行，超出后内部滚动。
+- 输入时外观不变，不画焦点环，也不加额外阴影；焦点在内部按钮上时，只给那个按钮画焦点环。
 - 宽度和对话栏一致，不超过 `content-max`；固定在内容区底部时让出安全区（`env(safe-area-inset-bottom)`）。
 
 ## 文字和占位符
@@ -122,8 +122,8 @@
   gap: var(--space-1);
   min-width: 0;
   min-height: var(--composer-min-height);
-  padding: calc((var(--composer-min-height) - var(--button-height-md)) / 2) var(--space-2);
-  border: 0;
+  padding: calc((var(--composer-min-height) - var(--button-height-md)) / 2 - var(--stroke-line)) var(--space-2); /* 减去边线，单行仍是 composer-min-height */
+  border: var(--stroke-line) solid var(--line);
   border-radius: var(--composer-radius);
   background: var(--surface-raised);
   box-shadow: var(--shadow-float);
@@ -181,7 +181,7 @@
 .dn-attachment-remove::before { content: ""; position: absolute; inset: 50% auto auto 50%; width: max(100%, var(--hit-min)); height: max(100%, var(--hit-min)); transform: translate(-50%, -50%); }
 .dn-attachment-remove .dn-icon { width: var(--icon-size-sm); height: var(--icon-size-sm); }
 @media (hover: hover) { .dn-attachment-remove:hover { background: var(--fill-hover); color: var(--ink); } }
-.dn-attachment-remove:focus-visible { outline: none; background: var(--fill-selected); color: var(--ink); }
+.dn-attachment-remove:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: calc(-1 * var(--stroke-focus)); }
 .dn-attachment-thumb { position: relative; display: grid; place-items: center; flex: none; width: var(--composer-thumb-size); height: var(--composer-thumb-size); border-radius: var(--radius-sm); background: var(--surface-sunken); color: var(--ink-tertiary); outline: var(--stroke-line) solid var(--line); outline-offset: calc(var(--stroke-line) * -1); }
 .dn-attachment-thumb img { width: 100%; height: 100%; border-radius: inherit; object-fit: cover; }
 .dn-attachment-thumb > .dn-icon { width: var(--icon-size-md); height: var(--icon-size-md); }
@@ -207,7 +207,7 @@
 .dn-send .dn-icon { width: var(--icon-size-sm); height: var(--icon-size-sm); stroke-width: 2.2; }
 .dn-send:disabled { background: var(--fill-selected); color: var(--ink-tertiary); cursor: default; }
 .dn-send.is-stop .dn-icon { fill: currentColor; stroke: none; }
-.dn-send:focus-visible { outline: none; opacity: var(--opacity-solid-hover); }
+.dn-send:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
 .dn-send::before {
   content: "";
   position: absolute;
@@ -241,7 +241,8 @@
 .dn-meta-button:active { background: var(--fill-selected); }
 .dn-meta-button b { color: var(--ink); font-weight: var(--weight-regular); }
 .dn-meta-button .dn-icon { width: var(--icon-size-sm); height: var(--icon-size-sm); margin-inline-start: -2px; color: var(--ink-tertiary); }
-.dn-meta-button:focus-visible, .dn-meta-button[aria-expanded="true"] { outline: none; background: var(--fill-selected); }
+.dn-meta-button[aria-expanded="true"] { background: var(--fill-selected); }
+.dn-meta-button:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
 .dn-composer.is-stacked { flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: var(--space-1); padding: var(--space-2); }
 .dn-composer.is-stacked .dn-composer-attachments { flex-basis: auto; }
 .dn-composer.is-stacked textarea { flex: none; min-height: calc(var(--type-body-line) * 2 + var(--button-height-md) - var(--type-body-line)); padding-inline: calc((var(--button-height-md) - var(--icon-size-md)) / 2); }
@@ -265,7 +266,8 @@
 .dn-tool-chip { background: var(--fill-selected); color: var(--ink); }
 .dn-tool-chip .dn-icon { width: var(--icon-size-sm); height: var(--icon-size-sm); }
 @media (hover: hover) { .dn-tool-chip:hover { background-image: linear-gradient(var(--fill-hover), var(--fill-hover)); } }
-.dn-tool-chip:active, .dn-tool-chip:focus-visible { outline: none; background-image: linear-gradient(var(--fill-selected), var(--fill-selected)); }
+.dn-tool-chip:active { background-image: linear-gradient(var(--fill-selected), var(--fill-selected)); }
+.dn-tool-chip:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
 .dn-recording { display: flex; flex: 1; align-items: center; gap: var(--space-2); min-width: 0; min-height: var(--button-height-md); padding: 0 var(--space-1); color: var(--ink-secondary); font: var(--type-body); font-variant-numeric: tabular-nums; }
 .dn-recording-dot { flex: none; width: var(--space-2); height: var(--space-2); border-radius: var(--radius-full); background: var(--danger); }
 .dn-context-ring {
@@ -380,6 +382,7 @@ VStack(alignment: .trailing, spacing: Deernova.space2) {
     .padding(.horizontal, Deernova.space2)
     .frame(minHeight: Deernova.composerMinHeight)
     .background(.surfaceRaised, in: .rect(cornerRadius: Deernova.composerRadius))
+    .overlay(RoundedRectangle(cornerRadius: Deernova.composerRadius).strokeBorder(.line, lineWidth: 1))
     .shadow(color: .black.opacity(0.08), radius: 10, y: 6)
 
     HStack(spacing: Deernova.space2) {                        // 信息行：左边免责提示，右边设置
@@ -401,7 +404,7 @@ VStack(alignment: .trailing, spacing: Deernova.space2) {
 
 ## 不要
 
-- 把 Composer 做成玻璃（它承载的是内容）；给它加描边或聚焦外圈。
+- 把 Composer 做成玻璃（它承载的是内容）；给它加深色描边或聚焦外圈。
 - 把模型、权限、上下文用量塞进输入框里；信息行离输入框很远，或者右边缘和输入框不对齐。
 - 在不同页面里调换添加、工具、语音、发送和信息行的位置。
 - 输入法选词时按 Return 就发送；发送失败后清空用户写的内容。

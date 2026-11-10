@@ -76,12 +76,12 @@
 | `ink` | `gray-9` `#171717` | `gray-93` `#ededed` | 正文与标题，在四种纸面上不低于 13:1。 |
 | `ink-secondary` | `gray-32` `#525252` | `gray-64` `#a3a3a3` | 次要文字、说明、列表的值、未选中的图标，在四种纸面上不低于 6:1。 |
 | `ink-tertiary` | `gray-40` `#666666` | `gray-55` `#8c8c8c` | 占位符、时间戳、计数、分组标题，在四种纸面上不低于 4.5:1。 |
-| `line` | `gray-89` `#e3e3e3` | `gray-18` `#2f2f2f` | 分隔线、卡片描边、按钮描边。装饰性，不承载信息。 |
-| `line-control` | `gray-54` `#8a8a8a` | `gray-45` `#737373` | 需要明确边界的自绘控件、拖拽条、链接下划线。在 canvas、surface、surface-raised 上不低于 3:1；普通输入框用底色区分，不用它描边。 |
+| `line` | `gray-89` `#e3e3e3` | `gray-18` `#2f2f2f` | 分隔线、卡片描边、输入框和 Composer 的浅线、按钮描边。 |
+| `line-control` | `gray-54` `#8a8a8a` | `gray-45` `#737373` | 需要明确边界的自绘控件、拖拽条、链接下划线。在 canvas、surface、surface-raised 上不低于 3:1；输入框用浅色的 line 描边，不用它。 |
 | `accent` | = `ink` | = `ink` | 强调：主按钮填充、选中指示。就是墨色本身，浅色主题是黑，深色主题是白；不用来画激活或焦点外框。 |
 | `accent-soft` | `gray-91` `#e8e8e8` | `gray-18` `#2f2f2f` | 强调的浅底：列表图标底。上面的文字用 ink；不用作输入框的聚焦外圈。 |
 | `on-accent` | `gray-100` `#ffffff` | `gray-9` `#171717` | accent 填充上的文字和图标：浅色主题白字，深色主题黑字。 |
-| `focus-ring` | `gray-45` `#737373` | `gray-64` `#a3a3a3` | 仅兼容旧版焦点环。新界面不用这个 token 描边；输入框聚焦时换成 `surface-raised` 底加 `shadow-control`，键盘导航用底色或文字提示。 |
+| `focus-ring` | `gray-45` `#737373` | `gray-64` `#a3a3a3` | 键盘焦点环的颜色。只在 `:focus-visible` 时画在按钮、链接、卡片、开关这类非输入控件外面，在 canvas、surface、surface-raised 上不低于 3:1。输入框和菜单项不用它。 |
 | `success` | `teal-27` `#1f6b66` | `teal-59` `#6cc3b4` | 成功、已完成、已同步、开关打开。作为文字用在纸面和 success-soft 上。 |
 | `success-soft` | `teal-90` `#ddeeec` | `teal-15` `#183230` | 成功状态的浅底（标签、横幅）。 |
 | `warning` | `amber-29` `#8a5a0b` | `amber-61` `#e2b054` | 需要注意但不阻断：额度将用完、网络较慢。 |
@@ -174,10 +174,10 @@
 
 | Token | 值 | 用途 |
 | --- | --- | --- |
-| `stroke-line` | `1px` | 分隔线、卡片、输入区、侧边栏和顶栏的边线。SwiftUI 里自己画的边框用 1pt，系统自带的分隔线保持系统样式。 |
-| `stroke-control` | `1px` | 确实需要边界的控件描边；普通输入框、下拉框和激活态不画深色边框。 |
-| `stroke-focus` | `2px` | 仅兼容旧版焦点环宽度，新界面不使用环形描边。 |
-| `focus-offset` | `2px` | 仅兼容旧版焦点环偏移，新界面不使用环形描边。 |
+| `stroke-line` | `1px` | 分隔线、卡片、输入框、Composer、侧边栏和顶栏的边线。SwiftUI 里自己画的边框用 1pt，系统自带的分隔线保持系统样式。 |
+| `stroke-control` | `1px` | 确实需要明确边界的控件描边，配 line-control；输入框、下拉框用 stroke-line 加浅色 line，激活态不画深色边框。 |
+| `stroke-focus` | `2px` | 键盘焦点环的粗细。 |
+| `focus-offset` | `2px` | 焦点环和控件之间的空隙。侧边栏项、分段控件、选项行这类贴着容器的元素，环改为向内画（偏移取负的 stroke-focus）。 |
 
 ## 线形
 

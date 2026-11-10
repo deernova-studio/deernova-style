@@ -77,7 +77,7 @@
 @media (hover: hover) { .dn-sidebar-item:hover { background: var(--fill-hover); } }
 .dn-sidebar-item:active { background: var(--fill-selected); }
 .dn-sidebar-item[aria-current="page"] { background: var(--fill-selected); }
-.dn-sidebar-item:focus-visible { outline: none; box-shadow: none; background: var(--fill-selected); text-decoration: underline; text-underline-offset: 3px; }
+.dn-sidebar-item:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: calc(-1 * var(--stroke-focus)); }
 .dn-sidebar-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dn-sidebar-count { color: var(--ink-tertiary); font: var(--weight-regular) var(--type-caption-size)/1 var(--font-sans); font-variant-numeric: tabular-nums; }
 .dn-sidebar-footer {

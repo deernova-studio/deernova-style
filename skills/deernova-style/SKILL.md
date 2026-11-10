@@ -53,7 +53,7 @@ Web 应用和 macOS 内容区（桌面档）的骨架和密度参照 Claude 桌�
 2. **黑白灰，强调靠对比。** `accent` 就是墨色 `ink`：主按钮在浅色主题是黑底白字，在深色主题是白底黑字，文字用 `on-accent`，不要写死白色。唯一的彩色是状态色 `success`、`warning`、`danger`、`info`，只用来表达状态，而且必须同时带图标或文字。
 3. **细线分区，阴影表达层级。** 区块之间用 `line` 色的 1px 线分隔（`stroke-line`），卡片不加阴影。菜单、弹窗、浮动面板和 Composer 用 `shadow-float`。激活和聚焦不加阴影，唯一的例外是输入框聚焦时的 `shadow-control`（见第 5 条）。
 4. **无衬线做界面，衬线点题。** 界面文字、AI 回答、用户消息、标题栏都用系统无衬线（SF Pro）；代码和需要对齐的数字用等宽（SF Mono）。衬线（New York）只用在页面大标题和空状态标题（`display`、`title`）、官网与文档，以及文章类的长文阅读（`prose`）。中文统一落到苹方。
-5. **激活不加装饰。** 悬停 `fill-hover`，按下和选中 `fill-selected`，选中项悬停不再加深。按钮保留轻微底色反馈；输入框和下拉框无描边，聚焦时浅灰底换成白底并加一层柔和的控件阴影，不加外圈。非输入控件的键盘位置用底色或文字下划线表示。悬停不位移，只写在 `@media (hover: hover)` 里，见 [交互状态](references/foundations/states.md)。
+5. **激活不加装饰，键盘焦点要看得见。** 悬停 `fill-hover`，按下和选中 `fill-selected`，选中项悬停不再加深。输入框和下拉框是浅灰底加一条 1px `line` 浅线，聚焦时换成白底并加一层柔和的控件阴影。其他控件用键盘聚焦（`:focus-visible`）时画一圈 2px 的 `focus-ring` 焦点环，鼠标点击时不出现；聚焦不改底色，免得和按下、选中分不清。悬停不位移，只写在 `@media (hover: hover)` 里，见 [交互状态](references/foundations/states.md)。
 6. **层次靠字号和灰度，少用粗体。** 600 只给真正的标题（`display`、`title`、`headline`）。分组标题、会话名、说明、时间戳用常规字重，靠 `ink-secondary`、`ink-tertiary` 和小一号的字区分层级。
 7. **控件高度由 token 决定，点击区域单独补。** 按钮、输入框、列表行的可见高度直接用 `button-height-*`、`field-height`、`row-height`，上下内边距为 0，不让页面行高把它撑高。可见尺寸小于 `hit-min` 时，用透明的命中区补足，不加大可见的控件。
 8. **间距成组。** 间距走 4pt 网格。组内用 `gap-stack`，组与组之间用 `gap-group`（至少 2 倍）；内容区里段落、工具调用、卡片之间 `space-4`。用细线和少量留白分组，不靠大块空白和外框。

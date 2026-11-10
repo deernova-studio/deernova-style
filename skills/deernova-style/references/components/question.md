@@ -74,7 +74,8 @@ AI 做到一半，遇到只有用户能定的事（选哪种方案、范围多�
 }
 @media (hover: hover) { .dn-question-option:hover { background: var(--fill-hover); } }
 .dn-question-option:has(> .dn-choice-box > input:checked) { background: var(--fill-selected); }
-.dn-question-option:has(> .dn-choice-box > input:focus-visible) .dn-question-label { text-decoration: underline; text-underline-offset: 3px; }
+.dn-question-option:has(> .dn-choice-box > input:focus-visible) { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: calc(-1 * var(--stroke-focus)); }
+.dn-question-option .dn-choice-box > input:focus-visible { outline: none; } /* 环画在整行上，方框不再重复 */
 .dn-question-text { display: grid; flex: 1; gap: 2px; min-width: 0; }
 .dn-question-label { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
 .dn-question-label > .dn-tag { font-weight: var(--weight-regular); }

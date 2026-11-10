@@ -26,13 +26,13 @@
 
 ## 线条
 
-分隔线和卡片描边用 `line`，属于装饰。需要明确边界的控件、拖拽条和链接下划线用 `line-control`，不低于 3:1。输入框靠标签与底色表示可输入区域，不用深色边线围起来。
+分隔线和卡片描边用 `line`，属于装饰。需要明确边界的控件、拖拽条和链接下划线用 `line-control`，不低于 3:1。输入框用浅灰底加一条 `line` 浅线表示可输入区域，不用 `line-control` 这类深色边线围起来。
 
 ## 强调
 
 - `accent` 等于 `ink`，用于主按钮填充和选中指示。主按钮上的文字用 `on-accent`：深色主题下它是黑色，不要写死白色。
 - 浅灰的强调底用 `accent-soft`，上面的文字用 `ink`。
-- 输入框聚焦时底色从 `surface-sunken` 换成 `surface-raised`，加一层 `shadow-control`，不加描边。非输入控件的键盘位置用底色或文字下划线表示，不画环形描边。`focus-ring`、`stroke-focus` 和 `focus-offset` 只保留给旧项目兼容，新界面不使用。
+- 输入框聚焦时底色从 `surface-sunken` 换成 `surface-raised`，加一层 `shadow-control`，浅线不变。其他控件用键盘聚焦时画 `focus-ring` 色的焦点环（粗 `stroke-focus`，间隙 `focus-offset`）；`accent` 不用来画焦点环。
 
 ## 状态色
 

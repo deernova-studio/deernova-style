@@ -16,12 +16,12 @@
 | `field-action-size` | 20 | 32 | 28 | 输入框内部图标按钮（清除、显示密码）的可见尺寸，四周离边缘相等；命中区用 hit-min 补足。 |
 <!-- /tokens -->
 
-- 默认用 `surface-sunken` 浅底表示可输入区域，`border: 0`，不画深色边线。
-- 聚焦时底色从 `surface-sunken` 换成 `surface-raised`（浅色主题从浅灰变白，深色主题亮一档），再加一层 `shadow-control`，让它放在白色的弹窗、卡片里也有边界；用时 `duration-instant`。不加描边、外圈或焦点环。鼠标点入和键盘进入用同样的规则，表单里一眼能看出光标在哪个输入框。
+- 默认用 `surface-sunken` 浅底加一条 1px（`stroke-line`）`line` 浅线表示可输入区域。线是浅灰的，不用 `line-control` 这类深色边线。
+- 聚焦时底色从 `surface-sunken` 换成 `surface-raised`（浅色主题从浅灰变白，深色主题亮一档），再加一层 `shadow-control`，浅线不变；用时 `duration-instant`。不加深色描边、外圈或焦点环。鼠标点入和键盘进入用同样的规则，表单里一眼能看出光标在哪个输入框。
 - 出错时用 `danger-soft` 底色，说明文字换成 `danger` 色的错误信息。出错的输入框聚焦时仍保留错误底色，只加 `shadow-control`；错误信息要说清楚怎么改，不依赖一圈红边。
 - 标签在输入框上方，`callout` 字号、中粗、`ink-secondary`；说明在下方，`caption` 字号、常规字重、`ink-tertiary`。标签、输入框、说明之间 `space-1`。
 - 触屏上输入文字不小于 16px，避免浏览器在聚焦时放大页面（`field-font-size` 已经保证）。
-- 下拉选择（`select`）和输入框同高，共用浅底，聚焦和展开时和输入框一样换成 `surface-raised` 底加 `shadow-control`，写法见 [菜单与下拉](menu.md)。
+- 下拉选择（`select`）和输入框同高，共用浅底和浅线，聚焦和展开时和输入框一样换成 `surface-raised` 底加 `shadow-control`，写法见 [菜单与下拉](menu.md)。
 
 整张表单怎么分组、校验和提交，见[表单](form.md)。
 
@@ -69,7 +69,7 @@
   width: 100%;
   height: var(--field-height);
   padding: 0 var(--field-padding-x);
-  border: 0;
+  border: var(--stroke-line) solid var(--line);
   border-radius: var(--field-radius);
   background: var(--surface-sunken);
   color: var(--ink);
@@ -94,6 +94,7 @@
   width: 100%;
   height: var(--field-height);
   padding: 0 var(--field-padding-x);
+  border: var(--stroke-line) solid var(--line);
   border-radius: var(--field-radius);
   background: var(--surface-sunken);
   color: var(--ink-tertiary);
@@ -126,7 +127,8 @@
 .dn-input-action::before { content: ""; position: absolute; inset: 50% auto auto 50%; width: max(100%, var(--hit-min)); height: max(100%, var(--hit-min)); transform: translate(-50%, -50%); }
 .dn-input-action .dn-icon { width: var(--icon-size-sm); height: var(--icon-size-sm); }
 @media (hover: hover) { .dn-input-action:hover { background: var(--fill-hover); color: var(--ink); } }
-.dn-input-action:active, .dn-input-action:focus-visible { outline: none; background: var(--fill-selected); color: var(--ink); }
+.dn-input-action:active { background: var(--fill-selected); color: var(--ink); }
+.dn-input-action:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: calc(-1 * var(--stroke-focus)); }
 .dn-input-group > input:placeholder-shown ~ .dn-input-action.is-clear { visibility: hidden; }
 .dn-input-group:has(> input[aria-invalid="true"]), .dn-input-group:has(> input[aria-invalid="true"]):focus-within { background: var(--danger-soft); }
 .dn-input-group:has(> input:disabled) { opacity: var(--opacity-disabled); cursor: default; }
@@ -135,7 +137,7 @@ textarea.dn-input {
   height: auto;
   min-height: calc(var(--field-font-size) * 1.5 * 3 + var(--field-height) - var(--field-font-size) * 1.5);
   max-height: calc(var(--field-font-size) * 1.5 * 8 + var(--field-height) - var(--field-font-size) * 1.5);
-  padding: calc((var(--field-height) - var(--field-font-size) * 1.5) / 2) var(--field-padding-x);
+  padding: calc((var(--field-height) - var(--field-font-size) * 1.5) / 2 - var(--stroke-line)) var(--field-padding-x); /* 减去边线，第一行和单行输入框对齐 */
   line-height: 1.5;
   resize: vertical;
   field-sizing: content;
@@ -215,6 +217,6 @@ iOS 设置页这类表单，直接在 `Form` 里用 `TextField`，交给系统�
 - 只用占位符代替标签；把格式、长度这类要求只写在占位符里；占位符写「请输入……」。
 - 用上下内边距撑高输入框；让清除按钮出现时把文字挤动；数字左对齐导致小数点对不齐。
 - 出错时只把边框变红、不给说明。
-- 给激活态套黑色或灰色外框，或用零模糊的 box-shadow 冒充描边；全局 outline、ring 不得叠到输入框上。
+- 给激活态套黑色或灰色外框，或用零模糊的 box-shadow 冒充描边；全局的焦点环不得叠到输入框上。
 - 聚焦前后完全没有变化，键盘用户看不出焦点在哪个输入框。
 - 把多行输入塞进单行框（多行用 `textarea`、`TextField(axis: .vertical)` 或 [Composer](composer.md)）。

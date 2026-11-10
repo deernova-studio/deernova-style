@@ -178,7 +178,6 @@
   color: var(--ink-secondary);
   font: var(--weight-regular) var(--type-caption-size)/1 var(--font-sans);
 }
-.product-app-icon { flex: none; object-fit: contain; }
 @media (hover: hover) { .product-option:hover { background: var(--fill-hover); } }
 .product-option:active { background: var(--fill-selected); }
 .product-option:focus { outline: none; }

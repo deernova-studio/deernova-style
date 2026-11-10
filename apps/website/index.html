@@ -26,7 +26,18 @@
         <ul class="product-options">
           <li>
             <a class="product-option" href="https://github.com/deernova-studio/handy-pick" target="_blank" rel="noopener noreferrer">
-              <img class="product-symbol product-app-icon" src="assets/handy-pick-icon.png" width="32" height="32" alt="">
+              <svg class="product-symbol" viewBox="244 290 560 444" aria-hidden="true" focusable="false">
+                <defs>
+                  <filter id="handypick-icon-alpha" color-interpolation-filters="sRGB">
+                    <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  -0.2126 -0.7152 -0.0722 0 1"/>
+                    <feComponentTransfer><feFuncA type="linear" slope="1.04" intercept="-0.02"/></feComponentTransfer>
+                  </filter>
+                  <mask id="handypick-icon-mask" maskUnits="userSpaceOnUse" x="244" y="290" width="560" height="444" style="mask-type: alpha">
+                    <image href="assets/handy-pick-icon.png" width="1024" height="1024" filter="url(#handypick-icon-alpha)"/>
+                  </mask>
+                </defs>
+                <rect x="244" y="290" width="560" height="444" fill="currentColor" mask="url(#handypick-icon-mask)"/>
+              </svg>
               <span class="product-copy">
                 <span class="product-name">HandyPick</span>
                 <span class="product-description" title="Mac 复制、粘贴、截图与图片取字工具，查看源码与下载">Mac 复制、截图与图片取字</span>

@@ -1,6 +1,7 @@
 node_modules/
 dist/
 releases/*.tgz
+releases/*.tgz.sha256
 packages/style/skill/
 .DS_Store
 .venv/

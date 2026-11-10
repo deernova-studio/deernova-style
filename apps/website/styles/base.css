@@ -132,3 +132,5 @@ a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
+:where(.site-filing) { padding: var(--space-2) var(--space-4); text-align: center; color: var(--ink-secondary); font: var(--type-caption); }
+:where(.site-filing a) { color: inherit; }

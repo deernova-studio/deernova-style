@@ -76,6 +76,8 @@ npm run pack         # 在 releases/ 生成 npm 包，不发布
 
 ## 发布
 
+官网部署到阿里云 ECS 的步骤、回滚方式和日常开发流程见 [网站部署说明](docs/deployment.md)。运行 `npm run pack:site` 生成仅包含公开静态文件的发布包。
+
 规范、skill 内容或安装器有变化时，发布新版本，使用者通过最新 CLI 安装或运行 `update` 才能拿到：
 
 ```sh

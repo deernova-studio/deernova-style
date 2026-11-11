@@ -5,14 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Deernova Loaders</title>
   <meta name="description" content="Deernova 加载动效：一笔单色的线沿数学曲线移动，停下时落成对应的图标。">
-  <meta name="robots" content="noindex">
   <script>try { const theme = localStorage.getItem('deernova-theme'); if (theme) document.documentElement.dataset.theme = theme; } catch {}</script>
   <link rel="icon" type="image/png" href="assets/deernova-studio-icon.png">
   <link rel="stylesheet" href="assets/tokens.css">
   <link rel="stylesheet" href="styles/base.css">
   <style>
 {{referenceCss}}
-.loaders-page { box-sizing: border-box; width: min(100%, 960px); margin: 0 auto; padding: calc(var(--masthead) + var(--space-6)) var(--space-4) var(--space-7); color: var(--ink); }
+.page-install { display: grid; gap: var(--space-2); max-width: 640px; margin: 0 0 var(--space-5); }
+.page-install pre { margin: 0; padding: var(--space-2) var(--space-3); overflow-x: auto; border-radius: var(--radius-sm); background: var(--surface-sunken); font: var(--type-code); }
+.page-install p { margin: 0; color: var(--ink-secondary); font: var(--type-callout); }
+.loaders-page { box-sizing: border-box; width: min(100%, 960px); margin: 0 auto; padding: var(--space-6) var(--space-4) var(--space-8); color: var(--ink); }
 .loaders-page h1 { margin: 0 0 var(--space-2); font: var(--weight-semibold) 32px/1.2 var(--font-serif); }
 .loaders-page h2 { margin: var(--space-6) 0 var(--space-2); font: var(--type-headline); }
 .loaders-note { max-width: 640px; margin: 0 0 var(--space-4); color: var(--ink-secondary); font: var(--type-body); }
@@ -31,7 +33,7 @@
 .loaders-status-time { color: var(--ink-tertiary); font-variant-numeric: tabular-nums; }
 .loaders-controls { display: flex; flex-wrap: wrap; gap: var(--gap-stack); }
 .loaders-pair { display: flex; align-items: center; gap: var(--space-5); color: var(--ink); }
-.loaders-pair figure { display: grid; justify-items: center; gap: var(--space-2); margin: 0; }
+.loaders-pair figure { display: grid; justify-items: center; gap: var(--space-2); min-width: 128px; margin: 0; }
 .loaders-pair figcaption { color: var(--ink-tertiary); font: var(--type-caption); }
 .loaders-pair svg { width: 64px; height: 64px; }
 .loaders-button { display: inline-flex; align-items: center; gap: var(--space-2); }
@@ -42,14 +44,22 @@
 <body>
 <header class="masthead">
   <a class="wordmark" href="./" aria-label="Deernova 首页">deernova<span>.</span></a>
+  <nav class="package-tabs" aria-label="Deernova Style 的三个包"><a class="package-tab" href="guide.html">Style</a><a class="package-tab" href="icons.html">Icons</a><a class="package-tab" aria-current="page" href="loaders.html">Loaders</a></nav>
   <nav class="masthead-actions" aria-label="快捷导航">
-    <a class="masthead-action" href="icons.html" aria-label="图标" data-tooltip="图标"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/></svg></a>
+    <a class="masthead-action" href="https://github.com/deernova-studio/deernova-style" target="_blank" rel="noopener noreferrer" aria-label="GitHub 仓库（新标签页）" data-tooltip="GitHub 仓库"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.3-4.3-2.1-6-2.6m12 5v-3.4c0-1 .1-1.5-.5-2.1 3-.3 6.2-1.5 6.2-6.7a5.2 5.2 0 0 0-1.4-3.6 4.8 4.8 0 0 0-.1-3.6s-1.1-.4-3.7 1.4a12.7 12.7 0 0 0-6.8 0C6.1 1.6 5 2 5 2a4.8 4.8 0 0 0-.1 3.6 5.2 5.2 0 0 0-1.4 3.6c0 5.2 3.2 6.4 6.2 6.7-.5.5-.8 1.1-.7 2.1v3.4"/></svg></a>
     <button class="theme-toggle masthead-action" type="button" data-theme-toggle aria-label="切换外观" data-tooltip="切换外观"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor" stroke="none"/></svg></button>
   </nav>
 </header>
 <main class="loaders-page" id="main">
   <h1>Deernova Loaders</h1>
   <p class="loaders-note">一笔单色的线沿着数学曲线走，尾巴逐渐变细，后面是很淡的完整曲线。网格、描边和图标完全一样（24×24、1.75）。曲线只给 AI 的状态用；普通加载是一段细圆弧。</p>
+
+  <section class="page-install" aria-label="安装">
+    <pre><code>npm install @deernova/loaders</code></pre>
+    <pre><code>import { defineLoaderElement } from '@deernova/loaders';
+defineLoaderElement(); // 之后写 &lt;dn-loader name="thinking"&gt;&lt;/dn-loader&gt;</code></pre>
+    <p>什么时候用哪个、怎么停下，见规范的<a href="guide.html#components-skeleton">加载状态</a>。MIT 许可，不依赖任何库。</p>
+  </section>
 
   <div class="loaders-grid">
     <section class="loaders-card"><div class="loaders-card-head"><code>thinking</code><span>AI 思考 · 三瓣玫瑰线 · 5.2 秒一圈</span></div><div class="loaders-sizes" data-loader="thinking"></div></section>

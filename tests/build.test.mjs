@@ -71,3 +71,10 @@ test('website pages are fully rendered and only reference files that exist', asy
     }
   }
 });
+
+test('the deploy script accepts exactly the pages the site builds', async () => {
+  const { PAGES } = await import('../scripts/build-site.mjs');
+  const deploy = await readFile('scripts/deploy-site.py', 'utf8');
+  const listed = deploy.match(/^PAGES = \{([^}]*)\}/m)[1].match(/'([^']+)'/g).map(name => name.slice(1, -1)).sort();
+  assert.deepEqual(listed, PAGES.map(page => `${page}.html`).sort());
+});

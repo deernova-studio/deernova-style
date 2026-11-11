@@ -187,6 +187,25 @@ const FOUNDATION_SPECIMENS = {
 
 const specimen = html => `<div class="specimen" ${APP}>${html}</div>`;
 
+// The three npm packages, each with its install command and a small live sample.
+const SHOWCASE_ICONS = ['new-chat', 'search', 'attach', 'mention', 'command', 'voice', 'send', 'thinking', 'tool', 'delegate', 'permission', 'artifact'];
+function packagesBlock(manifest) {
+  const count = manifest ? manifest.groups.reduce((sum, group) => sum + group.icons.length, 0) : 0;
+  const card = (name, title, text, command, sample, link) => `<article class="package-card">
+<header><h4>${title}</h4><code>${name}</code></header>
+<p>${text}</p>
+<div class="package-sample" ${APP}>${sample}</div>
+<pre class="package-command"><code>${escape(command)}</code></pre>
+${link}
+</article>`;
+  return `<h3 id="overview-4">三个包</h3>
+<div class="package-grid">
+${card('@deernova/style', 'Style', '这份规范本身：装进项目，AI 写界面时按它来；附带设计变量（CSS、Tailwind、SwiftUI）。', 'npx @deernova/style@latest install', '<span class="package-tokens"><span style="background:var(--canvas)"></span><span style="background:var(--surface)"></span><span style="background:var(--surface-sunken)"></span><span style="background:var(--line-control)"></span><span style="background:var(--ink-tertiary)"></span><span style="background:var(--ink)"></span></span>', '<a href="#foundations-color">从颜色开始读</a>')}
+${card('@deernova/icons', 'Icons', `${count} 个线性图标：24 网格、1.75 描边，AI 相关的是自己画的。`, 'npm install @deernova/icons', `<span class="package-icons">${SHOWCASE_ICONS.map(name => `<svg class="dn-icon" aria-hidden="true"><use href="#dn-${name}"/></svg>`).join('')}</span>`, '<a href="icons.html">看全部图标</a>')}
+${card('@deernova/loaders', 'Loaders', '一笔单色的线沿数学曲线走；思考停下来就是思考图标。', 'npm install @deernova/loaders', '<span class="package-loaders"><dn-loader name="thinking"></dn-loader><dn-loader name="working"></dn-loader><dn-loader name="spinner"></dn-loader></span>', '<a href="loaders.html">看动效</a>')}
+</div>`;
+}
+
 // The icon name list as glyphs; the sprite they reference is inlined once at the top of the page.
 function iconGrid(manifest) {
   if (!manifest) return '';
@@ -287,6 +306,7 @@ export async function renderGuide(root) {
 <div class="overview-rules"><h3 id="overview-1">核心规则</h3>${rules}<h3 id="overview-2">不要做</h3>${avoid}</div>
 <div class="overview-quick"><h3 id="overview-3">场景速查</h3>${summaryTable(tokens)}${scenesTable(tokens)}</div>
 </div>
+${packagesBlock(tokens.icons)}
 </section>`);
 
   for (const group of SECTIONS) {

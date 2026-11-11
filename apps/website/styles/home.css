@@ -184,6 +184,7 @@
 .product-option:focus-visible { background: var(--fill-selected); outline: none; box-shadow: none; text-decoration: underline; text-underline-offset: 3px; }
 /* Product symbols are pictures, so they take the large icon size. */
 .product-panel .product-symbol { width: var(--icon-size-lg); height: var(--icon-size-lg); fill: currentColor; stroke: none; }
+.product-panel .product-symbol.is-stroke { fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
 .product-panel .product-arrow { width: var(--icon-size-sm); height: var(--icon-size-sm); color: var(--ink-tertiary); }
 @media (prefers-reduced-motion: reduce) {
   .product-panel[hidden] { transform: none; }

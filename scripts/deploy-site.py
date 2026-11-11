@@ -8,6 +8,8 @@ import sys
 import tarfile
 from datetime import datetime, timezone
 
+# Keep in step with PAGES in scripts/build-site.mjs.
+PAGES = {'index.html', 'guide.html', 'icons.html', 'loaders.html'}
 archive = Path(sys.argv[1]).resolve()
 expected = sys.argv[2].lower()
 assert len(expected) == 64 and hashlib.sha256(archive.read_bytes()).hexdigest() == expected, 'SHA256 mismatch'
@@ -20,9 +22,9 @@ with tarfile.open(archive) as bundle:
         path = Path(member.name)
         assert not path.is_absolute() and '..' not in path.parts, 'Invalid archive path'
         assert member.isfile() or member.isdir(), 'Links and special files are forbidden'
-        assert path.parts[0] in {'index.html', 'guide.html', 'styles', 'scripts', 'assets'}, 'Unexpected archive entry'
+        assert path.parts[0] in {*PAGES, 'styles', 'scripts', 'assets'}, 'Unexpected archive entry'
     bundle.extractall(release, filter='data')
-assert (release / 'index.html').is_file() and (release / 'guide.html').is_file()
+assert all((release / page).is_file() for page in PAGES), 'Missing page'
 for path in [release, *release.rglob('*')]:
     os.chmod(path, 0o755 if path.is_dir() else 0o644)
 subprocess.run(['nginx', '-t'], check=True)

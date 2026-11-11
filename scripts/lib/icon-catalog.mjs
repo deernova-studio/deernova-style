@@ -6,11 +6,15 @@ import { lucideBody, readIcons } from '../icons.mjs';
 const SOURCE = { lucide: 'Lucide', redrawn: '重画', deernova: '自有' };
 const draw = (body, size) => `<svg class="dn-icon" style="width:${size}px;height:${size}px" viewBox="0 0 24 24" aria-hidden="true">${body.join('')}</svg>`;
 
-export async function renderIconCatalog(root) {
+export async function renderIconSummary(root) {
   const { manifest, icons } = await readIcons(root);
   const count = source => icons.filter(icon => icon.source === source).length;
+  return `<p class="icons-summary">${icons.length} 个图标：Lucide ${count('lucide')} 个（描边统一调成 ${manifest.stroke}），重画 ${count('redrawn')} 个，自有 ${count('deernova')} 个。网格 ${manifest.grid}×${manifest.grid}，圆头圆角，无填充，颜色跟随文字。</p>`;
+}
+
+export async function renderIconCatalog(root) {
+  const { manifest, icons } = await readIcons(root);
   const out = [];
-  out.push(`<p class="icons-summary">${icons.length} 个图标：Lucide ${count('lucide')} 个（描边统一调成 ${manifest.stroke}），重画 ${count('redrawn')} 个，自有 ${count('deernova')} 个。网格 ${manifest.grid}×${manifest.grid}，圆头圆角，无填充，颜色跟随文字。</p>`);
 
   for (const group of manifest.groups) {
     out.push(`<section class="icons-group" id="group-${group.id}"><h2>${escape(group.title)}</h2><ul class="icons-grid">`);

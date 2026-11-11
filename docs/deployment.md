@@ -2,7 +2,30 @@
 
 官网是静态网站：本机编辑和构建，ECS 的 Nginx 提供 `dist/` 中的文件。网站发布不需要发布 npm 包。
 
-## 当前发布（2026-11-11 02:22，北京时间）
+日常发布现已使用 **One CLI + SSH/SCP**，见 [SSH 配置与发布说明](ssh-deployment.md)。当前 Mac 已完成一次性配置，运行 `one run website:deploy` 即可完成构建、上传、版本切换和验收。
+
+## 当前发布（2026-11-11 23:18，北京时间）
+
+- 按用户要求再次执行 `one run website:deploy --ui stream`，版本 `0.3.14`，退出码为 0。
+- 发布包：`deernova-site-0.3.14-20261111T151813Z-3be21c62.tgz`。
+- SHA256：`6fb069d8a11723f05e3158c76c7573f776e022069e9de661dc7d182d211e7f14`。
+- 当前目录：`/var/www/releases/deernova-20261111T151821196015Z`。
+- 上一版本：`/var/www/releases/deernova-20261111T151334684012Z`，已保留并记录供回滚。
+- 已验收：Nginx 配置检查；两个域名的 HTTPS 首页、规范页、CSS、脚本和 token 与发布包一致，HTTP 跳转 HTTPS，未知路径和 `.git/config` 返回 404。此次未修改网站源码，内容与 23:13 发布一致。
+
+## 历史发布（2026-11-11 23:13，北京时间）
+
+- 来源：`main` 的 `b51b344`，版本 `0.3.14`，加上本次 One CLI + SSH 部署接入。
+- 执行：`one run website:deploy --ui stream`，实际完成构建、SCP 上传、SSH 部署和公网验收，退出码为 0。
+- 发布包：`deernova-site-0.3.14-20261111T151327Z-e150f88f.tgz`。
+- SHA256：`3336c915c3e09d8dbb10a7a9040f9399ee5feb8f72c7265f1945d588fd0fc1de`。
+- 当前目录：`/var/www/releases/deernova-20261111T151334684012Z`。
+- 上一版本：`/var/www/releases/deernova-20261110T182215777345Z`，已记录在 `/var/www/.deernova-previous`。
+- 已验收：本机 SSH 直连、One doctor、Nginx 配置与运行状态、真实部署、One status；两个域名的 HTTPS 首页、规范页、CSS、脚本、token 内容与本次构建一致，HTTP 跳转 HTTPS，未知路径和 `.git/config` 返回 404。
+- 本地验证：80 项 Node 测试通过，包含实际运行 10 项 Python 部署用例的测试入口；失败恢复和回滚在隔离目录中验证。
+- 未验收：生产回滚演练、移动端真机。本次未修改 Nginx 配置或证书。
+
+## 历史发布（2026-11-11 02:22，北京时间）
 
 - 来源：`e541336`；HandyPick 通过 SVG 视口与遮罩显示原图中心图形，去掉底板和留白，与 Deernova Style 共用 `icon-size-lg`，随主题切换黑白。
 - 发布包：`deernova-site-0.3.12-20261110T181802Z.tgz`。
@@ -75,7 +98,7 @@ npm run pack:site
 
 命令会重新构建，并在 `releases/` 生成带时间戳的 `.tgz` 和 `.sha256`。压缩包仅包含公开的网页、样式、脚本、图片和页面提供下载的 token 文件，不包含 `.git`、环境变量、仓库源码或 GitHub 凭据。
 
-## 当前 ECS 发布方式
+## 控制台手动发布（备用）
 
 - 区域：杭州；实例 `i-bp16xd8dppgclvu7y6q7`；公网 IP `47.114.38.135`。
 - 控制台：实例 → 全部操作 → 上传/下载文件，将发布包和 `scripts/deploy-site.py` 上传到 `/root/`，权限 `0644` 即可。
@@ -89,7 +112,7 @@ python3 /root/deploy-site.py /root/deernova-site-VERSION-TIMESTAMP.tgz SHA256
 
 Nginx 入口是 `/etc/nginx/sites-enabled/deernova`。证书在 `/etc/letsencrypt/live/deernova.me/`，由 `certbot.timer` 自动续期，续期后自动检查并重载 Nginx。不要在发布包中覆盖 Nginx 配置和证书。
 
-## 回滚
+## 控制台手动回滚（备用）
 
 将 `PREVIOUS_PATH` 替换为上次发布输出的 `PREVIOUS`，确认目录存在后执行：
 
@@ -111,12 +134,12 @@ nginx -t && systemctl reload nginx
 6. 首页和规范页备案号为 `京ICP备2026076994号-1`，链接指向工信部备案系统。
 7. 不存在的路径和 `/.git/config` 不返回私有文件；旧版本目录保留以便回滚。
 
-这是发布冒烟清单，不新增单元测试或测试框架。
+这是发布冒烟清单；部署脚本的失败恢复和回滚另由 `tests/deployment.test.mjs`、`tests/deploy/test_site.py` 在临时目录中验证，不访问生产服务器。
 
 ## 怎样连接服务器开发
 
-日常改静态网页用本机开发服务即可。需要查服务日志或操作后台时，目前可用阿里云云助手发送命令；它不依赖公网 SSH。
+日常改静态网页用本机开发服务即可。按 [SSH 部署说明](ssh-deployment.md) 配好连接后，可直接在终端查询服务器日志；阿里云云助手仍可作为连接故障时的备用入口。
 
-若后续需要长期远程开发，可单独配置 SSH 密钥、非 root 开发用户，并把安全组 22 端口限定为自己的出口 IP，然后用终端 SSH 或 VS Code Remote - SSH 连接。当前部署流程没有配置该通道。业务 API、数据库建议有独立开发环境，再发布到生产服务器。
+若需要长期远程开发，可单独配置非 root 开发用户，通过终端 SSH 或 VS Code Remote - SSH 连接。业务 API、数据库建议有独立开发环境，再发布到生产服务器。
 
-后续需要自动发布时，可以增加 GitHub Actions 的构建与发布流程，并为其设置专用部署凭据；当前流程为手动发布，没有配置自动发布。
+日常发布由 `one run website:deploy` 显式触发；GitHub Actions 目前只做构建、测试和 One dry-run，没有配置自动上线。

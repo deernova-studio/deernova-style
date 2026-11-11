@@ -6,3 +6,6 @@ packages/style/skill/
 .DS_Store
 .venv/
 __pycache__/
+.cache/
+.one/
+.one-run-*/

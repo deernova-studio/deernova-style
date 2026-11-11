@@ -1,0 +1,60 @@
+# Hand-maintained npm tasks. `toolchain = "none"` avoids One's pnpm preparation.
+min_version = '2026.9.7'
+monorepo_root = true
+
+[monorepo]
+config_roots = []
+lockfile = false
+
+[tools]
+node = '24.13.0'
+
+[tasks.'website:install']
+description = 'Install the locked npm dependencies'
+dir = '.'
+run = 'npm ci'
+
+[tasks.'website:dev']
+description = 'Start the website development server'
+dir = '.'
+raw_args = true
+run = 'npm run dev --'
+
+[tasks.'website:build']
+description = 'Build the static website'
+dir = '.'
+run = 'npm run build:site'
+
+[tasks.'website:check']
+description = 'Build and run repository and deployment tests'
+dir = '.'
+run = 'npm run check'
+
+[tasks.'website:pack']
+description = 'Build and package public website files'
+dir = '.'
+run = 'npm run pack:site'
+
+[tasks.'website:doctor']
+description = 'Check SSH access and server prerequisites without deploying'
+dir = '.'
+raw_args = true
+run = 'npm run doctor --'
+
+[tasks.'website:status']
+description = 'Show the current and previous server releases'
+dir = '.'
+raw_args = true
+run = 'npm run status --'
+
+[tasks.'website:deploy']
+description = 'Build, upload over SCP, deploy and verify both domains'
+dir = '.'
+raw_args = true
+run = 'npm run deploy --'
+
+[tasks.'website:rollback']
+description = 'Restore and verify the previous server release'
+dir = '.'
+raw_args = true
+run = 'npm run rollback --'

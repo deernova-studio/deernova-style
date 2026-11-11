@@ -1,0 +1,10 @@
+version = 2
+
+[workspace]
+id = "deernova-style"
+name = "Deernova Style"
+
+[projects.website]
+path = "apps/website"
+# Use explicit mise tasks: One's node toolchain assumes pnpm, this repository uses npm.
+toolchain = "none"

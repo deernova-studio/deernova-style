@@ -11,8 +11,17 @@ jobs:
         with:
           node-version: 24
           cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - run: npm ci
       - run: npm test
+      - name: Verify One task entry without contacting production
+        run: |
+          bash scripts/bootstrap-one.sh
+          export PATH="$PWD/.cache/one/bin:$PATH"
+          one mise trust
+          one run website:deploy --ui stream -- --dry-run
       - run: npm run pack
       - uses: actions/upload-artifact@v4
         with:

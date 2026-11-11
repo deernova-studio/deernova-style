@@ -76,7 +76,23 @@ npm run pack         # 在 releases/ 生成 npm 包，不发布
 
 ## 发布
 
-官网部署到阿里云 ECS 的步骤、回滚方式和日常开发流程见 [网站部署说明](docs/deployment.md)。运行 `npm run pack:site` 生成仅包含公开静态文件的发布包。
+官网支持 **One CLI + SSH/SCP 直接发布到现有阿里云 ECS**。一次配好本机 SSH 别名 `deernova`，后续不需要打开阿里云控制台，也不需要 OSS 或阿里云 AccessKey。完整初始化、SSH 配置和排障见 [SSH 部署说明](docs/ssh-deployment.md)；历史发布记录见 [网站部署说明](docs/deployment.md)。
+
+当前维护用 Mac 已于 2026-11-11 完成配置和真实上线验收，可直接运行 `one run website:deploy`。以下初始化步骤用于其他电脑；更换网络后需确认安全组仍允许本机出口 IP。
+
+```sh
+npm run setup:one                       # 固定版本 One，安装到本仓库 .cache/one/bin
+export PATH="$PWD/.cache/one/bin:$PATH"  # 当前终端使用本仓库的 One
+one mise trust
+one run website:install                # npm ci
+one run website:doctor                 # 检查 SSH 与服务器条件，不发布
+one run website:deploy -- --dry-run     # 只预览流程，不构建或连接服务器
+one run website:deploy                 # 构建、上传、切换版本、验收
+one run website:status                 # 当前与上一版本
+one run website:rollback               # 恢复上一版并验收
+```
+
+One 任务复用 npm scripts；`npm run deploy`、`npm run rollback` 也能独立使用。`npm run pack:site` 仅生成公开静态文件发布包。服务器要求 Python 3.12+；运行本仓库完整测试还需要本机 Python 3.11.8+。
 
 规范、skill 内容或安装器有变化时，发布新版本，使用者通过最新 CLI 安装或运行 `update` 才能拿到：
 

@@ -35,6 +35,10 @@ packages/style/                 npm 包 @deernova/style
   bin/cli.mjs                   install / update / doctor
 scripts/                        tokens、build-site、build-skill、发布工具
   vite-website.mjs               开发时渲染规范、提供共享素材并监听规范和 token 修改
+  deploy-ssh.mjs                 本机 SSH/SCP 发布编排与公网验收
+  deploy-site.py                 ECS 上的校验、版本切换、锁与回滚
+one.manifest.toml                One 工作区与官网登记
+mise.toml                        One 的显式 npm 任务入口，保留现有 npm 工具链
 vite.config.mjs                 Vite 开发入口，直接服务 apps/website，默认端口 4173
 tests/                          skill、构建、开发热更新、安装器和动画测试
 reviews/verification.md         当前验证结果与未覆盖范围

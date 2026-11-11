@@ -31,7 +31,7 @@ AI 做到一半，遇到只有用户能定的事（选哪种方案、范围多�
 - **键盘**：卡片出现时焦点不移过去，用户按 Tab 或点击进入。焦点在卡片里时，数字键选对应的选项，方向键上下移动，回车确认，Esc 等于「跳过」。输入框里有文字时数字键不生效。
 - **直接打字**：卡片等待时，用户也可以不点选项，直接在 [Composer](composer.md) 里写回答发出去，等于「其他」。Composer 的占位文字改成「也可以直接输入你的回答」。
 - **跳过**：AI 按自己判断的默认做法继续，并在回答里写一句「你跳过了 X，我按 Y 处理」。
-- **等待时**：对话末尾的运行状态写「等待你回答」，圆点停止闪烁，同[确认与审批](approval.md)。
+- **等待时**：对话末尾的运行状态写「等待你回答」，加载动效换成 `waiting` 图标，同[确认与审批](approval.md)。
 
 ## 回答之后
 
@@ -95,7 +95,7 @@ AI 做到一半，遇到只有用户能定的事（选哪种方案、范围多�
 ```html
 <div class="dn-stack">
   <div class="dn-approval dn-question" role="group" aria-labelledby="q1">
-    <div class="dn-approval-head"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.4M12 17h.01"/></svg><h3 class="dn-approval-title" id="q1">这个 bug 先快速修，还是重构整个同步模块？</h3><span class="dn-approval-status">1 / 3</span></div>
+    <div class="dn-approval-head"><svg class="dn-icon" aria-hidden="true"><use href="#dn-question"/></svg><h3 class="dn-approval-title" id="q1">这个 bug 先快速修，还是重构整个同步模块？</h3><span class="dn-approval-status">1 / 3</span></div>
     <div class="dn-question-options" role="radiogroup" aria-labelledby="q1">
       <label class="dn-question-option"><span class="dn-choice-box"><input type="radio" name="q1" aria-keyshortcuts="1"></span><span class="dn-question-text"><span class="dn-question-label">快速修复<span class="dn-tag">推荐</span></span><span class="dn-question-help">改动 3 个文件，今天能发版。</span></span><span class="dn-question-key" aria-hidden="true">1</span></label>
       <label class="dn-question-option"><span class="dn-choice-box"><input type="radio" name="q1" aria-keyshortcuts="2"></span><span class="dn-question-text"><span class="dn-question-label">重构同步模块</span><span class="dn-question-help">彻底解决重复保存，大约需要两天。</span></span><span class="dn-question-key" aria-hidden="true">2</span></label>
@@ -114,13 +114,13 @@ AI 做到一半，遇到只有用户能定的事（选哪种方案、范围多�
 ```html
 <div class="dn-stack">
   <div class="dn-approval dn-question" role="group" aria-labelledby="q3">
-    <div class="dn-approval-head"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.4M12 17h.01"/></svg><h3 class="dn-approval-title" id="q3">修完以后要同步给哪些地方？</h3><span class="dn-approval-status">3 / 3</span></div>
+    <div class="dn-approval-head"><svg class="dn-icon" aria-hidden="true"><use href="#dn-question"/></svg><h3 class="dn-approval-title" id="q3">修完以后要同步给哪些地方？</h3><span class="dn-approval-status">3 / 3</span></div>
     <p class="dn-approval-body">可以多选。</p>
     <div class="dn-question-options" role="group" aria-labelledby="q3">
-      <label class="dn-question-option"><span class="dn-choice-box"><input type="checkbox" aria-keyshortcuts="1" checked><svg class="dn-icon is-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg></span><span class="dn-question-text"><span class="dn-question-label">更新日志</span></span><span class="dn-question-key" aria-hidden="true">1</span></label>
-      <label class="dn-question-option"><span class="dn-choice-box"><input type="checkbox" aria-keyshortcuts="2" checked><svg class="dn-icon is-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg></span><span class="dn-question-text"><span class="dn-question-label">本周周报</span></span><span class="dn-question-key" aria-hidden="true">2</span></label>
-      <label class="dn-question-option"><span class="dn-choice-box"><input type="checkbox" aria-keyshortcuts="3"><svg class="dn-icon is-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg></span><span class="dn-question-text"><span class="dn-question-label">团队群通知</span><span class="dn-question-help">发到「客户端」群，会 @ 值班的人。</span></span><span class="dn-question-key" aria-hidden="true">3</span></label>
-      <label class="dn-question-option"><span class="dn-choice-box"><input type="checkbox" aria-keyshortcuts="4"><svg class="dn-icon is-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg></span><span class="dn-question-text"><span class="dn-question-label">其他</span><input class="dn-input dn-question-other" type="text" aria-label="其他回答" placeholder="写下你的想法"></span><span class="dn-question-key" aria-hidden="true">4</span></label>
+      <label class="dn-question-option"><span class="dn-choice-box"><input type="checkbox" aria-keyshortcuts="1" checked><svg class="dn-icon is-check" aria-hidden="true"><use href="#dn-check"/></svg></span><span class="dn-question-text"><span class="dn-question-label">更新日志</span></span><span class="dn-question-key" aria-hidden="true">1</span></label>
+      <label class="dn-question-option"><span class="dn-choice-box"><input type="checkbox" aria-keyshortcuts="2" checked><svg class="dn-icon is-check" aria-hidden="true"><use href="#dn-check"/></svg></span><span class="dn-question-text"><span class="dn-question-label">本周周报</span></span><span class="dn-question-key" aria-hidden="true">2</span></label>
+      <label class="dn-question-option"><span class="dn-choice-box"><input type="checkbox" aria-keyshortcuts="3"><svg class="dn-icon is-check" aria-hidden="true"><use href="#dn-check"/></svg></span><span class="dn-question-text"><span class="dn-question-label">团队群通知</span><span class="dn-question-help">发到「客户端」群，会 @ 值班的人。</span></span><span class="dn-question-key" aria-hidden="true">3</span></label>
+      <label class="dn-question-option"><span class="dn-choice-box"><input type="checkbox" aria-keyshortcuts="4"><svg class="dn-icon is-check" aria-hidden="true"><use href="#dn-check"/></svg></span><span class="dn-question-text"><span class="dn-question-label">其他</span><input class="dn-input dn-question-other" type="text" aria-label="其他回答" placeholder="写下你的想法"></span><span class="dn-question-key" aria-hidden="true">4</span></label>
     </div>
     <div class="dn-approval-actions">
       <button class="dn-button is-plain" type="button">跳过</button>
@@ -129,7 +129,7 @@ AI 做到一半，遇到只有用户能定的事（选哪种方案、范围多�
     </div>
   </div>
   <details class="dn-activity">
-    <summary><span class="dn-approval-done"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>已回答 3 个问题</span><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></summary>
+    <summary><span class="dn-approval-done"><svg class="dn-icon" aria-hidden="true"><use href="#dn-check"/></svg>已回答 3 个问题</span><svg class="dn-icon" aria-hidden="true"><use href="#dn-chevron-right"/></svg></summary>
     <dl class="dn-question-answers">
       <div><dt>这个 bug 先快速修，还是重构整个同步模块？</dt><dd>先快速修，下周再重构</dd></div>
       <div><dt>修复要不要带上离线提示？</dt><dd>要</dd></div>

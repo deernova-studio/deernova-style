@@ -1,0 +1,17 @@
+{
+  "name": "@deernova/loaders",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Deernova loaders: a single-color pen stroke traveling along mathematical curves, settling into the matching icon",
+  "license": "MIT",
+  "files": [
+    "src",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

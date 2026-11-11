@@ -95,20 +95,20 @@
 ```html
 <nav class="dn-sidebar" aria-label="侧边栏">
   <div class="dn-sidebar-section">
-    <a class="dn-sidebar-item" href="#"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="dn-sidebar-label">新建</span><span class="dn-sidebar-count">⌘N</span></a>
-    <a class="dn-sidebar-item" href="#"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg><span class="dn-sidebar-label">搜索</span></a>
-    <a class="dn-sidebar-item" href="#"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="dn-sidebar-label">定时任务</span></a>
+    <a class="dn-sidebar-item" href="#"><svg class="dn-icon" aria-hidden="true"><use href="#dn-plus"/></svg><span class="dn-sidebar-label">新建</span><span class="dn-sidebar-count">⌘N</span></a>
+    <a class="dn-sidebar-item" href="#"><svg class="dn-icon" aria-hidden="true"><use href="#dn-search"/></svg><span class="dn-sidebar-label">搜索</span></a>
+    <a class="dn-sidebar-item" href="#"><svg class="dn-icon" aria-hidden="true"><use href="#dn-history"/></svg><span class="dn-sidebar-label">定时任务</span></a>
   </div>
   <details class="dn-sidebar-group" open>
-    <summary class="dn-sidebar-heading">deernova-style<svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <summary class="dn-sidebar-heading">deernova-style<svg class="dn-icon" aria-hidden="true"><use href="#dn-chevron-down"/></svg></summary>
     <a class="dn-sidebar-item" href="#" aria-current="page"><span class="dn-sidebar-label">Deernova UI 风格指南优化</span></a>
     <a class="dn-sidebar-item" href="#"><span class="dn-sidebar-label">首页麋鹿的散步动画</span></a>
   </details>
   <details class="dn-sidebar-group" open>
-    <summary class="dn-sidebar-heading">dumbo<svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <summary class="dn-sidebar-heading">dumbo<svg class="dn-icon" aria-hidden="true"><use href="#dn-chevron-down"/></svg></summary>
     <a class="dn-sidebar-item" href="#"><span class="dn-sidebar-label">沙箱个人助理实现审查</span></a>
   </details>
-  <div class="dn-sidebar-footer"><span class="dn-avatar" aria-hidden="true">林</span><span class="dn-sidebar-label">林一 · Pro</span><button class="dn-icon-button" type="button" aria-label="设置"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></button></div>
+  <div class="dn-sidebar-footer"><span class="dn-avatar" aria-hidden="true">林</span><span class="dn-sidebar-label">林一 · Pro</span><button class="dn-icon-button" type="button" aria-label="设置"><svg class="dn-icon" aria-hidden="true"><use href="#dn-settings"/></svg></button></div>
 </nav>
 ```
 

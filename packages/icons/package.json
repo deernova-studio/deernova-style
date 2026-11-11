@@ -1,0 +1,27 @@
+{
+  "name": "@deernova/icons",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Deernova icons: 24×24 stroke icons for AI apps, based on Lucide with Deernova's own AI and navigation glyphs",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "LICENSE",
+    "LICENSE-LUCIDE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
+    },
+    "./sprite.svg": "./dist/sprite.svg",
+    "./svg/*": "./dist/svg/*",
+    "./icons.json": "./dist/icons.json"
+  },
+  "scripts": {
+    "prepack": "node ../../scripts/icons.mjs build"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -62,7 +62,7 @@
 .dn-banner-body { margin: 0; color: var(--ink-secondary); font: var(--type-callout); }
 .dn-banner .dn-button { align-self: center; }
 .dn-banner .dn-icon-button { align-self: center; width: var(--button-height-sm); height: var(--button-height-sm); margin-right: calc(var(--space-1) * -1); }
-.dn-banner .dn-spinner { margin: calc((var(--type-body-line) - var(--icon-size-sm)) / 2) 2px 0; }
+.dn-banner > dn-loader { margin-top: calc((var(--type-body-line) - var(--icon-size-md)) / 2); color: var(--ink-secondary); }
 .dn-banner.is-success { border-color: transparent; background: var(--success-soft); }
 .dn-banner.is-success > .dn-icon { color: var(--success); }
 .dn-banner.is-warning { border-color: transparent; background: var(--warning-soft); }
@@ -111,31 +111,31 @@
 ```html
 <div class="dn-stack">
   <div class="dn-banner">
-    <svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+    <svg class="dn-icon" aria-hidden="true"><use href="#dn-info"/></svg>
     <div class="dn-banner-text"><p class="dn-banner-title">新版本已就绪</p><p class="dn-banner-body">重新打开应用后生效，未保存的内容会自动保留。</p></div>
     <button class="dn-button is-sm" type="button">重新打开</button>
-    <button class="dn-icon-button" type="button" aria-label="关闭"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <button class="dn-icon-button" type="button" aria-label="关闭"><svg class="dn-icon" aria-hidden="true"><use href="#dn-close"/></svg></button>
   </div>
   <div class="dn-banner is-warning">
-    <svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>
+    <svg class="dn-icon" aria-hidden="true"><use href="#dn-warning"/></svg>
     <div class="dn-banner-text"><p class="dn-banner-title">本月 AI 次数还剩 10%</p><p class="dn-banner-body">用完后可以继续写笔记，AI 功能会在 11 月 1 日恢复。</p></div>
   </div>
   <div class="dn-banner is-danger" role="alert">
-    <svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg>
+    <svg class="dn-icon" aria-hidden="true"><use href="#dn-error"/></svg>
     <div class="dn-banner-text"><p class="dn-banner-title">同步失败</p><p class="dn-banner-body">网络连接已断开，恢复后会自动重试。</p></div>
     <button class="dn-button is-sm" type="button">立即重试</button>
   </div>
-  <div class="dn-toast is-success" role="status"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg><span class="dn-toast-text">已复制到剪贴板</span></div>
-  <div class="dn-toast" role="status"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span class="dn-toast-text">已删除 3 条笔记</span><button class="dn-toast-action" type="button" aria-keyshortcuts="Meta+Z">撤销</button></div>
-  <div class="dn-toast is-danger" role="alert"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span class="dn-toast-text">移动失败：没有目标文件夹的权限</span><button class="dn-toast-action" type="button">重试</button><button class="dn-icon-button" type="button" aria-label="关闭"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="dn-toast is-success" role="status"><svg class="dn-icon" aria-hidden="true"><use href="#dn-success"/></svg><span class="dn-toast-text">已复制到剪贴板</span></div>
+  <div class="dn-toast" role="status"><svg class="dn-icon" aria-hidden="true"><use href="#dn-trash"/></svg><span class="dn-toast-text">已删除 3 条笔记</span><button class="dn-toast-action" type="button" aria-keyshortcuts="Meta+Z">撤销</button></div>
+  <div class="dn-toast is-danger" role="alert"><svg class="dn-icon" aria-hidden="true"><use href="#dn-error"/></svg><span class="dn-toast-text">移动失败：没有目标文件夹的权限</span><button class="dn-toast-action" type="button">重试</button><button class="dn-icon-button" type="button" aria-label="关闭"><svg class="dn-icon" aria-hidden="true"><use href="#dn-close"/></svg></button></div>
 </div>
 ```
 
-全局状态（网络断开、正在重新连接）用中性横幅，图标换成转圈，放在内容区顶部或 Composer 上方：
+全局状态（网络断开、正在重新连接）用中性横幅，图标换成 `spinner` 动效，放在内容区顶部或 Composer 上方：
 
 ```html
 <div class="dn-banner" role="status">
-  <span class="dn-spinner" aria-hidden="true"></span>
+  <dn-loader name="spinner"></dn-loader>
   <div class="dn-banner-text"><p class="dn-banner-title">正在重新连接…</p><p class="dn-banner-body">网络已断开，修改会在恢复后同步。</p></div>
 </div>
 ```

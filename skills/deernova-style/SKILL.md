@@ -65,6 +65,7 @@ Web 应用和 macOS 内容区（桌面档）的骨架和密度参照 Claude 桌�
 | 你在做 | 先读 |
 | --- | --- |
 | 任何界面 | 上面的核心规则，加上对应的场景说明 `references/scenes/` |
+| 图标、加载动效 | [图标](references/foundations/iconography.md)的名单（Web 用 `@deernova/icons`，原生用 SF Symbols）和[加载状态](references/components/skeleton.md)（`@deernova/loaders`），不手画图标、不自己写转圈 |
 | 提示、报错、撤销、通知 | [反馈与通知](references/foundations/feedback.md)：先用里面的表选对方式，再读对应的组件 |
 | AI 功能：对话、输入框、工具调用、确认、提问 | [AI 交互](references/foundations/ai.md)：一轮回答的顺序、状态和原则，再读里面列出的组件 |
 | 某个组件 | [组件](#组件)里对应的文件：用途、尺寸表、状态、Web 和 SwiftUI 写法 |

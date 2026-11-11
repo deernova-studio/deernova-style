@@ -95,28 +95,28 @@ AI 做出来的「东西」：文档、代码文件、网页、图表、图片�
 ```html
 <div class="dn-stack">
   <div class="dn-artifact" role="button" tabindex="0" aria-current="true">
-    <span class="dn-artifact-icon"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h4"/></svg></span>
+    <span class="dn-artifact-icon"><svg class="dn-icon" aria-hidden="true"><use href="#dn-document"/></svg></span>
     <span class="dn-artifact-text"><span class="dn-artifact-title">第三季度经营分析</span><span class="dn-artifact-meta">文档 · 版本 3 · 刚刚更新</span></span>
-    <span class="dn-artifact-actions"><button class="dn-button is-sm" type="button">打开</button><button class="dn-icon-button" type="button" aria-label="下载"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></button></span>
+    <span class="dn-artifact-actions"><button class="dn-button is-sm" type="button">打开</button><button class="dn-icon-button" type="button" aria-label="下载"><svg class="dn-icon" aria-hidden="true"><use href="#dn-download"/></svg></button></span>
   </div>
   <div class="dn-artifact" role="button" tabindex="0">
-    <span class="dn-artifact-icon"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg></span>
+    <span class="dn-artifact-icon"><svg class="dn-icon" aria-hidden="true"><use href="#dn-code"/></svg></span>
     <span class="dn-artifact-text"><span class="dn-artifact-title">landing.html</span><span class="dn-artifact-meta"><span class="dn-shimmer-text">正在写 · 第 42 行</span></span></span>
     <span class="dn-artifact-actions"><button class="dn-button is-sm" type="button">打开</button></span>
   </div>
   <div class="dn-preview">
     <div class="dn-preview-head">
       <span class="dn-preview-title">landing.html</span>
-      <span class="dn-preview-version"><button class="dn-icon-button" type="button" aria-label="上一个版本"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>版本 2<button class="dn-icon-button" type="button" aria-label="下一个版本"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></span>
+      <span class="dn-preview-version"><button class="dn-icon-button" type="button" aria-label="上一个版本"><svg class="dn-icon" aria-hidden="true"><use href="#dn-chevron-left"/></svg></button>版本 2<button class="dn-icon-button" type="button" aria-label="下一个版本"><svg class="dn-icon" aria-hidden="true"><use href="#dn-chevron-right"/></svg></button></span>
       <div class="dn-preview-head-end">
-        <button class="dn-icon-button" type="button" aria-label="复制"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button>
-        <button class="dn-icon-button" type="button" aria-label="关闭"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg></button>
+        <button class="dn-icon-button" type="button" aria-label="复制"><svg class="dn-icon" aria-hidden="true"><use href="#dn-copy"/></svg></button>
+        <button class="dn-icon-button" type="button" aria-label="关闭"><svg class="dn-icon" aria-hidden="true"><use href="#dn-close"/></svg></button>
       </div>
     </div>
     <div class="dn-addressbar">
-      <button class="dn-icon-button" type="button" aria-label="刷新"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v4h-4"/></svg></button>
+      <button class="dn-icon-button" type="button" aria-label="刷新"><svg class="dn-icon" aria-hidden="true"><use href="#dn-regenerate"/></svg></button>
       <span class="dn-address">http://localhost:5173/landing.html</span>
-      <button class="dn-icon-button" type="button" aria-label="在浏览器中打开"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5H5V6h5"/></svg></button>
+      <button class="dn-icon-button" type="button" aria-label="在浏览器中打开"><svg class="dn-icon" aria-hidden="true"><use href="#dn-external"/></svg></button>
     </div>
   </div>
 </div>
@@ -126,7 +126,7 @@ AI 做出来的「东西」：文档、代码文件、网页、图表、图片�
 
 ```html
 <div class="dn-image-grid">
-  <div class="dn-image"><div class="dn-image-actions"><button class="dn-icon-button" type="button" aria-label="下载"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></button><button class="dn-icon-button" type="button" aria-label="放大查看"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div></div>
+  <div class="dn-image"><div class="dn-image-actions"><button class="dn-icon-button" type="button" aria-label="下载"><svg class="dn-icon" aria-hidden="true"><use href="#dn-download"/></svg></button><button class="dn-icon-button" type="button" aria-label="放大查看"><svg class="dn-icon" aria-hidden="true"><use href="#dn-expand"/></svg></button></div></div>
   <div class="dn-image dn-skeleton-block" aria-busy="true"><span class="dn-image-status">正在生成 · 62%</span></div>
 </div>
 ```

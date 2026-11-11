@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-CN" data-density="desktop">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deernova Loaders</title>
+  <meta name="description" content="Deernova 加载动效：一笔单色的线沿数学曲线移动，停下时落成对应的图标。">
+  <meta name="robots" content="noindex">
+  <script>try { const theme = localStorage.getItem('deernova-theme'); if (theme) document.documentElement.dataset.theme = theme; } catch {}</script>
+  <link rel="icon" type="image/png" href="assets/deernova-studio-icon.png">
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <style>
+{{referenceCss}}
+.loaders-page { box-sizing: border-box; width: min(100%, 960px); margin: 0 auto; padding: calc(var(--masthead) + var(--space-6)) var(--space-4) var(--space-7); color: var(--ink); }
+.loaders-page h1 { margin: 0 0 var(--space-2); font: var(--weight-semibold) 32px/1.2 var(--font-serif); }
+.loaders-page h2 { margin: var(--space-6) 0 var(--space-2); font: var(--type-headline); }
+.loaders-note { max-width: 640px; margin: 0 0 var(--space-4); color: var(--ink-secondary); font: var(--type-body); }
+.loaders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-2); }
+.loaders-card { display: grid; gap: var(--space-3); padding: var(--space-4); border: var(--stroke-line) solid var(--line); border-radius: var(--card-radius); background: var(--surface-raised); }
+.loaders-card-head { display: flex; align-items: baseline; gap: var(--space-2); }
+.loaders-card-head code { font: var(--weight-regular) var(--type-callout-size)/1 var(--font-mono); }
+.loaders-card-head span { color: var(--ink-tertiary); font: var(--type-caption); }
+.loaders-sizes { display: flex; align-items: flex-end; gap: var(--space-4); color: var(--ink-secondary); }
+.loaders-sizes figure { display: grid; justify-items: center; gap: var(--space-1); margin: 0; }
+.loaders-sizes figcaption { color: var(--ink-tertiary); font: var(--weight-regular) 11px/1 var(--font-mono); }
+.loaders-sizes .is-big { color: var(--ink); }
+.loaders-demo { display: grid; gap: var(--space-3); padding: var(--space-5); border: var(--stroke-line) solid var(--line); border-radius: var(--card-radius); background: var(--canvas); }
+.loaders-status { display: flex; align-items: center; gap: var(--space-2); min-height: var(--button-height-md); color: var(--ink-secondary); font: var(--type-body); }
+.loaders-status .dn-loader, .loaders-status .dn-icon { width: var(--icon-size-md); height: var(--icon-size-md); }
+.loaders-status-time { color: var(--ink-tertiary); font-variant-numeric: tabular-nums; }
+.loaders-controls { display: flex; flex-wrap: wrap; gap: var(--gap-stack); }
+.loaders-pair { display: flex; align-items: center; gap: var(--space-5); color: var(--ink); }
+.loaders-pair figure { display: grid; justify-items: center; gap: var(--space-2); margin: 0; }
+.loaders-pair figcaption { color: var(--ink-tertiary); font: var(--type-caption); }
+.loaders-pair svg { width: 64px; height: 64px; }
+.loaders-button { display: inline-flex; align-items: center; gap: var(--space-2); }
+.loaders-button .dn-loader { width: var(--icon-size-sm); height: var(--icon-size-sm); }
+  </style>
+  <script type="module" src="scripts/site.js"></script>
+</head>
+<body>
+<header class="masthead">
+  <a class="wordmark" href="./" aria-label="Deernova 首页">deernova<span>.</span></a>
+  <nav class="masthead-actions" aria-label="快捷导航">
+    <a class="masthead-action" href="icons.html" aria-label="图标" data-tooltip="图标"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/></svg></a>
+    <button class="theme-toggle masthead-action" type="button" data-theme-toggle aria-label="切换外观" data-tooltip="切换外观"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor" stroke="none"/></svg></button>
+  </nav>
+</header>
+<main class="loaders-page" id="main">
+  <h1>Deernova Loaders</h1>
+  <p class="loaders-note">一笔单色的线沿着数学曲线走，尾巴逐渐变细，后面是很淡的完整曲线。网格、描边和图标完全一样（24×24、1.75）。曲线只给 AI 的状态用；普通加载是一段细圆弧。</p>
+
+  <div class="loaders-grid">
+    <section class="loaders-card"><div class="loaders-card-head"><code>thinking</code><span>AI 思考 · 三瓣玫瑰线 · 5.2 秒一圈</span></div><div class="loaders-sizes" data-loader="thinking"></div></section>
+    <section class="loaders-card"><div class="loaders-card-head"><code>working</code><span>AI 运行工具 · 1:2 利萨如曲线 · 3 秒一圈</span></div><div class="loaders-sizes" data-loader="working"></div></section>
+    <section class="loaders-card"><div class="loaders-card-head"><code>spinner</code><span>普通加载 · 圆 · 0.9 秒一圈</span></div><div class="loaders-sizes" data-loader="spinner"></div></section>
+  </div>
+
+  <h2>思考结束，落成图标</h2>
+  <p class="loaders-note">思考时线在走；结束时线在 240ms 内补满整条曲线，停下来就是 <code>thinking</code> 图标，后面的文字换成「已思考 12 秒」。开启「减弱动态效果」时从头到尾只显示这个图标。</p>
+  <div class="loaders-demo">
+    <div class="loaders-status" id="thinking-status" role="status"><span id="thinking-slot"></span><span class="dn-shimmer-text" id="thinking-text">正在思考</span><span class="loaders-status-time" id="thinking-time">0 秒</span></div>
+    <div class="loaders-status" role="status"><span id="working-slot"></span><span>正在运行 命令</span><span class="loaders-status-time">npm test</span></div>
+    <div class="loaders-controls"><button class="dn-button" type="button" id="finish">思考完成</button><button class="dn-button is-plain" type="button" id="restart">重新开始</button><button class="dn-button is-primary loaders-button" type="button" disabled><span id="button-slot"></span>正在保存</button></div>
+  </div>
+
+  <h2>和图标是同一条线</h2>
+  <div class="loaders-pair">
+    <figure><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true">{{thinkingIcon}}</svg><figcaption>thinking 图标</figcaption></figure>
+    <figure><span id="rest-slot"></span><figcaption>thinking 动效停下后</figcaption></figure>
+  </div>
+</main>
+<script type="module">
+{{loaderScript}}
+
+for (const box of document.querySelectorAll('.loaders-sizes')) {
+  for (const size of [14, 16, 20, 32, 64]) {
+    const figure = document.createElement('figure');
+    const loader = createLoader(figure, box.dataset.loader);
+    loader.svg.style.width = loader.svg.style.height = `${size}px`;
+    if (size >= 32) figure.classList.add('is-big');
+    figure.insertAdjacentHTML('beforeend', `<figcaption>${size}</figcaption>`);
+    box.append(figure);
+  }
+}
+
+const slot = id => document.getElementById(id);
+createLoader(slot('working-slot'), 'working');
+createLoader(slot('button-slot'), 'spinner');
+const rest = createLoader(slot('rest-slot'), 'thinking');
+setTimeout(() => rest.stop(), 1600);
+
+let thinking;
+let timer;
+function startThinking() {
+  slot('thinking-slot').replaceChildren();
+  thinking = createLoader(slot('thinking-slot'), 'thinking');
+  const began = Date.now();
+  slot('thinking-text').className = 'dn-shimmer-text';
+  slot('thinking-text').textContent = '正在思考';
+  slot('thinking-time').hidden = false;
+  clearInterval(timer);
+  timer = setInterval(() => { slot('thinking-time').textContent = `${Math.round((Date.now() - began) / 1000)} 秒`; }, 250);
+}
+slot('finish').addEventListener('click', () => {
+  clearInterval(timer);
+  const seconds = slot('thinking-time').textContent;
+  thinking.stop();
+  slot('thinking-text').className = '';
+  slot('thinking-text').textContent = `已思考 ${seconds}`;
+  slot('thinking-time').hidden = true;
+});
+slot('restart').addEventListener('click', startThinking);
+startThinking();
+</script>
+</body>
+</html>

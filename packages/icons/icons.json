@@ -1,0 +1,815 @@
+{
+  "grid": 24,
+  "stroke": 1.75,
+  "groups": [
+    {
+      "id": "navigation",
+      "title": "导航",
+      "icons": [
+        {
+          "name": "sidebar",
+          "label": "侧边栏开关",
+          "source": "redrawn",
+          "lucide": "panel-left",
+          "keywords": [
+            "侧边栏",
+            "面板"
+          ],
+          "sf": "sidebar.left"
+        },
+        {
+          "name": "new-chat",
+          "label": "新对话",
+          "source": "redrawn",
+          "lucide": "square-pen",
+          "keywords": [
+            "新建",
+            "编辑",
+            "对话"
+          ],
+          "sf": "square.and.pencil"
+        },
+        {
+          "name": "search",
+          "label": "搜索",
+          "source": "lucide",
+          "lucide": "search",
+          "keywords": [
+            "查找"
+          ],
+          "sf": "magnifyingglass"
+        },
+        {
+          "name": "home",
+          "label": "首页",
+          "source": "lucide",
+          "lucide": "house",
+          "keywords": [
+            "主页"
+          ],
+          "sf": "house"
+        },
+        {
+          "name": "folder",
+          "label": "文件夹",
+          "source": "lucide",
+          "lucide": "folder",
+          "keywords": [
+            "目录",
+            "项目"
+          ],
+          "sf": "folder"
+        },
+        {
+          "name": "history",
+          "label": "历史",
+          "source": "lucide",
+          "lucide": "history",
+          "keywords": [
+            "最近",
+            "记录"
+          ],
+          "sf": "clock.arrow.circlepath"
+        },
+        {
+          "name": "settings",
+          "label": "设置",
+          "source": "lucide",
+          "lucide": "settings",
+          "keywords": [
+            "偏好",
+            "齿轮"
+          ],
+          "sf": "gearshape"
+        },
+        {
+          "name": "more",
+          "label": "更多",
+          "source": "lucide",
+          "lucide": "ellipsis",
+          "keywords": [
+            "菜单",
+            "省略"
+          ],
+          "sf": "ellipsis"
+        },
+        {
+          "name": "back",
+          "label": "返回",
+          "source": "lucide",
+          "lucide": "arrow-left",
+          "keywords": [
+            "后退"
+          ],
+          "sf": "chevron.backward"
+        },
+        {
+          "name": "close",
+          "label": "关闭",
+          "source": "lucide",
+          "lucide": "x",
+          "keywords": [
+            "取消",
+            "删除标签"
+          ],
+          "sf": "xmark"
+        }
+      ]
+    },
+    {
+      "id": "direction",
+      "title": "方向与展开",
+      "icons": [
+        {
+          "name": "chevron-down",
+          "label": "向下",
+          "source": "redrawn",
+          "lucide": "chevron-down",
+          "keywords": [
+            "展开",
+            "下拉"
+          ],
+          "sf": "chevron.down"
+        },
+        {
+          "name": "chevron-right",
+          "label": "向右",
+          "source": "redrawn",
+          "lucide": "chevron-right",
+          "keywords": [
+            "进入",
+            "折叠"
+          ],
+          "sf": "chevron.right"
+        },
+        {
+          "name": "chevron-up",
+          "label": "向上",
+          "source": "redrawn",
+          "lucide": "chevron-up",
+          "keywords": [
+            "收起"
+          ],
+          "sf": "chevron.up"
+        },
+        {
+          "name": "expand",
+          "label": "展开",
+          "source": "redrawn",
+          "lucide": "maximize-2",
+          "keywords": [
+            "全屏",
+            "放大"
+          ],
+          "sf": "arrow.up.left.and.arrow.down.right"
+        },
+        {
+          "name": "collapse",
+          "label": "收起",
+          "source": "redrawn",
+          "lucide": "minimize-2",
+          "keywords": [
+            "退出全屏",
+            "缩小"
+          ],
+          "sf": "arrow.down.right.and.arrow.up.left"
+        },
+        {
+          "name": "external",
+          "label": "在新窗口打开",
+          "source": "lucide",
+          "lucide": "external-link",
+          "keywords": [
+            "外链",
+            "打开"
+          ],
+          "sf": "arrow.up.right.square"
+        },
+        {
+          "name": "chevron-left",
+          "label": "向左",
+          "source": "redrawn",
+          "lucide": "chevron-left",
+          "keywords": [
+            "上一个",
+            "返回"
+          ],
+          "sf": "chevron.left"
+        },
+        {
+          "name": "arrow-down",
+          "label": "向下箭头",
+          "source": "lucide",
+          "lucide": "arrow-down",
+          "keywords": [
+            "回到底部",
+            "降序"
+          ],
+          "sf": "arrow.down"
+        },
+        {
+          "name": "arrow-right",
+          "label": "向右箭头",
+          "source": "lucide",
+          "lucide": "arrow-right",
+          "keywords": [
+            "追问",
+            "前往"
+          ],
+          "sf": "arrow.right"
+        }
+      ]
+    },
+    {
+      "id": "actions",
+      "title": "通用操作",
+      "icons": [
+        {
+          "name": "plus",
+          "label": "添加",
+          "source": "lucide",
+          "lucide": "plus",
+          "keywords": [
+            "新建",
+            "附件菜单"
+          ],
+          "sf": "plus"
+        },
+        {
+          "name": "copy",
+          "label": "复制",
+          "source": "lucide",
+          "lucide": "copy",
+          "keywords": [
+            "拷贝"
+          ],
+          "sf": "doc.on.doc"
+        },
+        {
+          "name": "check",
+          "label": "完成",
+          "source": "lucide",
+          "lucide": "check",
+          "keywords": [
+            "已复制",
+            "选中"
+          ],
+          "sf": "checkmark"
+        },
+        {
+          "name": "edit",
+          "label": "编辑",
+          "source": "lucide",
+          "lucide": "pencil",
+          "keywords": [
+            "修改",
+            "重命名"
+          ],
+          "sf": "pencil"
+        },
+        {
+          "name": "trash",
+          "label": "删除",
+          "source": "lucide",
+          "lucide": "trash-2",
+          "keywords": [
+            "移除",
+            "回收站"
+          ],
+          "sf": "trash"
+        },
+        {
+          "name": "undo",
+          "label": "撤销",
+          "source": "lucide",
+          "lucide": "undo-2",
+          "keywords": [
+            "恢复"
+          ],
+          "sf": "arrow.uturn.backward"
+        },
+        {
+          "name": "download",
+          "label": "下载",
+          "source": "lucide",
+          "lucide": "download",
+          "keywords": [
+            "导出",
+            "保存"
+          ],
+          "sf": "arrow.down.to.line"
+        },
+        {
+          "name": "upload",
+          "label": "上传",
+          "source": "lucide",
+          "lucide": "upload",
+          "keywords": [
+            "导入"
+          ],
+          "sf": "arrow.up.to.line"
+        },
+        {
+          "name": "share",
+          "label": "分享",
+          "source": "lucide",
+          "lucide": "share",
+          "keywords": [
+            "发送",
+            "导出"
+          ],
+          "sf": "square.and.arrow.up"
+        },
+        {
+          "name": "link",
+          "label": "链接",
+          "source": "lucide",
+          "lucide": "link",
+          "keywords": [
+            "网址",
+            "引用"
+          ],
+          "sf": "link"
+        },
+        {
+          "name": "pin",
+          "label": "固定",
+          "source": "lucide",
+          "lucide": "pin",
+          "keywords": [
+            "置顶"
+          ],
+          "sf": "pin"
+        },
+        {
+          "name": "filter",
+          "label": "筛选",
+          "source": "lucide",
+          "lucide": "list-filter",
+          "keywords": [
+            "过滤"
+          ],
+          "sf": "line.3.horizontal.decrease"
+        },
+        {
+          "name": "minus",
+          "label": "减去",
+          "source": "lucide",
+          "lucide": "minus",
+          "keywords": [
+            "部分选中",
+            "移除"
+          ],
+          "sf": "minus"
+        },
+        {
+          "name": "options",
+          "label": "选项",
+          "source": "lucide",
+          "lucide": "sliders-horizontal",
+          "keywords": [
+            "工具",
+            "调节",
+            "筛选"
+          ],
+          "sf": "slider.horizontal.3"
+        },
+        {
+          "name": "star",
+          "label": "收藏",
+          "source": "lucide",
+          "lucide": "star",
+          "keywords": [
+            "星标",
+            "喜欢"
+          ],
+          "sf": "star"
+        }
+      ]
+    },
+    {
+      "id": "content",
+      "title": "内容与文件",
+      "icons": [
+        {
+          "name": "file",
+          "label": "文件",
+          "source": "lucide",
+          "lucide": "file",
+          "keywords": [
+            "附件"
+          ],
+          "sf": "doc"
+        },
+        {
+          "name": "document",
+          "label": "文档",
+          "source": "lucide",
+          "lucide": "file-text",
+          "keywords": [
+            "文本",
+            "笔记"
+          ],
+          "sf": "doc.text"
+        },
+        {
+          "name": "image",
+          "label": "图片",
+          "source": "lucide",
+          "lucide": "image",
+          "keywords": [
+            "照片"
+          ],
+          "sf": "photo"
+        },
+        {
+          "name": "code",
+          "label": "代码",
+          "source": "lucide",
+          "lucide": "code",
+          "keywords": [
+            "程序"
+          ],
+          "sf": "chevron.left.forwardslash.chevron.right"
+        },
+        {
+          "name": "table",
+          "label": "表格",
+          "source": "lucide",
+          "lucide": "table",
+          "keywords": [
+            "数据"
+          ],
+          "sf": "tablecells"
+        },
+        {
+          "name": "attach",
+          "label": "附件",
+          "source": "lucide",
+          "lucide": "paperclip",
+          "keywords": [
+            "回形针",
+            "添加文件"
+          ],
+          "sf": "paperclip"
+        },
+        {
+          "name": "web",
+          "label": "网页",
+          "source": "lucide",
+          "lucide": "globe",
+          "keywords": [
+            "网络",
+            "联网搜索"
+          ],
+          "sf": "globe"
+        },
+        {
+          "name": "terminal",
+          "label": "终端",
+          "source": "lucide",
+          "lucide": "square-terminal",
+          "keywords": [
+            "命令",
+            "运行"
+          ],
+          "sf": "apple.terminal"
+        },
+        {
+          "name": "list",
+          "label": "列表",
+          "source": "lucide",
+          "lucide": "list",
+          "keywords": [
+            "计划",
+            "清单"
+          ],
+          "sf": "list.bullet"
+        },
+        {
+          "name": "chat",
+          "label": "对话",
+          "source": "lucide",
+          "lucide": "message-square",
+          "keywords": [
+            "会话",
+            "消息"
+          ],
+          "sf": "bubble.left"
+        },
+        {
+          "name": "mail",
+          "label": "邮件",
+          "source": "lucide",
+          "lucide": "mail",
+          "keywords": [
+            "邮箱"
+          ],
+          "sf": "envelope"
+        },
+        {
+          "name": "changes",
+          "label": "改动",
+          "source": "lucide",
+          "lucide": "diff",
+          "keywords": [
+            "变更",
+            "差异"
+          ],
+          "sf": "plus.forwardslash.minus"
+        }
+      ]
+    },
+    {
+      "id": "ai",
+      "title": "AI",
+      "icons": [
+        {
+          "name": "thinking",
+          "label": "思考",
+          "source": "deernova",
+          "keywords": [
+            "推理",
+            "思考过程",
+            "加载"
+          ],
+          "curve": "thinking",
+          "sf": null
+        },
+        {
+          "name": "tool",
+          "label": "工具调用",
+          "source": "deernova",
+          "keywords": [
+            "执行",
+            "运行工具"
+          ],
+          "sf": "wrench.adjustable"
+        },
+        {
+          "name": "delegate",
+          "label": "委派",
+          "source": "deernova",
+          "keywords": [
+            "子代理",
+            "交给"
+          ],
+          "sf": null
+        },
+        {
+          "name": "model",
+          "label": "模型",
+          "source": "deernova",
+          "keywords": [
+            "切换模型"
+          ],
+          "sf": "cube"
+        },
+        {
+          "name": "context",
+          "label": "上下文",
+          "source": "deernova",
+          "keywords": [
+            "上下文窗口",
+            "用量"
+          ],
+          "sf": null
+        },
+        {
+          "name": "permission",
+          "label": "权限",
+          "source": "deernova",
+          "keywords": [
+            "确认",
+            "安全",
+            "允许"
+          ],
+          "sf": "checkmark.shield"
+        },
+        {
+          "name": "artifact",
+          "label": "产物",
+          "source": "deernova",
+          "keywords": [
+            "生成结果",
+            "预览"
+          ],
+          "sf": "macwindow"
+        },
+        {
+          "name": "mention",
+          "label": "@ 提及",
+          "source": "deernova",
+          "keywords": [
+            "引用",
+            "@"
+          ],
+          "sf": "at"
+        },
+        {
+          "name": "command",
+          "label": "/ 命令",
+          "source": "deernova",
+          "keywords": [
+            "斜杠命令",
+            "快捷指令"
+          ],
+          "sf": null
+        },
+        {
+          "name": "voice",
+          "label": "语音",
+          "source": "deernova",
+          "keywords": [
+            "麦克风",
+            "听写"
+          ],
+          "sf": "mic"
+        },
+        {
+          "name": "send",
+          "label": "发送",
+          "source": "deernova",
+          "keywords": [
+            "提交"
+          ],
+          "sf": "arrow.up"
+        },
+        {
+          "name": "stop",
+          "label": "停止",
+          "source": "deernova",
+          "keywords": [
+            "中断"
+          ],
+          "sf": "stop"
+        },
+        {
+          "name": "regenerate",
+          "label": "重新生成",
+          "source": "deernova",
+          "keywords": [
+            "重试",
+            "刷新"
+          ],
+          "sf": "arrow.clockwise"
+        },
+        {
+          "name": "branch",
+          "label": "分支",
+          "source": "deernova",
+          "keywords": [
+            "版本",
+            "另一条回答"
+          ],
+          "sf": "arrow.triangle.branch"
+        },
+        {
+          "name": "question",
+          "label": "提问",
+          "source": "lucide",
+          "lucide": "circle-help",
+          "keywords": [
+            "问用户",
+            "帮助"
+          ],
+          "sf": "questionmark.circle"
+        }
+      ]
+    },
+    {
+      "id": "status",
+      "title": "反馈与状态",
+      "icons": [
+        {
+          "name": "success",
+          "label": "成功",
+          "source": "lucide",
+          "lucide": "circle-check",
+          "keywords": [
+            "完成",
+            "通过"
+          ],
+          "sf": "checkmark.circle.fill"
+        },
+        {
+          "name": "warning",
+          "label": "警告",
+          "source": "lucide",
+          "lucide": "triangle-alert",
+          "keywords": [
+            "注意"
+          ],
+          "sf": "exclamationmark.triangle.fill"
+        },
+        {
+          "name": "error",
+          "label": "错误",
+          "source": "lucide",
+          "lucide": "circle-x",
+          "keywords": [
+            "失败"
+          ],
+          "sf": "xmark.circle.fill"
+        },
+        {
+          "name": "info",
+          "label": "提示",
+          "source": "lucide",
+          "lucide": "info",
+          "keywords": [
+            "说明"
+          ],
+          "sf": "info.circle.fill"
+        },
+        {
+          "name": "waiting",
+          "label": "等待确认",
+          "source": "lucide",
+          "lucide": "circle-pause",
+          "keywords": [
+            "暂停",
+            "等待你"
+          ],
+          "sf": "pause.circle"
+        },
+        {
+          "name": "skipped",
+          "label": "已跳过",
+          "source": "lucide",
+          "lucide": "circle-slash",
+          "keywords": [
+            "已拒绝",
+            "禁止"
+          ],
+          "sf": "nosign"
+        },
+        {
+          "name": "bell",
+          "label": "通知",
+          "source": "lucide",
+          "lucide": "bell",
+          "keywords": [
+            "提醒",
+            "铃铛"
+          ],
+          "sf": "bell"
+        },
+        {
+          "name": "thumbs-up",
+          "label": "赞",
+          "source": "lucide",
+          "lucide": "thumbs-up",
+          "keywords": [
+            "好评",
+            "反馈"
+          ],
+          "sf": "hand.thumbsup"
+        },
+        {
+          "name": "thumbs-down",
+          "label": "踩",
+          "source": "lucide",
+          "lucide": "thumbs-down",
+          "keywords": [
+            "差评",
+            "反馈"
+          ],
+          "sf": "hand.thumbsdown"
+        },
+        {
+          "name": "user",
+          "label": "用户",
+          "source": "lucide",
+          "lucide": "user",
+          "keywords": [
+            "账号",
+            "头像"
+          ],
+          "sf": "person"
+        },
+        {
+          "name": "pause",
+          "label": "暂停",
+          "source": "lucide",
+          "lucide": "pause",
+          "keywords": [
+            "等待"
+          ],
+          "sf": "pause"
+        },
+        {
+          "name": "cloud",
+          "label": "同步",
+          "source": "lucide",
+          "lucide": "cloud",
+          "keywords": [
+            "云端",
+            "在线"
+          ],
+          "sf": "icloud"
+        }
+      ]
+    }
+  ]
+}

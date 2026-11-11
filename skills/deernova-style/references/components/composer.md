@@ -283,22 +283,22 @@
 ```html
 <div class="dn-composer-stack">
   <div class="dn-composer-notice" role="status">
-    <svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    <svg class="dn-icon" aria-hidden="true"><use href="#dn-history"/></svg>
     <span>本周额度将提前用完 <span class="dn-muted">已使用 52% · 11 月 9 日重置</span></span>
-    <button class="dn-icon-button" type="button" aria-label="关闭提示"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg></button>
+    <button class="dn-icon-button" type="button" aria-label="关闭提示"><svg class="dn-icon" aria-hidden="true"><use href="#dn-close"/></svg></button>
   </div>
   <div class="dn-composer">
-    <div class="dn-composer-attachments" role="list" aria-label="附件"><span class="dn-attachment" role="listitem"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg><span class="dn-attachment-name">周报草稿</span><span class="dn-attachment-ext">.md</span><span class="dn-attachment-meta">12 KB</span><button class="dn-attachment-remove" type="button" aria-label="移除 周报草稿.md"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg></button></span></div>
-    <button class="dn-icon-button" type="button" aria-label="添加" aria-haspopup="menu"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+    <div class="dn-composer-attachments" role="list" aria-label="附件"><span class="dn-attachment" role="listitem"><svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg><span class="dn-attachment-name">周报草稿</span><span class="dn-attachment-ext">.md</span><span class="dn-attachment-meta">12 KB</span><button class="dn-attachment-remove" type="button" aria-label="移除 周报草稿.md"><svg class="dn-icon" aria-hidden="true"><use href="#dn-close"/></svg></button></span></div>
+    <button class="dn-icon-button" type="button" aria-label="添加" aria-haspopup="menu"><svg class="dn-icon" aria-hidden="true"><use href="#dn-plus"/></svg></button>
     <textarea rows="1" aria-label="消息" placeholder="按 ⏎ 发送，按 ⌘⏎ 加入队列稍后发送"></textarea>
-    <button class="dn-icon-button" type="button" aria-label="语音输入"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
-    <button class="dn-send" type="button" aria-label="发送"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+    <button class="dn-icon-button" type="button" aria-label="语音输入"><svg class="dn-icon" aria-hidden="true"><use href="#dn-voice"/></svg></button>
+    <button class="dn-send" type="button" aria-label="发送"><svg class="dn-icon" aria-hidden="true"><use href="#dn-send"/></svg></button>
   </div>
   <div class="dn-composer-footer">
     <p class="dn-composer-disclaimer">AI 可能会出错，请核对重要信息</p>
     <div class="dn-composer-meta">
-      <button class="dn-meta-button" type="button" aria-haspopup="menu"><b>Opus 5.5</b>高<svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
-      <button class="dn-meta-button" type="button" aria-haspopup="menu"><b>询问权限</b><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button class="dn-meta-button" type="button" aria-haspopup="menu"><b>Opus 5.5</b>高<svg class="dn-icon" aria-hidden="true"><use href="#dn-chevron-down"/></svg></button>
+      <button class="dn-meta-button" type="button" aria-haspopup="menu"><b>询问权限</b><svg class="dn-icon" aria-hidden="true"><use href="#dn-chevron-down"/></svg></button>
       <span class="dn-context-ring" role="img" aria-label="上下文已用 30%"></span>
     </div>
   </div>
@@ -311,19 +311,19 @@
 <div class="dn-composer-stack">
   <div class="dn-composer is-stacked">
     <div class="dn-composer-attachments" role="list" aria-label="附件">
-      <span class="dn-attachment-thumb" role="listitem"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M20 16l-5-5-8 8"/></svg><button class="dn-attachment-remove" type="button" aria-label="移除 截图.png"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg></button></span>
-      <span class="dn-attachment" role="listitem"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg><span class="dn-attachment-name">第三季度经营分析报告终稿</span><span class="dn-attachment-ext">.pdf</span><span class="dn-attachment-meta">2.4 MB</span><button class="dn-attachment-remove" type="button" aria-label="移除 第三季度经营分析报告终稿.pdf"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg></button></span>
-      <span class="dn-attachment" role="listitem"><span class="dn-context-ring" aria-hidden="true"></span><span class="dn-attachment-name">会议录音</span><span class="dn-attachment-ext">.m4a</span><span class="dn-attachment-meta" aria-live="polite">上传中 30%</span><button class="dn-attachment-remove" type="button" aria-label="取消上传 会议录音.m4a"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg></button></span>
-      <span class="dn-attachment is-error" role="listitem"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span class="dn-attachment-name">数据</span><span class="dn-attachment-ext">.xlsx</span><span class="dn-attachment-meta">上传失败</span><button class="dn-attachment-remove" type="button" aria-label="重试上传 数据.xlsx"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.7M4 4v4h4"/></svg></button></span>
+      <span class="dn-attachment-thumb" role="listitem"><svg class="dn-icon" aria-hidden="true"><use href="#dn-image"/></svg><button class="dn-attachment-remove" type="button" aria-label="移除 截图.png"><svg class="dn-icon" aria-hidden="true"><use href="#dn-close"/></svg></button></span>
+      <span class="dn-attachment" role="listitem"><svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg><span class="dn-attachment-name">第三季度经营分析报告终稿</span><span class="dn-attachment-ext">.pdf</span><span class="dn-attachment-meta">2.4 MB</span><button class="dn-attachment-remove" type="button" aria-label="移除 第三季度经营分析报告终稿.pdf"><svg class="dn-icon" aria-hidden="true"><use href="#dn-close"/></svg></button></span>
+      <span class="dn-attachment" role="listitem"><span class="dn-context-ring" aria-hidden="true"></span><span class="dn-attachment-name">会议录音</span><span class="dn-attachment-ext">.m4a</span><span class="dn-attachment-meta" aria-live="polite">上传中 30%</span><button class="dn-attachment-remove" type="button" aria-label="取消上传 会议录音.m4a"><svg class="dn-icon" aria-hidden="true"><use href="#dn-close"/></svg></button></span>
+      <span class="dn-attachment is-error" role="listitem"><svg class="dn-icon" aria-hidden="true"><use href="#dn-error"/></svg><span class="dn-attachment-name">数据</span><span class="dn-attachment-ext">.xlsx</span><span class="dn-attachment-meta">上传失败</span><button class="dn-attachment-remove" type="button" aria-label="重试上传 数据.xlsx"><svg class="dn-icon" aria-hidden="true"><use href="#dn-regenerate"/></svg></button></span>
     </div>
     <textarea rows="2" aria-label="消息" placeholder="描述你要做的事，可以拖入文件"></textarea>
     <div class="dn-composer-toolbar">
-      <button class="dn-icon-button" type="button" aria-label="添加" aria-haspopup="menu"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
-      <button class="dn-icon-button" type="button" aria-label="工具" aria-haspopup="menu"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
-      <button class="dn-tool-chip" type="button" aria-pressed="true"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>联网搜索</button>
+      <button class="dn-icon-button" type="button" aria-label="添加" aria-haspopup="menu"><svg class="dn-icon" aria-hidden="true"><use href="#dn-plus"/></svg></button>
+      <button class="dn-icon-button" type="button" aria-label="工具" aria-haspopup="menu"><svg class="dn-icon" aria-hidden="true"><use href="#dn-options"/></svg></button>
+      <button class="dn-tool-chip" type="button" aria-pressed="true"><svg class="dn-icon" aria-hidden="true"><use href="#dn-web"/></svg>联网搜索</button>
       <div class="dn-composer-end">
-        <button class="dn-icon-button" type="button" aria-label="语音输入"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
-        <button class="dn-send" type="button" aria-label="发送"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+        <button class="dn-icon-button" type="button" aria-label="语音输入"><svg class="dn-icon" aria-hidden="true"><use href="#dn-voice"/></svg></button>
+        <button class="dn-send" type="button" aria-label="发送"><svg class="dn-icon" aria-hidden="true"><use href="#dn-send"/></svg></button>
       </div>
     </div>
   </div>
@@ -335,24 +335,24 @@
 ```html
 <div class="dn-composer-stack">
   <div class="dn-composer">
-    <button class="dn-icon-button" type="button" aria-label="添加" aria-haspopup="menu"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button class="dn-icon-button" type="button" aria-label="添加" aria-haspopup="menu"><svg class="dn-icon" aria-hidden="true"><use href="#dn-plus"/></svg></button>
     <textarea rows="1" aria-label="消息" placeholder="发消息"></textarea>
-    <button class="dn-icon-button" type="button" aria-label="工具" aria-haspopup="menu"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
-    <button class="dn-send" type="button" aria-label="发送" disabled><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+    <button class="dn-icon-button" type="button" aria-label="工具" aria-haspopup="menu"><svg class="dn-icon" aria-hidden="true"><use href="#dn-options"/></svg></button>
+    <button class="dn-send" type="button" aria-label="发送" disabled><svg class="dn-icon" aria-hidden="true"><use href="#dn-send"/></svg></button>
   </div>
   <div class="dn-composer-meta">
-    <button class="dn-meta-button" type="button" aria-haspopup="menu"><b>Opus 5.5</b><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+    <button class="dn-meta-button" type="button" aria-haspopup="menu"><b>Opus 5.5</b><svg class="dn-icon" aria-hidden="true"><use href="#dn-chevron-down"/></svg></button>
     <span class="dn-context-ring" role="img" aria-label="上下文已用 30%"></span>
   </div>
   <div class="dn-row">
-    <button class="dn-send" type="button" aria-label="发送" disabled><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
-    <button class="dn-send" type="button" aria-label="发送"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
-    <button class="dn-send is-stop" type="button" aria-label="停止生成"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/></svg></button>
+    <button class="dn-send" type="button" aria-label="发送" disabled><svg class="dn-icon" aria-hidden="true"><use href="#dn-send"/></svg></button>
+    <button class="dn-send" type="button" aria-label="发送"><svg class="dn-icon" aria-hidden="true"><use href="#dn-send"/></svg></button>
+    <button class="dn-send is-stop" type="button" aria-label="停止生成"><svg class="dn-icon" aria-hidden="true"><use href="#dn-stop"/></svg></button>
   </div>
   <div class="dn-composer">
     <div class="dn-recording" role="status"><span class="dn-recording-dot" aria-hidden="true"></span>录音中 0:12</div>
-    <button class="dn-icon-button" type="button" aria-label="取消录音"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg></button>
-    <button class="dn-send" type="button" aria-label="完成录音"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg></button>
+    <button class="dn-icon-button" type="button" aria-label="取消录音"><svg class="dn-icon" aria-hidden="true"><use href="#dn-close"/></svg></button>
+    <button class="dn-send" type="button" aria-label="完成录音"><svg class="dn-icon" aria-hidden="true"><use href="#dn-check"/></svg></button>
   </div>
 </div>
 ```

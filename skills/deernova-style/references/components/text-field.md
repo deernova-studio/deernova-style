@@ -164,7 +164,7 @@ textarea.dn-input {
 ```html
 <div class="dn-stack">
   <div class="dn-input-group">
-    <svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+    <svg class="dn-icon" aria-hidden="true"><use href="#dn-search"/></svg>
     <input type="search" aria-label="搜索全部笔记" placeholder="搜索全部笔记">
     <span class="dn-input-kbd" aria-hidden="true">⌘K</span>
   </div>
@@ -173,7 +173,7 @@ textarea.dn-input {
     <div class="dn-input-group">
       <span class="dn-input-affix">https://</span>
       <input id="site" value="deernova.app/notes">
-      <button class="dn-input-action is-clear" type="button" aria-label="清除"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg></button>
+      <button class="dn-input-action is-clear" type="button" aria-label="清除"><svg class="dn-icon" aria-hidden="true"><use href="#dn-close"/></svg></button>
     </div>
   </div>
   <div class="dn-field">

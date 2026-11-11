@@ -82,14 +82,14 @@ AI 主动给出的下一步：新对话首页的**起始建议**，以及回答�
   <div class="dn-composer is-stacked">
     <textarea rows="2" aria-label="消息" placeholder="描述你要做的事，可以拖入文件"></textarea>
     <div class="dn-composer-toolbar">
-      <button class="dn-icon-button" type="button" aria-label="添加" aria-haspopup="menu"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
-      <div class="dn-composer-end"><button class="dn-send" type="button" aria-label="发送" disabled><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></div>
+      <button class="dn-icon-button" type="button" aria-label="添加" aria-haspopup="menu"><svg class="dn-icon" aria-hidden="true"><use href="#dn-plus"/></svg></button>
+      <div class="dn-composer-end"><button class="dn-send" type="button" aria-label="发送" disabled><svg class="dn-icon" aria-hidden="true"><use href="#dn-send"/></svg></button></div>
     </div>
   </div>
   <div class="dn-suggestions" role="group" aria-label="建议">
-    <button class="dn-suggestion" type="button"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h4"/></svg><span>总结一份文件</span></button>
-    <button class="dn-suggestion" type="button"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg><span>起草一封邮件</span></button>
-    <button class="dn-suggestion" type="button"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg><span>解释这段代码</span></button>
+    <button class="dn-suggestion" type="button"><svg class="dn-icon" aria-hidden="true"><use href="#dn-document"/></svg><span>总结一份文件</span></button>
+    <button class="dn-suggestion" type="button"><svg class="dn-icon" aria-hidden="true"><use href="#dn-mail"/></svg><span>起草一封邮件</span></button>
+    <button class="dn-suggestion" type="button"><svg class="dn-icon" aria-hidden="true"><use href="#dn-code"/></svg><span>解释这段代码</span></button>
   </div>
 </div>
 ```
@@ -100,8 +100,8 @@ AI 主动给出的下一步：新对话首页的**起始建议**，以及回答�
 <div class="dn-message-assistant">
   <p>年付转化率从 3.1% 升到 4.4%，主要来自首月优惠的调整。</p>
   <ul class="dn-followups" aria-label="追问建议">
-    <li><button class="dn-followup" type="button"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>和上个季度对比一下</button></li>
-    <li><button class="dn-followup" type="button"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>做成一张表格</button></li>
+    <li><button class="dn-followup" type="button"><svg class="dn-icon" aria-hidden="true"><use href="#dn-arrow-right"/></svg>和上个季度对比一下</button></li>
+    <li><button class="dn-followup" type="button"><svg class="dn-icon" aria-hidden="true"><use href="#dn-arrow-right"/></svg>做成一张表格</button></li>
   </ul>
 </div>
 ```

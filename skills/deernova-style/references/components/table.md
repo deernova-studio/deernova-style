@@ -87,30 +87,30 @@ th[aria-sort] .dn-sort { color: var(--ink); }
   <div class="dn-table-wrap">
     <table class="dn-table">
       <thead><tr>
-        <th class="is-check" scope="col"><span class="dn-choice-box"><input type="checkbox" aria-label="全选"><svg class="dn-icon is-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><svg class="dn-icon is-mixed" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></span></th>
+        <th class="is-check" scope="col"><span class="dn-choice-box"><input type="checkbox" aria-label="全选"><svg class="dn-icon is-check" aria-hidden="true"><use href="#dn-check"/></svg><svg class="dn-icon is-mixed" aria-hidden="true"><use href="#dn-minus"/></svg></span></th>
         <th scope="col">名称</th>
-        <th scope="col" aria-sort="descending"><button class="dn-sort" type="button">更新时间<svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button></th>
+        <th scope="col" aria-sort="descending"><button class="dn-sort" type="button">更新时间<svg class="dn-icon" aria-hidden="true"><use href="#dn-arrow-down"/></svg></button></th>
         <th class="is-number" scope="col">大小（KB）</th>
         <th class="is-actions" scope="col"><span class="sr-only">操作</span></th>
       </tr></thead>
       <tbody>
         <tr aria-selected="true">
-          <td class="is-check"><span class="dn-choice-box"><input type="checkbox" checked aria-label="选择 周报草稿.md"><svg class="dn-icon is-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><svg class="dn-icon is-mixed" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></span></td>
-          <td class="is-primary"><span class="dn-table-cell"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg><span>周报草稿.md</span></span></td>
+          <td class="is-check"><span class="dn-choice-box"><input type="checkbox" checked aria-label="选择 周报草稿.md"><svg class="dn-icon is-check" aria-hidden="true"><use href="#dn-check"/></svg><svg class="dn-icon is-mixed" aria-hidden="true"><use href="#dn-minus"/></svg></span></td>
+          <td class="is-primary"><span class="dn-table-cell"><svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg><span>周报草稿.md</span></span></td>
           <td>今天 14:20</td><td class="is-number">12</td>
-          <td class="is-actions"><button class="dn-icon-button" type="button" aria-label="更多操作"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18" cy="12" r="1"/></svg></button></td>
+          <td class="is-actions"><button class="dn-icon-button" type="button" aria-label="更多操作"><svg class="dn-icon" aria-hidden="true"><use href="#dn-more"/></svg></button></td>
         </tr>
         <tr>
-          <td class="is-check"><span class="dn-choice-box"><input type="checkbox" aria-label="选择 第三季度经营分析.pdf"><svg class="dn-icon is-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><svg class="dn-icon is-mixed" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></span></td>
-          <td class="is-primary"><span class="dn-table-cell"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg><span>第三季度经营分析.pdf</span></span></td>
+          <td class="is-check"><span class="dn-choice-box"><input type="checkbox" aria-label="选择 第三季度经营分析.pdf"><svg class="dn-icon is-check" aria-hidden="true"><use href="#dn-check"/></svg><svg class="dn-icon is-mixed" aria-hidden="true"><use href="#dn-minus"/></svg></span></td>
+          <td class="is-primary"><span class="dn-table-cell"><svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg><span>第三季度经营分析.pdf</span></span></td>
           <td>昨天 09:05</td><td class="is-number">2,410</td>
-          <td class="is-actions"><button class="dn-icon-button" type="button" aria-label="更多操作"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18" cy="12" r="1"/></svg></button></td>
+          <td class="is-actions"><button class="dn-icon-button" type="button" aria-label="更多操作"><svg class="dn-icon" aria-hidden="true"><use href="#dn-more"/></svg></button></td>
         </tr>
         <tr>
-          <td class="is-check"><span class="dn-choice-box"><input type="checkbox" aria-label="选择 会议录音.m4a"><svg class="dn-icon is-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><svg class="dn-icon is-mixed" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></span></td>
-          <td class="is-primary"><span class="dn-table-cell"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg><span>会议录音.m4a</span></span></td>
+          <td class="is-check"><span class="dn-choice-box"><input type="checkbox" aria-label="选择 会议录音.m4a"><svg class="dn-icon is-check" aria-hidden="true"><use href="#dn-check"/></svg><svg class="dn-icon is-mixed" aria-hidden="true"><use href="#dn-minus"/></svg></span></td>
+          <td class="is-primary"><span class="dn-table-cell"><svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg><span>会议录音.m4a</span></span></td>
           <td>11 月 3 日</td><td class="is-number">18,920</td>
-          <td class="is-actions"><button class="dn-icon-button" type="button" aria-label="更多操作"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18" cy="12" r="1"/></svg></button></td>
+          <td class="is-actions"><button class="dn-icon-button" type="button" aria-label="更多操作"><svg class="dn-icon" aria-hidden="true"><use href="#dn-more"/></svg></button></td>
         </tr>
       </tbody>
     </table>

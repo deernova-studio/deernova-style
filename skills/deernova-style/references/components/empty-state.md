@@ -51,7 +51,7 @@
 
 ```html
 <div class="dn-empty">
-  <svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg>
+  <svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg>
   <h3 class="dn-empty-title">还没有笔记</h3>
   <p class="dn-empty-body">写下第一条想法，它会同步到你所有的设备。</p>
   <div class="dn-empty-actions">
@@ -65,7 +65,7 @@
 
 ```html
 <div class="dn-empty" role="alert">
-  <svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v10H4z"/><path d="M8 20h8M12 16v4M9.5 9.5l5 3M14.5 9.5l-5 3"/></svg>
+  <svg class="dn-icon" aria-hidden="true"><use href="#dn-error"/></svg>
   <h3 class="dn-empty-title">页面没有加载出来</h3>
   <p class="dn-empty-body">这不是你的问题，我们已经收到报告。</p>
   <div class="dn-empty-actions">

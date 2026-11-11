@@ -40,7 +40,7 @@
 
 ```html
 <div class="dn-code">
-  <div class="dn-code-header">swift<button class="dn-button is-plain is-sm" type="button"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>复制</button></div>
+  <div class="dn-code-header">swift<button class="dn-button is-plain is-sm" type="button"><svg class="dn-icon" aria-hidden="true"><use href="#dn-copy"/></svg>复制</button></div>
   <pre><code><span class="tk-comment">// 统计本周完成的笔记数</span>
 <span class="tk-keyword">let</span> done = notes.filter { $0.completedAt &gt;= start }
 <span class="tk-keyword">print</span>(<span class="tk-string">"本周完成 \(done.count) 条"</span>)</code></pre>

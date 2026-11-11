@@ -16,8 +16,13 @@
   </style>
   <script type="module" src="scripts/site.js"></script>
   <script type="module" src="scripts/guide.js"></script>
+  <script type="module">
+{{loaderScript}}
+defineLoaderElement();
+  </script>
 </head>
 <body class="guide-page">
+{{iconSprite}}
 <a class="skip" href="#main">跳到正文</a>
 <header class="masthead guide-masthead">
   <a class="wordmark" href="./" aria-label="Deernova 首页">deernova<span>.</span></a>

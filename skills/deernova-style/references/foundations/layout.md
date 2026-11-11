@@ -128,7 +128,7 @@
 
 ```html
 <div class="dn-item">
-  <svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .5-8 6 6 0 0 0-11.5 1.5A3.5 3.5 0 0 0 7 18z"/></svg>
+  <svg class="dn-icon" aria-hidden="true"><use href="#dn-cloud"/></svg>
   <div class="dn-item-text">
     <p class="dn-item-title">iCloud 同步</p>
     <p class="dn-item-detail">在登录同一账户的设备之间保持一致。</p>
@@ -141,7 +141,7 @@
 
 ```html
 <div class="dn-item is-top">
-  <svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>
+  <svg class="dn-icon" aria-hidden="true"><use href="#dn-check"/></svg>
   <div class="dn-item-text">
     <p class="dn-item-title">会议纪要已整理</p>
     <p class="dn-item-detail">按议题分成了三段，待办事项单独列在最后，负责人和截止日期都已经补上。原始录音的转写保留在附件里，需要核对时可以打开对照。</p>
@@ -155,7 +155,7 @@
 ```html
 <div class="dn-centered">
   <div class="dn-empty">
-    <svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/></svg>
+    <svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg>
     <p class="dn-empty-title">还没有笔记</p>
     <p class="dn-empty-body">点右上角的加号新建一条。</p>
   </div>

@@ -2,7 +2,11 @@ import { cp, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ROOT, isMain, read, write } from './lib/files.mjs';
 import { SKILL_DIR } from './lib/design.mjs';
-import { renderGuide } from './lib/guide.mjs';
+import { referenceCss, renderGuide } from './lib/guide.mjs';
+import { renderIconCatalog } from './lib/icon-catalog.mjs';
+import { readIcons, spriteSvg } from './icons.mjs';
+
+const thinkingIcon = async root => (await readIcons(root)).icons.find(icon => icon.name === 'thinking').body.join('');
 import { staleTokenOutputs } from './tokens.mjs';
 
 const SITE = 'apps/website';
@@ -13,7 +17,10 @@ export const SHARED_ASSETS = ['tokens.css', 'tokens.json', 'tailwind.css', 'Deer
 export async function renderSiteHtml(html, { root = ROOT } = {}) {
   if (!/\{\{\w+\}\}/.test(html)) return html;
   const { version } = JSON.parse(await read(join(root, 'package.json')));
-  const values = html.includes('{{docs}}') ? await renderGuide(root) : {};
+  const loaderScript = () => read(join(root, 'packages/loaders/src/index.mjs'));
+  const values = html.includes('{{docs}}') ? { ...await renderGuide(root), iconSprite: spriteSvg((await readIcons(root)).icons), loaderScript: await loaderScript() }
+    : html.includes('{{iconCatalog}}') ? { iconCatalog: await renderIconCatalog(root), referenceCss: await referenceCss(root) }
+    : html.includes('{{loaderScript}}') ? { loaderScript: await loaderScript(), thinkingIcon: await thinkingIcon(root), referenceCss: await referenceCss(root) } : {};
   for (const [key, value] of Object.entries(values)) html = html.replaceAll(`{{${key}}}`, () => value);
   // The guide's own content can mention the version, so it is filled in last.
   return html.replaceAll('{{version}}', version);
@@ -27,11 +34,11 @@ export async function buildSite({ root = ROOT, out = join(root, 'dist') } = {}) 
   for (const directory of ['styles', 'scripts', 'assets']) await cp(join(root, SITE, directory), join(out, directory), { recursive: true });
   for (const file of SHARED_ASSETS) await cp(join(root, SKILL_DIR, 'assets', file), join(out, 'assets', file));
   await cp(join(root, SKILL_DIR, 'assets/screens'), join(out, 'assets/screens'), { recursive: true });
-  for (const page of ['index', 'guide']) {
+  for (const page of ['index', 'guide', 'icons', 'loaders']) {
     const template = await read(join(root, SITE, `${page}.html`));
     await write(join(out, `${page}.html`), await renderSiteHtml(template, { root }));
   }
-  return { version, pages: ['index.html', 'guide.html'] };
+  return { version, pages: ['index.html', 'guide.html', 'icons.html', 'loaders.html'] };
 }
 
 if (isMain(import.meta.url)) {

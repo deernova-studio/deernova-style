@@ -103,12 +103,12 @@
 
 ```html
 <div class="dn-row">
-  <button class="dn-icon-button" type="button" aria-label="新建笔记" aria-keyshortcuts="Meta+N"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+  <button class="dn-icon-button" type="button" aria-label="新建笔记" aria-keyshortcuts="Meta+N"><svg class="dn-icon" aria-hidden="true"><use href="#dn-plus"/></svg></button>
   <span class="dn-tooltip-anchor">
-    <button class="dn-icon-button" type="button" aria-label="搜索" aria-keyshortcuts="Meta+K"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></button>
+    <button class="dn-icon-button" type="button" aria-label="搜索" aria-keyshortcuts="Meta+K"><svg class="dn-icon" aria-hidden="true"><use href="#dn-search"/></svg></button>
     <span class="dn-tooltip" aria-hidden="true">搜索<span class="dn-tooltip-shortcut">⌘K</span></span>
   </span>
-  <button class="dn-icon-button" type="button" aria-label="设置"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></button>
+  <button class="dn-icon-button" type="button" aria-label="设置"><svg class="dn-icon" aria-hidden="true"><use href="#dn-settings"/></svg></button>
 </div>
 ```
 

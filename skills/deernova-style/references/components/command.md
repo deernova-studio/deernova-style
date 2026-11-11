@@ -63,17 +63,17 @@ dialog.dn-command { margin: 15vh auto auto; }
 ```html
 <div class="dn-command" role="dialog" aria-label="命令面板">
   <div class="dn-command-search">
-    <svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+    <svg class="dn-icon" aria-hidden="true"><use href="#dn-search"/></svg>
     <input role="combobox" aria-expanded="true" aria-controls="cmd-list" aria-activedescendant="cmd-1" aria-label="搜索命令、会话和文件" value="周报" placeholder="搜索命令、会话和文件">
     <span class="dn-kbd">Esc</span>
   </div>
   <div class="dn-command-list" role="listbox" id="cmd-list">
     <div class="dn-suggest-heading">会话</div>
-    <div class="dn-suggest-item" role="option" id="cmd-1" aria-selected="true"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H8l-4 4z"/></svg><span class="dn-suggest-name"><mark>周报</mark>整理成三条要点</span><span class="dn-suggest-detail">昨天</span></div>
+    <div class="dn-suggest-item" role="option" id="cmd-1" aria-selected="true"><svg class="dn-icon" aria-hidden="true"><use href="#dn-chat"/></svg><span class="dn-suggest-name"><mark>周报</mark>整理成三条要点</span><span class="dn-suggest-detail">昨天</span></div>
     <div class="dn-suggest-heading">文件</div>
-    <div class="dn-suggest-item" role="option" aria-selected="false"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg><span class="dn-suggest-name"><mark>周报</mark>草稿.md</span><span class="dn-suggest-detail">docs/weekly</span></div>
+    <div class="dn-suggest-item" role="option" aria-selected="false"><svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg><span class="dn-suggest-name"><mark>周报</mark>草稿.md</span><span class="dn-suggest-detail">docs/weekly</span></div>
     <div class="dn-suggest-heading">命令</div>
-    <div class="dn-suggest-item" role="option" aria-selected="false"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="dn-suggest-name">新建<mark>周报</mark></span><span class="dn-suggest-detail">从模板创建</span><span class="dn-kbd">⌘N</span></div>
+    <div class="dn-suggest-item" role="option" aria-selected="false"><svg class="dn-icon" aria-hidden="true"><use href="#dn-plus"/></svg><span class="dn-suggest-name">新建<mark>周报</mark></span><span class="dn-suggest-detail">从模板创建</span><span class="dn-kbd">⌘N</span></div>
   </div>
 </div>
 ```

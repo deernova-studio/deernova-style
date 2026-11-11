@@ -18,10 +18,10 @@ AI 在对话里想了什么、做了什么。思考和工具调用都是「过�
 | `tool-detail-max-height` | `320px` | 工具详情（预览或 JSON）的最大高度，超出时在块内滚动。 |
 <!-- /tokens -->
 
-- **摘要行**：`type-body` 字号、`ink-secondary`，末尾一个小箭头，点开后箭头转向下；悬停时文字变 `ink`。没有底色、没有边框，和正文段落之间 `space-4`。
-- **执行步骤**：在摘要下方缩进，左边一条 1px `line`。每步高 `button-height-md`，`radius-sm`，悬停 `fill-hover`。状态图标：进行中是 `ink` 色的转圈，成功 `success`，失败 `danger`（失败时摘要写清楚原因）。动作名 `callout` 半粗 `ink`；对象摘要 `caption` 等宽、单行截断；耗时 `caption`、`ink-tertiary`、等宽数字。
+- **摘要行**：`type-body` 字号、`ink-secondary`；前面一个 `icon-size-md` 的图标（思考是 `thinking`，工具调用是 `tool`），末尾一个小箭头，点开后箭头转向下；悬停时文字变 `ink`。没有底色、没有边框，和正文段落之间 `space-4`。
+- **执行步骤**：在摘要下方缩进，左边一条 1px `line`。每步高 `button-height-md`，`radius-sm`，悬停 `fill-hover`。状态图标：进行中是 `spinner` 动效（`ink`），成功 `success`，失败 `danger`（失败时摘要写清楚原因）。动作名 `callout` 半粗 `ink`；对象摘要 `caption` 等宽、单行截断；耗时 `caption`、`ink-tertiary`、等宽数字。
 - **步骤详情**：再点开一步，缩进到和文字对齐，`surface-sunken` 底，`radius-sm`。默认显示可读的**预览**，原始数据放在 **JSON** 视图里，见下面的[工具详情](#工具详情)。
-- **运行中**：三个依次闪烁的圆点（`ink-secondary`）+ 动作名 + 已用时间（`ink-tertiary`），`type-body` 字号。减弱动态效果时圆点不闪。等待用户确认时改成「等待你确认」，圆点停止闪烁，见 [确认与审批](approval.md)。
+- **运行中**：对话末尾一行：加载动效（思考时 `thinking`，运行工具时 `working`，见[加载状态](skeleton.md)）+ 动作名 + 已用时间（`ink-tertiary`），`type-body`、`ink-secondary`。思考结束时动效停下，正好落成摘要行前面的 `thinking` 图标。等待用户确认时改成「等待你确认」，动效换成 `waiting` 图标，见 [确认与审批](approval.md)。
 - **更多状态**：等待确认是 `ink` 色的暂停图标；被拒绝、被跳过是 `ink-tertiary` 的斜线圆，动作名后写「已拒绝」；运行被停止时，还没完成的步骤显示 `ink-tertiary` 的方块和「已停止」。这些状态的步骤也留在原处，不删掉。
 
 ## 步骤行怎么写
@@ -69,7 +69,7 @@ AI 在对话里想了什么、做了什么。思考和工具调用都是「过�
 
 ## 思考
 
-- 思考完成后折叠成一行「已思考 12 秒」，样式和摘要行相同（`type-body`、`ink-secondary`、小箭头）；思考进行中，对话末尾的运行状态写「正在思考」和已用时间。
+- 思考进行中，对话末尾的运行状态是 `thinking` 动效加「正在思考」和已用时间；思考完成后动效停下，折叠成一行「已思考 12 秒」，样式和摘要行相同（`thinking` 图标、`type-body`、`ink-secondary`、小箭头）。
 - 展开后是思考的文字：`callout` 字号、`ink-secondary`，左边一条 1px `line`，缩进和执行步骤一致；只做段落和列表，不显示大标题和表格。
 - 默认折叠，不自动展开；思考很短（不到 1 秒）时不显示这一行。
 - 思考和工具调用交替发生时，按先后顺序各占一行，不合并成一个大块。
@@ -95,8 +95,9 @@ AI 在对话里想了什么、做了什么。思考和工具调用都是「过�
 }
 .dn-activity > summary::-webkit-details-marker { display: none; }
 @media (hover: hover) { .dn-activity > summary:hover { color: var(--ink); } }
-.dn-activity > summary .dn-icon { width: var(--icon-size-sm); height: var(--icon-size-sm); transition: transform var(--duration-base) var(--ease-standard); }
-.dn-activity[open] > summary .dn-icon { transform: rotate(90deg); }
+.dn-activity > summary > .dn-icon:last-child { width: var(--icon-size-sm); height: var(--icon-size-sm); transition: transform var(--duration-base) var(--ease-standard); }
+.dn-activity[open] > summary > .dn-icon:last-child { transform: rotate(90deg); }
+.dn-activity > summary > .dn-icon:first-child:not(:last-child) { width: var(--icon-size-md); height: var(--icon-size-md); margin-right: var(--space-1); }
 .dn-activity > .dn-steps { margin: var(--space-1) 0 0 6px; padding-left: var(--space-3); border-left: var(--stroke-line) solid var(--line); }
 
 .dn-steps { display: flex; flex-direction: column; min-width: 0; }
@@ -171,44 +172,33 @@ details > .dn-step { cursor: pointer; }
 .dn-json .dn-tool-more { display: inline; margin: 0 0 0 var(--space-1); }
 .dn-tool-head .dn-icon-button { flex: none; width: calc(var(--button-height-md) - 8px); height: calc(var(--button-height-md) - 8px); color: var(--ink-tertiary); }
 .dn-tool-head .dn-icon-button .dn-icon { width: var(--icon-size-sm); height: var(--icon-size-sm); }
-.dn-spinner { flex: none; width: var(--icon-size-sm); height: var(--icon-size-sm); border: 2px solid var(--line); border-top-color: var(--ink); border-radius: var(--radius-full); animation: dn-spin 0.9s linear infinite; }
-@keyframes dn-spin { to { transform: rotate(360deg); } }
 
 .dn-running { display: flex; align-items: center; gap: var(--space-2); min-height: var(--button-height-md); color: var(--ink-secondary); font: var(--type-body); }
-.dn-running-dots { display: inline-flex; gap: 3px; }
-.dn-running-dots span { width: 4px; height: 4px; border-radius: var(--radius-full); background: currentColor; animation: dn-blink 1.2s var(--ease-standard) infinite; }
-.dn-running-dots span:nth-child(2) { animation-delay: 0.2s; }
-.dn-running-dots span:nth-child(3) { animation-delay: 0.4s; }
 .dn-running-time { color: var(--ink-tertiary); font-variant-numeric: tabular-nums; }
-@keyframes dn-blink { 0%, 100% { opacity: 0.25; } 40% { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) {
-  .dn-spinner { animation-duration: 2.4s; }
-  .dn-running-dots span { animation: none; opacity: 0.6; }
-}
 ```
 
 ```html
 <div class="dn-stack">
   <details class="dn-activity">
-    <summary>已思考 12 秒<svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></summary>
+    <summary><svg class="dn-icon" aria-hidden="true"><use href="#dn-thinking"/></svg>已思考 12 秒<svg class="dn-icon" aria-hidden="true"><use href="#dn-chevron-right"/></svg></summary>
     <div class="dn-thinking"><p>用户要三条要点。先读周报草稿，确认有哪些进展，再对照上周的周报去掉重复的内容。</p><p>测试结果也要一起看，避免把还没通过的修复写成已完成。</p></div>
   </details>
   <details class="dn-activity" open>
-    <summary>已运行 2 个命令，已读取 1 个文件<svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></summary>
+    <summary><svg class="dn-icon" aria-hidden="true"><use href="#dn-tool"/></svg>已运行 2 个命令，已读取 1 个文件<svg class="dn-icon" aria-hidden="true"><use href="#dn-chevron-right"/></svg></summary>
     <div class="dn-steps">
-      <div class="dn-step is-success"><svg class="dn-icon dn-step-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg><span class="dn-step-name">读取</span><span class="dn-step-summary">周报草稿.md</span><span class="dn-step-meta">0.4 秒</span></div>
+      <div class="dn-step is-success"><svg class="dn-icon dn-step-glyph" aria-hidden="true"><use href="#dn-success"/></svg><span class="dn-step-name">读取</span><span class="dn-step-summary">周报草稿.md</span><span class="dn-step-meta">0.4 秒</span></div>
       <details open>
-        <summary class="dn-step is-success"><svg class="dn-icon dn-step-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg><span class="dn-step-name">运行</span><span class="dn-step-summary">npm test</span><span class="dn-step-meta">12.3 秒</span></summary>
+        <summary class="dn-step is-success"><svg class="dn-icon dn-step-glyph" aria-hidden="true"><use href="#dn-success"/></svg><span class="dn-step-name">运行</span><span class="dn-step-summary">npm test</span><span class="dn-step-meta">12.3 秒</span></summary>
         <div class="dn-step-detail"><span class="dn-step-detail-label">输入</span><div>npm test</div><span class="dn-step-detail-label">输出</span><div>tests 63 · pass 63 · fail 0</div></div>
       </details>
-      <div class="dn-step is-failed"><svg class="dn-icon dn-step-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span class="dn-step-name">运行</span><span class="dn-step-summary">npm run lint：找不到 eslint 配置</span><span class="dn-step-meta">已跳过</span></div>
+      <div class="dn-step is-failed"><svg class="dn-icon dn-step-glyph" aria-hidden="true"><use href="#dn-error"/></svg><span class="dn-step-name">运行</span><span class="dn-step-summary">npm run lint：找不到 eslint 配置</span><span class="dn-step-meta">已跳过</span></div>
     </div>
   </details>
   <div class="dn-steps">
-    <div class="dn-step is-waiting"><svg class="dn-icon dn-step-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6"/></svg><span class="dn-step-name">写入</span><span class="dn-step-summary">docs/weekly.md</span><span class="dn-step-meta">等待你确认</span></div>
-    <div class="dn-step is-skipped"><svg class="dn-icon dn-step-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M6 18L18 6"/></svg><span class="dn-step-name">推送</span><span class="dn-step-summary">git push origin main</span><span class="dn-step-meta">已拒绝</span></div>
+    <div class="dn-step is-waiting"><svg class="dn-icon dn-step-glyph" aria-hidden="true"><use href="#dn-waiting"/></svg><span class="dn-step-name">写入</span><span class="dn-step-summary">docs/weekly.md</span><span class="dn-step-meta">等待你确认</span></div>
+    <div class="dn-step is-skipped"><svg class="dn-icon dn-step-glyph" aria-hidden="true"><use href="#dn-skipped"/></svg><span class="dn-step-name">推送</span><span class="dn-step-summary">git push origin main</span><span class="dn-step-meta">已拒绝</span></div>
   </div>
-  <div class="dn-running" role="status"><span class="dn-running-dots" aria-hidden="true"><span></span><span></span><span></span></span>正在运行 命令<span class="dn-running-time">42 秒</span></div>
+  <div class="dn-running" role="status"><dn-loader name="working"></dn-loader>正在运行 命令<span class="dn-running-time">42 秒</span></div>
 </div>
 ```
 
@@ -219,9 +209,9 @@ details > .dn-step { cursor: pointer; }
 ```html
 <div class="dn-steps">
   <details open>
-    <summary class="dn-step is-success"><svg class="dn-icon dn-step-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg><span class="dn-step-name">委派</span><span class="dn-step-summary">DSH · 第 20 轮成语接龙，接「化」开头的成语</span><span class="dn-step-meta">6 秒</span></summary>
+    <summary class="dn-step is-success"><svg class="dn-icon dn-step-glyph" aria-hidden="true"><use href="#dn-success"/></svg><span class="dn-step-name">委派</span><span class="dn-step-summary">DSH · 第 20 轮成语接龙，接「化」开头的成语</span><span class="dn-step-meta">6 秒</span></summary>
     <div class="dn-tool">
-      <div class="dn-tool-head"><span class="dn-tool-name">herd · delegate_task</span><div class="dn-tool-view" role="group" aria-label="显示方式"><button type="button" aria-pressed="true">预览</button><button type="button" aria-pressed="false">JSON</button></div><button class="dn-icon-button" type="button" aria-label="复制原始数据"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button></div>
+      <div class="dn-tool-head"><span class="dn-tool-name">herd · delegate_task</span><div class="dn-tool-view" role="group" aria-label="显示方式"><button type="button" aria-pressed="true">预览</button><button type="button" aria-pressed="false">JSON</button></div><button class="dn-icon-button" type="button" aria-label="复制原始数据"><svg class="dn-icon" aria-hidden="true"><use href="#dn-copy"/></svg></button></div>
       <dl class="dn-tool-fields">
         <dt>接收方</dt><dd>DSH <span class="dn-step-summary">afa13cc4…442a</span></dd>
         <dt>任务</dt><dd><div class="dn-tool-clamp">完成追加 10 轮成语接龙（第 11–20 轮）的最后一轮。每轮 Codex 和 DSH 各一个，严格尾字接首字，同字不谐音，全局不重复。已用成语依次为：一心一意、意气风发、发扬光大、大器晚成……</div><button class="dn-tool-more" type="button">展开全部 · 312 字</button></dd>
@@ -233,9 +223,9 @@ details > .dn-step { cursor: pointer; }
     </div>
   </details>
   <details open>
-    <summary class="dn-step is-failed"><svg class="dn-icon dn-step-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span class="dn-step-name">运行</span><span class="dn-step-summary">npm run build</span><span class="dn-step-meta">3.1 秒</span></summary>
+    <summary class="dn-step is-failed"><svg class="dn-icon dn-step-glyph" aria-hidden="true"><use href="#dn-error"/></svg><span class="dn-step-name">运行</span><span class="dn-step-summary">npm run build</span><span class="dn-step-meta">3.1 秒</span></summary>
     <div class="dn-tool">
-      <div class="dn-tool-head"><span class="dn-tool-name">bash</span><div class="dn-tool-view" role="group" aria-label="显示方式"><button type="button" aria-pressed="true">预览</button><button type="button" aria-pressed="false">JSON</button></div><button class="dn-icon-button" type="button" aria-label="复制原始数据"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button></div>
+      <div class="dn-tool-head"><span class="dn-tool-name">bash</span><div class="dn-tool-view" role="group" aria-label="显示方式"><button type="button" aria-pressed="true">预览</button><button type="button" aria-pressed="false">JSON</button></div><button class="dn-icon-button" type="button" aria-label="复制原始数据"><svg class="dn-icon" aria-hidden="true"><use href="#dn-copy"/></svg></button></div>
       <dl class="dn-tool-fields">
         <dt>命令</dt><dd class="is-code">npm run build</dd>
       </dl>
@@ -255,9 +245,9 @@ error: Could not resolve "./tokens.css" from "src/main.ts"</dd>
 ```html
 <div class="dn-steps">
   <details open>
-    <summary class="dn-step is-success"><svg class="dn-icon dn-step-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg><span class="dn-step-name">委派</span><span class="dn-step-summary">DSH · 第 20 轮成语接龙，接「化」开头的成语</span><span class="dn-step-meta">6 秒</span></summary>
+    <summary class="dn-step is-success"><svg class="dn-icon dn-step-glyph" aria-hidden="true"><use href="#dn-success"/></svg><span class="dn-step-name">委派</span><span class="dn-step-summary">DSH · 第 20 轮成语接龙，接「化」开头的成语</span><span class="dn-step-meta">6 秒</span></summary>
     <div class="dn-tool">
-      <div class="dn-tool-head"><span class="dn-tool-name">herd · delegate_task</span><div class="dn-tool-view" role="group" aria-label="显示方式"><button type="button" aria-pressed="false">预览</button><button type="button" aria-pressed="true">JSON</button></div><button class="dn-icon-button" type="button" aria-label="复制原始数据"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button></div>
+      <div class="dn-tool-head"><span class="dn-tool-name">herd · delegate_task</span><div class="dn-tool-view" role="group" aria-label="显示方式"><button type="button" aria-pressed="false">预览</button><button type="button" aria-pressed="true">JSON</button></div><button class="dn-icon-button" type="button" aria-label="复制原始数据"><svg class="dn-icon" aria-hidden="true"><use href="#dn-copy"/></svg></button></div>
       <span class="dn-tool-label">输入</span>
 <pre class="dn-json"><span class="dn-json-punct">{</span>
   <span class="dn-json-key">"agentId"</span><span class="dn-json-punct">:</span> "afa13cc4-e519-4cec-9ef3-72c0081a442a"<span class="dn-json-punct">,</span>

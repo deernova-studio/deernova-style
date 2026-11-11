@@ -124,18 +124,18 @@
 ```html
 <div class="dn-stack">
   <div class="dn-row">
-    <button class="dn-icon-button" type="button" aria-label="通知，有未读"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg><span class="dn-dot"></span></button>
-    <button class="dn-icon-button" type="button" aria-label="通知，3 条未读"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg><span class="dn-badge">3</span></button>
-    <button class="dn-icon-button" type="button" aria-label="通知，120 条未读"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg><span class="dn-badge">99+</span></button>
+    <button class="dn-icon-button" type="button" aria-label="通知，有未读"><svg class="dn-icon" aria-hidden="true"><use href="#dn-bell"/></svg><span class="dn-dot"></span></button>
+    <button class="dn-icon-button" type="button" aria-label="通知，3 条未读"><svg class="dn-icon" aria-hidden="true"><use href="#dn-bell"/></svg><span class="dn-badge">3</span></button>
+    <button class="dn-icon-button" type="button" aria-label="通知，120 条未读"><svg class="dn-icon" aria-hidden="true"><use href="#dn-bell"/></svg><span class="dn-badge">99+</span></button>
   </div>
   <div class="dn-popover dn-notifications" role="dialog" aria-labelledby="nt">
     <div class="dn-notifications-head"><h3 class="dn-notifications-title" id="nt">通知</h3><button class="dn-button is-plain is-sm" type="button">全部标为已读</button></div>
     <ul class="dn-notifications-list">
       <li class="dn-notifications-group">今天</li>
-      <li class="dn-notification is-unread"><span class="dn-notification-icon is-waiting"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 7v10M14 7v10"/></svg></span><div class="dn-notification-head"><p class="dn-notification-title">周报草稿</p><span class="dn-notification-time">2 分钟前</span></div><p class="dn-notification-body">写入 3 个文件，等待你确认。</p></li>
-      <li class="dn-notification is-unread"><span class="dn-notification-icon is-danger"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg></span><div class="dn-notification-head"><p class="dn-notification-title">同步失败</p><span class="dn-notification-time">18 分钟前</span></div><p class="dn-notification-body">网络已断开，3 条笔记还没有上传，恢复后会自动重试。</p><button class="dn-button is-sm" type="button">立即重试</button></li>
+      <li class="dn-notification is-unread"><span class="dn-notification-icon is-waiting"><svg class="dn-icon" aria-hidden="true"><use href="#dn-pause"/></svg></span><div class="dn-notification-head"><p class="dn-notification-title">周报草稿</p><span class="dn-notification-time">2 分钟前</span></div><p class="dn-notification-body">写入 3 个文件，等待你确认。</p></li>
+      <li class="dn-notification is-unread"><span class="dn-notification-icon is-danger"><svg class="dn-icon" aria-hidden="true"><use href="#dn-close"/></svg></span><div class="dn-notification-head"><p class="dn-notification-title">同步失败</p><span class="dn-notification-time">18 分钟前</span></div><p class="dn-notification-body">网络已断开，3 条笔记还没有上传，恢复后会自动重试。</p><button class="dn-button is-sm" type="button">立即重试</button></li>
       <li class="dn-notifications-group">更早</li>
-      <li class="dn-notification"><span class="dn-notification-icon is-success"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg></span><div class="dn-notification-head"><p class="dn-notification-title">导出完成</p><span class="dn-notification-time">昨天 14:20</span></div><p class="dn-notification-body">年度总结.pdf，共 128 页。</p></li>
+      <li class="dn-notification"><span class="dn-notification-icon is-success"><svg class="dn-icon" aria-hidden="true"><use href="#dn-check"/></svg></span><div class="dn-notification-head"><p class="dn-notification-title">导出完成</p><span class="dn-notification-time">昨天 14:20</span></div><p class="dn-notification-body">年度总结.pdf，共 128 页。</p></li>
     </ul>
   </div>
 </div>

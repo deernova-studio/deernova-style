@@ -38,7 +38,7 @@
 - **位置**：从光标所在的行向上弹出，左边缘和触发符对齐，间距 `menu-offset`；上方放不下才翻到下方。Composer 通常在窗口底部，向下弹会被挡住。
 - **焦点留在输入框里**：用户可以继续打字筛选。↑↓ 移动高亮（到头后回到另一端），Enter 或 Tab 选中，Esc 只关闭浮层、保留已经输入的「@文字」，不会同时停止正在进行的生成（Esc 的先后顺序见 [Composer](composer.md#键盘和输入法)）；继续删除到触发符之前也会关闭。鼠标悬停只移动高亮，点击选中。
 - **筛选**：边输入边过滤，匹配上的字用 `weight-semibold`；按「最近用过」「当前项目」等分组，组标题见菜单的分组标题；最多显示 8 项，更多时浮层内部滚动。
-- **加载和空结果**：远程搜索时第一项位置显示「正在搜索」和小转圈；没有结果时显示一行「没有匹配的文件」，`ink-tertiary`，浮层不消失，直到用户删除或按 Esc。
+- **加载和空结果**：远程搜索时第一项位置显示「正在搜索」和 `spinner` 动效；没有结果时显示一行「没有匹配的文件」，`ink-tertiary`，浮层不消失，直到用户删除或按 Esc。
 - 高亮项用 `fill-hover`；当前项右侧的说明可以比其他项多显示一些（比如完整路径）。
 
 ## 标签
@@ -114,15 +114,15 @@
 <div class="dn-composer-stack">
   <div class="dn-suggest" role="listbox" id="suggest" aria-label="文件">
     <div class="dn-suggest-heading">最近用过</div>
-    <div class="dn-suggest-item" role="option" aria-selected="true" id="s1"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg><span class="dn-suggest-name"><mark>周</mark>报草稿.md</span><span class="dn-suggest-meta">docs/weekly</span></div>
-    <div class="dn-suggest-item" role="option" aria-selected="false"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg><span class="dn-suggest-name"><mark>周</mark>会记录.md</span><span class="dn-suggest-meta">notes</span></div>
+    <div class="dn-suggest-item" role="option" aria-selected="true" id="s1"><svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg><span class="dn-suggest-name"><mark>周</mark>报草稿.md</span><span class="dn-suggest-meta">docs/weekly</span></div>
+    <div class="dn-suggest-item" role="option" aria-selected="false"><svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg><span class="dn-suggest-name"><mark>周</mark>会记录.md</span><span class="dn-suggest-meta">notes</span></div>
     <div class="dn-suggest-heading">当前项目</div>
-    <div class="dn-suggest-item" role="option" aria-selected="false"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="dn-suggest-name"><mark>周</mark>报模板</span><span class="dn-suggest-meta">templates</span></div>
+    <div class="dn-suggest-item" role="option" aria-selected="false"><svg class="dn-icon" aria-hidden="true"><use href="#dn-folder"/></svg><span class="dn-suggest-name"><mark>周</mark>报模板</span><span class="dn-suggest-meta">templates</span></div>
   </div>
   <div class="dn-composer">
-    <button class="dn-icon-button" type="button" aria-label="添加" aria-haspopup="menu"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
-    <div class="dn-compose-text" role="combobox" aria-expanded="true" aria-controls="suggest" aria-activedescendant="s1" aria-label="消息"><span class="dn-mention is-command">/总结</span> 把 <span class="dn-mention"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg>需求文档.md</span> 和 @周</div>
-    <button class="dn-send" type="button" aria-label="发送"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+    <button class="dn-icon-button" type="button" aria-label="添加" aria-haspopup="menu"><svg class="dn-icon" aria-hidden="true"><use href="#dn-plus"/></svg></button>
+    <div class="dn-compose-text" role="combobox" aria-expanded="true" aria-controls="suggest" aria-activedescendant="s1" aria-label="消息"><span class="dn-mention is-command">/总结</span> 把 <span class="dn-mention"><svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg>需求文档.md</span> 和 @周</div>
+    <button class="dn-send" type="button" aria-label="发送"><svg class="dn-icon" aria-hidden="true"><use href="#dn-send"/></svg></button>
   </div>
 </div>
 ```

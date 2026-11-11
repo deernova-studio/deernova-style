@@ -81,12 +81,12 @@
 <div class="dn-glass-demo">
   <div class="dn-row">
     <nav class="dn-glass dn-glass-group" aria-label="页面">
-      <button class="dn-glass-button" type="button" aria-label="笔记" aria-current="page"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg></button>
-      <button class="dn-glass-button" type="button" aria-label="收藏"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l2.4 5 5.6.6-4.2 3.8 1.2 5.5L12 16l-5 2.9 1.2-5.5L4 9.6l5.6-.6z"/></svg></button>
-      <button class="dn-glass-button" type="button" aria-label="设置"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+      <button class="dn-glass-button" type="button" aria-label="笔记" aria-current="page"><svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg></button>
+      <button class="dn-glass-button" type="button" aria-label="收藏"><svg class="dn-icon" aria-hidden="true"><use href="#dn-star"/></svg></button>
+      <button class="dn-glass-button" type="button" aria-label="设置"><svg class="dn-icon" aria-hidden="true"><use href="#dn-settings"/></svg></button>
     </nav>
-    <button class="dn-glass dn-glass-button" type="button" aria-label="搜索"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></button>
-    <button class="dn-glass dn-glass-button is-prominent" type="button" aria-label="新建"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button class="dn-glass dn-glass-button" type="button" aria-label="搜索"><svg class="dn-icon" aria-hidden="true"><use href="#dn-search"/></svg></button>
+    <button class="dn-glass dn-glass-button is-prominent" type="button" aria-label="新建"><svg class="dn-icon" aria-hidden="true"><use href="#dn-plus"/></svg></button>
   </div>
 </div>
 ```

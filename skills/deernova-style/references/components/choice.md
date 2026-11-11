@@ -107,9 +107,9 @@
 <div class="dn-row is-top">
   <fieldset class="dn-choice-group">
     <legend>通知我</legend>
-    <label class="dn-choice"><span class="dn-choice-box"><input type="checkbox" checked><svg class="dn-icon is-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><svg class="dn-icon is-mixed" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></span><span class="dn-choice-text"><span class="dn-choice-label">任务完成时</span><span class="dn-choice-help">后台运行的任务结束后发一条通知。</span></span></label>
-    <label class="dn-choice"><span class="dn-choice-box"><input type="checkbox"><svg class="dn-icon is-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><svg class="dn-icon is-mixed" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></span><span class="dn-choice-text"><span class="dn-choice-label">需要我确认时</span></span></label>
-    <label class="dn-choice"><span class="dn-choice-box"><input type="checkbox" disabled><svg class="dn-icon is-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><svg class="dn-icon is-mixed" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></span><span class="dn-choice-text"><span class="dn-choice-label">每日摘要</span><span class="dn-choice-help">升级到 Pro 后可用。</span></span></label>
+    <label class="dn-choice"><span class="dn-choice-box"><input type="checkbox" checked><svg class="dn-icon is-check" aria-hidden="true"><use href="#dn-check"/></svg><svg class="dn-icon is-mixed" aria-hidden="true"><use href="#dn-minus"/></svg></span><span class="dn-choice-text"><span class="dn-choice-label">任务完成时</span><span class="dn-choice-help">后台运行的任务结束后发一条通知。</span></span></label>
+    <label class="dn-choice"><span class="dn-choice-box"><input type="checkbox"><svg class="dn-icon is-check" aria-hidden="true"><use href="#dn-check"/></svg><svg class="dn-icon is-mixed" aria-hidden="true"><use href="#dn-minus"/></svg></span><span class="dn-choice-text"><span class="dn-choice-label">需要我确认时</span></span></label>
+    <label class="dn-choice"><span class="dn-choice-box"><input type="checkbox" disabled><svg class="dn-icon is-check" aria-hidden="true"><use href="#dn-check"/></svg><svg class="dn-icon is-mixed" aria-hidden="true"><use href="#dn-minus"/></svg></span><span class="dn-choice-text"><span class="dn-choice-label">每日摘要</span><span class="dn-choice-help">升级到 Pro 后可用。</span></span></label>
   </fieldset>
   <fieldset class="dn-choice-group">
     <legend>回答长度</legend>

@@ -88,12 +88,12 @@ Web 应用的页面骨架：左边是[侧边栏](sidebar.md)，中间是内容�
 <div class="dn-app dn-app-demo">
   <div class="dn-app-main">
     <header class="dn-toolbar">
-      <button class="dn-toolbar-title" type="button"><span>Deernova UI 风格指南优化</span><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button class="dn-toolbar-title" type="button"><span>Deernova UI 风格指南优化</span><svg class="dn-icon" aria-hidden="true"><use href="#dn-chevron-down"/></svg></button>
       <div class="dn-toolbar-actions">
-        <button class="dn-icon-button" type="button" aria-label="任务" aria-pressed="false"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></button>
-        <button class="dn-icon-button" type="button" aria-label="终端" aria-pressed="true"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7l5 5-5 5M12 17h7"/></svg></button>
-        <button class="dn-icon-button" type="button" aria-label="改动" aria-pressed="false"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v6M9 11h6M9 17h6"/></svg></button>
-        <button class="dn-icon-button" type="button" aria-label="更多"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18" cy="12" r="1"/></svg></button>
+        <button class="dn-icon-button" type="button" aria-label="任务" aria-pressed="false"><svg class="dn-icon" aria-hidden="true"><use href="#dn-document"/></svg></button>
+        <button class="dn-icon-button" type="button" aria-label="终端" aria-pressed="true"><svg class="dn-icon" aria-hidden="true"><use href="#dn-terminal"/></svg></button>
+        <button class="dn-icon-button" type="button" aria-label="改动" aria-pressed="false"><svg class="dn-icon" aria-hidden="true"><use href="#dn-changes"/></svg></button>
+        <button class="dn-icon-button" type="button" aria-label="更多"><svg class="dn-icon" aria-hidden="true"><use href="#dn-more"/></svg></button>
       </div>
     </header>
     <div class="dn-app-content"><div class="dn-message-assistant">内容区：对话、卡片和任务清单在这里滚动，顶栏保持不动。</div></div>
@@ -103,8 +103,8 @@ Web 应用的页面骨架：左边是[侧边栏](sidebar.md)，中间是内容�
       <button type="button" role="tab" aria-selected="true">终端</button>
       <button type="button" role="tab" aria-selected="false">预览</button>
       <div class="dn-panel-actions">
-        <button class="dn-icon-button" type="button" aria-label="新建标签"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
-        <button class="dn-icon-button" type="button" aria-label="关闭面板"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        <button class="dn-icon-button" type="button" aria-label="新建标签"><svg class="dn-icon" aria-hidden="true"><use href="#dn-plus"/></svg></button>
+        <button class="dn-icon-button" type="button" aria-label="关闭面板"><svg class="dn-icon" aria-hidden="true"><use href="#dn-close"/></svg></button>
       </div>
     </div>
     <div class="dn-panel-body">$ npm run dev<br>ready in 412 ms</div>

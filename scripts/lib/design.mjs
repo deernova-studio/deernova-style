@@ -6,6 +6,18 @@ import { read } from './files.mjs';
 export const SKILL_DIR = 'skills/deernova-style';
 
 export const readTokens = async root => JSON.parse(await read(join(root, SKILL_DIR, 'assets/tokens.json')));
+// The icon list lives with the icon package; the skill embeds a generated name table from it.
+export const readIconManifest = async root => JSON.parse(await read(join(root, 'packages/icons/icons.json')));
+
+export function renderIconTables(manifest) {
+  const out = [];
+  for (const group of manifest.groups) {
+    out.push(`**${group.title}**`, '', '| 名字 | 用途 | SF Symbols |', '| --- | --- | --- |');
+    for (const icon of group.icons) out.push(`| \`${icon.name}\` | ${icon.label} | ${icon.sf ? `\`${icon.sf}\`` : '自定义 Symbol（待导出）'} |`);
+    out.push('');
+  }
+  return out.join('\n').trimEnd();
+}
 
 // Groups in the order they are documented. Palette and color are handled separately.
 export const GROUPS = [
@@ -353,9 +365,10 @@ export function renderComponentTable(tokens, id) {
 const BLOCK = /<!-- tokens:([\w-]+) -->\n[\s\S]*?<!-- \/tokens -->/g;
 
 // Hand-written Markdown can embed generated tables between <!-- tokens:name --> and <!-- /tokens -->.
-export function applyGeneratedBlocks(markdown, tokens, from) {
+export function applyGeneratedBlocks(markdown, tokens, from, icons) {
   return markdown.replace(BLOCK, (_, name) => {
-    const body = name === 'scenes' ? renderScenesTable(tokens, from)
+    const body = name === 'icons' ? renderIconTables(icons)
+      : name === 'scenes' ? renderScenesTable(tokens, from)
       : name === 'summary' ? renderSummaryTable(tokens)
         : renderComponentTable(tokens, name);
     return `<!-- tokens:${name} -->\n${body}\n<!-- /tokens -->`;
@@ -467,7 +480,7 @@ export async function renderTokenOutputs(root, tokens) {
     const path = `${SKILL_DIR}/${file}`;
     const source = await read(join(root, path));
     if (!source.includes('<!-- tokens:')) continue;
-    outputs[path] = applyGeneratedBlocks(source, tokens, path);
+    outputs[path] = applyGeneratedBlocks(source, tokens, path, source.includes('<!-- tokens:icons -->') ? await readIconManifest(root) : null);
   }
   return outputs;
 }

@@ -2,6 +2,26 @@
 
 更新于 2026-11-05。
 
+## 规范切换到图标包和加载动效（2026-11-11）
+
+- 用户确认两个预览页后，把规范切换过去。规范里 180 处手画 SVG（61 种形状）全部换成 `<svg class="dn-icon"><use href="#dn-名字"/></svg>`；缺的 13 个加进图标包（减号、选项、向下/向右箭头、向左（重画）、云、提问、列表、收藏、暂停、邮件、对话、改动），现在共 73 个。`icons.json` 加了 SF Symbols 对照，图标规范里的名单表由 `npm run tokens` 生成（`<!-- tokens:icons -->`），示例页把它画成图标网格。示例页内联一次 sprite，并定义 `<dn-loader>`。
+- 加载状态：`thinking`、`working` 只用在对话末尾的运行状态行（同一屏最多一个），其他进行中的一律 `spinner`；等待确认和等待回答换成 `waiting` 图标、不放动效。删掉了 `.dn-spinner`、`.dn-running-dots`、任务清单的旋转 CSS；思考和工具调用的摘要行前面加了 `thinking`、`tool` 图标（箭头旋转只作用于最后一个图标）。状态图标里原生端的错误从 `xmark.octagon.fill` 改成 `xmark.circle.fill`，和 Web 的圆形一致。
+- 新增测试：规范里每个 `#dn-名字` 都在图标包里、每个 `<dn-loader>` 名字都存在、没有手画的 SVG。开发服务器测试和构建测试的临时仓库带上两个包的源文件。`npm test` 70 项通过。
+- 实测：示例页 257 处图标引用全部能找到对应的 symbol，可见的图标都是 14 或 16px，描边继承 `ink-secondary`；加载状态里 thinking、working 16px，按钮里的 spinner 14px、白色，动效和文字中线同在 319。用本机 Chrome 无头模式截了 Composer、执行步骤、图标三节：图标显示正常，摘要行的 thinking、tool 图标和末尾的 working 动效都在。图标网格原来被正文列表的左内边距挤进去 19px，提高选择器优先级后对齐；正文里的彩色 ✨ 换成文字。
+
+## 加载动效包第一批（2026-11-11）
+
+- 用户确认「思考」图标和思考加载是同一个东西，开始做 `packages/loaders`（`@deernova/loaders` 0.1.0，未发布，无依赖）。三个动效：`thinking`（三瓣玫瑰线，花瓣用 |cos 3θ|^0.6 加宽，5.2 秒一圈）、`working`（1:2 利萨如 ∞，3 秒）、`spinner`（圆，0.9 秒，减弱动态效果时 2.4 秒）。一笔 `currentColor` 的线按弧长匀速走，12 段从头到尾变细（尾部是头部的 40%），后面是 16% 不透明度的完整曲线；`stop()` 在 240ms 内把线补满整条曲线、粗细变均匀，停在静止帧。减弱动态效果时曲线类直接显示静止帧。`math-curve-loaders` 没有许可证，只借鉴思路，代码和参数都是自己写的。
+- `thinking` 图标改成由同一条曲线生成（`icons.json` 里 `curve: "thinking"`，`npm run icons -- import` 写入），两边都用 48 个点，路径字符串完全相同；测试会在两者不一致时失败。新增预览页 `loaders.html`。
+- 新增 3 个测试：曲线居中、不出 2.5–21.5 的活动区域、没有非数字；线段从头到尾变细、头部 1.75、收尾时变均匀；思考图标就是思考动效的静止帧。`npm test` 69 项通过。
+- 实测：浏览器面板隐藏时 rAF 不稳定、截图会过期，所以用 Node 算出各时刻的帧，再用本机 Chrome 无头模式截图（8 帧一圈和收尾 6 帧）。第一版 14–16px 下尾巴太细、几乎看不见，把变细幅度从 75% 降到 60%、底线从 14% 提到 16%；收尾时尾巴由细突然变粗，改成补满的同时粗细逐渐变均匀，最后一帧和图标一致。页面上 19 个动效都已渲染，「停下后」那个的底线不透明度变为 1、移动的线段已清空。
+
+## 图标包第一批（2026-11-11）
+
+- 用户确认第一批 60 个图标的名单。新增工作区包 `packages/icons`（`@deernova/icons` 0.1.0，未发布）：`icons.json` 分 6 组，`src/` 每个图标一个 SVG；`scripts/icons.mjs import` 从 `lucide-static@1.61.0`（ISC，devDependency，发布已超过两周）导入 39 个，`build` 生成 `dist/`（单个 SVG、sprite、`index.mjs` 的 `svg()`、类型、清单）。重画 7 个（侧边栏、新对话、三个箭头、展开、收起），自有 14 个 AI 图标。附 `LICENSE-LUCIDE`，Lucide 来源的文件头注明出处。新增预览页 `icons.html`（不进导航，`noindex`）。
+- 新增 3 个测试：网格、描边、命名、只允许的元素；标成 Lucide 的必须和 Lucide 原图一致、标成重画的必须不同；包里有许可文件，`svg()` 和 sprite 正常。构建测试的临时仓库带上图标源文件，并检查构建不写回源文件。`npm test` 66 项通过。
+- 实测（1280 宽，96px 放大和 16px 原尺寸并排）：第一版有三个问题已改：「思考」的玫瑰线花瓣太细、像螺旋桨，改成三片宽花瓣；「产物」两个叠放的方块和「复制」撞形，改成带标题栏的窗口；「委派」箭头碰到第二个圆，留出空隙。「思考」原来重心偏上（中心 y 10.75），「工具」偏小偏左（13×13），重新居中放大到 16 左右，和其他图标一致。对比卡片 300 宽时「Deernova」字样被截断，改成 380。深色主题正常。
+
 ## 反馈、通知与错误页（2026-11-10）
 
 - 用户问提示、通知、错误有没有规范：只有横幅、只能确认的轻提示、字段和 AI 的局部报错。新增基础 [反馈与通知](../skills/deernova-style/references/foundations/feedback.md)（选哪种方式的对照表、一次一个、成功消失错误留下、时长表、错误怎么写、全局状态、无障碍）和组件 [通知](../skills/deernova-style/references/components/notification.md)（圆点和数字角标、通知中心浮层、系统通知的时机和写法）；[横幅与轻提示](../skills/deernova-style/references/components/banner.md) 补了带「撤销」和错误两种轻提示、位置、替换规则、可关闭横幅和全局状态写法；[空状态](../skills/deernova-style/references/components/empty-state.md) 补了错误页（404、无权限、离线、服务出错、崩溃）和错误编号。新增 token `toast-max-width`、`badge-size`、`badge-dot-size`、`notification-panel-width`、`notification-panel-max-height`。

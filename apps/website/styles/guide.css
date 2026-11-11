@@ -235,3 +235,12 @@ body.guide-page { background: var(--surface); font: var(--type-body); }
   .type-values { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .specimen { padding: var(--space-4); }
 }
+
+/* Icon name list in 图标 */
+.icon-group-title { margin: var(--space-4) 0 var(--space-2); color: var(--ink-secondary); font: var(--weight-medium) var(--type-callout-size)/var(--type-callout-line) var(--font-sans); }
+.doc .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: var(--space-1); margin: 0; padding: 0; list-style: none; }
+.icon-grid li { display: grid; justify-items: center; gap: 2px; padding: var(--space-3) var(--space-1) var(--space-2); border: var(--stroke-line) solid var(--line); border-radius: var(--radius-md); background: var(--surface-raised); text-align: center; }
+.icon-grid .dn-icon { width: 20px; height: 20px; margin-bottom: var(--space-1); color: var(--ink); }
+.icon-grid code { font-size: var(--type-caption-size); }
+.icon-grid span { color: var(--ink-tertiary); font: var(--type-caption); }
+.icon-grid .icon-sf { font-family: var(--font-mono); font-size: 11px; overflow-wrap: anywhere; }

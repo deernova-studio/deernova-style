@@ -50,7 +50,7 @@
 - 按下：次按钮灰底加深，文字按钮用 `fill-selected`，主按钮用 `opacity-solid-hover`；不添加描边或外圈。
 - 焦点：用键盘聚焦（`:focus-visible`）时画焦点环：`stroke-focus` 粗的 `focus-ring`，离按钮 `focus-offset`，圆角跟着按钮。底色和不透明度不变；鼠标点击时不出现。
 - 禁用：`opacity-disabled`，保持原位，不隐藏。
-- 加载：按钮宽度不变，把标签换成转圈，`aria-busy="true"`。
+- 加载：按钮宽度不变，把标签换成 `spinner` 动效（`icon-size-sm`，见[加载状态](skeleton.md)），`aria-busy="true"`。
 
 ## Web
 
@@ -131,11 +131,11 @@
   <button class="dn-button is-plain" type="button">跳过</button>
   <button class="dn-button is-danger" type="button">删除</button>
   <button class="dn-button is-primary" type="button" disabled>保存</button>
-  <button class="dn-icon-button" type="button" aria-label="搜索"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></button>
+  <button class="dn-icon-button" type="button" aria-label="搜索"><svg class="dn-icon" aria-hidden="true"><use href="#dn-search"/></svg></button>
 </div>
 <div class="dn-row">
   <button class="dn-button is-sm" type="button">获取</button>
-  <button class="dn-button" type="button"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新建笔记</button>
+  <button class="dn-button" type="button"><svg class="dn-icon" aria-hidden="true"><use href="#dn-plus"/></svg>新建笔记</button>
   <button class="dn-button is-primary is-lg" type="button">开始使用</button>
 </div>
 ```

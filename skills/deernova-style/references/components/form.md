@@ -38,7 +38,7 @@
 ## 提交
 
 - 主按钮写具体动作：「创建项目」「保存修改」，不写「提交」「确定」。
-- 提交中：主按钮保持宽度，文字换成转圈加「正在保存」，表单字段不禁用（用户还能看），但不能再次提交。
+- 提交中：主按钮保持宽度，文字换成 `spinner` 动效加「正在保存」，表单字段不禁用（用户还能看），但不能再次提交。
 - 成功：留在原页时用[轻提示](banner.md)「已保存」；进入新页面时直接跳转，不再弹提示。
 - 没有改动时，「保存修改」可以禁用；离开有未保存修改的表单时，先问「放弃修改？」。
 
@@ -65,7 +65,7 @@
 
 ```html
 <form class="dn-form" novalidate>
-  <div class="dn-banner" role="alert"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><div class="dn-banner-text"><p class="dn-banner-title">有 1 处需要修改</p><p class="dn-banner-body">项目名称</p></div></div>
+  <div class="dn-banner" role="alert"><svg class="dn-icon" aria-hidden="true"><use href="#dn-error"/></svg><div class="dn-banner-text"><p class="dn-banner-title">有 1 处需要修改</p><p class="dn-banner-body">项目名称</p></div></div>
   <fieldset class="dn-form-section">
     <legend>新项目</legend>
     <div class="dn-field">

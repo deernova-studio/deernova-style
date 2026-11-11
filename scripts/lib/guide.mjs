@@ -2,7 +2,7 @@ import { join, posix } from 'node:path';
 import { Marked } from 'marked';
 import { escape, read } from './files.mjs';
 import {
-  SKILL_DIR, aliasOf, colorIn, contrast, densityIds, isDensity, readTokens, renderTokensMarkdown, showDensity, summaryRows
+  SKILL_DIR, aliasOf, readIconManifest, colorIn, contrast, densityIds, isDensity, readTokens, renderTokensMarkdown, showDensity, summaryRows
 } from './design.mjs';
 
 // The style guide page: specimens first, then the skill's own words. Everything comes from the skill folder,
@@ -186,6 +186,13 @@ const FOUNDATION_SPECIMENS = {
 };
 
 const specimen = html => `<div class="specimen" ${APP}>${html}</div>`;
+
+// The icon name list as glyphs; the sprite they reference is inlined once at the top of the page.
+function iconGrid(manifest) {
+  if (!manifest) return '';
+  return manifest.groups.map(group => `<h4 class="icon-group-title">${escape(group.title)}</h4><ul class="icon-grid">${group.icons.map(icon =>
+    `<li><svg class="dn-icon" aria-hidden="true"><use href="#dn-${icon.name}"/></svg><code>${icon.name}</code><span>${escape(icon.label)}</span><span class="icon-sf">${icon.sf ? escape(icon.sf) : '自定义 Symbol'}</span></li>`).join('')}</ul>`).join('');
+}
 const sample = (label, text) => `<details class="sample"><summary>${label}</summary><pre><code>${escape(text).replaceAll('>', '&gt;')}</code></pre></details>`;
 
 // ---------- Markdown ----------
@@ -228,6 +235,7 @@ function renderMarkdown(path, markdown, tokens, { hoistSpecimen = false } = {}) 
     .replace(/<div data-generated="([\w-]+)"><\/div>/g, (_, name) => {
       const component = tokens.components.find(item => item.id === name);
       if (component) return tokenTable(tokens, component.tokens);
+      if (name === 'icons') return iconGrid(tokens.icons);
       if (name === 'summary') return summaryTable(tokens);
       if (name === 'scenes') return scenesTable(tokens);
       return '';
@@ -264,6 +272,7 @@ export async function referenceCss(root) {
 
 export async function renderGuide(root) {
   const tokens = await readTokens(root);
+  tokens.icons = await readIconManifest(root).catch(() => null);
   const skill = await read(join(root, SKILL_DIR, 'SKILL.md'));
   const nav = ['<a class="toc-top" href="#overview">总览</a>'];
   const docs = [];

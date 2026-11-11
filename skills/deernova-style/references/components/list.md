@@ -91,8 +91,8 @@
 <section class="dn-list-section">
   <h3 class="dn-list-header">同步</h3>
   <ul class="dn-list">
-    <li class="dn-list-row has-icon"><span class="dn-list-icon"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg></span>个人资料<span class="dn-list-value">林一</span><svg class="dn-icon dn-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></li>
-    <li class="dn-list-row has-icon"><span class="dn-list-icon"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .5-8 6 6 0 0 0-11.5 1.5A3.5 3.5 0 0 0 7 18z"/></svg></span><label for="sync">iCloud 同步</label><input class="dn-switch" id="sync" type="checkbox" role="switch" checked></li>
+    <li class="dn-list-row has-icon"><span class="dn-list-icon"><svg class="dn-icon" aria-hidden="true"><use href="#dn-user"/></svg></span>个人资料<span class="dn-list-value">林一</span><svg class="dn-icon dn-chevron" aria-hidden="true"><use href="#dn-chevron-right"/></svg></li>
+    <li class="dn-list-row has-icon"><span class="dn-list-icon"><svg class="dn-icon" aria-hidden="true"><use href="#dn-cloud"/></svg></span><label for="sync">iCloud 同步</label><input class="dn-switch" id="sync" type="checkbox" role="switch" checked></li>
   </ul>
   <p class="dn-list-footer">关闭 iCloud 同步后，新笔记只保存在这台设备上。</p>
 </section>

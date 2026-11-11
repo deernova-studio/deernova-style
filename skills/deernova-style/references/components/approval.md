@@ -53,7 +53,7 @@ AI 在替用户做事时，遇到需要用户拍板的地方就停下来，在�
 
 - 同一时间只显示一张待确认的卡，排在对话最后；还有更多时，标题行右侧写「还有 2 项」。
 - 卡片出现时，如果用户停在对话底部，就滚到能看见整张卡；如果用户在往上翻，不要强行滚动，「回到底部」按钮上显示「1 项等待确认」。
-- 运行状态行变成「等待你确认」，不闪烁；Composer 的停止按钮仍然可用，点了等于全部拒绝并停止。
+- 运行状态行变成「等待你确认」，加载动效换成 `waiting` 图标；Composer 的停止按钮仍然可用，点了等于全部拒绝并停止。
 - 用户离开这个会话时，侧边栏的会话前出现 `ink` 色实心圆点；系统允许时发通知「需要你确认：运行命令」。
 - 键盘：卡片里的按钮按 Tab 可以到达，主按钮在 Tab 顺序的最后；Composer 为空时，⌘-Return 等于主按钮，Esc 等于拒绝；浮层打开时 Esc 先关浮层，见 [Composer 的 Esc 顺序](composer.md#键盘和输入法)。不要用倒计时逼用户做决定。
 
@@ -115,7 +115,7 @@ AI 在替用户做事时，遇到需要用户拍板的地方就停下来，在�
 ```html
 <div class="dn-stack">
   <div class="dn-approval" role="group" aria-labelledby="ap1">
-    <div class="dn-approval-head"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10l3 2-3 2M12 15h5"/></svg><h3 class="dn-approval-title" id="ap1">运行命令</h3><span class="dn-approval-status">等待你确认</span></div>
+    <div class="dn-approval-head"><svg class="dn-icon" aria-hidden="true"><use href="#dn-terminal"/></svg><h3 class="dn-approval-title" id="ap1">运行命令</h3><span class="dn-approval-status">等待你确认</span></div>
     <p class="dn-approval-body">在 deernova-style 目录里执行，会更新 node_modules。</p>
     <pre class="dn-approval-code">npm install @deernova/style@latest</pre>
     <div class="dn-approval-actions">
@@ -125,7 +125,7 @@ AI 在替用户做事时，遇到需要用户拍板的地方就停下来，在�
     </div>
   </div>
   <div class="dn-approval is-danger" role="group" aria-labelledby="ap2">
-    <div class="dn-approval-head"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg><h3 class="dn-approval-title" id="ap2">删除 12 个文件</h3><span class="dn-approval-status">等待你确认</span></div>
+    <div class="dn-approval-head"><svg class="dn-icon" aria-hidden="true"><use href="#dn-warning"/></svg><h3 class="dn-approval-title" id="ap2">删除 12 个文件</h3><span class="dn-approval-status">等待你确认</span></div>
     <p class="dn-approval-warning">这个操作不能撤销。</p>
     <pre class="dn-approval-code">rm -rf dist/ releases/old/</pre>
     <div class="dn-approval-actions">
@@ -141,7 +141,7 @@ AI 在替用户做事时，遇到需要用户拍板的地方就停下来，在�
 ```html
 <div class="dn-stack">
   <div class="dn-approval" role="group" aria-labelledby="ap3">
-    <div class="dn-approval-head"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg><h3 class="dn-approval-title" id="ap3">计划</h3><span class="dn-approval-status">等待你确认</span></div>
+    <div class="dn-approval-head"><svg class="dn-icon" aria-hidden="true"><use href="#dn-list"/></svg><h3 class="dn-approval-title" id="ap3">计划</h3><span class="dn-approval-status">等待你确认</span></div>
     <ol class="dn-approval-plan">
       <li>读取周报草稿和上周的周报</li>
       <li>按「进展、风险、下周计划」重新分段</li>
@@ -152,8 +152,8 @@ AI 在替用户做事时，遇到需要用户拍板的地方就停下来，在�
       <button class="dn-button is-primary" type="button">开始执行</button>
     </div>
   </div>
-  <div class="dn-approval-done"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>已允许 · 运行 npm test</div>
-  <div class="dn-approval-done"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M6 18L18 6"/></svg>已拒绝 · 写入 3 个文件</div>
+  <div class="dn-approval-done"><svg class="dn-icon" aria-hidden="true"><use href="#dn-check"/></svg>已允许 · 运行 npm test</div>
+  <div class="dn-approval-done"><svg class="dn-icon" aria-hidden="true"><use href="#dn-skipped"/></svg>已拒绝 · 写入 3 个文件</div>
 </div>
 ```
 
@@ -161,9 +161,9 @@ AI 在替用户做事时，遇到需要用户拍板的地方就停下来，在�
 
 ```html
 <div class="dn-approval" role="group" aria-labelledby="ap4">
-  <div class="dn-approval-head"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h4M12 11v4"/></svg><h3 class="dn-approval-title" id="ap4">修改了 3 个文件</h3><span class="dn-approval-total"><span class="dn-diff-add">+42</span><span class="dn-diff-del">−8</span></span></div>
+  <div class="dn-approval-head"><svg class="dn-icon" aria-hidden="true"><use href="#dn-changes"/></svg><h3 class="dn-approval-title" id="ap4">修改了 3 个文件</h3><span class="dn-approval-total"><span class="dn-diff-add">+42</span><span class="dn-diff-del">−8</span></span></div>
   <ul class="dn-changes">
-    <li class="dn-change"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg><span class="dn-change-path">docs/weekly.md</span><span class="dn-approval-total"><span class="dn-diff-add">+3</span><span class="dn-diff-del">−2</span></span></li>
+    <li class="dn-change"><svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg><span class="dn-change-path">docs/weekly.md</span><span class="dn-approval-total"><span class="dn-diff-add">+3</span><span class="dn-diff-del">−2</span></span></li>
   </ul>
   <div class="dn-diff" role="table" aria-label="docs/weekly.md 的改动">
     <div class="dn-diff-line"><span>12</span><span> </span><span>## 本周进展</span></div>
@@ -173,8 +173,8 @@ AI 在替用户做事时，遇到需要用户拍板的地方就停下来，在�
     <div class="dn-diff-fold">展开 24 行未修改</div>
   </div>
   <ul class="dn-changes">
-    <li class="dn-change"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg><span class="dn-change-path">src/report/format.ts</span><span class="dn-approval-total"><span class="dn-diff-add">+31</span><span class="dn-diff-del">−6</span></span></li>
-    <li class="dn-change"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg><span class="dn-change-path">src/report/template.md</span><span class="dn-change-tag">新建</span><span class="dn-approval-total"><span class="dn-diff-add">+8</span></span></li>
+    <li class="dn-change"><svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg><span class="dn-change-path">src/report/format.ts</span><span class="dn-approval-total"><span class="dn-diff-add">+31</span><span class="dn-diff-del">−6</span></span></li>
+    <li class="dn-change"><svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg><span class="dn-change-path">src/report/template.md</span><span class="dn-change-tag">新建</span><span class="dn-approval-total"><span class="dn-diff-add">+8</span></span></li>
   </ul>
   <div class="dn-approval-actions">
     <button class="dn-button is-plain" type="button">撤销全部</button>

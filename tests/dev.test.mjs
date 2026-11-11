@@ -36,7 +36,7 @@ test('Vite serves source files and sends updates over its live connection', asyn
   let server;
   let socket;
   try {
-    for (const path of ['apps', 'skills', 'package.json']) {
+    for (const path of ['apps', 'skills', 'packages/icons/src', 'packages/icons/icons.json', 'packages/loaders/src', 'package.json']) {
       await cp(join(ROOT, path), join(root, path), { recursive: true });
     }
     const sources = () => Promise.all(['apps', 'skills'].map(path => hashTree(join(root, path))));

@@ -161,21 +161,21 @@
     <span class="dn-field-label" id="sort-label">排序</span>
     <div class="dn-select">
       <button type="button" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="sort-label sort-value"><span id="sort-value">最近编辑</span></button>
-      <svg class="dn-icon dn-select-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      <svg class="dn-icon dn-select-chevron" aria-hidden="true"><use href="#dn-chevron-down"/></svg>
     </div>
     <div class="dn-menu" role="listbox" aria-labelledby="sort-label">
-      <div class="dn-menu-item" role="option" aria-selected="true"><svg class="dn-icon dn-menu-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span class="dn-menu-label">最近编辑</span></div>
-      <div class="dn-menu-item" role="option" aria-selected="false"><svg class="dn-icon dn-menu-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span class="dn-menu-label">创建时间</span></div>
-      <div class="dn-menu-item" role="option" aria-selected="false"><svg class="dn-icon dn-menu-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span class="dn-menu-label">标题</span></div>
+      <div class="dn-menu-item" role="option" aria-selected="true"><svg class="dn-icon dn-menu-check" aria-hidden="true"><use href="#dn-check"/></svg><span class="dn-menu-label">最近编辑</span></div>
+      <div class="dn-menu-item" role="option" aria-selected="false"><svg class="dn-icon dn-menu-check" aria-hidden="true"><use href="#dn-check"/></svg><span class="dn-menu-label">创建时间</span></div>
+      <div class="dn-menu-item" role="option" aria-selected="false"><svg class="dn-icon dn-menu-check" aria-hidden="true"><use href="#dn-check"/></svg><span class="dn-menu-label">标题</span></div>
     </div>
   </div>
   <div class="dn-menu" role="menu" aria-label="笔记">
-    <button class="dn-menu-item" type="button" role="menuitem" aria-keyshortcuts="Meta+R"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg><span class="dn-menu-label">重命名</span><span class="dn-menu-shortcut">⌘R</span></button>
-    <button class="dn-menu-item" type="button" role="menuitem" aria-keyshortcuts="Shift+Meta+C"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><span class="dn-menu-label">复制链接</span><span class="dn-menu-shortcut">⇧⌘C</span></button>
-    <button class="dn-menu-item" type="button" role="menuitem" aria-haspopup="menu" aria-expanded="false"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="dn-menu-label">移到</span><svg class="dn-icon dn-menu-more" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
-    <button class="dn-menu-item" type="button" role="menuitem" aria-disabled="true"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 9l5-5 5 5M5 20h14"/></svg><span class="dn-menu-label">导出…</span></button>
+    <button class="dn-menu-item" type="button" role="menuitem" aria-keyshortcuts="Meta+R"><svg class="dn-icon" aria-hidden="true"><use href="#dn-edit"/></svg><span class="dn-menu-label">重命名</span><span class="dn-menu-shortcut">⌘R</span></button>
+    <button class="dn-menu-item" type="button" role="menuitem" aria-keyshortcuts="Shift+Meta+C"><svg class="dn-icon" aria-hidden="true"><use href="#dn-link"/></svg><span class="dn-menu-label">复制链接</span><span class="dn-menu-shortcut">⇧⌘C</span></button>
+    <button class="dn-menu-item" type="button" role="menuitem" aria-haspopup="menu" aria-expanded="false"><svg class="dn-icon" aria-hidden="true"><use href="#dn-folder"/></svg><span class="dn-menu-label">移到</span><svg class="dn-icon dn-menu-more" aria-hidden="true"><use href="#dn-chevron-right"/></svg></button>
+    <button class="dn-menu-item" type="button" role="menuitem" aria-disabled="true"><svg class="dn-icon" aria-hidden="true"><use href="#dn-upload"/></svg><span class="dn-menu-label">导出…</span></button>
     <div class="dn-menu-separator" role="separator"></div>
-    <button class="dn-menu-item is-danger" type="button" role="menuitem"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span class="dn-menu-label">删除</span></button>
+    <button class="dn-menu-item is-danger" type="button" role="menuitem"><svg class="dn-icon" aria-hidden="true"><use href="#dn-trash"/></svg><span class="dn-menu-label">删除</span></button>
   </div>
 </div>
 ```

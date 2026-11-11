@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "packages/style"
+    "packages/style",
+    "packages/icons",
+    "packages/loaders"
   ],
   "engines": {
     "node": ">=22.12.0"
@@ -22,9 +24,11 @@
     "check": "npm test",
     "pack": "npm run build:skill && npm pack --workspace @deernova/style --pack-destination releases",
     "release:version": "node scripts/version.mjs",
-    "release:publish": "npm test && node scripts/publish.mjs"
+    "release:publish": "npm test && node scripts/publish.mjs",
+    "icons": "node scripts/icons.mjs"
   },
   "devDependencies": {
+    "lucide-static": "1.61.0",
     "marked": "18.1.2",
     "vite": "8.3.5"
   }

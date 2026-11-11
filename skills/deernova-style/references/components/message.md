@@ -104,13 +104,13 @@
       <li><strong>订阅转化提升。</strong>年付转化率从 3.1% 升到 4.4%<a class="dn-cite" href="#" aria-label="来源 1">1</a>。</li>
     </ul>
     <p>需要的话，我可以按 <a href="#">周报模板</a> 再排一次，或者导出成 <code>weekly.md</code>。</p>
-    <ul class="dn-sources" aria-label="来源"><li class="dn-sources-label">来源</li><li><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg>1 · 订阅数据周报.xlsx</li><li><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>2 · 定价实验说明 · notion.so</li></ul>
+    <ul class="dn-sources" aria-label="来源"><li class="dn-sources-label">来源</li><li><svg class="dn-icon" aria-hidden="true"><use href="#dn-file"/></svg>1 · 订阅数据周报.xlsx</li><li><svg class="dn-icon" aria-hidden="true"><use href="#dn-web"/></svg>2 · 定价实验说明 · notion.so</li></ul>
     <div class="dn-message-actions">
-      <span class="dn-branch"><button class="dn-icon-button" type="button" aria-label="上一个版本"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>2 / 3<button class="dn-icon-button" type="button" aria-label="下一个版本"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></span>
-      <button class="dn-icon-button" type="button" aria-label="复制"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button>
-      <button class="dn-icon-button" type="button" aria-label="重新生成"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6"/><path d="M4 4v4h4"/></svg></button>
-      <button class="dn-icon-button" type="button" aria-label="有帮助" aria-pressed="true"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11v9H4v-9zM7 11l4-7a2 2 0 0 1 3 2l-1 4h5a2 2 0 0 1 2 2.3l-1.2 6A2 2 0 0 1 16.8 20H7"/></svg></button>
-      <button class="dn-icon-button" type="button" aria-label="没帮助" aria-pressed="false"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 13V4H4v9zM7 13l4 7a2 2 0 0 0 3-2l-1-4h5a2 2 0 0 0 2-2.3l-1.2-6A2 2 0 0 0 16.8 4H7"/></svg></button>
+      <span class="dn-branch"><button class="dn-icon-button" type="button" aria-label="上一个版本"><svg class="dn-icon" aria-hidden="true"><use href="#dn-chevron-left"/></svg></button>2 / 3<button class="dn-icon-button" type="button" aria-label="下一个版本"><svg class="dn-icon" aria-hidden="true"><use href="#dn-chevron-right"/></svg></button></span>
+      <button class="dn-icon-button" type="button" aria-label="复制"><svg class="dn-icon" aria-hidden="true"><use href="#dn-copy"/></svg></button>
+      <button class="dn-icon-button" type="button" aria-label="重新生成"><svg class="dn-icon" aria-hidden="true"><use href="#dn-regenerate"/></svg></button>
+      <button class="dn-icon-button" type="button" aria-label="有帮助" aria-pressed="true"><svg class="dn-icon" aria-hidden="true"><use href="#dn-thumbs-up"/></svg></button>
+      <button class="dn-icon-button" type="button" aria-label="没帮助" aria-pressed="false"><svg class="dn-icon" aria-hidden="true"><use href="#dn-thumbs-down"/></svg></button>
     </div>
   </div>
 </div>
@@ -126,11 +126,11 @@
   </div>
   <div class="dn-message-assistant">
     <p>正在整理第二部分的数据。</p>
-    <div class="dn-message-error" role="alert"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>网络中断，已生成的内容已保留。<button class="dn-button is-sm" type="button">重试</button></div>
+    <div class="dn-message-error" role="alert"><svg class="dn-icon" aria-hidden="true"><use href="#dn-error"/></svg>网络中断，已生成的内容已保留。<button class="dn-button is-sm" type="button">重试</button></div>
   </div>
   <div class="dn-row">
-    <button class="dn-jump" type="button" aria-label="回到底部"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button>
-    <button class="dn-jump" type="button"><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>1 项等待确认</button>
+    <button class="dn-jump" type="button" aria-label="回到底部"><svg class="dn-icon" aria-hidden="true"><use href="#dn-arrow-down"/></svg></button>
+    <button class="dn-jump" type="button"><svg class="dn-icon" aria-hidden="true"><use href="#dn-arrow-down"/></svg>1 项等待确认</button>
   </div>
 </div>
 ```

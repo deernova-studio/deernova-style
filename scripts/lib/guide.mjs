@@ -1,6 +1,10 @@
 import { join, posix } from 'node:path';
 import { Marked } from 'marked';
 import { escape, read } from './files.mjs';
+import { renderIconsDoc } from './icon-catalog.mjs';
+import { renderLoadersDoc } from './loader-page.mjs';
+import { productMark } from './marks.mjs';
+import { readIcons } from '../icons.mjs';
 import {
   SKILL_DIR, aliasOf, readIconManifest, colorIn, contrast, densityIds, isDensity, readTokens, renderTokensMarkdown, showDensity, summaryRows
 } from './design.mjs';
@@ -340,6 +344,12 @@ export async function renderGuide(root) {
 <header class="doc-head"><h2 id="tokens-title">全部变量</h2><code class="doc-path">references/tokens.md</code></header>
 <div class="doc-body"><p>由 <code>tokens.json</code> 生成的完整变量表，和 agent 读到的一致。</p><details class="sample is-long"><summary>展开全部变量表</summary><div class="sample-body">${renderMarkdown('references/tokens.md', tokensMarkdown, tokens)}</div></details></div>
 </section>`);
+
+  // The two companion packages, shown inside the guide with their own marks.
+  const { icons } = await readIcons(root);
+  nav.push('<p class="toc-group">图标与动效</p>', '<ol>', '<li><a href="#package-icons">Deernova Icons</a></li>', '<li><a href="#package-loaders">Deernova Loaders</a></li>', '</ol>');
+  docs.push(await renderIconsDoc(root, productMark('icons', 'mark-icons')));
+  docs.push(renderLoadersDoc(icons.find(icon => icon.name === 'thinking').body.join(''), productMark('loaders', 'mark-loaders')));
 
   return { nav: nav.join('\n'), docs: docs.join('\n'), referenceCss: await referenceCss(root) };
 }

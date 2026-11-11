@@ -26,4 +26,6 @@ loader.stop();
 - 页面不可见时浏览器会暂停 `requestAnimationFrame`，不耗电。
 - `curvePath(name)` 返回完整曲线的 SVG 路径，`strokeAt(name, head)` 返回某一时刻的线段，可以用来做服务端渲染或在别的平台照着实现。SwiftUI 用 `TimelineView(.animation)` 加 `Canvas`，按同样的公式和参数画。
 
+「让线沿数学曲线走」的思路受 [Paidax01/math-curve-loaders](https://github.com/Paidax01/math-curve-loaders) 启发；曲线参数、单笔变细的画法和代码都是独立实现的，没有使用它的代码。
+
 许可：MIT（见 `LICENSE`）。

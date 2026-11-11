@@ -55,7 +55,7 @@ test('builds leave sources alone, and website edits do not change the skill', as
 });
 
 test('website pages are fully rendered and only reference files that exist', async () => {
-  for (const page of ['index.html', 'guide.html', 'icons.html', 'loaders.html']) {
+  for (const page of ['index.html', 'guide.html']) {
     const html = await readFile(join('dist', page), 'utf8');
     assert.doesNotMatch(html, /\{\{\w+\}\}/, `${page} has an unfilled placeholder`);
     for (const [, target] of html.matchAll(/(?:src|href)="([^"#]+)/g)) {

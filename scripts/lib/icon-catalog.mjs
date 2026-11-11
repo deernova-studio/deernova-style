@@ -1,28 +1,16 @@
 import { escape } from './files.mjs';
 import { readIcons } from '../icons.mjs';
 
-// The Deernova Icons page, laid out like the Style guide: an overview, then one section per icon group.
+// The Deernova Icons section of the Style guide: what the set is, an app put together from it, install, and every icon by group.
 const use = (name, size) => `<svg class="dn-icon"${size ? ` style="width:${size}px;height:${size}px"` : ''} aria-hidden="true"><use href="#dn-${name}"/></svg>`;
 const button = (name, label) => `<button class="dn-icon-button" type="button" aria-label="${label}">${use(name)}</button>`;
 
-export async function renderIconsPage(root) {
+export async function renderIconsDoc(root, mark) {
   const { manifest, icons } = await readIcons(root);
-  const nav = ['<a class="toc-top" href="#overview">总览</a>', '<p class="toc-group">图标</p>', '<ol>'];
-  const docs = [];
-
-  docs.push(`<section class="doc doc-overview" id="overview" aria-labelledby="overview-title">
-<header class="overview-head"><h1 id="overview-title">Deernova Icons</h1><p class="lede">AI 应用常用的 ${icons.length} 个线性图标，基于 Lucide，按 Deernova 的线条统一：${manifest.grid}×${manifest.grid} 网格、${manifest.stroke} 描边、圆头圆角、无填充，颜色跟随文字。</p></header>
+  return `<section class="doc doc-package" id="package-icons" aria-labelledby="package-icons-title">
+<header class="doc-head">${mark}<h2 id="package-icons-title">Deernova Icons</h2><code class="doc-path">@deernova/icons</code></header>
 <div class="doc-body">
-<h3 id="overview-install">安装</h3>
-<pre><code>npm install @deernova/icons</code></pre>
-<h3 id="overview-usage">使用</h3>
-<p>用 <code>svg()</code> 生成一个内联图标；只有图标的按钮给一个 <code>label</code>，旁边有文字时不给：</p>
-<pre><code>import { svg } from '@deernova/icons';
-button.innerHTML = svg('send', { label: '发送' });</code></pre>
-<p>页面里图标多时，内联一次 <code>@deernova/icons/sprite.svg</code>，再按名字引用；尺寸和描边用规范里的 <code>.dn-icon</code> 类：</p>
-<pre><code>&lt;svg class=&quot;dn-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#dn-send&quot;/&gt;&lt;/svg&gt;</code></pre>
-<p>每个图标在原生端对应的 SF Symbol，以及颜色和状态图标的规则，见 Style 的<a href="guide.html#foundations-iconography">图标</a>。MIT 许可。</p>
-<h3 id="overview-context">放进界面里</h3>
+<p class="lede">AI 应用常用的 ${icons.length} 个线性图标，基于 Lucide，按 Deernova 的线条统一：${manifest.grid}×${manifest.grid} 网格、${manifest.stroke} 描边、圆头圆角、无填充，颜色跟随文字。每个图标对应的 SF Symbol 和使用规则见<a href="#foundations-iconography">图标</a>。</p>
 <div class="specimen" data-density="desktop"><div class="icons-context">
   <nav class="icons-sidebar" aria-label="示例侧边栏">
     <div class="icons-row">${button('sidebar', '收起侧边栏')}<span class="icons-spacer"></span>${button('search', '搜索')}${button('new-chat', '新对话')}</div>
@@ -37,18 +25,16 @@ button.innerHTML = svg('send', { label: '发送' });</code></pre>
     </div>
   </div>
 </div></div>
+<h3 id="package-icons-install">安装和使用</h3>
+<pre><code>npm install @deernova/icons</code></pre>
+<p>用 <code>svg()</code> 生成一个内联图标；只有图标的按钮给一个 <code>label</code>，旁边有文字时不给：</p>
+<pre><code>import { svg } from '@deernova/icons';
+button.innerHTML = svg('send', { label: '发送' });</code></pre>
+<p>页面里图标多时，内联一次 <code>@deernova/icons/sprite.svg</code>，再按名字引用：</p>
+<pre><code>&lt;svg class=&quot;dn-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#dn-send&quot;/&gt;&lt;/svg&gt;</code></pre>
+${manifest.groups.map(group => `<h3 id="package-icons-${group.id}">${escape(group.title)}</h3>
+<ul class="icon-grid">${group.icons.map(icon =>
+    `<li>${use(icon.name)}<code>${icon.name}</code><span>${escape(icon.label)}</span><span class="icon-sf">${icon.sf ? escape(icon.sf) : '自定义 Symbol'}</span></li>`).join('')}</ul>`).join('\n')}
 </div>
-</section>`);
-
-  for (const group of manifest.groups) {
-    const id = `icons-${group.id}`;
-    nav.push(`<li><a href="#${id}">${escape(group.title)}</a></li>`);
-    docs.push(`<section class="doc" id="${id}" aria-labelledby="${id}-title">
-<header class="doc-head"><h2 id="${id}-title">${escape(group.title)}</h2><code class="doc-path">${group.icons.length} 个</code></header>
-<div class="doc-body"><ul class="icon-grid">${group.icons.map(icon =>
-      `<li>${use(icon.name)}<code>${icon.name}</code><span>${escape(icon.label)}</span><span class="icon-sf">${icon.sf ? escape(icon.sf) : '自定义 Symbol'}</span></li>`).join('')}</ul></div>
-</section>`);
-  }
-  nav.push('</ol>');
-  return { nav: nav.join('\n'), docs: docs.join('\n') };
+</section>`;
 }

@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="assets/tokens.css">
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/guide.css">
+  <link rel="stylesheet" href="styles/packages.css">
   <style>
 {{referenceCss}}
   </style>
@@ -19,6 +20,31 @@
   <script type="module">
 {{loaderScript}}
 defineLoaderElement();
+// Deernova Loaders section: the thinking loader settles into its icon.
+const slot = id => document.getElementById(id);
+if (slot('thinking-slot')) {
+  const rest = createLoader(slot('rest-slot'), 'thinking');
+  setTimeout(() => rest.stop(), 1600);
+  let thinking;
+  let timer;
+  const start = () => {
+    slot('thinking-slot').replaceChildren();
+    thinking = createLoader(slot('thinking-slot'), 'thinking');
+    const began = Date.now();
+    slot('thinking-text').textContent = '正在思考';
+    slot('thinking-time').hidden = false;
+    clearInterval(timer);
+    timer = setInterval(() => { slot('thinking-time').textContent = `${Math.round((Date.now() - began) / 1000)} 秒`; }, 250);
+  };
+  slot('thinking-finish').addEventListener('click', () => {
+    clearInterval(timer);
+    thinking.stop();
+    slot('thinking-text').textContent = `已思考 ${slot('thinking-time').textContent}`;
+    slot('thinking-time').hidden = true;
+  });
+  slot('thinking-restart').addEventListener('click', start);
+  start();
+}
   </script>
 </head>
 <body class="guide-page">

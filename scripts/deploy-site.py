@@ -9,7 +9,7 @@ import tarfile
 from datetime import datetime, timezone
 
 # Keep in step with PAGES in scripts/build-site.mjs.
-PAGES = {'index.html', 'guide.html', 'icons.html', 'loaders.html'}
+PAGES = {'index.html', 'guide.html'}
 archive = Path(sys.argv[1]).resolve()
 expected = sys.argv[2].lower()
 assert len(expected) == 64 and hashlib.sha256(archive.read_bytes()).hexdigest() == expected, 'SHA256 mismatch'

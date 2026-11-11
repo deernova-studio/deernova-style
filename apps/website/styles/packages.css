@@ -1,4 +1,9 @@
-/* Deernova Icons and Deernova Loaders pages: the guide layout plus their own samples. */
+/* Deernova Icons and Deernova Loaders, shown as sections of the Style guide. */
+.doc-package .doc-head { align-items: center; }
+.doc-package .doc-head .product-symbol { flex: 0 0 32px; width: 32px; height: 32px; fill: currentColor; }
+.doc-package .lede { margin: 0 0 var(--space-4); }
+.doc-credit { margin-top: var(--space-6); color: var(--ink-tertiary); font: var(--type-caption); }
+.doc-credit a { color: inherit; }
 
 /* Icons: a small app put together from the set */
 .icons-context { display: grid; grid-template-columns: 200px minmax(0, 1fr); width: 100%; overflow: hidden; border: var(--stroke-line) solid var(--line); border-radius: var(--card-radius); background: var(--canvas); }
@@ -35,3 +40,8 @@
 /* Install and usage snippets */
 .doc-body > pre { margin: var(--space-2) 0 var(--space-3); padding: var(--space-3) var(--space-4); overflow-x: auto; border-radius: var(--radius-md); background: var(--surface-sunken); color: var(--ink); font: var(--type-code); }
 .doc-body > pre code { padding: 0; background: none; font: inherit; }
+
+/* The icon list is a grid, not a text list: full width, no list indent or code pills. */
+.doc-body > .icon-grid { max-width: none; margin: 0 0 var(--space-5); padding: 0; }
+.doc-body > .icon-grid > li + li { margin-top: 0; }
+.doc-body > .icon-grid code { padding: 0; background: none; }

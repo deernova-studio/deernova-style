@@ -2,6 +2,12 @@
 
 更新于 2026-11-05。
 
+## Icons、Loaders 改为规范页里的两节（2026-11-11）
+
+- 用户说明：npm 包保持独立，展示页面放到 Style 下。去掉了 `icons.html`、`loaders.html` 两个独立页面和首页菜单里的两项；规范页目录末尾加「图标与动效」一组，Deernova Icons、Deernova Loaders 各一节，节标题前用它们自己的「Ui」标志。`PAGES` 回到首页和规范页，部署脚本同步。
+- Loaders 一节和 `packages/loaders/README.md` 写明：「让线沿数学曲线走」的思路受 Paidax01/math-curve-loaders 启发，曲线参数、单笔变细的画法和代码都是独立实现的。
+- 实测：本机 Chrome 无头模式截了两节。图标网格原来是正文列表的直接子元素，被套上了正文列表的最大宽度、缩进和代码底色（名字变成灰色胶囊），单独覆盖后正常。`npm test` 72 项通过。
+
 ## Icons、Loaders 与 Style 同级（2026-11-11）
 
 - 用户要求：Icons、Loaders 的产品图标参考 Style 的标志设计；三个页面同级、展示方式一样；不再标注「重画」「自有」，介绍里写明基于 Lucide 即可；以后不装 Chrome 扩展。

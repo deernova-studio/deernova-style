@@ -35,7 +35,7 @@
 
 ## 加载动效
 
-来自 `@deernova/loaders`：一笔单色的线沿着数学曲线走，尾巴逐渐变细，后面是很淡的完整曲线。网格和描边与[图标](../foundations/iconography.md)相同（24×24、1.75），颜色跟随文字。
+来自 `@deernova/icons/loaders`（图标包的一部分）：一笔单色的线沿着数学曲线走，尾巴逐渐变细，后面是很淡的完整曲线。网格和描边与[图标](../foundations/iconography.md)相同（24×24、1.75），颜色跟随文字。
 
 | 名字 | 用在 | 曲线 | 停下后 |
 | --- | --- | --- | --- |
@@ -60,7 +60,7 @@
 
 ## Web
 
-加载动效用自定义元素 `<dn-loader name="thinking">`：项目里 `import { defineLoaderElement } from '@deernova/loaders'` 后调用一次 `defineLoaderElement()`；需要手动控制时用 `createLoader(容器, 'thinking')`，它返回 `stop()` 和 `destroy()`。
+加载动效用自定义元素 `<dn-loader name="thinking">`：项目里 `import { defineLoaderElement } from '@deernova/icons/loaders'` 后调用一次 `defineLoaderElement()`；需要手动控制时用 `createLoader(容器, 'thinking')`，它返回 `stop()` 和 `destroy()`。
 
 骨架区域加 `aria-busy="true"`，并用一个视觉隐藏的文字（「正在加载」）告诉读屏；加载完成后去掉 `aria-busy`。进度条用 `<progress>` 或 `role="progressbar"` 加 `aria-valuenow`。
 
@@ -122,7 +122,7 @@ dn-loader > .dn-loader { width: var(--loader-size, var(--icon-size-md)); height:
 
 ## SwiftUI
 
-普通加载用系统的 `ProgressView()`；`thinking`、`working` 按 `@deernova/loaders` README 里的曲线公式和参数，用 `TimelineView(.animation)` 加 `Canvas` 画，减弱动态效果时画静止的完整曲线。骨架用真实的视图加 `.redacted(reason: .placeholder)`，系统会按内容画出灰块；需要微光时在上面叠一个移动的渐变遮罩，减弱动态效果时去掉。进度用 `ProgressView(value:)`（确定）和 `ProgressView()`（转圈），用 `.tint(.brandAccent)`。
+普通加载用系统的 `ProgressView()`；`thinking`、`working` 按 `@deernova/icons` README 里的曲线公式和参数，用 `TimelineView(.animation)` 加 `Canvas` 画，减弱动态效果时画静止的完整曲线。骨架用真实的视图加 `.redacted(reason: .placeholder)`，系统会按内容画出灰块；需要微光时在上面叠一个移动的渐变遮罩，减弱动态效果时去掉。进度用 `ProgressView(value:)`（确定）和 `ProgressView()`（转圈），用 `.tint(.brandAccent)`。
 
 ## 不要
 

@@ -32,7 +32,7 @@ test('the npm package carries the skill folder byte for byte', async () => {
 test('builds leave sources alone, and website edits do not change the skill', async () => {
   const root = await mkdtemp(join(tmpdir(), 'deernova-build-'));
   try {
-    for (const path of ['skills', 'apps', 'packages/icons/src', 'packages/icons/icons.json', 'packages/loaders/src', 'package.json']) await cp(resolve(path), join(root, path), { recursive: true });
+    for (const path of ['skills', 'apps', 'packages/icons/src', 'packages/icons/icons.json', 'packages/icons/loaders.mjs', 'package.json']) await cp(resolve(path), join(root, path), { recursive: true });
     const sources = async () => Promise.all(['skills', 'apps', 'packages/icons/src'].map(path => hashTree(join(root, path))));
     const before = await sources();
     const skill = await buildSkill({ root });

@@ -2,6 +2,12 @@
 
 更新于 2026-11-05。
 
+## 加载动效并入图标包（2026-11-11）
+
+- 用户确认：loaders 不再单独成包，放进图标包，用 `@deernova/icons/loaders` 引入。源码移到 `packages/icons/loaders.mjs`（`git mv`，历史保留），加了 `loaders.d.ts`；图标包升到 0.2.0，`exports` 加 `./loaders`，`files` 带上两个文件；README 合并，保留对 math-curve-loaders 的说明。删除 `packages/loaders` 工作区，锁文件里残留的「extraneous」条目手动去掉。规范（加载状态、SKILL.md）、规范页 Loaders 一节、构建脚本、测试都改成新路径；发布脚本只发 style 和 icons。
+- 还没做：npm 上发布 icons 0.2.0、把 `@deernova/loaders` 标记为弃用，等用户确认。
+- 实测：`npm pack --dry-run` 图标包 0.2.0 共 83 个文件，含 `loaders.mjs` 和 `loaders.d.ts`。规范页 Loaders 一节：自定义元素已定义，21 个动效都画出来了，「停下后」那个已落成静止帧，安装说明是 `npm install @deernova/icons` 和 `@deernova/icons/loaders`。`npm test` 72 项通过。
+
 ## Icons、Loaders 改为规范页里的两节（2026-11-11）
 
 - 用户说明：npm 包保持独立，展示页面放到 Style 下。去掉了 `icons.html`、`loaders.html` 两个独立页面和首页菜单里的两项；规范页目录末尾加「图标与动效」一组，Deernova Icons、Deernova Loaders 各一节，节标题前用它们自己的「Ui」标志。`PAGES` 回到首页和规范页，部署脚本同步。

@@ -11,14 +11,15 @@ const sizes = name => `<div class="loaders-sizes">${[14, 16, 20, 32, 64].map(siz
 
 export function renderLoadersDoc(thinkingIcon, mark) {
   return `<section class="doc doc-package" id="package-loaders" aria-labelledby="package-loaders-title">
-<header class="doc-head">${mark}<h2 id="package-loaders-title">Deernova Loaders</h2><code class="doc-path">@deernova/loaders</code></header>
+<header class="doc-head">${mark}<h2 id="package-loaders-title">Deernova Loaders</h2><code class="doc-path">@deernova/icons/loaders</code></header>
 <div class="doc-body">
-<p class="lede">一笔单色的线沿着数学曲线走，尾巴逐渐变细，后面是很淡的完整曲线。网格和描边与 Deernova Icons 相同（24×24、1.75），颜色跟随文字，不依赖任何库。什么时候用哪个见<a href="#components-skeleton">加载状态</a>。</p>
+<p class="lede">一笔单色的线沿着数学曲线走，尾巴逐渐变细，后面是很淡的完整曲线。网格和描边与 Deernova Icons 相同（24×24、1.75），颜色跟随文字，不依赖任何库。它是 Deernova Icons 的一部分。什么时候用哪个见<a href="#components-skeleton">加载状态</a>。</p>
 <div class="specimen" data-density="desktop"><div class="loaders-hero">${LOADERS.map(item => `<figure><dn-loader name="${item.name}" style="--loader-size:48px"></dn-loader><figcaption><code>${item.name}</code>${item.title}</figcaption></figure>`).join('')}</div></div>
 <h3 id="package-loaders-install">安装和使用</h3>
-<pre><code>npm install @deernova/loaders</code></pre>
+<p>加载动效在图标包里，装了 <code>@deernova/icons</code> 就有：</p>
+<pre><code>npm install @deernova/icons</code></pre>
 <p>定义一次自定义元素，之后直接写标签；加上 <code>done</code> 属性时停下。需要自己控制时用 <code>createLoader(容器, 'thinking')</code>，它返回 <code>stop()</code> 和 <code>destroy()</code>；尺寸默认 <code>icon-size-md</code>，用 <code>--loader-size</code> 改。</p>
-<pre><code>import { defineLoaderElement } from '@deernova/loaders';
+<pre><code>import { defineLoaderElement } from '@deernova/icons/loaders';
 defineLoaderElement();
 
 &lt;dn-loader name=&quot;thinking&quot;&gt;&lt;/dn-loader&gt;</code></pre>

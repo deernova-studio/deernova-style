@@ -41,7 +41,7 @@ test('the package ships the Lucide license and a working svg() helper', async ()
 });
 
 test('the skill draws every icon from the icon set and every loader from the loader set', async () => {
-  const { LOADERS } = await import('../packages/loaders/src/index.mjs');
+  const { LOADERS } = await import('../packages/icons/loaders.mjs');
   const { icons } = await readIcons();
   const names = new Set(icons.map(icon => icon.name));
   const dir = 'skills/deernova-style';

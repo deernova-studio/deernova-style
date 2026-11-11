@@ -21,7 +21,7 @@ export async function renderSiteHtml(html, { root = ROOT } = {}) {
   const values = has('docs') ? await renderGuide(root) : {};
   if (has('referenceCss') && !values.referenceCss) values.referenceCss = await referenceCss(root);
   if (has('iconSprite')) values.iconSprite = spriteSvg(icons);
-  if (has('loaderScript')) values.loaderScript = await read(join(root, 'packages/loaders/src/index.mjs'));
+  if (has('loaderScript')) values.loaderScript = await read(join(root, 'packages/icons/loaders.mjs'));
   for (const [key, value] of Object.entries(values)) html = html.replaceAll(`{{${key}}}`, () => value);
   // The guide's own content can mention the version, so it is filled in last.
   return html.replaceAll('{{version}}', version);

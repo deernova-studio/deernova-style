@@ -1,11 +1,13 @@
 {
   "name": "@deernova/icons",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
-  "description": "Deernova icons: 24×24 stroke icons for AI apps, based on Lucide with Deernova's own AI and navigation glyphs",
+  "description": "Deernova icons and loaders: 24×24 stroke icons for AI apps based on Lucide, plus single-stroke loaders that travel along mathematical curves",
   "license": "MIT",
   "files": [
     "dist",
+    "loaders.mjs",
+    "loaders.d.ts",
     "LICENSE",
     "LICENSE-LUCIDE"
   ],
@@ -16,7 +18,11 @@
     },
     "./sprite.svg": "./dist/sprite.svg",
     "./svg/*": "./dist/svg/*",
-    "./icons.json": "./dist/icons.json"
+    "./icons.json": "./dist/icons.json",
+    "./loaders": {
+      "types": "./loaders.d.ts",
+      "default": "./loaders.mjs"
+    }
   },
   "scripts": {
     "prepack": "node ../../scripts/icons.mjs build"

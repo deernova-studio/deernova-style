@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { LOADERS, curvePath, strokeAt } from '../packages/loaders/src/index.mjs';
+import { LOADERS, curvePath, strokeAt } from '../packages/icons/loaders.mjs';
 import { readFile } from 'node:fs/promises';
 import { readIcons } from '../scripts/icons.mjs';
 
@@ -37,9 +37,8 @@ test('the thinking icon is the thinking loader at rest', async () => {
   assert.equal(LOADERS.thinking.rest, 'curve');
 });
 
-test('the loaders package is MIT licensed and ships its license', async () => {
-  const pkg = JSON.parse(await readFile('packages/loaders/package.json', 'utf8'));
-  assert.equal(pkg.license, 'MIT');
-  assert.ok(pkg.files.includes('LICENSE'));
-  assert.match(await readFile('packages/loaders/LICENSE', 'utf8'), /^MIT License/);
+test('the icons package ships the loaders as @deernova/icons/loaders', async () => {
+  const pkg = JSON.parse(await readFile('packages/icons/package.json', 'utf8'));
+  assert.ok(pkg.files.includes('loaders.mjs') && pkg.files.includes('loaders.d.ts'));
+  assert.deepEqual(pkg.exports['./loaders'], { types: './loaders.d.ts', default: './loaders.mjs' });
 });

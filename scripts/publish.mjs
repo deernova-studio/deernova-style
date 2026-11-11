@@ -2,8 +2,8 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
 // Publishes every workspace package whose current version is not on npm yet. @deernova/style moves with
-// each release; icons and loaders keep their own versions and are skipped until someone bumps them.
-for (const name of ['style', 'icons', 'loaders']) {
+// each release; icons keeps its own version and is skipped until someone bumps it.
+for (const name of ['style', 'icons']) {
   const { version } = JSON.parse(readFileSync(`packages/${name}/package.json`, 'utf8'));
   const spec = `@deernova/${name}@${version}`;
   const published = spawnSync('npm', ['view', spec, 'version'], { encoding: 'utf8' });

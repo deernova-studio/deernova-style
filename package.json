@@ -5,8 +5,7 @@
   "type": "module",
   "workspaces": [
     "packages/style",
-    "packages/icons",
-    "packages/loaders"
+    "packages/icons"
   ],
   "engines": {
     "node": ">=22.12.0"

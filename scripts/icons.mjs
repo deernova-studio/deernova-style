@@ -1,7 +1,7 @@
 import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ROOT, isMain } from './lib/files.mjs';
-import { curvePath } from '../packages/loaders/src/index.mjs';
+import { curvePath } from '../packages/icons/loaders.mjs';
 
 // The icon set lives in packages/icons: icons.json lists every icon, src/ holds one 24×24 stroke SVG each.
 // `node scripts/icons.mjs import` copies the Lucide-based ones from lucide-static; `build` writes dist/.

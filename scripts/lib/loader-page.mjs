@@ -32,11 +32,11 @@ ${LOADERS.map(item => `<h3 id="package-loaders-${item.name}">${item.title}</h3>
 <h3 id="package-loaders-rest">停下与图标</h3>
 <p>思考结束时调用 <code>stop()</code>：线在 240ms 内补满整条曲线、粗细变均匀，停下来就是 <code>thinking</code> 图标，后面的文字换成「已思考 12 秒」。开启「减弱动态效果」时从头到尾只显示这个图标。</p>
 <div class="specimen" data-density="desktop">
-<div class="loaders-status" role="status"><span id="thinking-slot"></span><span id="thinking-text">正在思考</span><span class="loaders-status-time" id="thinking-time">0 秒</span></div>
+<div class="loaders-status" role="status"><span class="loaders-slot" id="thinking-slot"></span><span id="thinking-text">正在思考</span><span class="loaders-status-time" id="thinking-time">0 秒</span></div>
 <div class="loaders-controls"><button class="dn-button" type="button" id="thinking-finish">思考完成</button><button class="dn-button is-plain" type="button" id="thinking-restart">重新开始</button></div>
 <div class="loaders-pair">
 <figure><svg class="dn-icon" viewBox="0 0 24 24" aria-hidden="true">${thinkingIcon}</svg><figcaption>thinking 图标</figcaption></figure>
-<figure><span id="rest-slot"></span><figcaption>thinking 动效停下后</figcaption></figure>
+<figure><span class="loaders-slot" id="rest-slot"></span><figcaption>thinking 动效停下后</figcaption></figure>
 </div>
 </div>
 <p class="doc-credit">「让线沿数学曲线走」的思路受 <a href="https://github.com/Paidax01/math-curve-loaders" target="_blank" rel="noopener noreferrer">Paidax01/math-curve-loaders</a> 启发；曲线参数、单笔变细的画法和代码都是 Deernova 独立实现的。MIT 许可。</p>

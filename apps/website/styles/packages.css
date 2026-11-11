@@ -30,9 +30,12 @@
 .loaders-sizes { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-5); color: var(--ink-secondary); }
 .loaders-sizes figcaption { color: var(--ink-tertiary); font: var(--weight-regular) 11px/1 var(--font-mono); }
 .loaders-status { display: flex; align-items: center; gap: var(--space-2); min-height: var(--button-height-md); margin-top: var(--space-4); color: var(--ink-secondary); font: var(--type-body); }
+/* The demo slots hold an <svg> that createLoader() adds; as inline content it would sit on the text baseline, above centre. */
+.loaders-slot { display: grid; place-items: center; }
+.loaders-status:first-child { margin-top: 0; }
 .loaders-status-time { color: var(--ink-tertiary); font-variant-numeric: tabular-nums; }
 .loaders-controls { display: flex; flex-wrap: wrap; gap: var(--gap-stack); margin-top: var(--space-3); }
-.loaders-pair { display: flex; gap: var(--space-6); color: var(--ink); }
+.loaders-pair { display: flex; gap: var(--space-6); margin-top: var(--space-6); color: var(--ink); }
 .loaders-pair figure { min-width: 128px; }
 .loaders-pair figcaption { color: var(--ink-tertiary); font: var(--type-caption); }
 .loaders-pair svg, .loaders-pair .dn-loader { width: 64px; height: 64px; }

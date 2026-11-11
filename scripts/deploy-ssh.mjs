@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { isAbsolute, join } from 'node:path';
 import { ROOT, isMain } from './lib/files.mjs';
 import { packageSite } from './package-site.mjs';
 
@@ -23,7 +23,9 @@ export function parseArgs(args, env = process.env) {
   const host = env.DEERNOVA_SSH_HOST || 'deernova';
   if (!/^(?:[\w][\w.-]*@)?[a-zA-Z0-9][\w.-]*$/.test(host)) throw Error('DEERNOVA_SSH_HOST must be an SSH alias or user@hostname; configure ports and IPv6 in ~/.ssh/config.');
   if (release && !/^\/var\/www\/(?:releases\/deernova-|deernova-before-)[A-Za-z0-9]+$/.test(release)) throw Error('Release must be a Deernova version directory under /var/www.');
-  return { action, host, dryRun, release };
+  const sshConfig = env.DEERNOVA_SSH_CONFIG;
+  if (sshConfig && (!isAbsolute(sshConfig) || /[\r\n\0]/.test(sshConfig))) throw Error('DEERNOVA_SSH_CONFIG must be an absolute file path.');
+  return { action, host, dryRun, release, sshConfig };
 }
 
 function execute(command, args, { input, timeout = 300_000 } = {}) {
@@ -56,7 +58,7 @@ export async function verifyPublic(checks, fetcher = fetch) {
 }
 
 export async function run(options, { exec = execute, pack = packageSite, verify = verifyPublic, log = console.log } = {}) {
-  const { action, host, dryRun, release } = options;
+  const { action, host, dryRun, release, sshConfig } = options;
   if (action === 'help') {
     log('Usage: node scripts/deploy-ssh.mjs check|status|deploy|rollback [--dry-run] [--release /var/www/releases/deernova-TIMESTAMP]\nSSH alias: DEERNOVA_SSH_HOST (default: deernova). See docs/deployment.md.');
     return;
@@ -69,7 +71,8 @@ export async function run(options, { exec = execute, pack = packageSite, verify 
     return;
   }
   const source = await readFile(join(ROOT, 'scripts/deploy-site.py'), 'utf8');
-  const ssh = (command, input) => exec('ssh', [...SSH_OPTIONS, host, command], { input });
+  const sshOptions = [...(sshConfig ? ['-F', sshConfig] : []), ...SSH_OPTIONS];
+  const ssh = (command, input) => exec('ssh', [...sshOptions, host, command], { input });
   const remote = (verb, args = []) => {
     const command = ['python3', '-', verb, ...args].map(quote).join(' ');
     return JSON.parse(ssh(`if [ "$(id -u)" -eq 0 ]; then exec ${command}; else exec sudo -n ${command}; fi`, source));
@@ -94,7 +97,7 @@ export async function run(options, { exec = execute, pack = packageSite, verify 
   let result;
   try {
     log(`Uploading ${bundle.archive}…`);
-    exec('scp', [...SSH_OPTIONS, bundle.archive, `${host}:${staging}/site.tgz`], { timeout: 600_000 });
+    exec('scp', [...sshOptions, bundle.archive, `${host}:${staging}/site.tgz`], { timeout: 600_000 });
     result = remote('deploy', [`${staging}/site.tgz`, bundle.sha256]);
     log(JSON.stringify(result, null, 2));
   } finally {

@@ -36,7 +36,7 @@ dir = '.'
 run = 'npm run pack:site'
 
 [tasks.'website:doctor']
-description = 'Check SSH access and server prerequisites without deploying'
+description = 'Load Infisical credentials and check SSH/server prerequisites'
 dir = '.'
 raw_args = true
 run = 'npm run doctor --'
@@ -48,7 +48,7 @@ raw_args = true
 run = 'npm run status --'
 
 [tasks.'website:deploy']
-description = 'Build, upload over SCP, deploy and verify both domains'
+description = 'Load Infisical credentials, build, deploy over SSH and verify'
 dir = '.'
 raw_args = true
 run = 'npm run deploy --'

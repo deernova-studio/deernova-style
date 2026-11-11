@@ -35,7 +35,9 @@ packages/style/                 npm 包 @deernova/style
   bin/cli.mjs                   install / update / doctor
 scripts/                        tokens、build-site、build-skill、发布工具
   vite-website.mjs               开发时渲染规范、提供共享素材并监听规范和 token 修改
-  deploy-ssh.mjs                 本机 SSH/SCP 发布编排与公网验收
+  deploy-one.mjs                 从 One / Infisical 的独立目录读取部署凭据
+  deploy-credentials.mjs         临时 SSH 文件、严格主机验证与退出清理
+  deploy-ssh.mjs                 SSH/SCP 发布编排与公网验收
   deploy-site.py                 ECS 上的校验、版本切换、锁与回滚
 one.manifest.toml                One 工作区与官网登记
 mise.toml                        One 的显式 npm 任务入口，保留现有 npm 工具链

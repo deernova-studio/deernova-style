@@ -1,121 +1,116 @@
-# One CLI + SSH 部署
+# One CLI + Infisical + SSH 部署
 
-流程：**One → npm 构建 → SCP 上传 → SSH 执行部署脚本 → HTTPS 验收**。使用本机 `~/.ssh/config`、密钥和 agent，不需要 OSS、阿里云 AccessKey 或 One/Infisical 登录。
+流程：**One → Infisical 读取部署凭据 → 构建 → SCP 上传 → SSH 切换版本 → HTTPS 验收**。官网继续部署到现有 ECS；HTTPS 证书和 Nginx 配置由服务器管理，不需要 OSS 或阿里云 AccessKey。
 
-2026-11-11 已完成本机与生产 SSH 配置，并通过真实的一键发布验收。当前这台 Mac 已安装 `~/.local/bin/one`、配置 `deernova` SSH 别名并核对服务器主机密钥，在仓库根目录直接运行 `one run website:deploy` 即可。完整发布记录见 [部署记录](deployment.md)。
+## 凭据与配置放在哪里
 
-当前部署私钥为 `~/.ssh/deernova_deploy_ed25519`，只保存在本机；服务器上的公钥使用 `restrict` 禁用端口转发、agent 转发及 PTY。安全组仅允许配置时的本机直连出口 IPv4 `/32` 访问 TCP 22。更换网络或出口 IP 变化后，需要先更新安全组来源；HTTP 代理的出口 IP 不一定是 SSH 使用的出口 IP。
+| 内容 | 存放位置 |
+| --- | --- |
+| SSH 私钥、服务器地址、账号、端口、已核验的主机公钥 | Infisical `shared-credentials` 项目，`prod` 环境，`/deernova-website` 目录 |
+| One 登录会话 | 每位维护者本机的 One 配置目录，由 One 管理 |
+| HTTPS 证书和私钥、Nginx 配置 | 服务器 `/etc/letsencrypt/`、`/etc/nginx/` |
+| 公开的任务、部署脚本、域名、目录约定 | Git 仓库 |
 
-## 其他维护者能否直接部署
+接法与 HandyPick 的共享签名凭据一致：`one exec --global --env prod --path ... --keys ...`。`one.manifest.toml` 只登记工作区，不绑定项目级环境变量；仅部署、检查服务器、查状态和回滚任务读取部署目录，开发与构建不需要 Infisical 登录。
 
-Git 共享的是部署任务、脚本和文档，不包含本机私钥、SSH 配置或服务器访问权限；当前 One 仅作为统一任务入口，未接入共享凭据库。
+`deploy-credentials.mjs` 在系统临时目录创建权限为 `0700` 的目录，密钥、主机公钥和 SSH 配置均为 `0600`。它验证密钥和主机记录后，启动部署子进程，并从子进程环境中移除私钥等凭据值。SSH/SCP 使用临时配置和严格主机校验，不依赖本机 `~/.ssh/config` 或 agent。命令成功、失败或收到正常终止信号后都会清理临时目录；系统断电或强制 `SIGKILL` 无法执行清理。
 
-其他维护者拉取包含这些改动的分支后，需要完成一次本机工具初始化，生成自己的 SSH 密钥，由服务器管理员授权其公钥并放行其出口 IP，再配置 `deernova` 别名、核对服务器主机密钥。`one run website:doctor` 通过后，即可运行 `one run website:deploy`。管理员可以通过已有的 SSH 连接追加公钥，无需每次打开控制台，也无需复制其他维护者的私钥。
+## 其他维护者开始部署
 
-当前脚本针对 `deernova.me`、`www.deernova.me` 及现有 `/var/www/`、Nginx 环境。部署到另一台服务器时，还需准备相应服务、域名和证书；只改 SSH 地址并不能自动初始化整台服务器。通过 npm 安装 `@deernova/style` 的普通使用者只获得 skill 安装器和规范，不会获得官网部署权限。
+本机需要 Node.js 22.12+、npm、OpenSSH（`ssh`/`scp`/`ssh-keygen`）、`tar`、`curl` 和 `shasum`。完整测试另需 Python 3.11.8+。服务器使用现有 Ubuntu 24.04、Python 3.12、Nginx、curl 和 systemd。
 
-## 初始化本机工具
-
-本机需要 Node.js 22.12+、npm、OpenSSH（`ssh`/`scp`）、`tar`、`curl` 和 `shasum`。运行完整测试另需 Python 3.11.8+。服务器继续使用现有 Ubuntu 24.04、Python 3.12、Nginx、curl 和 systemd。
-
-在仓库根目录运行：
+在包含本次接入的分支根目录运行：
 
 ```sh
 npm run setup:one
 export PATH="$PWD/.cache/one/bin:$PATH"
 one mise trust
 one run website:install
-```
-
-安装脚本固定 One **0.1.25** 并核对仓库内登记的 SHA256，支持 macOS/Linux 的 arm64 和 x86_64；仅写入仓库 `.cache/one/`。PATH 只影响当前终端，重新打开终端后需在仓库根目录再执行，或直接用 `.cache/one/bin/one`。One 首次运行可能下载其 mise、Node 和 Process Compose 运行工具。
-
-`one.manifest.toml` 将官网登记为 `toolchain = "none"`，`mise.toml` 手工维护任务并固定 Node 24.13.0。One 0.1.25 的 Node 工具链只支持 pnpm，显式任务则可以保留本仓库的 npm 锁文件和构建方式。不要用 `one init` 迁移包管理器；修改任务时同步维护 `mise.toml` 与根目录 `package.json`。
-
-## 一次性配置 SSH
-
-现有服务器为杭州 ECS，公网 IP `47.114.38.135`。如需新密钥，在本机运行下面的命令；已有适用密钥可直接使用。
-
-```sh
-ssh-keygen -t ed25519 -f ~/.ssh/deernova_deploy_ed25519 -C deernova-site-deploy
-ssh-add ~/.ssh/deernova_deploy_ed25519
-```
-
-通过目前可用的阿里云控制台终端，将 **`.pub` 公钥**追加到服务器登录账号的 `~/.ssh/authorized_keys`；目录权限为 `700`，文件权限为 `600`。私钥保留在本机。安全组开放实际 SSH 端口（默认 22）给本机出口 IP，同时确认服务器 SSH 服务和系统防火墙允许连接。
-
-把下面一段添加到本机 `~/.ssh/config`，按实际账号、端口和密钥路径调整：
-
-```sshconfig
-Host deernova
-    HostName 47.114.38.135
-    User root
-    Port 22
-    IdentityFile ~/.ssh/deernova_deploy_ed25519
-    IdentitiesOnly yes
-    ForwardAgent no
-    ServerAliveInterval 15
-```
-
-部署账号需要更新 `/var/www/`，执行 `nginx -t` 和 `systemctl reload nginx`。当前流程支持 root；使用普通运维账号时，它必须已有 `sudo -n python3` 的执行权限（这是管理员级权限）。脚本不会创建账号、更改 sudoers 或打开端口。
-
-先通过控制台核对服务器主机指纹（例如 `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub`），再在本机完成首次交互连接，将核对过的主机记录加入 `known_hosts`：
-
-```sh
-ssh deernova true
+one login
+one env --global
+one env list --global --env prod --path /deernova-website
 one run website:doctor
+one run website:deploy
 ```
 
-`doctor` 检查密钥连接、执行权限、Python 版本、Nginx 配置与运行状态，以及当前/上一版本目录；不发布网站。自动化命令固定启用 `BatchMode=yes` 和 `StrictHostKeyChecking=yes`，不会询问登录密码或自动接受未知主机。加密私钥先用 `ssh-add` 加载到 agent。
+登录时选择维护团队所在的 Infisical 组织，并由管理员授予上述项目、环境和目录的读取权限。`one env --global` 用于确认当前绑定，`env list` 只显示变量名。首次登录后仍需将维护者的实际出口 IP 加入 ECS 的 SSH 安全组白名单；当前服务器为 `47.114.38.135:22`，规则使用 IPv4 `/32`。HTTP 代理的出口 IP 不一定是 SSH 的出口 IP。
 
-也可使用自己的 SSH 别名；端口、用户、跳板机等配置仍放在 `~/.ssh/config`：
+获得授权后，无需在每台电脑复制部署私钥或编辑 SSH 配置。没有 Infisical 权限的开源用户不能部署到本服务器，读取该目录私钥的维护者则拥有对应服务器账号的权限。当前账号为 root；共享目录应只对管理员开放。服务器公钥授权使用 `restrict` 禁止转发和 PTY，但不限制 root 命令执行。
+
+当前脚本针对 `deernova.me`、`www.deernova.me` 和 `/var/www/` 的现有网站环境。部署到自己的服务器时，需要自己的 Infisical 凭据和服务器、域名、证书配置，不能只换 IP 就自动初始化新服务器。npm 包 `@deernova/style` 只提供 skill 安装器和规范，不授予官网部署权限。
+
+安装脚本固定 One **0.1.25** 并核对 SHA256，支持 macOS/Linux 的 arm64 和 x86_64，只写入 `.cache/one/`。上面的 PATH 仅影响当前终端；当前维护用 Mac 另已安装 `~/.local/bin/one`。One 首次运行可能下载 mise、Node 和 Process Compose。
+
+`mise.toml` 固定 Node 24.13.0，显式复用根目录 npm scripts。One 0.1.25 的 Node 工具链使用 pnpm，因此本仓库采用 `toolchain = "none"`，保留 npm 锁文件。不要运行 `one init` 改写这些任务。
+
+## 管理员首次存入部署凭据
+
+目标为当前组织的 `shared-credentials` 项目、`prod` 环境、`/deernova-website` 目录，包含以下五项：
+
+| 变量名 | 内容 |
+| --- | --- |
+| `DEERNOVA_SSH_HOST` | 实际服务器 IPv4 或 DNS 主机名，不是本机 SSH 别名 |
+| `DEERNOVA_SSH_USER` | 服务器账号 |
+| `DEERNOVA_SSH_PORT` | SSH 端口 |
+| `DEERNOVA_SSH_PRIVATE_KEY` | 完整、无口令的专用 OpenSSH 私钥，仅通过标准输入传入 |
+| `DEERNOVA_SSH_KNOWN_HOSTS` | 经控制台或可信渠道核验的 OpenSSH 主机公钥记录，包含匹配的主机和端口 |
+
+先确认 `one whoami`、`one env --global` 指向正确账号和组织，并在 Infisical 的 `prod` 环境创建 `/deernova-website` 文件夹，再写入。以下为管理员操作示例，替换账号、主机和本机文件路径；不要把私钥粘贴到命令参数或提交到 Git。
 
 ```sh
-DEERNOVA_SSH_HOST=my-ecs one run website:doctor
-DEERNOVA_SSH_HOST=my-ecs one run website:deploy
+one env set --global --env prod --path /deernova-website DEERNOVA_SSH_HOST 47.114.38.135
+one env set --global --env prod --path /deernova-website DEERNOVA_SSH_USER root
+one env set --global --env prod --path /deernova-website DEERNOVA_SSH_PORT 22
+one env set --global --env prod --path /deernova-website --stdin DEERNOVA_SSH_KNOWN_HOSTS < /path/to/verified-known-hosts
+one env set --global --env prod --path /deernova-website --stdin DEERNOVA_SSH_PRIVATE_KEY < ~/.ssh/deernova_deploy_ed25519
 ```
+
+One 0.1.25 的共享凭据写入在文件夹不存在时可能返回 `INFISICAL_FOLDER_NOT_FOUND`；先创建文件夹再重试。服务器需要已授权对应公钥、SSH 服务正常，账号能更新 `/var/www/` 并执行 Nginx 检查和重载；普通账号需已有 `sudo -n python3` 权限。脚本不会创建服务器账号或自动放开安全组。
 
 ## 日常命令
 
 | 命令 | 行为 |
 | --- | --- |
-| `one run website:dev` | 启动本机 Vite 开发服务 |
-| `one run website:check` | 构建并运行全部测试，包含隔离部署测试 |
-| `one run website:pack` | 只构建发布包和 SHA256，不连接服务器 |
-| `one run website:deploy -- --dry-run` | 输出目标与步骤，不构建、不连接生产服务器 |
-| `one run website:doctor` | 检查 SSH 和服务器条件 |
-| `one run website:deploy` | 检查服务器，构建、上传、部署并验收 |
-| `one run website:status` | 查询当前目录与记录的上一版本 |
-| `one run website:rollback` | 恢复记录的上一版本，原当前版本成为新的上一版本 |
+| `one run website:dev` | 本机开发，不读取部署凭据 |
+| `one run website:check` | 构建和完整测试，包含隔离部署及凭据清理测试 |
+| `one run website:pack` | 构建发布包，不连接 Infisical 或服务器 |
+| `one run website:deploy -- --dry-run` | 预览凭据来源和部署步骤，不读取凭据或连接服务器 |
+| `one run website:doctor` | 从 Infisical 获取凭据，验证 SSH、Python、Nginx 和版本目录 |
+| `one run website:deploy` | 从 Infisical 获取凭据，构建、上传、部署并验收 |
+| `one run website:status` | 查询当前版本与上一版本 |
+| `one run website:rollback` | 恢复上一版本并验收 |
 
-`deploy` 发布当前本机源码的构建，包括未提交改动；发布前运行 `website:check` 并确认准备上线的改动。它不执行 git push 或 npm 包发布。
+`npm run doctor/status/deploy/rollback` 使用相同的 Infisical 入口，也需要 One。发布包含当前本机未提交改动，不执行 git push 或 npm 包发布。One 自身的 `--dry-run`（位于 `--` 之前）只展示任务计划；上表的 `-- --dry-run` 会进入部署脚本预览。
 
-One 的 `--dry-run`（放在 `--` 之前）仅展示任务计划；表格里的 `-- --dry-run` 会实际进入部署脚本的预览模式。首次运行 One 自身可能准备本机工具，但部署预览不会连接生产服务器。
+若 Infisical 暂时不可用，且本机已有可信的 SSH 配置，可显式使用备用入口；默认流程不会自动绕过 Infisical 授权：
 
-不使用 One 时，可直接执行 `npm run doctor`、`npm run status`、`npm run deploy`、`npm run rollback`。参数通过 `--` 传给 npm script，例如 `npm run deploy -- --dry-run`。
+```sh
+DEERNOVA_SSH_HOST=deernova node scripts/deploy-ssh.mjs check
+DEERNOVA_SSH_HOST=deernova node scripts/deploy-ssh.mjs deploy
+```
 
-## 部署、检查与失败恢复
+## 部署、验收与恢复
 
-发布包只含公开网站文件，上传到服务器独立的 `/tmp/deernova-upload.*` 目录。服务器脚本通过 SSH 标准输入执行，无需预先安装在服务器上。
+公开网站发布包上传到独立 `/tmp/deernova-upload.*` 目录；服务器脚本通过 SSH 标准输入执行。服务器校验 SHA256、归档路径、文件类型、必要文件和模板占位符，使用 `flock` 防止并发发布，解压到 `/var/www/releases/deernova-TIMESTAMP` 后原子切换 `/var/www/deernova`。成功版本保留，上传临时目录在结束后清理。
 
-脚本校验 SHA256、归档路径、文件类型、必要页面与模板占位符，使用 `flock` 防止并发部署/回滚，解压到 `/var/www/releases/deernova-TIMESTAMP` 后原子切换 `/var/www/deernova`。上传临时目录在结束后清理；成功版本保留，不自动删除。Nginx 配置与证书沿用服务器现有配置。
+Nginx 重载或站内 HTTPS 内容校验失败，会尝试恢复原版本。站内检查通过本机 Nginx 校验证书和两个域名的页面、CSS、脚本、token 内容；随后本机检查两个公网域名的相同内容、HTTP → HTTPS 跳转，以及未知页面和 `.git/config` 的 404。
 
-服务器上的 Nginx 重载或站内 HTTPS 内容检查失败，会尝试恢复原版本并返回失败。站内检查绕过 DNS 连接本机 Nginx，同时校验两个域名的证书和首页、规范页、CSS、脚本、token 的文件内容。成功后，本机还会检查两个公网域名的相同内容、HTTP → HTTPS 跳转，以及不存在路径和 `.git/config` 的 404。
-
-如果**服务器已切换成功，但本机公网验收失败**，命令会明确报告当前版本和失败原因；它不会因本机 DNS/网络问题自动撤回已发布版本。先查询 `website:status`，需要恢复时运行 `website:rollback`。如果 SSH 在远端执行期间断开，结果可能未知，也应先查状态，不盲目重试发布。
-
-上一版本记录在 `/var/www/.deernova-previous`。首次使用新脚本前，该记录可能不存在；可以从 [历史发布记录](deployment.md) 选取仍然存在的目录，明确指定回滚目标：
+若服务器已切换成功、本机公网验收失败，会报告当前版本；不会因本机 DNS/网络问题自动回滚。SSH 中断时结果也可能未知，应先运行 `website:status`。需要回滚时运行 `website:rollback`，或指定仍然存在的历史版本：
 
 ```sh
 one run website:rollback -- --release /var/www/releases/deernova-TIMESTAMP
 ```
 
-回滚仅接受 `/var/www/releases/deernova-*` 或历史备份 `/var/www/deernova-before-*` 中的真实目录，并检查必要网站文件；不接受任意路径或目录软链接。历史 Hello World 备份若缺少完整网站文件，不适用这个回滚命令。
+上一版本记录在 `/var/www/.deernova-previous`。回滚只接受 `/var/www/releases/deernova-*` 或历史 `/var/www/deernova-before-*` 的真实完整网站目录。详细历史见 [部署记录](deployment.md)。
 
-## 常见连接问题
+## 常见问题
 
-- `Host key verification failed`：先交互连接、核对指纹并登记主机；不要关闭主机验证。
-- `Permission denied (publickey)`：检查登录账号、`authorized_keys`、密钥文件与 `ssh-add -l`。
-- 连接超时：检查安全组来源 IP、端口、系统防火墙和 SSH 服务。
-- `sudo` 要求密码：配置已有权限的运维账号，或使用当前管理员账号；自动化不接受交互密码。
-- `Another deploy or rollback is running`：等待当前操作完成后查状态；锁随进程结束自动释放。
+- Infisical 未登录或登录过期：运行 `one login`，选择正确组织。
+- 文件夹不存在或缺少变量：核对项目、`prod`、`/deernova-website` 及五项变量的读取权限；不会回退到本机私钥。
+- 主机验证失败：通过可信渠道核对服务器主机公钥后更新 Infisical 记录，不关闭主机验证。
+- `Permission denied (publickey)`：检查云端私钥是否与服务器已授权公钥对应、账号是否正确。
+- SSH 超时：检查当前网络出口 IP 是否仍在安全组白名单，及端口、系统防火墙、SSH 服务。
+- `sudo` 要求密码：使用具有非交互执行权限的账号。
+- `Another deploy or rollback is running`：等待当前操作完成后查询状态。
 
-GitHub Actions 目前只做构建、测试和 One dry-run，不连接生产。以后如需云端发布，可复用同一个 SSH 部署脚本，再配置 CI 的 SSH 密钥、主机指纹与网络访问。
+GitHub Actions 只做构建、测试和不读取凭据的 One dry-run，不连接生产。当前流程使用维护者的 One 用户登录；CI 的机器身份和自动发布另行配置。

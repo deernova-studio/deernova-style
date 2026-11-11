@@ -2,9 +2,20 @@
 
 官网是静态网站：本机编辑和构建，ECS 的 Nginx 提供 `dist/` 中的文件。网站发布不需要发布 npm 包。
 
-日常发布现已使用 **One CLI + SSH/SCP**，见 [SSH 配置与发布说明](ssh-deployment.md)。当前 Mac 已完成一次性配置，运行 `one run website:deploy` 即可完成构建、上传、版本切换和验收。
+日常发布现已使用 **One CLI + Infisical + SSH/SCP**，见 [凭据与发布说明](ssh-deployment.md)。One 从共享凭据库读取 SSH 配置，运行 `one run website:deploy` 完成构建、上传、版本切换和验收。维护者需有 Infisical 读取权限，且当前网络出口在服务器安全组白名单内。
 
-## 当前发布（2026-11-11 23:18，北京时间）
+## 当前发布（2026-11-12 00:46，北京时间）
+
+- 来源：已拉取到 `main` 的 `5fd4ef8`，加上 One CLI 与本次 Infisical 接入，网站版本 `0.3.14`。
+- 执行：`one run website:deploy --ui stream`，真实从 Infisical `shared-credentials / prod / deernova-website` 获取五项 SSH 凭据，完成构建、上传、版本切换和公网验收，退出码为 0。
+- 发布包：`deernova-site-0.3.14-20261111T164631Z-9817c75c.tgz`。
+- SHA256：`8dd19e6d809b6f32ad0080fd65e06c342ca8754bc39837627bd7cfbcbfe3f4cd`。
+- 当前目录：`/var/www/releases/deernova-20261111T164640221102Z`。
+- 上一版本：`/var/www/releases/deernova-20261111T154548210672Z`，已保留并记录供回滚。
+- 已验收：Infisical 凭据读取与临时文件清理、One doctor、Nginx 配置；两个域名的 HTTPS 首页、规范页、CSS、脚本和 token 与本次发布包一致，HTTP 跳转 HTTPS，未知路径和 `.git/config` 返回 404。
+- 本地验证：84 项 Node 测试通过，包含 Python 部署测试入口及凭据权限、终止清理和 SSH/SCP 配置传递测试。经用户确认新增当前出口 IP 的 TCP 22 单地址规则，原规则保留。未执行生产回滚演练。
+
+## 历史发布（2026-11-11 23:18，北京时间）
 
 - 按用户要求再次执行 `one run website:deploy --ui stream`，版本 `0.3.14`，退出码为 0。
 - 发布包：`deernova-site-0.3.14-20261111T151813Z-3be21c62.tgz`。

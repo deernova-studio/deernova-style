@@ -39,6 +39,7 @@ test('deployment uploads this build, enforces host checks, and verifies its cont
   let verified;
   const exec = (command, args, options) => {
     calls.push({ command, args, options });
+    assert.deepEqual(args.slice(0, 2), ['-F', '/tmp/private ssh config']);
     assert.ok(args.includes('BatchMode=yes'));
     assert.ok(args.includes('StrictHostKeyChecking=yes'));
     if (command === 'scp') return '';
@@ -48,7 +49,7 @@ test('deployment uploads this build, enforces host checks, and verifies its cont
     assert.match(options.input, /class Site:/);
     return JSON.stringify(remote.includes("'deploy'") ? switched : { ready: true });
   };
-  const result = await run(parseArgs(['deploy'], {}), { exec, pack: async () => bundle,
+  const result = await run(parseArgs(['deploy'], { DEERNOVA_SSH_CONFIG: '/tmp/private ssh config' }), { exec, pack: async () => bundle,
     verify: async checks => { verified = checks; }, log });
   assert.equal(result.current, current);
   assert.deepEqual(verified, bundle.checks);

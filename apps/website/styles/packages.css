@@ -1,11 +1,5 @@
 /* Deernova Icons and Deernova Loaders pages: the guide layout plus their own samples. */
 
-/* Icons: one row per size */
-.icons-strip { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) 0; border-bottom: var(--stroke-line) solid var(--line); }
-.icons-strip-label { flex: none; width: 28px; color: var(--ink-tertiary); font: var(--weight-regular) var(--type-caption-size)/1 var(--font-mono); }
-.icons-strip-row { display: flex; flex-wrap: wrap; gap: 10px 12px; color: var(--ink-secondary); }
-.icons-strip-row > span { display: inline-grid; }
-
 /* Icons: a small app put together from the set */
 .icons-context { display: grid; grid-template-columns: 200px minmax(0, 1fr); width: 100%; overflow: hidden; border: var(--stroke-line) solid var(--line); border-radius: var(--card-radius); background: var(--canvas); }
 .icons-sidebar { display: grid; align-content: start; gap: 2px; padding: var(--space-2); border-right: var(--stroke-line) solid var(--line); background: var(--surface); }

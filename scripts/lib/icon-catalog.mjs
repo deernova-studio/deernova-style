@@ -22,9 +22,6 @@ button.innerHTML = svg('send', { label: '发送' });</code></pre>
 <p>页面里图标多时，内联一次 <code>@deernova/icons/sprite.svg</code>，再按名字引用；尺寸和描边用规范里的 <code>.dn-icon</code> 类：</p>
 <pre><code>&lt;svg class=&quot;dn-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#dn-send&quot;/&gt;&lt;/svg&gt;</code></pre>
 <p>每个图标在原生端对应的 SF Symbol，以及颜色和状态图标的规则，见 Style 的<a href="guide.html#foundations-iconography">图标</a>。MIT 许可。</p>
-<h3 id="overview-sizes">三个尺寸</h3>
-<p>按桌面密度的 <code>icon-size-sm</code>、<code>icon-size-md</code>、<code>icon-size-lg</code>（14、16、20）。</p>
-${[14, 16, 20].map(size => `<div class="icons-strip"><span class="icons-strip-label">${size}</span><span class="icons-strip-row">${icons.map(icon => `<span title="${icon.name}">${use(icon.name, size)}</span>`).join('')}</span></div>`).join('\n')}
 <h3 id="overview-context">放进界面里</h3>
 <div class="specimen" data-density="desktop"><div class="icons-context">
   <nav class="icons-sidebar" aria-label="示例侧边栏">

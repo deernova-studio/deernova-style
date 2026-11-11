@@ -107,7 +107,7 @@ nginx -t && systemctl reload nginx
 2. `https://deernova.me/` 和 `https://www.deernova.me/` 返回 200，证书校验通过。
 3. 两个域名的 HTTP 地址跳转到 HTTPS。
 4. 首页麋鹿画面正常，主题切换与产品菜单可操作，HandyPick 排在首位并在新标签页打开公开仓库，Deernova Style 能进入规范页，两个入口显示用途说明。
-5. 规范页内容、样式、图片和 token 下载正常；浏览器无新增脚本错误。
+5. 规范页内容、样式、图片和 token 下载正常；`icons.html`、`loaders.html` 打开正常，图标和动效显示；浏览器无新增脚本错误。
 6. 首页和规范页备案号为 `京ICP备2026076994号-1`，链接指向工信部备案系统。
 7. 不存在的路径和 `/.git/config` 不返回私有文件；旧版本目录保留以便回滚。
 

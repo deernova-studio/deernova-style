@@ -1,77 +1,55 @@
 <!doctype html>
-<html lang="zh-CN" data-density="desktop">
+<html lang="zh-CN" data-density="comfortable">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Deernova Icons</title>
-  <meta name="description" content="Deernova 图标：AI 应用常用的 60 个线性图标，基于 Lucide，加上 Deernova 自己的 AI 和导航图标。">
+  <meta name="description" content="Deernova Icons：AI 应用常用的线性图标，基于 Lucide，24×24 网格、1.75 描边。npm 包 @deernova/icons。">
   <script>try { const theme = localStorage.getItem('deernova-theme'); if (theme) document.documentElement.dataset.theme = theme; } catch {}</script>
   <link rel="icon" type="image/png" href="assets/deernova-studio-icon.png">
+  <link rel="apple-touch-icon" href="assets/deernova-studio-icon.png">
   <link rel="stylesheet" href="assets/tokens.css">
   <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/guide.css">
+  <link rel="stylesheet" href="styles/packages.css">
   <style>
 {{referenceCss}}
-.page-install { display: grid; gap: var(--space-2); max-width: 640px; margin: 0 0 var(--space-5); }
-.page-install pre { margin: 0; padding: var(--space-2) var(--space-3); overflow-x: auto; border-radius: var(--radius-sm); background: var(--surface-sunken); font: var(--type-code); }
-.page-install p { margin: 0; color: var(--ink-secondary); font: var(--type-callout); }
-.icons-page { box-sizing: border-box; width: min(100%, 1040px); margin: 0 auto; padding: var(--space-6) var(--space-4) var(--space-8); color: var(--ink); }
-.icons-page h1 { margin: 0 0 var(--space-2); font: var(--weight-semibold) 32px/1.2 var(--font-serif); }
-.icons-summary, .icons-note { max-width: 640px; margin: 0 0 var(--space-4); color: var(--ink-secondary); font: var(--type-body); }
-.icons-group { margin-top: var(--space-6); }
-.icons-group h2 { margin: 0 0 var(--space-3); font: var(--type-headline); }
-.icons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
-.icons-tile { position: relative; display: grid; justify-items: center; gap: 2px; padding: var(--space-4) var(--space-2) var(--space-3); border: var(--stroke-line) solid var(--line); border-radius: var(--card-radius); background: var(--surface-raised); text-align: center; }
-.icons-glyph { display: grid; place-items: center; height: 40px; color: var(--ink); }
-.icons-name { color: var(--ink); font: var(--weight-regular) var(--type-caption-size)/1.4 var(--font-mono); }
-.icons-label { color: var(--ink-tertiary); font: var(--weight-regular) var(--type-caption-size)/1.4 var(--font-sans); }
-.icons-source { position: absolute; top: 6px; right: 6px; padding: 1px 6px; border-radius: var(--radius-full); background: var(--fill-selected); color: var(--ink-secondary); font: var(--weight-regular) 11px/16px var(--font-sans); }
-.icons-strip { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) 0; border-bottom: var(--stroke-line) solid var(--line); }
-.icons-strip-label { flex: none; width: 40px; color: var(--ink-tertiary); font: var(--weight-regular) var(--type-caption-size)/1 var(--font-mono); }
-.icons-strip-row { display: flex; flex-wrap: wrap; gap: 10px 12px; color: var(--ink-secondary); }
-.icons-strip-row > span { display: inline-grid; }
-.icons-compare { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: var(--space-2); }
-.icons-pair { display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: var(--space-3); padding: var(--space-3); border: var(--stroke-line) solid var(--line); border-radius: var(--card-radius); background: var(--surface-raised); }
-.icons-pair-name { color: var(--ink); font: var(--weight-regular) var(--type-caption-size)/1.4 var(--font-mono); }
-.icons-pair-cell { display: flex; align-items: center; gap: var(--space-3); color: var(--ink-tertiary); }
-.icons-pair-cell.is-ours { color: var(--ink); }
-.icons-pair-cell em { color: var(--ink-tertiary); font: normal var(--weight-regular) 11px/1 var(--font-sans); }
-.icons-context { display: grid; grid-template-columns: 240px minmax(0, 1fr); overflow: hidden; border: var(--stroke-line) solid var(--line); border-radius: var(--card-radius); background: var(--canvas); }
-.icons-sidebar { display: grid; align-content: start; gap: 2px; padding: var(--space-2); border-right: var(--stroke-line) solid var(--line); background: var(--surface); }
-.icons-row { display: flex; align-items: center; gap: 2px; }
-.icons-spacer { flex: 1; }
-.icons-nav { display: flex; align-items: center; gap: var(--space-2); height: var(--sidebar-row-height, 32px); padding: 0 var(--space-2); border-radius: var(--radius-sm); color: var(--ink-secondary); font: var(--type-callout); }
-.icons-nav:first-of-type { background: var(--fill-selected); color: var(--ink); }
-.icons-main { display: grid; align-content: start; gap: var(--space-2); padding: var(--space-5) var(--space-5) var(--space-4); }
-.icons-step { display: flex; align-items: center; gap: var(--space-1); color: var(--ink-secondary); font: var(--type-body); }
-.icons-step > .dn-icon:first-child { margin-right: var(--space-1); }
-.icons-actions { display: flex; gap: 2px; margin: var(--space-1) 0 var(--space-6) calc(var(--space-2) * -1); }
-.icons-actions .dn-icon-button { color: var(--ink-tertiary); }
-.icons-composer { display: grid; gap: var(--space-2); padding: var(--space-3) var(--space-2) var(--space-2); border-radius: var(--radius-lg); background: var(--surface-raised); box-shadow: var(--shadow-float); }
-.icons-composer-text { padding: 0 var(--space-2); color: var(--ink-tertiary); font: var(--type-body); }
-.icons-send { display: grid; place-items: center; width: var(--button-height-md); height: var(--button-height-md); border: 0; border-radius: var(--radius-full); background: var(--accent); color: var(--on-accent); }
-@media (max-width: 720px) { .icons-context { grid-template-columns: 1fr; } .icons-sidebar { border-right: 0; border-bottom: var(--stroke-line) solid var(--line); } }
   </style>
   <script type="module" src="scripts/site.js"></script>
+  <script type="module" src="scripts/guide.js"></script>
 </head>
-<body>
-<header class="masthead">
+<body class="guide-page">
+{{iconSprite}}
+<a class="skip" href="#main">跳到正文</a>
+<header class="masthead guide-masthead">
   <a class="wordmark" href="./" aria-label="Deernova 首页">deernova<span>.</span></a>
-  <nav class="package-tabs" aria-label="Deernova Style 的三个包"><a class="package-tab" href="guide.html">Style</a><a class="package-tab" aria-current="page" href="icons.html">Icons</a><a class="package-tab" href="loaders.html">Loaders</a></nav>
+  <a class="masthead-product" href="#overview">
+    {{markIcons}}
+    <span class="product-name">Deernova Icons</span>
+  </a>
   <nav class="masthead-actions" aria-label="快捷导航">
-    <a class="masthead-action" href="https://github.com/deernova-studio/deernova-style" target="_blank" rel="noopener noreferrer" aria-label="GitHub 仓库（新标签页）" data-tooltip="GitHub 仓库"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.3-4.3-2.1-6-2.6m12 5v-3.4c0-1 .1-1.5-.5-2.1 3-.3 6.2-1.5 6.2-6.7a5.2 5.2 0 0 0-1.4-3.6 4.8 4.8 0 0 0-.1-3.6s-1.1-.4-3.7 1.4a12.7 12.7 0 0 0-6.8 0C6.1 1.6 5 2 5 2a4.8 4.8 0 0 0-.1 3.6 5.2 5.2 0 0 0-1.4 3.6c0 5.2 3.2 6.4 6.2 6.7-.5.5-.8 1.1-.7 2.1v3.4"/></svg></a>
+    <a class="masthead-action" href="https://github.com/deernova-studio" target="_blank" rel="noopener noreferrer" aria-label="GitHub 组织（新标签页）" data-tooltip="GitHub 组织"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.3-4.3-2.1-6-2.6m12 5v-3.4c0-1 .1-1.5-.5-2.1 3-.3 6.2-1.5 6.2-6.7a5.2 5.2 0 0 0-1.4-3.6 4.8 4.8 0 0 0-.1-3.6s-1.1-.4-3.7 1.4a12.7 12.7 0 0 0-6.8 0C6.1 1.6 5 2 5 2a4.8 4.8 0 0 0-.1 3.6 5.2 5.2 0 0 0-1.4 3.6c0 5.2 3.2 6.4 6.2 6.7-.5.5-.8 1.1-.7 2.1v3.4"/></svg></a>
     <button class="theme-toggle masthead-action" type="button" data-theme-toggle aria-label="切换外观" data-tooltip="切换外观"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor" stroke="none"/></svg></button>
   </nav>
 </header>
-<main class="icons-page" id="main">
-  <h1>Deernova Icons</h1>
-{{iconSummary}}
-  <section class="page-install" aria-label="安装">
-    <pre><code>npm install @deernova/icons</code></pre>
-    <pre><code>import { svg } from '@deernova/icons';
-button.innerHTML = svg('send', { label: '发送' });</code></pre>
-    <p>也可以内联一次 <code>@deernova/icons/sprite.svg</code>，再用 <code>&lt;use href=&quot;#dn-send&quot;&gt;</code> 引用。名单、用途和对应的 SF Symbol 见规范的<a href="guide.html#foundations-iconography">图标</a>。MIT 许可，来自 Lucide 的部分按 ISC。</p>
-  </section>
-{{iconCatalog}}
-</main>
+
+<div class="guide">
+  <aside class="toc" aria-label="目录">
+    <details class="toc-details" open>
+      <summary>目录</summary>
+      <nav>
+{{iconsNav}}
+      </nav>
+    </details>
+  </aside>
+  <main class="guide-main" id="main">
+{{iconsDocs}}
+    <footer class="guide-footer">
+      <span>deernova.</span>
+      <span>v{{version}} · <a href="./">首页</a> · <a href="https://github.com/deernova-studio" target="_blank" rel="noopener noreferrer">GitHub ↗</a></span>
+    </footer>
+    <div class="site-filing"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">京ICP备2026076994号-1</a></div>
+  </main>
+</div>
 </body>
 </html>

@@ -1,0 +1,43 @@
+/* Deernova Icons and Deernova Loaders pages: the guide layout plus their own samples. */
+
+/* Icons: one row per size */
+.icons-strip { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) 0; border-bottom: var(--stroke-line) solid var(--line); }
+.icons-strip-label { flex: none; width: 28px; color: var(--ink-tertiary); font: var(--weight-regular) var(--type-caption-size)/1 var(--font-mono); }
+.icons-strip-row { display: flex; flex-wrap: wrap; gap: 10px 12px; color: var(--ink-secondary); }
+.icons-strip-row > span { display: inline-grid; }
+
+/* Icons: a small app put together from the set */
+.icons-context { display: grid; grid-template-columns: 200px minmax(0, 1fr); width: 100%; overflow: hidden; border: var(--stroke-line) solid var(--line); border-radius: var(--card-radius); background: var(--canvas); }
+.icons-sidebar { display: grid; align-content: start; gap: 2px; padding: var(--space-2); border-right: var(--stroke-line) solid var(--line); background: var(--surface); }
+.icons-row { display: flex; align-items: center; gap: 2px; }
+.icons-spacer { flex: 1; }
+.icons-nav { display: flex; align-items: center; gap: var(--space-2); height: var(--button-height-md); padding: 0 var(--space-2); border-radius: var(--radius-sm); color: var(--ink-secondary); font: var(--type-callout); }
+.icons-nav.is-current { background: var(--fill-selected); color: var(--ink); }
+.icons-main { display: grid; align-content: start; gap: var(--space-2); padding: var(--space-5) var(--space-5) var(--space-4); }
+.icons-step { display: flex; align-items: center; gap: var(--space-1); color: var(--ink-secondary); font: var(--type-body); }
+.icons-step > .dn-icon:first-child { margin-right: var(--space-1); }
+.icons-actions { display: flex; gap: 2px; margin: var(--space-1) 0 var(--space-6) calc(var(--space-2) * -1); }
+.icons-actions .dn-icon-button { color: var(--ink-tertiary); }
+.icons-composer { display: grid; gap: var(--space-2); padding: var(--space-3) var(--space-2) var(--space-2); border-radius: var(--radius-lg); background: var(--surface-raised); box-shadow: var(--shadow-float); }
+.icons-composer-text { padding: 0 var(--space-2); color: var(--ink-tertiary); font: var(--type-body); }
+.icons-send { display: grid; place-items: center; width: var(--button-height-md); height: var(--button-height-md); border: 0; border-radius: var(--radius-full); background: var(--accent); color: var(--on-accent); }
+@media (max-width: 720px) { .icons-context { grid-template-columns: 1fr; } .icons-sidebar { border-right: 0; border-bottom: var(--stroke-line) solid var(--line); } }
+
+/* Loaders */
+.loaders-hero { display: flex; flex-wrap: wrap; gap: var(--space-8); color: var(--ink); }
+.loaders-hero figure, .loaders-sizes figure, .loaders-pair figure { display: grid; justify-items: center; gap: var(--space-2); margin: 0; }
+.loaders-hero figcaption { display: grid; justify-items: center; gap: 2px; color: var(--ink-tertiary); font: var(--type-caption); }
+.loaders-hero figcaption code { color: var(--ink); }
+.loaders-sizes { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-5); color: var(--ink-secondary); }
+.loaders-sizes figcaption { color: var(--ink-tertiary); font: var(--weight-regular) 11px/1 var(--font-mono); }
+.loaders-status { display: flex; align-items: center; gap: var(--space-2); min-height: var(--button-height-md); margin-top: var(--space-4); color: var(--ink-secondary); font: var(--type-body); }
+.loaders-status-time { color: var(--ink-tertiary); font-variant-numeric: tabular-nums; }
+.loaders-controls { display: flex; flex-wrap: wrap; gap: var(--gap-stack); margin-top: var(--space-3); }
+.loaders-pair { display: flex; gap: var(--space-6); color: var(--ink); }
+.loaders-pair figure { min-width: 128px; }
+.loaders-pair figcaption { color: var(--ink-tertiary); font: var(--type-caption); }
+.loaders-pair svg, .loaders-pair .dn-loader { width: 64px; height: 64px; }
+
+/* Install and usage snippets */
+.doc-body > pre { margin: var(--space-2) 0 var(--space-3); padding: var(--space-3) var(--space-4); overflow-x: auto; border-radius: var(--radius-md); background: var(--surface-sunken); color: var(--ink); font: var(--type-code); }
+.doc-body > pre code { padding: 0; background: none; font: inherit; }

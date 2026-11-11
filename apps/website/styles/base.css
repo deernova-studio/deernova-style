@@ -135,10 +135,3 @@ p { margin: 0; }
 }
 :where(.site-filing) { padding: var(--space-2) var(--space-4); text-align: center; color: var(--ink-secondary); font: var(--type-caption); }
 :where(.site-filing a) { color: inherit; }
-
-/* The three packages, as tabs in the page header */
-.package-tabs { display: flex; gap: 2px; }
-.package-tab { display: inline-flex; align-items: center; height: var(--button-height-md); padding: 0 var(--space-3); border-radius: var(--radius-full); color: var(--ink-secondary); font: var(--weight-medium) var(--type-callout-size)/1 var(--font-sans); text-decoration: none; }
-@media (hover: hover) { .package-tab:hover { background: var(--fill-hover); color: var(--ink); } }
-.package-tab[aria-current="page"] { background: var(--fill-selected); color: var(--ink); }
-@media (max-width: 640px) { .package-tab { padding: 0 var(--space-2); } }

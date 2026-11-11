@@ -2,6 +2,13 @@
 
 更新于 2026-11-05。
 
+## Icons、Loaders 与 Style 同级（2026-11-11）
+
+- 用户要求：Icons、Loaders 的产品图标参考 Style 的标志设计；三个页面同级、展示方式一样；不再标注「重画」「自有」，介绍里写明基于 Lucide 即可；以后不装 Chrome 扩展。
+- 产品标志：三个都用 Style 标志里长着鹿角的「Ui」（同一张 PNG 做遮罩），只换右上角：Style 是四角星，Icons 是描边圆角方块（图标格），Loaders 是开口圆弧（加载）。试过实心方块，小尺寸下会被看成「i」的点，没用。`scripts/lib/marks.mjs` 生成，每个实例有自己的 filter/mask/clip id。首页产品菜单和两个页面顶栏都用它。
+- 页面：`icons.html`、`loaders.html` 改成和规范页同一套外壳（顶栏标志加产品名、左侧目录、一次显示一篇、上一篇下一篇、页脚）。Icons：总览（基于 Lucide 的一句话、安装、使用、三个尺寸、放进界面里）加 6 个分组各一篇；Loaders：总览（三个动效、安装、使用、选哪个）加思考、运行工具、普通加载、停下与图标四篇。去掉了顶栏的 Style/Icons/Loaders 标签和规范页总览里的「三个包」；去掉了「重画」「自有」标记和重画前后对比；图标规范和图标包 README 里的来源说明简化成「基于 Lucide」。
+- 实测：本机 Chrome 无头模式截了三个顶栏（3 倍）和两个页面的总览、分组、动效页，布局与规范页一致；首页菜单 4 项、标志 24px、没有重复 id。总览里的安装代码原来没有底色（规范页只给自己的代码块上样式），补了样式。`npm test` 72 项通过。
+
 ## 站点加上 Icons 和 Loaders（2026-11-11）
 
 - 首页产品菜单在 HandyPick、Deernova Style 后加了 Deernova Icons、Deernova Loaders 两项（线性图标的符号用 `is-stroke`，Loaders 的符号就是 thinking 图标）。规范页总览末尾加「三个包」：每个包一句话、安装命令和一个活的示例（色阶、12 个图标、三个动效），并链到各自的页面。规范页、图标页、动效页顶栏都加了 Style / Icons / Loaders 三个标签。`icons.html`、`loaders.html` 去掉 noindex，加了安装和用法，先写一句介绍再写安装。

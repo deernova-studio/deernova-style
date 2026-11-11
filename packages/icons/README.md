@@ -1,6 +1,6 @@
 # @deernova/icons
 
-Deernova 的线性图标：AI 应用常用的 60 个，24×24 网格、1.75 描边、圆头圆角、无填充，颜色跟随文字。39 个来自 [Lucide](https://lucide.dev)，7 个按 Deernova 的比例重画，14 个 AI 图标是自己画的。
+Deernova 的线性图标：AI 应用常用的 73 个，基于 [Lucide](https://lucide.dev)，24×24 网格、1.75 描边、圆头圆角、无填充，颜色跟随文字。
 
 ```js
 import { svg } from '@deernova/icons';

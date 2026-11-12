@@ -1,4 +1,4 @@
-export type LoaderName = 'thinking' | 'working' | 'spinner';
+export type LoaderName = 'thinking' | 'deep-thinking' | 'searching' | 'reading' | 'writing' | 'working' | 'spinner';
 export declare const LOADERS: Record<LoaderName, { shape: string; duration: number; trail: number; taper: boolean; rest: 'curve' | 'none'; reducedDuration?: number }>;
 export declare function curvePath(name: LoaderName, count?: number): string;
 export declare function strokeAt(name: LoaderName, head: number, trail?: number, taper?: number): { d: string; width: number }[];

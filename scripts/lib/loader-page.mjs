@@ -1,9 +1,13 @@
 // The Deernova Loaders section of the Style guide: the three loaders, install, which to use, sizes, and the
 // thinking loader settling into its icon. The live <dn-loader> elements are defined by the page script.
 const LOADERS = [
-  { name: 'thinking', title: '思考', use: 'AI 正在思考：对话末尾的运行状态行。', curve: '三瓣玫瑰线 r = cos 3θ，花瓣加宽（|cos 3θ|^0.6），一个花瓣朝上', lap: '5.2 秒', rest: '落成 <code>thinking</code> 图标，就是「已思考 12 秒」前面那个图标', status: '正在思考' },
-  { name: 'working', title: '运行工具', use: 'AI 正在运行工具：对话末尾的运行状态行。', curve: '1:2 利萨如曲线（∞）', lap: '3 秒', rest: '停下后换成这一步的结果', status: '正在运行 命令' },
-  { name: 'spinner', title: '普通加载', use: '其他所有加载：按钮里、正在进行的步骤和任务、侧边栏会话、远程搜索、重新连接。', curve: '圆', lap: '0.9 秒（减弱动态效果时 2.4 秒）', rest: '消失', status: '正在保存' }
+  { name: 'thinking', title: '思考', use: 'AI 正在思考。', curve: '三瓣玫瑰线 r = cos 3θ，花瓣加宽（|cos 3θ|^0.6），一个花瓣朝上', lap: '5.2 秒', rest: '落成 <code>thinking</code> 图标，就是「已思考 12 秒」前面那个图标', status: '正在思考' },
+  { name: 'deep-thinking', title: '深度思考', use: 'AI 在深度思考模式下思考。', curve: '五瓣玫瑰线 r = cos 5θ', lap: '7.6 秒', rest: '换成 <code>thinking</code> 图标和「已深度思考 2 分钟」', status: '正在深度思考' },
+  { name: 'searching', title: '搜索', use: 'AI 正在联网搜索、在代码库或知识库里查找。', curve: '阿基米德螺线，两圈，向外再收回', lap: '3.6 秒', rest: '换成这一步的结果', status: '正在搜索 deernova icons' },
+  { name: 'reading', title: '读取', use: 'AI 正在读取文件、网页或附件。', curve: '三行来回，像目光一行行往下读', lap: '3.2 秒', rest: '换成这一步的结果', status: '正在读取 3 个文件' },
+  { name: 'writing', title: '写入', use: 'AI 正在写入或修改文件、生成产物。', curve: '三个相连的草写圈（摆线），写完再倒回', lap: '3.6 秒', rest: '换成这一步的结果', status: '正在写入 app.tsx' },
+  { name: 'working', title: '运行工具', use: 'AI 正在运行其他工具：命令、脚本、外部服务。', curve: '1:2 利萨如曲线（∞）', lap: '3 秒', rest: '换成这一步的结果', status: '正在运行 命令' },
+  { name: 'spinner', title: '普通加载', use: '其他所有加载：按钮里、正在进行的步骤和任务、侧边栏会话、@ 提及的远程搜索、重新连接。', curve: '圆', lap: '0.9 秒（减弱动态效果时 2.4 秒）', rest: '消失', status: '正在保存' }
 ];
 
 const sizes = name => `<div class="loaders-sizes">${[14, 16, 20, 32, 64].map(size =>
@@ -13,7 +17,7 @@ export function renderLoadersDoc(thinkingIcon, mark) {
   return `<section class="doc doc-package" id="package-loaders" aria-labelledby="package-loaders-title">
 <header class="doc-head">${mark}<h2 id="package-loaders-title">Deernova Loaders</h2><code class="doc-path">@deernova/icons/loaders</code></header>
 <div class="doc-body">
-<p class="lede">一笔单色的线沿着数学曲线走，尾巴逐渐变细，后面是很淡的完整曲线。网格和描边与 Deernova Icons 相同（24×24、1.75），颜色跟随文字，不依赖任何库。它是 Deernova Icons 的一部分。什么时候用哪个见<a href="#components-skeleton">加载状态</a>。</p>
+<p class="lede">一笔单色的线沿着数学曲线走，尾巴逐渐变细，后面是很淡的完整曲线。AI 在做什么，就用哪条曲线：思考、深度思考、搜索、读取、写入、运行工具各有一条，其他加载用圆。网格和描边与 Deernova Icons 相同（24×24、1.75），颜色跟随文字，不依赖任何库。它是 Deernova Icons 的一部分。什么时候用哪个见<a href="#components-skeleton">加载状态</a>。</p>
 <div class="specimen" data-density="desktop"><div class="loaders-hero">${LOADERS.map(item => `<figure><dn-loader name="${item.name}" style="--loader-size:48px"></dn-loader><figcaption><code>${item.name}</code>${item.title}</figcaption></figure>`).join('')}</div></div>
 <h3 id="package-loaders-install">安装和使用</h3>
 <p>加载动效在图标包里，装了 <code>@deernova/icons</code> 就有：</p>

@@ -34,7 +34,7 @@ button.innerHTML = svg('send', { label: '发送' });</code></pre>
 <pre><code>&lt;svg class=&quot;dn-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#dn-send&quot;/&gt;&lt;/svg&gt;</code></pre>
 ${manifest.groups.map(group => `<h3 id="package-icons-${group.id}">${escape(group.title)}</h3>
 <ul class="icon-grid">${group.icons.map(icon =>
-    `<li>${use(icon.name)}<code>${icon.name}</code><span>${escape(icon.label)}</span><span class="icon-sf">${icon.sf ? escape(icon.sf) : '自定义 Symbol'}</span></li>`).join('')}</ul>`).join('\n')}
+    `<li>${use(icon.name)}<code>${icon.name}</code><span>${escape(icon.label)}</span></li>`).join('')}</ul>`).join('\n')}
 </div>
 </section>`;
 }

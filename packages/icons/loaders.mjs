@@ -9,13 +9,36 @@ const TRACK_OPACITY = 0.16;
 const TAPER = 0.6; // the tail ends at 40% of the head's width
 
 // Raw curves; each is fitted to the 24 grid by fit() below, so only the shape matters here.
+// Open curves (spiral, rows, loops) are run with `there()`, which goes out and comes back, so every curve is a loop.
+// `count` is how many points the static track is drawn through; detailed curves need more than the default 48.
+const there = t => (1 - Math.cos(t * TAU)) / 2; // 0 → 1 → 0, slowing at both ends
+const rose = petals => t => {
+  const theta = t * Math.PI;
+  const c = Math.cos(petals * theta);
+  const r = Math.sign(c) * Math.abs(c) ** 0.6;
+  return [r * Math.cos(theta - Math.PI / 2), r * Math.sin(theta - Math.PI / 2)];
+};
 const SHAPES = {
   // A three-petal rose, r = cos 3θ, with fuller petals (|cos 3θ|^0.6) and one petal pointing up.
-  thinking: { extent: 16.5, at: t => {
-    const theta = t * Math.PI;
-    const c = Math.cos(3 * theta);
-    const r = Math.sign(c) * Math.abs(c) ** 0.6;
-    return [r * Math.cos(theta - Math.PI / 2), r * Math.sin(theta - Math.PI / 2)];
+  thinking: { extent: 16.5, at: rose(3) },
+  // The same rose with five petals: thinking that goes on longer.
+  'deep-thinking': { extent: 17, count: 80, at: rose(5) },
+  // An Archimedean spiral, two turns out from the centre and back in.
+  searching: { extent: 16.5, count: 96, at: t => {
+    const s = there(t);
+    const a = s * 2 * TAU;
+    const r = 0.12 + s;
+    return [r * Math.cos(a - Math.PI / 2), r * Math.sin(a - Math.PI / 2)];
+  } },
+  // Three lines read left to right and back, like eyes going down a page.
+  reading: { extent: 16.5, count: 72, at: t => {
+    const s = there(t);
+    return [Math.cos(s * 3 * Math.PI), 1.2 * (s + Math.sin(6 * Math.PI * s) / (6 * Math.PI))];
+  } },
+  // Three joined cursive loops (a trochoid), written and then rewound.
+  writing: { extent: 17, count: 96, at: t => {
+    const u = (there(t) * 2 - 1) * 3 * Math.PI;
+    return [0.28 * u - Math.sin(u), -Math.cos(u)];
   } },
   // A 1:2 Lissajous figure, the ∞ of work going back and forth.
   working: { extent: 17, at: t => [Math.sin(t * TAU), Math.sin(2 * t * TAU) / 2] },
@@ -26,6 +49,10 @@ const SHAPES = {
 // How each loader moves. duration: one lap in ms. trail: share of the curve the stroke covers.
 export const LOADERS = {
   thinking: { shape: 'thinking', duration: 5200, trail: 0.32, taper: true, rest: 'curve' },
+  'deep-thinking': { shape: 'deep-thinking', duration: 7600, trail: 0.24, taper: true, rest: 'curve' },
+  searching: { shape: 'searching', duration: 3600, trail: 0.22, taper: true, rest: 'curve' },
+  reading: { shape: 'reading', duration: 3200, trail: 0.2, taper: true, rest: 'curve' },
+  writing: { shape: 'writing', duration: 3600, trail: 0.2, taper: true, rest: 'curve' },
   working: { shape: 'working', duration: 3000, trail: 0.3, taper: true, rest: 'curve' },
   spinner: { shape: 'spinner', duration: 900, trail: 0.26, taper: false, rest: 'none', reducedDuration: 2400 }
 };
@@ -77,8 +104,10 @@ function polyline(curve, from, to) {
 }
 
 // The whole curve as a smooth closed path (Catmull-Rom through evenly spaced points).
-export function curvePath(name, count = 48) {
-  const curve = fit(LOADERS[name]?.shape ?? name);
+export function curvePath(name, count) {
+  const shape = LOADERS[name]?.shape ?? name;
+  const curve = fit(shape);
+  count ??= SHAPES[shape].count ?? 48;
   const p = Array.from({ length: count }, (_, i) => pointAt(curve, i / count));
   let d = `M${num(p[0][0])} ${num(p[0][1])}`;
   for (let i = 0; i < count; i++) {

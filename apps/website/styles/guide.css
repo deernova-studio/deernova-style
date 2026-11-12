@@ -243,4 +243,3 @@ body.guide-page { background: var(--surface); font: var(--type-body); }
 .icon-grid .dn-icon { width: 20px; height: 20px; margin-bottom: var(--space-1); color: var(--ink); }
 .icon-grid code { font-size: var(--type-caption-size); }
 .icon-grid span { color: var(--ink-tertiary); font: var(--type-caption); }
-.icon-grid .icon-sf { font-family: var(--font-mono); font-size: 11px; overflow-wrap: anywhere; }

@@ -195,7 +195,7 @@ const specimen = html => `<div class="specimen" ${APP}>${html}</div>`;
 function iconGrid(manifest) {
   if (!manifest) return '';
   return manifest.groups.map(group => `<h4 class="icon-group-title">${escape(group.title)}</h4><ul class="icon-grid">${group.icons.map(icon =>
-    `<li><svg class="dn-icon" aria-hidden="true"><use href="#dn-${icon.name}"/></svg><code>${icon.name}</code><span>${escape(icon.label)}</span><span class="icon-sf">${icon.sf ? escape(icon.sf) : '自定义 Symbol'}</span></li>`).join('')}</ul>`).join('');
+    `<li><svg class="dn-icon" aria-hidden="true"><use href="#dn-${icon.name}"/></svg><code>${icon.name}</code><span>${escape(icon.label)}</span></li>`).join('')}</ul>`).join('');
 }
 const sample = (label, text) => `<details class="sample"><summary>${label}</summary><pre><code>${escape(text).replaceAll('>', '&gt;')}</code></pre></details>`;
 

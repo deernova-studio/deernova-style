@@ -6,13 +6,18 @@ import { createFootsteps } from './footsteps.js';
 import { EFFECT_FOR, createEffects } from './effects.js';
 import { LOOP, shot } from './timeline.js';
 import { createColorReveal } from './color.js';
+import { createHalftone, dotRadius, TONES } from './halftone.js';
 
 const MONO = 'ui-monospace, "SF Mono", Menlo, monospace';
 const RAMP = ' .:-=+*';
 const PHRASE = 'DEERNOVA';
-// Light snaps to a few flat tones, like screentone sheets in a manga or cel shading in an anime.
-// Each tone prints as one dot size; the darkest prints solid.
-const TONES = [[0.07, 0], [0.27, 0.16], [0.5, 0.36], [0.76, 0.6], [Infinity, 1]];
+
+function toneIndex(light, invert) {
+  const brightness = invert ? 1 - light / 255 : light / 255;
+  let tone = 0;
+  while (brightness >= TONES[tone][0]) tone++;
+  return tone;
+}
 
 function layer(width = 1, height = 1, options) {
   const c = document.createElement('canvas');
@@ -22,14 +27,13 @@ function layer(width = 1, height = 1, options) {
 }
 
 // Compose the scene into an offscreen field, then print it as dots and letters.
-export function createRenderer(stage, canvas, { raw = false, still = false } = {}) {
+export function createRenderer(stage, canvas, { raw = false, still = false, gpu = true } = {}) {
   const ctx = canvas.getContext('2d');
-  const [field, f] = layer(1, 1, { willReadFrequently: true });
+  const halftone = !raw && gpu ? createHalftone() : null;
+  const [field, f] = layer(1, 1, { willReadFrequently: !halftone });
   const [small, s] = layer(1, 1, { willReadFrequently: true });
-  const [dots, d] = layer();
   const [pigments, p] = layer();
   const [colorPrint, cp] = layer();
-  const masks = [1, 2, 3, 4].map(() => layer());
   const stag = createStagRenderer(f);
   const scenery = createScenery(f);
   const colorScenery = createScenery(p, { colored: true });
@@ -39,23 +43,33 @@ export function createRenderer(stage, canvas, { raw = false, still = false } = {
   const footsteps = createFootsteps();
 
   let W = 0, H = 0, dpr = 1, cell = 6, SS = 3, cols = 0, rows = 0, S = 200, groundY = 0, horizon = 0, deerX = 0;
-  let level = new Uint8Array(0), value = new Float32Array(0), buffers = [], patterns = [], palette = {}, last = null;
+  let fallback = null, palette = {}, last = null;
+  let overlayHasPaint = false;
+
+  if (halftone) {
+    const background = halftone.canvas;
+    background.className = 'meadow-halftone';
+    background.setAttribute('aria-hidden', 'true');
+    background.hidden = true;
+    stage.insertBefore(background, canvas);
+    background.addEventListener('webglcontextlost', () => { if (last) render(last); });
+  }
 
   function readPalette() {
     const style = getComputedStyle(stage);
     palette = { paper: style.getPropertyValue('--print-paper').trim(), ink: style.getPropertyValue('--print-ink').trim(), mode: style.getPropertyValue('--print-mode').trim() };
-    makePatterns();
+    halftone?.setPalette(palette);
+    if (fallback) fallback.patterns = makePatterns(fallback.d);
   }
 
   // One tile per dot size, at device resolution, scaled so the tile period is exactly one cell.
-  function makePatterns() {
-    if (!cols) return;
+  function makePatterns(d) {
     const size = cell * dpr, T = Math.max(2, Math.round(size));
-    patterns = TONES.slice(1, -1).map(([, b]) => {
+    return TONES.slice(1, -1).map(([, b]) => {
       const [tile, t] = layer(T, T);
       t.fillStyle = palette.ink;
       t.beginPath();
-      t.arc(T / 2, T / 2, (T / 2) * Math.sqrt(b) * 1.12, 0, Math.PI * 2);
+      t.arc(T / 2, T / 2, T * dotRadius(b), 0, Math.PI * 2);
       t.fill();
       const pattern = d.createPattern(tile, 'repeat');
       pattern.setTransform(new DOMMatrix().scale(size / T));
@@ -72,6 +86,7 @@ export function createRenderer(stage, canvas, { raw = false, still = false } = {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
+    overlayHasPaint = false;
     cell = phone ? 3 : clamp(Math.round(W / 360), 3, 5);
     SS = phone ? 2 : 3;
     cols = Math.ceil(W / cell);
@@ -84,12 +99,8 @@ export function createRenderer(stage, canvas, { raw = false, still = false } = {
     colorPrint.height = canvas.height;
     small.width = cols;
     small.height = rows;
-    dots.width = canvas.width;
-    dots.height = canvas.height;
-    for (const [mask] of masks) { mask.width = cols; mask.height = rows; }
-    level = new Uint8Array(cols * rows);
-    value = new Float32Array(cols * rows);
-    buffers = masks.map(() => new ImageData(cols, rows));
+    halftone?.resize(canvas.width, canvas.height, cell * dpr, cols, rows, SS);
+    fallback = null;
     S = phone ? Math.min(W * 0.34, H * 0.2) : Math.min(W * 0.18, H * 0.28);
     groundY = H * (phone ? 0.64 : 0.79);
     horizon = H * (phone ? 0.46 : 0.56);
@@ -102,7 +113,6 @@ export function createRenderer(stage, canvas, { raw = false, still = false } = {
     scenery.resize({ W, H, cell, cols, rows });
     colorScenery.resize({ W, H, cell, cols, rows });
     effects.resize({ W, H, cell });
-    makePatterns();
   }
 
   // ---- Paint the scene, then print it ----
@@ -143,9 +153,10 @@ export function createRenderer(stage, canvas, { raw = false, still = false } = {
       effects.draw(sim.clock, target, target === p);
     }
     paint(f, scenery, () => stag.draw(pose.weights, animalX, groundY, S));
-    print(cut.to ? line : null, sim.clock);
     const reveal = color.sample(sim.clock);
-    if (reveal.amount > 0 && reveal.spread > 0) {
+    const revealing = reveal.amount > 0 && reveal.spread > 0;
+    print(cut.to ? line : null, sim.clock, revealing);
+    if (revealing) {
       paint(p, colorScenery, () => stag.paintColor(p));
       printColor(reveal);
     }
@@ -185,31 +196,61 @@ export function createRenderer(stage, canvas, { raw = false, still = false } = {
     ctx.globalAlpha = 1;
   }
 
-  function print(line, clock) {
+  function print(line, clock, revealing) {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.globalAlpha = 1;
     ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = palette.paper;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    if (raw) { ctx.drawImage(field, 0, 0, W * dpr, H * dpr); return; }
+    if (raw) {
+      ctx.fillStyle = palette.paper;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(field, 0, 0, W * dpr, H * dpr);
+      return;
+    }
+    const invert = palette.mode !== 'light', band = line === null ? 0 : Math.max(cell * 8, W * 0.07);
+    const start = band ? Math.max(0, Math.floor((line - band) / cell)) : cols;
+    const end = band ? Math.min(cols, Math.ceil((line + band) / cell)) : cols;
+    const maskEnd = band ? end + 1 : cols;
+    const hasLetters = band > 0 && end > start;
+    const onGpu = halftone?.draw(field, start, maskEnd);
+    if (!onGpu || hasLetters) {
+      // Only Canvas 2D and the transition's original letter band need readback.
+      s.imageSmoothingEnabled = true;
+      s.imageSmoothingQuality = 'high';
+      s.drawImage(field, 0, 0, field.width, field.height, 0, 0, cols, rows);
+    }
+    if (onGpu) {
+      if (halftone.canvas.hidden) halftone.canvas.hidden = false;
+      // The browser presents the GPU canvas directly. Only the color reveal
+      // needs a copy of the monochrome frame for its blend.
+      if (revealing) ctx.drawImage(halftone.canvas, 0, 0);
+      else if (overlayHasPaint) ctx.clearRect(0, 0, canvas.width, canvas.height);
+      overlayHasPaint = revealing || hasLetters;
+    } else {
+      if (halftone) halftone.canvas.hidden = true;
+      ctx.fillStyle = palette.paper;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      printDots(start, maskEnd, invert);
+      overlayHasPaint = true;
+    }
+    if (hasLetters) letters(start, end, invert, clock);
+  }
 
-    // Average each cell's samples into its light by letting the canvas scale the field down to one pixel per cell.
-    s.imageSmoothingEnabled = true;
-    s.imageSmoothingQuality = 'high';
-    s.drawImage(field, 0, 0, field.width, field.height, 0, 0, cols, rows);
+  function printDots(start, end, invert) {
+    if (!fallback) {
+      const [dots, d] = layer(canvas.width, canvas.height);
+      const masks = TONES.slice(1).map(() => layer(cols, rows));
+      const buffers = masks.map(() => new ImageData(cols, rows));
+      const words = buffers.map(buffer => new Uint32Array(buffer.data.buffer));
+      fallback = { dots, d, masks, buffers, words, patterns: makePatterns(d) };
+    }
+    const { dots, d, masks, buffers, words, patterns } = fallback;
     const data = s.getImageData(0, 0, cols, rows).data;
-    const ink = palette.mode !== 'light', band = line === null ? 0 : Math.max(cell * 8, W * 0.07);
-    const c0 = band ? Math.floor((line - band) / cell) : cols, c1 = band ? Math.ceil((line + band) / cell) : -1;
-    const words = buffers.map(b => new Uint32Array(b.data.buffer));
     for (const w of words) w.fill(0);
     for (let r = 0, i = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++, i++) {
-        const light = data[i * 4] / 255, b = ink ? 1 - light : light;
-        let k = 0;
-        while (b >= TONES[k][0]) k++;
-        value[i] = TONES[k][1];
-        level[i] = k;
-        if (k && (c < c0 || c > c1)) words[k - 1][i] = 0xff000000;
+        if (c >= start && c < end) continue;
+        const k = toneIndex(data[i * 4], invert);
+        if (k) words[k - 1][i] = 0xff000000;
       }
     }
 
@@ -228,27 +269,25 @@ export function createRenderer(stage, canvas, { raw = false, still = false } = {
       d.fillRect(0, 0, dots.width, dots.height);
       ctx.drawImage(dots, 0, 0);
     }
-    if (band) letters(line, band, clock);
   }
 
   // The wipe's edge prints the picture in letters: light marks for light values, the name for the darkest.
-  function letters(line, band, clock) {
-    const c0 = Math.max(0, Math.floor((line - band) / cell)), c1 = Math.min(cols - 1, Math.ceil((line + band) / cell) - 1);
-    if (c1 < c0) return;
+  function letters(start, end, invert, clock) {
+    const data = s.getImageData(start, 0, end - start, rows).data;
     const seed = Math.floor(clock * 20);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.font = `600 ${cell / 0.6}px ${MONO}`;
     ctx.textBaseline = 'middle';
     ctx.fillStyle = palette.ink;
-    for (let r = 0; r < rows; r++) {
+    for (let r = 0, i = 0; r < rows; r++) {
       let text = '';
-      for (let c = c0; c <= c1; c++) {
-        const b = value[r * cols + c], flip = hash(r * 31.7 + c * 7.3 + seed) < 0.2;
+      for (let c = start; c < end; c++, i++) {
+        const b = TONES[toneIndex(data[i * 4], invert)][1], flip = hash(r * 31.7 + c * 7.3 + seed) < 0.2;
         if (b < 0.05 && !flip) text += ' ';
         else if (b < 0.7 && !flip) text += RAMP[Math.min(RAMP.length - 1, Math.floor((b / 0.7) * RAMP.length))];
         else text += PHRASE[(c + r * 3 + seed) % PHRASE.length];
       }
-      ctx.fillText(text, c0 * cell, r * cell + cell / 2);
+      ctx.fillText(text, start * cell, r * cell + cell / 2);
     }
   }
 

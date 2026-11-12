@@ -2,7 +2,8 @@ import { createRenderer } from './meadow/renderer.js';
 import { createPlayback, STILL_TIME } from './meadow/timeline.js';
 
 // Browser lifecycle and input only. Rendering, scenery, effects, the stag and its clock live in separate
-// modules. ?t= pins a moment (add &play to keep it running), ?halftone=0 shows the gray painting.
+// modules. ?t= pins a moment (add &play to keep it running), ?halftone=0 shows
+// the gray painting, and ?halftone=canvas forces the fallback for comparison.
 const stage = document.querySelector('[data-meadow]');
 const canvas = stage?.querySelector('canvas');
 
@@ -11,7 +12,8 @@ if (canvas) {
   const pinned = Number.parseFloat(query.get('t'));
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const still = reduced || (Number.isFinite(pinned) && !query.has('play'));
-  const renderer = createRenderer(stage, canvas, { raw: query.get('halftone') === '0', still });
+  const halftone = query.get('halftone');
+  const renderer = createRenderer(stage, canvas, { raw: halftone === '0', gpu: halftone !== 'canvas', still });
   const playback = createPlayback({
     start: Number.isFinite(pinned) ? pinned : reduced ? STILL_TIME : 0,
     render: renderer.render

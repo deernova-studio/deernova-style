@@ -1,5 +1,4 @@
-<!-- From Lucide "pencil" (ISC, see LICENSE-LUCIDE) -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
-  <path d="m15 5 4 4"/>
+  <path d="M17 4.25L5.5 15.75L4 20L8.25 18.5L19.75 7"/>
+  <path d="M14.5 6.75L17.25 9.5"/>
 </svg>

@@ -2,7 +2,7 @@
   "name": "@deernova/icons",
   "version": "0.3.0",
   "type": "module",
-  "description": "Deernova icons and loaders: 24×24 stroke icons for AI apps based on Lucide, plus single-stroke loaders that travel along mathematical curves",
+  "description": "Deernova icons and loaders: 24×24 stroke icons for AI apps, plus single-stroke loaders that travel along mathematical curves",
   "license": "MIT",
   "files": [
     "dist",

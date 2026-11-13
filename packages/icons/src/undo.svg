@@ -1,5 +1,4 @@
-<!-- From Lucide "undo-2" (ISC, see LICENSE-LUCIDE) -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M9 14 4 9l5-5"/>
-  <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/>
+  <path d="M9 14L4 9L9 4"/>
+  <path d="M4 9H14.25a5.25 5.25 0 0 1 0 10.5H11"/>
 </svg>

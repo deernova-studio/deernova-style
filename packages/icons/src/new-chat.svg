@@ -1,5 +1,4 @@
-<!-- Redrawn for Deernova; replaces Lucide "square-pen" -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M11.5 4.5H7.5a3 3 0 0 0-3 3v9a3 3 0 0 0 3 3h9a3 3 0 0 0 3-3v-4"/>
-  <path d="M17.6 4.4a1.9 1.9 0 0 1 2.7 2.7L13 14.4l-3.4.9.9-3.4z"/>
+  <path d="M13 5H7a3.25 3.25 0 0 0-3.25 3.25V17A3.25 3.25 0 0 0 7 20.25h8.75A3.25 3.25 0 0 0 19 17V11Z"/>
+  <path d="M19 2Q19.35 4.65 21.4 5Q19.35 5.35 19 8Q18.65 5.35 16.6 5Q18.65 4.65 19 2Z"/>
 </svg>

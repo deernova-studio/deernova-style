@@ -1,6 +1,6 @@
 # @deernova/icons
 
-Deernova 的线性图标：AI 应用常用的 73 个，基于 [Lucide](https://lucide.dev)，24×24 网格、1.75 描边、圆头圆角、无填充，颜色跟随文字。
+Deernova 的线性图标：AI 应用常用的 73 个，24×24 网格、1.75 描边、圆头圆角、无填充，颜色跟随文字。
 
 ```js
 import { svg } from '@deernova/icons';
@@ -12,8 +12,9 @@ button.innerHTML = svg('send', { label: '发送' }); // 只有图标的按钮给
 ## 加图标
 
 1. 在 `src/` 放一个 SVG，用和其他文件一样的 `<svg>` 开头，里面只用 `path`、`circle`、`rect`、`line`、`polyline`、`ellipse`，不写颜色和描边。
-2. 在 `icons.json` 对应分组里加一行：名字（kebab-case）、中文用途、来源（`lucide` / `redrawn` / `deernova`）、关键词。
-3. `npm test`。从 Lucide 原样拿的图标可以用 `npm run icons -- import` 导入。
+2. 方框的右上角裁掉一角，和其他图标一致。
+3. 在 `icons.json` 对应分组里加一行：名字（kebab-case）、中文用途、来源（自己画的写 `deernova`）、关键词。
+4. `npm test`。
 
 ## 加载动效：`@deernova/icons/loaders`
 
@@ -51,4 +52,4 @@ loader.stop();
 
 ## 许可
 
-MIT（见 `LICENSE`）。来自 Lucide 的图标按 ISC 许可使用，许可全文见 `LICENSE-LUCIDE`。
+MIT（见 `LICENSE`）。几个方向图标（`chevron-*`、`expand`、`collapse`）参考 Lucide 重画，Lucide 的 ISC 许可见 `LICENSE-LUCIDE`。

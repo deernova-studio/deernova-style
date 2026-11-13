@@ -1,7 +1,6 @@
-<!-- From Lucide "table" (ISC, see LICENSE-LUCIDE) -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M12 3v18"/>
-  <rect width="18" height="18" x="3" y="3" rx="2"/>
-  <path d="M3 9h18"/>
-  <path d="M3 15h18"/>
+  <path d="M16.75 3.25L20.75 7.25V18.25a2.5 2.5 0 0 1 -2.5 2.5H5.75a2.5 2.5 0 0 1 -2.5 -2.5V5.75a2.5 2.5 0 0 1 2.5 -2.5Z"/>
+  <path d="M3.25 9.5H20.75"/>
+  <path d="M3.25 15H20.75"/>
+  <path d="M12 9.5V20.75"/>
 </svg>

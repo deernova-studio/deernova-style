@@ -10,7 +10,7 @@ export async function renderIconsDoc(root, mark) {
   return `<section class="doc doc-package" id="package-icons" aria-labelledby="package-icons-title">
 <header class="doc-head">${mark}<h2 id="package-icons-title">Deernova Icons</h2><code class="doc-path">@deernova/icons</code></header>
 <div class="doc-body">
-<p class="lede">AI 应用常用的 ${icons.length} 个线性图标，基于 Lucide，按 Deernova 的线条统一：${manifest.grid}×${manifest.grid} 网格、${manifest.stroke} 描边、圆头圆角、无填充，颜色跟随文字。每个图标对应的 SF Symbol 和使用规则见<a href="#foundations-iconography">图标</a>。</p>
+<p class="lede">AI 应用常用的 ${icons.length} 个线性图标：${manifest.grid}×${manifest.grid} 网格、${manifest.stroke} 描边、圆头圆角、无填充，颜色跟随文字。每个图标对应的 SF Symbol 和使用规则见<a href="#foundations-iconography">图标</a>。</p>
 <div class="specimen" data-density="desktop"><div class="icons-context">
   <nav class="icons-sidebar" aria-label="示例侧边栏">
     <div class="icons-row">${button('sidebar', '收起侧边栏')}<span class="icons-spacer"></span>${button('search', '搜索')}${button('new-chat', '新对话')}</div>

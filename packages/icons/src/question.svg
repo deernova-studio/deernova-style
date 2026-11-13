@@ -1,6 +1,5 @@
-<!-- From Lucide "circle-help" (ISC, see LICENSE-LUCIDE) -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-  <circle cx="12" cy="12" r="10"/>
-  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-  <path d="M12 17h.01"/>
+  <path d="M3.25 12a8.75 8.75 0 1 0 17.5 0a8.75 8.75 0 1 0 -17.5 0"/>
+  <path d="M9.5 9.5a2.6 2.6 0 0 1 5 .9c0 1.7-2.5 2.35-2.5 3.85"/>
+  <path d="M12 17H12.01"/>
 </svg>

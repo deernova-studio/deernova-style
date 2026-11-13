@@ -1,8 +1,7 @@
-<!-- From Lucide "trash-2" (ISC, see LICENSE-LUCIDE) -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M10 11v6"/>
-  <path d="M14 11v6"/>
-  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
-  <path d="M3 6h18"/>
-  <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+  <path d="M3.75 6.5H20.25"/>
+  <path d="M9 6.5V5A1.5 1.5 0 0 1 10.5 3.5h3A1.5 1.5 0 0 1 15 5V6.5"/>
+  <path d="M5.75 6.5L6.6 19.1A2 2 0 0 0 8.6 21h6.8a2 2 0 0 0 2-1.9L18.25 6.5"/>
+  <path d="M10 10.5V16.5"/>
+  <path d="M14 10.5V16.5"/>
 </svg>

@@ -9,8 +9,7 @@
         {
           "name": "sidebar",
           "label": "侧边栏开关",
-          "source": "redrawn",
-          "lucide": "panel-left",
+          "source": "deernova",
           "keywords": [
             "侧边栏",
             "面板"
@@ -20,8 +19,7 @@
         {
           "name": "new-chat",
           "label": "新对话",
-          "source": "redrawn",
-          "lucide": "square-pen",
+          "source": "deernova",
           "keywords": [
             "新建",
             "编辑",
@@ -32,8 +30,7 @@
         {
           "name": "search",
           "label": "搜索",
-          "source": "lucide",
-          "lucide": "search",
+          "source": "deernova",
           "keywords": [
             "查找"
           ],
@@ -42,8 +39,7 @@
         {
           "name": "home",
           "label": "首页",
-          "source": "lucide",
-          "lucide": "house",
+          "source": "deernova",
           "keywords": [
             "主页"
           ],
@@ -52,8 +48,7 @@
         {
           "name": "folder",
           "label": "文件夹",
-          "source": "lucide",
-          "lucide": "folder",
+          "source": "deernova",
           "keywords": [
             "目录",
             "项目"
@@ -63,8 +58,7 @@
         {
           "name": "history",
           "label": "历史",
-          "source": "lucide",
-          "lucide": "history",
+          "source": "deernova",
           "keywords": [
             "最近",
             "记录"
@@ -74,8 +68,7 @@
         {
           "name": "settings",
           "label": "设置",
-          "source": "lucide",
-          "lucide": "settings",
+          "source": "deernova",
           "keywords": [
             "偏好",
             "齿轮"
@@ -85,8 +78,7 @@
         {
           "name": "more",
           "label": "更多",
-          "source": "lucide",
-          "lucide": "ellipsis",
+          "source": "deernova",
           "keywords": [
             "菜单",
             "省略"
@@ -96,8 +88,7 @@
         {
           "name": "back",
           "label": "返回",
-          "source": "lucide",
-          "lucide": "arrow-left",
+          "source": "deernova",
           "keywords": [
             "后退"
           ],
@@ -106,8 +97,7 @@
         {
           "name": "close",
           "label": "关闭",
-          "source": "lucide",
-          "lucide": "x",
+          "source": "deernova",
           "keywords": [
             "取消",
             "删除标签"
@@ -177,8 +167,7 @@
         {
           "name": "external",
           "label": "在新窗口打开",
-          "source": "lucide",
-          "lucide": "external-link",
+          "source": "deernova",
           "keywords": [
             "外链",
             "打开"
@@ -199,8 +188,7 @@
         {
           "name": "arrow-down",
           "label": "向下箭头",
-          "source": "lucide",
-          "lucide": "arrow-down",
+          "source": "deernova",
           "keywords": [
             "回到底部",
             "降序"
@@ -210,8 +198,7 @@
         {
           "name": "arrow-right",
           "label": "向右箭头",
-          "source": "lucide",
-          "lucide": "arrow-right",
+          "source": "deernova",
           "keywords": [
             "追问",
             "前往"
@@ -227,8 +214,7 @@
         {
           "name": "plus",
           "label": "添加",
-          "source": "lucide",
-          "lucide": "plus",
+          "source": "deernova",
           "keywords": [
             "新建",
             "附件菜单"
@@ -238,8 +224,7 @@
         {
           "name": "copy",
           "label": "复制",
-          "source": "lucide",
-          "lucide": "copy",
+          "source": "deernova",
           "keywords": [
             "拷贝"
           ],
@@ -248,8 +233,7 @@
         {
           "name": "check",
           "label": "完成",
-          "source": "lucide",
-          "lucide": "check",
+          "source": "deernova",
           "keywords": [
             "已复制",
             "选中"
@@ -259,8 +243,7 @@
         {
           "name": "edit",
           "label": "编辑",
-          "source": "lucide",
-          "lucide": "pencil",
+          "source": "deernova",
           "keywords": [
             "修改",
             "重命名"
@@ -270,8 +253,7 @@
         {
           "name": "trash",
           "label": "删除",
-          "source": "lucide",
-          "lucide": "trash-2",
+          "source": "deernova",
           "keywords": [
             "移除",
             "回收站"
@@ -281,8 +263,7 @@
         {
           "name": "undo",
           "label": "撤销",
-          "source": "lucide",
-          "lucide": "undo-2",
+          "source": "deernova",
           "keywords": [
             "恢复"
           ],
@@ -291,8 +272,7 @@
         {
           "name": "download",
           "label": "下载",
-          "source": "lucide",
-          "lucide": "download",
+          "source": "deernova",
           "keywords": [
             "导出",
             "保存"
@@ -302,8 +282,7 @@
         {
           "name": "upload",
           "label": "上传",
-          "source": "lucide",
-          "lucide": "upload",
+          "source": "deernova",
           "keywords": [
             "导入"
           ],
@@ -312,8 +291,7 @@
         {
           "name": "share",
           "label": "分享",
-          "source": "lucide",
-          "lucide": "share",
+          "source": "deernova",
           "keywords": [
             "发送",
             "导出"
@@ -323,8 +301,7 @@
         {
           "name": "link",
           "label": "链接",
-          "source": "lucide",
-          "lucide": "link",
+          "source": "deernova",
           "keywords": [
             "网址",
             "引用"
@@ -334,8 +311,7 @@
         {
           "name": "pin",
           "label": "固定",
-          "source": "lucide",
-          "lucide": "pin",
+          "source": "deernova",
           "keywords": [
             "置顶"
           ],
@@ -344,8 +320,7 @@
         {
           "name": "filter",
           "label": "筛选",
-          "source": "lucide",
-          "lucide": "list-filter",
+          "source": "deernova",
           "keywords": [
             "过滤"
           ],
@@ -354,8 +329,7 @@
         {
           "name": "minus",
           "label": "减去",
-          "source": "lucide",
-          "lucide": "minus",
+          "source": "deernova",
           "keywords": [
             "部分选中",
             "移除"
@@ -365,8 +339,7 @@
         {
           "name": "options",
           "label": "选项",
-          "source": "lucide",
-          "lucide": "sliders-horizontal",
+          "source": "deernova",
           "keywords": [
             "工具",
             "调节",
@@ -377,8 +350,7 @@
         {
           "name": "star",
           "label": "收藏",
-          "source": "lucide",
-          "lucide": "star",
+          "source": "deernova",
           "keywords": [
             "星标",
             "喜欢"
@@ -394,8 +366,7 @@
         {
           "name": "file",
           "label": "文件",
-          "source": "lucide",
-          "lucide": "file",
+          "source": "deernova",
           "keywords": [
             "附件"
           ],
@@ -404,8 +375,7 @@
         {
           "name": "document",
           "label": "文档",
-          "source": "lucide",
-          "lucide": "file-text",
+          "source": "deernova",
           "keywords": [
             "文本",
             "笔记"
@@ -415,8 +385,7 @@
         {
           "name": "image",
           "label": "图片",
-          "source": "lucide",
-          "lucide": "image",
+          "source": "deernova",
           "keywords": [
             "照片"
           ],
@@ -425,8 +394,7 @@
         {
           "name": "code",
           "label": "代码",
-          "source": "lucide",
-          "lucide": "code",
+          "source": "deernova",
           "keywords": [
             "程序"
           ],
@@ -435,8 +403,7 @@
         {
           "name": "table",
           "label": "表格",
-          "source": "lucide",
-          "lucide": "table",
+          "source": "deernova",
           "keywords": [
             "数据"
           ],
@@ -445,8 +412,7 @@
         {
           "name": "attach",
           "label": "附件",
-          "source": "lucide",
-          "lucide": "paperclip",
+          "source": "deernova",
           "keywords": [
             "回形针",
             "添加文件"
@@ -456,8 +422,7 @@
         {
           "name": "web",
           "label": "网页",
-          "source": "lucide",
-          "lucide": "globe",
+          "source": "deernova",
           "keywords": [
             "网络",
             "联网搜索"
@@ -467,8 +432,7 @@
         {
           "name": "terminal",
           "label": "终端",
-          "source": "lucide",
-          "lucide": "square-terminal",
+          "source": "deernova",
           "keywords": [
             "命令",
             "运行"
@@ -478,8 +442,7 @@
         {
           "name": "list",
           "label": "列表",
-          "source": "lucide",
-          "lucide": "list",
+          "source": "deernova",
           "keywords": [
             "计划",
             "清单"
@@ -489,8 +452,7 @@
         {
           "name": "chat",
           "label": "对话",
-          "source": "lucide",
-          "lucide": "message-square",
+          "source": "deernova",
           "keywords": [
             "会话",
             "消息"
@@ -500,8 +462,7 @@
         {
           "name": "mail",
           "label": "邮件",
-          "source": "lucide",
-          "lucide": "mail",
+          "source": "deernova",
           "keywords": [
             "邮箱"
           ],
@@ -510,8 +471,7 @@
         {
           "name": "changes",
           "label": "改动",
-          "source": "lucide",
-          "lucide": "diff",
+          "source": "deernova",
           "keywords": [
             "变更",
             "差异"
@@ -667,8 +627,7 @@
         {
           "name": "question",
           "label": "提问",
-          "source": "lucide",
-          "lucide": "circle-help",
+          "source": "deernova",
           "keywords": [
             "问用户",
             "帮助"
@@ -684,8 +643,7 @@
         {
           "name": "success",
           "label": "成功",
-          "source": "lucide",
-          "lucide": "circle-check",
+          "source": "deernova",
           "keywords": [
             "完成",
             "通过"
@@ -695,8 +653,7 @@
         {
           "name": "warning",
           "label": "警告",
-          "source": "lucide",
-          "lucide": "triangle-alert",
+          "source": "deernova",
           "keywords": [
             "注意"
           ],
@@ -705,8 +662,7 @@
         {
           "name": "error",
           "label": "错误",
-          "source": "lucide",
-          "lucide": "circle-x",
+          "source": "deernova",
           "keywords": [
             "失败"
           ],
@@ -715,8 +671,7 @@
         {
           "name": "info",
           "label": "提示",
-          "source": "lucide",
-          "lucide": "info",
+          "source": "deernova",
           "keywords": [
             "说明"
           ],
@@ -725,8 +680,7 @@
         {
           "name": "waiting",
           "label": "等待确认",
-          "source": "lucide",
-          "lucide": "circle-pause",
+          "source": "deernova",
           "keywords": [
             "暂停",
             "等待你"
@@ -736,8 +690,7 @@
         {
           "name": "skipped",
           "label": "已跳过",
-          "source": "lucide",
-          "lucide": "circle-slash",
+          "source": "deernova",
           "keywords": [
             "已拒绝",
             "禁止"
@@ -747,8 +700,7 @@
         {
           "name": "bell",
           "label": "通知",
-          "source": "lucide",
-          "lucide": "bell",
+          "source": "deernova",
           "keywords": [
             "提醒",
             "铃铛"
@@ -758,8 +710,7 @@
         {
           "name": "thumbs-up",
           "label": "赞",
-          "source": "lucide",
-          "lucide": "thumbs-up",
+          "source": "deernova",
           "keywords": [
             "好评",
             "反馈"
@@ -769,8 +720,7 @@
         {
           "name": "thumbs-down",
           "label": "踩",
-          "source": "lucide",
-          "lucide": "thumbs-down",
+          "source": "deernova",
           "keywords": [
             "差评",
             "反馈"
@@ -780,8 +730,7 @@
         {
           "name": "user",
           "label": "用户",
-          "source": "lucide",
-          "lucide": "user",
+          "source": "deernova",
           "keywords": [
             "账号",
             "头像"
@@ -791,8 +740,7 @@
         {
           "name": "pause",
           "label": "暂停",
-          "source": "lucide",
-          "lucide": "pause",
+          "source": "deernova",
           "keywords": [
             "等待"
           ],
@@ -801,8 +749,7 @@
         {
           "name": "cloud",
           "label": "同步",
-          "source": "lucide",
-          "lucide": "cloud",
+          "source": "deernova",
           "keywords": [
             "云端",
             "在线"

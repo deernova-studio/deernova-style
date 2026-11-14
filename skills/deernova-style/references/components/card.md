@@ -2,7 +2,7 @@
 
 卡片把一条内容的摘要装进一个可以点开的块里，用于网格和看板。
 
-**需要提供**：标题、一到两行摘要、元信息（时间、分类、状态[标签](tag.md)），点击后打开详情。
+**需要提供**：标题、一行元信息（时间、分类、状态[标签](tag.md)，最多 3 项），点击后打开详情。标题说不清内容时才加摘要。
 
 ## 尺寸
 
@@ -16,7 +16,8 @@
 <!-- /tokens -->
 
 - `surface` 底、1px（`stroke-line`）`line` 描边，不加阴影，圆角 `card-radius`。
-- 标题用 `type-headline`（无衬线、半粗）；摘要用 `footnote`、`ink-secondary`，最多 3 行；元信息用 `caption`、`ink-tertiary`。内部间距 `space-1`。
+- 标题用 `type-headline`（无衬线、半粗）；摘要用 `footnote`、`ink-secondary`，最多 2 行；元信息用 `caption`、`ink-tertiary`。内部间距 `space-1`。
+- 卡片里不放装饰图标、「了解更多」链接和装饰性徽标；整张卡片可点就够了。
 - 悬停时描边加深为 `line-control`。选中时用 `fill-selected` 底色，保持原有 `line` 边线；用键盘聚焦时画焦点环，底色不变。
 - 网格间距 `card-gap`；每张卡片高度由内容决定，同一行顶部对齐。
 
@@ -31,17 +32,30 @@
   flex-direction: column;
   gap: var(--space-1);
   min-width: 0;
+  position: relative;
+  isolation: isolate;
   padding: var(--card-padding-y) var(--card-padding-x);
-  border: var(--stroke-line) solid var(--line);
   border-radius: var(--card-radius);
-  background: var(--surface);
   color: var(--ink);
   text-decoration: none;
-  transition: border-color var(--duration-instant) var(--ease-standard);
 }
-@media (hover: hover) { a.dn-card:hover, button.dn-card:hover { border-color: var(--line-control); } }
+/* 底色和描边画在 ::after 上：可点的卡片按下时只缩它，文字不动，写法同按钮 */
+.dn-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border: var(--stroke-line) solid var(--line);
+  border-radius: inherit;
+  background-color: var(--surface);
+  transition: border-color var(--duration-instant) var(--ease-standard), transform var(--duration-release) var(--ease-release);
+}
+@media (hover: hover) { :is(a, button).dn-card:hover::after { border-color: var(--line-control); } }
+@media (prefers-reduced-motion: no-preference) {
+  :is(a, button).dn-card:active::after { transform: scale(var(--press-scale)); transition: border-color var(--duration-instant) var(--ease-standard), transform var(--duration-press) var(--ease-standard); }
+}
 .dn-card:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
-.dn-card[aria-current="true"], .dn-card.is-selected { border-color: var(--line); background-image: linear-gradient(var(--fill-selected), var(--fill-selected)); }
+.dn-card:is([aria-current="true"], .is-selected)::after { border-color: var(--line); background-image: linear-gradient(var(--fill-selected), var(--fill-selected)); }
 .dn-card-title { margin: 0; font: var(--type-headline); }
 .dn-card-summary {
   display: -webkit-box;
@@ -49,7 +63,7 @@
   overflow: hidden;
   color: var(--ink-secondary);
   font: var(--type-footnote);
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 .dn-card-meta { display: flex; align-items: center; gap: 6px; margin-top: 2px; color: var(--ink-tertiary); font: var(--weight-regular) var(--type-caption-size)/var(--type-caption-line) var(--font-sans); font-variant-numeric: tabular-nums; }
@@ -68,7 +82,7 @@
 ```swift
 VStack(alignment: .leading, spacing: Deernova.space1) {
     Text(note.title).font(.deernovaHeadline)
-    Text(note.summary).font(.deernovaFootnote).foregroundStyle(.inkSecondary).lineLimit(3)
+    Text(note.summary).font(.deernovaFootnote).foregroundStyle(.inkSecondary).lineLimit(2)
     Text(note.date, format: .relative(presentation: .named))
         .font(.caption).foregroundStyle(.inkTertiary)
 }

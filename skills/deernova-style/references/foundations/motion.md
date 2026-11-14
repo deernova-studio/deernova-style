@@ -24,6 +24,7 @@
 | 侧边抽屉 | `duration-slow` · `ease-drawer` | `duration-base` · `ease-drawer` | 从左边或右边整块滑入；遮罩的透明度 |
 | 展开收起（侧边栏分组、执行步骤、目录） | `duration-base` · `ease-standard` | 同进入 | 内容高度，箭头同步旋转 |
 | 悬停、按下、选中 | `duration-instant` · `ease-standard` | 同进入 | 颜色，见 [交互状态](states.md) |
+| 按钮和可点卡片按下 | `duration-press` · `ease-standard` | `duration-release` · `ease-release` | 只有底色层缩到 `press-scale`，文字不动；松开时带回弹 |
 
 ## 原则
 
@@ -70,7 +71,7 @@
 
 ## 减弱动态效果
 
-- 用户开启「减弱动态效果」后，去掉位移和缩放，只保留透明度的淡入淡出，时长不超过 `duration-base`；抽屉和底部弹窗也改成淡入淡出。
+- 用户开启「减弱动态效果」后，去掉位移和缩放（包括按钮按下的缩放），只保留透明度的淡入淡出，时长不超过 `duration-base`；抽屉和底部弹窗也改成淡入淡出。
 - 展开收起直接切换；`spinner` 放慢，`thinking`、`working` 这类曲线动效停在静止帧（见[加载状态](../components/skeleton.md)）。
 - 完整信息不能依赖动画才看得到。
 

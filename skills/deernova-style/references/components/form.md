@@ -18,7 +18,7 @@
 ## 布局
 
 - 单栏，宽度不超过 `form-max`，在内容区里居中或靠左（设置页靠左对齐分组标题）。不要把两个不相关的字段并排；只有天然成对的才并排（省和市、开始和结束日期），并排的两项同高。
-- **标签在上**：默认标签在输入框上方，`callout`、`weight-medium`、`ink-secondary`；说明在下方，`caption`、`ink-tertiary`；三者之间 `space-1`。
+- **标签在上**：默认标签在输入框上方，`callout`、`weight-medium`、`ink-secondary`；说明在下方，`caption`、`ink-tertiary`；三者之间 `space-1`。说明只写后果和不明显的格式要求，不复述标签，大部分字段没有说明（见 [文案](../foundations/writing.md)）。
 - **标签在左**：只用在宽屏的设置页，标签栏宽 `form-label-width`，右对齐到控件左边 `space-4` 处，标签和控件的第一行按中线对齐；窄于 `breakpoint-sm` 时改回标签在上。
 - 字段之间 `gap-stack` 的 2 倍（表单字段通常带说明，需要更多呼吸）；分组之间 `gap-group`，每组有一个 `headline` 的组标题，可以带一句说明。
 - 按钮区在表单最后，和字段之间 `gap-group`：主按钮在右，取消在它左边（弹窗里同样）；长表单的设置页可以把按钮区吸底，上方一条 1px `line`。

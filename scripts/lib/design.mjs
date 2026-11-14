@@ -95,12 +95,21 @@ function themedDeclarations(tokens, theme) {
     lines.push(`--${token.name}: ${cssValue(tokens, isThemed(token) ? token.value[theme] : token.value)};`);
   }
   for (const token of tokens.shadow.tokens) lines.push(`--${token.name}: ${token.value[theme]};`);
+  // Light text on a dark ground reads heavier, so dark themes step every weight down. The shorthands are
+  // re-declared here so an element switched to dark with data-theme picks up the lighter weights too.
+  const [regular] = tokens.type.weights;
+  for (const weight of tokens.type.weights) lines.push(`--${weight.name}: ${theme === 'dark' ? weight.dark : weight.value};`);
+  lines.push(`--weight-shift: ${theme === 'dark' ? regular.dark - regular.value : 0};`);
+  for (const role of tokens.type.roles) lines.push(typeShorthand(tokens, role));
   return lines;
 }
 
+const weightToken = (tokens, value) => tokens.type.weights.find(weight => weight.value === value).name;
+const typeShorthand = (tokens, role) =>
+  `--type-${role.name}: var(--${weightToken(tokens, role.weight)}) var(--type-${role.name}-size)/var(--type-${role.name}-line) var(--font-${role.family});`;
+
 function staticDeclarations(tokens) {
   const lines = Object.entries(tokens.type.families).map(([name, stack]) => `--font-${name}: ${stack};`);
-  for (const weight of tokens.type.weights) lines.push(`--${weight.name}: ${weight.value};`);
   for (const role of tokens.type.roles) if (role.tracking) lines.push(`--type-${role.name}-tracking: ${role.tracking};`);
   for (const group of groupTokens(tokens)) {
     if (group.key === 'shadow') continue;
@@ -116,8 +125,7 @@ function densityDeclarations(tokens, density) {
   const lines = [];
   for (const role of tokens.type.roles) {
     const [size, line] = role.values[density];
-    lines.push(`--type-${role.name}-size: ${size}px;`, `--type-${role.name}-line: ${line}px;`,
-      `--type-${role.name}: ${role.weight} ${size}px/${line}px var(--font-${role.family});`);
+    lines.push(`--type-${role.name}-size: ${size}px;`, `--type-${role.name}-line: ${line}px;`, typeShorthand(tokens, role));
   }
   for (const group of groupTokens(tokens)) {
     for (const token of group.tokens) if (isDensity(token)) lines.push(`--${token.name}: ${densityValue(token, density)};`);
@@ -151,7 +159,7 @@ export function renderTailwindCss(tokens) {
   for (const role of tokens.type.roles) {
     lines.push(`--text-${role.name}: var(--type-${role.name}-size);`,
       `--text-${role.name}--line-height: var(--type-${role.name}-line);`,
-      `--text-${role.name}--font-weight: ${role.weight};`);
+      `--text-${role.name}--font-weight: var(--${weightToken(tokens, role.weight)});`);
   }
   lines.push('');
   const spacing = {
@@ -434,7 +442,8 @@ export function renderTokensMarkdown(tokens) {
 
   out.push('', '## 字体', '', tokens.type.note, '', '| 字族 | CSS 变量 | 字体栈 |', '| --- | --- | --- |');
   for (const [name, stack] of Object.entries(tokens.type.families)) out.push(`| ${name} | \`--font-${name}\` | \`${cell(stack)}\` |`);
-  out.push('', '### 字重', '', ...staticTable(tokens.type.weights.map(weight => ({ ...weight, value: weight.value }))));
+  out.push('', '### 字重', '', tokens.type.weightsNote, '', '| Token | 浅色 | 深色 | 用途 |', '| --- | --- | --- | --- |');
+  for (const weight of tokens.type.weights) out.push(`| \`${weight.name}\` | \`${weight.value}\` | \`${weight.dark}\` | ${cell(weight.usage)} |`);
   out.push('', '### 字号角色', '',
     '每个角色生成 `--type-<角色>`（`font` 简写，可以直接写 `font: var(--type-body)`）、`--type-<角色>-size` 和 `--type-<角色>-line`。表里是“字号 / 行高”。', '',
     `| 角色 | 字族 | 字重 | ${densityHeader(tokens).join(' | ')} | SwiftUI（macOS · iOS） | 用途 |`,

@@ -218,6 +218,7 @@ function renderMarkdown(path, markdown, tokens, { hoistSpecimen = false } = {}) 
           if (hoistSpecimen && firstHtml === null) { firstHtml = text; return sample('HTML', text); }
           return specimen(text) + sample('HTML', text);
         }
+        if (language === 'text') return `<pre class="wire"><code>${escape(text).replaceAll('>', '&gt;')}</code></pre>`;
         return sample(LANGUAGE[language] || '代码', text);
       },
       link({ href, tokens: text }) {
@@ -283,13 +284,21 @@ export async function renderGuide(root) {
 
   const lede = withoutTitle(skill).trim().split('\n\n')[0];
   // Rendered through the same renderer as the docs, so links between skill files become page anchors.
+  const principles = renderMarkdown('SKILL.md', section(skill, '总则'), tokens);
   const rules = renderMarkdown('SKILL.md', section(skill, '核心规则'), tokens);
   const avoid = renderMarkdown('SKILL.md', section(skill, '不要做'), tokens);
+  // 整页示例 is part 7 of 总则: rendered inside the overview, its sections one level below the overview headings.
+  const examplesPath = 'references/examples.md';
+  const examplesMarkdown = await read(join(root, SKILL_DIR, examplesPath));
+  const examples = renderMarkdown(examplesPath, withoutTitle(examplesMarkdown).replace(/^## /gm, '### '), tokens);
+  nav.push('<ol><li><a href="#overview-0">总则</a></li><li><a href="#examples">整页示例</a></li><li><a href="#overview-1">核心规则</a></li><li><a href="#overview-2">不要做</a></li></ol>');
   docs.push(`<section class="doc doc-overview" id="overview" aria-labelledby="overview-title">
 <header class="overview-head"><h1 id="overview-title">Deernova Style</h1><p class="lede">${inline(lede)}</p></header>
-<div class="overview-grid">
-<div class="overview-rules"><h3 id="overview-1">核心规则</h3>${rules}<h3 id="overview-2">不要做</h3>${avoid}</div>
-<div class="overview-quick"><h3 id="overview-3">场景速查</h3>${summaryTable(tokens)}${scenesTable(tokens)}</div>
+<div class="doc-body">
+<h3 id="overview-0">总则</h3>${principles}
+<h3 id="examples">整页示例</h3>${examples}
+<h3 id="overview-1">核心规则</h3>${rules}
+<h3 id="overview-2">不要做</h3>${avoid}
 </div>
 </section>`);
 

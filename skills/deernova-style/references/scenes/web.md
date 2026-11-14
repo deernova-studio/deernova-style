@@ -40,7 +40,7 @@ Web 上按钮“上下特别宽”几乎都是同一个原因：用内边距和�
 
 1. **高度用 token**：`height: var(--button-height-md)`（输入框 `--field-height`，列表行 `min-height: var(--row-height)`）。
 2. **上下内边距为 0**：`padding: 0 var(--button-padding-x-md)`。
-3. **行高为 1，不继承页面**：`font: var(--button-font-weight) var(--button-font-size-md)/1 var(--font-sans)`。页面正文的 1.6–1.8 行高一旦进到按钮里，按钮就会变高。
+3. **行高为 1，不继承页面**：`font: calc(var(--button-font-weight) + var(--weight-shift)) var(--button-font-size-md)/1 var(--font-sans)`（`--weight-shift` 是深色主题的字重补偿）。页面正文的 1.6–1.8 行高一旦进到按钮里，按钮就会变高。
 4. **点击区域单独补**：用 `::before` 伪元素把命中区撑到 `max(100%, var(--hit-min))`。**不要用 padding 补**，CSS 的 padding 在背景里面，会让可见的按钮一起变大。SwiftUI 示例里的 `.padding()` 写在 `.buttonStyle()` 之后，是透明的，不能照搬到 CSS。
 5. **不要套用官网的按钮**：官网的 44px 胶囊按钮属于 `comfortable` 密度，不用在应用里。
 

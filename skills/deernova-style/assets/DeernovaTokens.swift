@@ -163,6 +163,12 @@ public enum Deernova {
     public static let durationBase: Double = 0.2
     /// 弹窗、底部弹窗、侧边抽屉的进入，页面级转场。
     public static let durationSlow: Double = 0.32
+    /// 按下时底色缩小，要立刻跟手。
+    public static let durationPress: Double = 0.06
+    /// 松开后底色弹回原大，配 `ease-release`。
+    public static let durationRelease: Double = 0.45
+    /// 按下时底色层缩小到的比例。只缩底色，文字和图标不动；用于按钮、图标按钮、发送按钮和可点的卡片，列表行、侧边栏项、菜单项不缩放。
+    public static let pressScale: CGFloat = 0.975
     /// 禁用的控件。禁用时保持原位，不隐藏。
     public static let opacityDisabled: Double = 0.35
     /// 实色（accent 填充）按钮悬停和按下。

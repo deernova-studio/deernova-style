@@ -39,7 +39,7 @@
 
 - 列表行、卡片角落里的行内操作（获取、关注、打开）→ 小号 `is-sm`。
 - 页面和卡片里的普通按钮，包括并排的两个按钮（以后再说 / 开启）→ 默认。同一行里的按钮用同一个尺寸。
-- 空状态、引导页的操作 → 大号 `is-lg`。触屏上整页唯一的底部主操作（登录、订阅、开始使用）用大号加 `is-block` 通栏，一屏最多一个。
+- 空状态、引导页的操作 → 大号 `is-lg`。触屏上整页唯一的底部主操作（登录、订阅、创建账号）用大号加 `is-block` 通栏，一屏最多一个。
 - 导航栏、标签栏、工具栏里的按钮 → 用系统控件或[玻璃操作层](glass-controls.md)，不自己设尺寸。
 
 触控档比桌面档大是有意的：手指比鼠标指针粗。三种尺寸放在手机里的样子见 `assets/screens/iphone-button-sizes-light.png`。
@@ -57,6 +57,7 @@
 ```css
 .dn-button {
   position: relative;
+  isolation: isolate; /* 底色层 ::after 画在文字下面、页面上面 */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -65,27 +66,29 @@
   padding: 0 var(--button-padding-x-md); /* 上下永远是 0：高度只由 height 决定 */
   border: 0;
   border-radius: var(--button-radius);
-  background: var(--fill-selected);
+  background: none;
   color: var(--ink);
-  font: var(--button-font-weight) var(--button-font-size-md)/1 var(--font-sans); /* 行高 1，不继承页面行高 */
+  font: calc(var(--button-font-weight) + var(--weight-shift)) var(--button-font-size-md)/1 var(--font-sans); /* 行高 1，不继承页面行高；深色主题字重减 40 */
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color var(--duration-instant) var(--ease-standard), opacity var(--duration-instant) var(--ease-standard);
+  transition: color var(--duration-instant) var(--ease-standard), opacity var(--duration-instant) var(--ease-standard);
 }
-@media (hover: hover) { .dn-button:hover:not(:disabled) { background-image: linear-gradient(var(--fill-hover), var(--fill-hover)); } }
-.dn-button:active:not(:disabled) { background-image: linear-gradient(var(--fill-selected), var(--fill-selected)); }
 .dn-button:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
 .dn-button:disabled { opacity: var(--opacity-disabled); cursor: default; }
 
-.dn-button.is-primary { background: var(--accent); color: var(--on-accent); }
-@media (hover: hover) { .dn-button.is-primary:hover:not(:disabled) { background-image: none; opacity: var(--opacity-solid-hover); } }
-.dn-button.is-primary:active:not(:disabled) { background-image: none; opacity: var(--opacity-solid-hover); }
-.dn-button.is-plain { background: transparent; color: var(--ink-secondary); }
-@media (hover: hover) { .dn-button.is-plain:hover:not(:disabled) { background: var(--fill-hover); color: var(--ink); } }
-.dn-button.is-plain:active:not(:disabled) { background: var(--fill-selected); color: var(--ink); }
-.dn-button.is-danger { background: var(--danger-soft); color: var(--danger); }
-.dn-button.is-primary.is-danger { background: var(--danger); color: var(--on-accent); }
+.dn-button.is-primary { color: var(--on-accent); }
+.dn-button.is-primary::after { background-color: var(--accent); }
+@media (hover: hover) { .dn-button.is-primary:hover:not(:disabled) { opacity: var(--opacity-solid-hover); } }
+.dn-button.is-primary:active:not(:disabled) { opacity: var(--opacity-solid-hover); }
+.dn-button.is-plain { color: var(--ink-secondary); }
+.dn-button.is-plain::after { background-color: transparent; }
+@media (hover: hover) { .dn-button.is-plain:hover:not(:disabled) { color: var(--ink); } }
+.dn-button.is-plain:active:not(:disabled) { color: var(--ink); }
+.dn-button.is-danger { color: var(--danger); }
+.dn-button.is-danger::after { background-color: var(--danger-soft); }
+.dn-button.is-primary.is-danger { color: var(--on-accent); }
+.dn-button.is-primary.is-danger::after { background-color: var(--danger); }
 
 .dn-button.is-sm { height: var(--button-height-sm); padding: 0 var(--button-padding-x-sm); border-radius: var(--button-radius-sm); font-size: var(--button-font-size-sm); }
 .dn-button.is-lg { height: var(--button-height-lg); padding: 0 var(--button-padding-x-lg); font-size: var(--button-font-size-lg); }
@@ -94,6 +97,7 @@
 
 .dn-icon-button {
   position: relative;
+  isolation: isolate;
   display: inline-grid;
   place-items: center;
   flex: none;
@@ -102,14 +106,41 @@
   padding: 0;
   border: 0;
   border-radius: var(--button-radius);
-  background: transparent;
+  background: none;
   color: var(--ink-secondary);
   cursor: pointer;
-  transition: background-color var(--duration-instant) var(--ease-standard);
+  transition: color var(--duration-instant) var(--ease-standard);
 }
-@media (hover: hover) { .dn-icon-button:hover { background: var(--fill-hover); color: var(--ink); } }
-.dn-icon-button:active { background: var(--fill-selected); color: var(--ink); }
+@media (hover: hover) { .dn-icon-button:hover { color: var(--ink); } }
+.dn-icon-button:active { color: var(--ink); }
 .dn-icon-button:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
+
+/* 底色层：按钮的底色画在 ::after 上，悬停和按下只改它。按下时只有它缩到 press-scale，
+   文字和图标不动；按下 60ms 跟手，松开 450ms 带回弹。 */
+.dn-button::after, .dn-icon-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-color: var(--fill-selected);
+  transition: background-color var(--duration-instant) var(--ease-standard), transform var(--duration-release) var(--ease-release);
+}
+.dn-icon-button::after { background-color: transparent; }
+@media (hover: hover) {
+  .dn-button:hover:not(:disabled)::after { background-image: linear-gradient(var(--fill-hover), var(--fill-hover)); }
+  .dn-button.is-primary:hover::after, .dn-button.is-primary.is-danger:hover::after { background-image: none; }
+  .dn-button.is-plain:hover:not(:disabled)::after, .dn-icon-button:hover::after { background-color: var(--fill-hover); background-image: none; }
+}
+.dn-button:active:not(:disabled)::after { background-image: linear-gradient(var(--fill-selected), var(--fill-selected)); }
+.dn-button.is-primary:active::after { background-image: none; }
+.dn-button.is-plain:active:not(:disabled)::after, .dn-icon-button:active::after { background-color: var(--fill-selected); background-image: none; }
+@media (prefers-reduced-motion: no-preference) {
+  :is(.dn-button, .dn-icon-button):active:not(:disabled)::after {
+    transform: scale(var(--press-scale));
+    transition: background-color var(--duration-instant) var(--ease-standard), transform var(--duration-press) var(--ease-standard);
+  }
+}
 
 /* 点击区域：可见尺寸不变，用透明的伪元素把可点范围撑到 hit-min。
    不要用 padding 补：padding 在背景里面，会把可见的按钮一起撑大。 */
@@ -136,7 +167,7 @@
 <div class="dn-row">
   <button class="dn-button is-sm" type="button">获取</button>
   <button class="dn-button" type="button"><svg class="dn-icon" aria-hidden="true"><use href="#dn-plus"/></svg>新建笔记</button>
-  <button class="dn-button is-primary is-lg" type="button">开始使用</button>
+  <button class="dn-button is-primary is-lg" type="button">创建账号</button>
 </div>
 ```
 
@@ -162,7 +193,7 @@ Button("继续") { next() }
 
 // iOS 底部通栏主按钮
 Button { start() } label: {
-    Text("开始使用").font(.callout.weight(.semibold))
+    Text("创建账号").font(.callout.weight(.semibold))
         .frame(maxWidth: .infinity, minHeight: Deernova.buttonHeightLg)
 }
 .buttonStyle(.borderedProminent)
@@ -175,6 +206,27 @@ Button { save() } label: {
 ```
 
 放在玻璃层上时改用 `.glassProminent` / `.glass`，见 [玻璃操作层](glass-controls.md)。
+
+系统按钮自带按下反馈，不要再加缩放。只有自己写 `ButtonStyle` 的按钮（例如内容区里自绘的图标按钮）才补上：和 Web 一样只缩底色，标签不动；按下快，松开带回弹。
+
+```swift
+struct DeernovaPressStyle: ButtonStyle {
+    var fill: Color = .clear              // 平时的底色：次按钮 .fillSelected，图标按钮 .clear
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    func makeBody(configuration: Configuration) -> some View {
+        let pressed = configuration.isPressed && !reduceMotion
+        configuration.label
+            .background {
+                RoundedRectangle(cornerRadius: Deernova.buttonRadius)
+                    .fill(configuration.isPressed ? Color.fillSelected : fill)
+                    .scaleEffect(pressed ? Deernova.pressScale : 1)
+                    .animation(pressed ? .easeOut(duration: Deernova.durationPress)
+                                       : .spring(duration: Deernova.durationRelease, bounce: 0.3),
+                               value: pressed)
+            }
+    }
+}
+```
 
 ## 不要
 

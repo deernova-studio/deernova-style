@@ -71,6 +71,18 @@ test('every component documents its sizes and every reference is reachable', asy
   }
 });
 
+test('component docs share one section order and the name index covers each of them', async () => {
+  const skill = await readFile(join(SKILL_DIR, 'SKILL.md'), 'utf8');
+  const index = skill.match(/### 按代码里的名字找\n([\s\S]*?)\n### /)?.[1] ?? '';
+  const dir = join(SKILL_DIR, 'references/components');
+  for (const name of (await readdir(dir)).filter(file => file.endsWith('.md'))) {
+    const headings = [...(await readFile(join(dir, name), 'utf8')).matchAll(/^## (.+)$/gm)].map(match => match[1]);
+    assert.ok(headings.includes('尺寸'), `${name} needs a 尺寸 section`);
+    assert.deepEqual(headings.slice(-3), ['Web', 'SwiftUI', '不要'], `${name} must end with Web, SwiftUI, 不要`);
+    assert.match(index, new RegExp(`\\]\\(references/components/${name.replace('.', '\\.')}\\)`), `the name index must route to ${name}`);
+  }
+});
+
 test('reference CSS sizes controls with tokens, not padding or inherited line height', async () => {
   const button = cssBlocks(await readFile(join(SKILL_DIR, 'references/components/button.md'), 'utf8')).join('\n');
   const rule = button.match(/\.dn-button \{([\s\S]*?)\n\}/)?.[1] ?? '';

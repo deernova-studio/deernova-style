@@ -23,7 +23,7 @@ Web 应用的页面骨架：左边是[侧边栏](sidebar.md)，中间是内容�
 ```css
 .dn-app { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; height: 100dvh; background: var(--canvas); color: var(--ink); }
 .dn-app-main { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
-.dn-app-content { flex: 1; min-height: 0; overflow: auto; scrollbar-gutter: stable; padding: var(--space-6) calc(var(--page-margin) + var(--space-3)); }
+.dn-app-content { flex: 1; min-height: 0; overflow: auto; scrollbar-gutter: stable both-edges; padding: var(--space-6) calc(var(--page-margin) + var(--space-3)); }
 
 .dn-toolbar {
   position: sticky;
@@ -56,7 +56,8 @@ Web 应用的页面骨架：左边是[侧边栏](sidebar.md)，中间是内容�
 @media (hover: hover) { .dn-toolbar-title:hover { background: var(--fill-hover); } }
 .dn-toolbar-title:active { background: var(--fill-selected); }
 .dn-toolbar-actions { display: flex; align-items: center; gap: 2px; margin-left: auto; }
-.dn-toolbar .dn-icon-button[aria-pressed="true"], .dn-panel-tabs .dn-icon-button[aria-pressed="true"] { background: var(--fill-selected); color: var(--ink); }
+.dn-toolbar .dn-icon-button[aria-pressed="true"], .dn-panel-tabs .dn-icon-button[aria-pressed="true"] { color: var(--ink); }
+.dn-toolbar .dn-icon-button[aria-pressed="true"]::after, .dn-panel-tabs .dn-icon-button[aria-pressed="true"]::after { background-color: var(--fill-selected); }
 
 .dn-panel { display: flex; flex-direction: column; min-width: 0; min-height: 0; border-left: var(--stroke-line) solid var(--line); background: var(--canvas); }
 .dn-panel-tabs {

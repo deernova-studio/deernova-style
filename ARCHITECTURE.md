@@ -6,12 +6,13 @@
 
 ```text
 skills/deernova-style/          skill 本体，规范的唯一来源
-  SKILL.md                      入口：先确定场景、场景速查（生成）、核心规则、读什么、工作流程
+  SKILL.md                      入口：总则、核心规则、场景、读什么（按任务、按代码里的名字、按样式问题找文件）、工作流程、场景速查（生成，检查时对照）
   references/
     foundations/                跨平台的“为什么”，每个主题一份：颜色、字体、间距、布局与对齐、圆角、线条、层级与阴影、玻璃、动效、图标、文案、无障碍
     components/                 每个组件一份：用途、尺寸表（生成）、状态、Web 参考 CSS 和示例 HTML、SwiftUI 写法、不要
     scenes/                     各场景的落地：Web 应用、官网与文档、macOS、iOS、iPadOS，以及 SwiftUI 共用
     tokens.md                   全部设计变量表（由 tokens.json 生成）
+    examples.md                 整页示例：总则落到整页上的「不要 / 改成」
     review.md                   审查清单
   assets/
     tokens.json                 唯一的数据源（手工编辑）：原始色板、语义颜色、字号角色、间距、圆角、线宽、线形、阴影、层级、动效、不透明度、玻璃、布局和组件尺寸
@@ -21,7 +22,7 @@ skills/deernova-style/          skill 本体，规范的唯一来源
     screens/                    Mac 窗口、iPhone 页面、iOS 按钮尺寸的效果截图，各有浅色和深色
 apps/website/                   官网
   index.html                    首页：满屏麋鹿动画，依次走过草原、森林、雪山、星空、沙漠；点天空有场景特效，点鹿向全画面扩散颜色后淡回黑白；顶部保留玻璃导航
-  guide.html                    规范页（首页产品菜单里的 Deernova Style）：顶栏左侧是和产品菜单相同的图标与名称；总览（核心规则和场景速查）、基础、组件、场景、资源。活样例按设备的默认密度显示（桌面，触屏设备上是触控），尺寸表列出全部场景
+  guide.html                    规范页（首页产品菜单里的 Deernova Style）：顶栏左侧是和产品菜单相同的图标与名称；总览（总则和作为第 7 部分的整页示例、核心规则、不要做）、基础、组件、场景、资源。活样例按设备的默认密度显示（桌面，触屏设备上是触控），尺寸表列出全部场景
   styles/                       网站自己的样式
   assets/milu-run-*.png          两张灰度透明图集：烘焙好的散步，每完整循环 160 帧（由 art/milu 生成）
   scripts/site.js               主题、复制命令、规范目录高亮

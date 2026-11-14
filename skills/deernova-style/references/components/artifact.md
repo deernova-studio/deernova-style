@@ -83,7 +83,8 @@ AI 做出来的「东西」：文档、代码文件、网页、图表、图片�
 .dn-image img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .dn-image-status { position: absolute; left: var(--space-3); bottom: var(--space-3); color: var(--ink-tertiary); font: var(--weight-regular) var(--type-caption-size)/1 var(--font-sans); font-variant-numeric: tabular-nums; }
 .dn-image-actions { position: absolute; top: var(--space-2); right: var(--space-2); display: flex; gap: var(--space-1); }
-.dn-image-actions .dn-icon-button { border-radius: var(--radius-full); background: var(--surface-raised); box-shadow: var(--shadow-control); }
+.dn-image-actions .dn-icon-button { border-radius: var(--radius-full); }
+.dn-image-actions .dn-icon-button::after { background-color: var(--surface-raised); box-shadow: var(--shadow-control); }
 @media (hover: hover) and (pointer: fine) {
   .dn-image-actions { opacity: 0; transition: opacity var(--duration-instant) var(--ease-standard); }
   .dn-image:is(:hover, :focus-within) .dn-image-actions { opacity: 1; }

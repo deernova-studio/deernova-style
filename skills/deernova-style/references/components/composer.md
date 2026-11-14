@@ -200,12 +200,19 @@
   padding: 0;
   border: 0;
   border-radius: var(--radius-full);
-  background: var(--accent);
+  isolation: isolate;
+  background: none;
   color: var(--on-accent);
   cursor: pointer;
 }
+/* 底色画在 ::after 上，按下时只缩它，箭头不动；写法同按钮 */
+.dn-send::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background-color: var(--accent); transition: transform var(--duration-release) var(--ease-release); }
+@media (prefers-reduced-motion: no-preference) {
+  .dn-send:active:not(:disabled)::after { transform: scale(var(--press-scale)); transition: transform var(--duration-press) var(--ease-standard); }
+}
 .dn-send .dn-icon { width: var(--icon-size-sm); height: var(--icon-size-sm); stroke-width: 2.2; }
-.dn-send:disabled { background: var(--fill-selected); color: var(--ink-tertiary); cursor: default; }
+.dn-send:disabled { color: var(--ink-tertiary); cursor: default; }
+.dn-send:disabled::after { background-color: var(--fill-selected); }
 .dn-send.is-stop .dn-icon { fill: currentColor; stroke: none; }
 .dn-send:focus-visible { outline: var(--stroke-focus) solid var(--focus-ring); outline-offset: var(--focus-offset); }
 .dn-send::before {

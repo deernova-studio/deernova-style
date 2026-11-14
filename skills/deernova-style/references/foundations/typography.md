@@ -37,6 +37,7 @@ Windows 和 Android 上会落到各自的系统字体，这是预期的，不要
 - 600：`display`、`title`、`headline`，以及 AI 回答里的加粗。
 - 500：按钮、标签、表单标签。侧边栏的选中项靠底色区分，不加粗。
 - 400：其余全部，包括侧边栏分组标题（`footnote` + `ink-tertiary`）、会话名、顶栏标题、说明、时间戳。
+- **深色主题减 40**：浅字在深底上显得更粗，深色主题里三档自动变成 360、460、560，浅色和深色看起来一样重。这由变量完成，代码里照常写 `var(--weight-regular)` 或 `font: var(--type-body)`，不要自己写数字。组件变量自带字重时（例如 `--button-font-weight`），写成 `calc(var(--button-font-weight) + var(--weight-shift))`。SF Pro 能渲染中间字重；中文的苹方没有这些档位，保持原来的字重。SwiftUI 只有固定档位，原生端不补偿。
 
 ## 规则
 
